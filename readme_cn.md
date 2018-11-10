@@ -5,6 +5,8 @@
 - CoreLooper对标Android java层和Windows MFC中的业务层，提供完善的基础设施。 
 - CoreLooper目前不直接支持UI,但可以和UI层交互。后续可考虑集成OpenGL/DirectX UI.
 
+[详细介绍请看这里](readme_cn.detail.md)
+
 ## CoreLooper主要功能
 - 组件通讯, 跨线程通讯,网络通讯,三者和谐统一
 - 组件命名,布局,定位
