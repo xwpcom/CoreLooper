@@ -6,17 +6,6 @@ Handler可以使用timer,在同一looper和跨looper sendMessage或者postMessag
 
 ![img](images/handler.lifecycle.png)
 
-[//]: # (这种注释方法真是蛋疼)
-[//]: # (图片生成方法:)
-[//]: # (https://mermaidjs.github.io/mermaid-live-editor)
-[//]: # (graph TD)
-[//]: # (A("Begin") -->|"采用make_shared< Handler>()构造Handler" |Start(Handler构造函数))
-[//]: # (Start -->|Handler.Create或者parent.AddChild,绑定到Looper| B(Handler::OnCreate))
-[//]: # (B -->|Destroy| C(Handler::OnDestroy))
-[//]: # (C -->|"最后一个强引用消失时"| D(Handler 析构函数 ) )
-[//]: # (D --> End(End) )
-
-
 #### 创建Handler
 采用两段式来创建Handler,
 - 第一段是c++语言层面上的创建,即new语义
