@@ -1,125 +1,118 @@
 # Handler
-HandlerÊÇCoreLooper¿ò¼Ü¹ÜÀíµÄ»ù±¾¶ÔÏó£¬ÀàËÆÓÚAndroidÖĞµÄHandler,MFCÖĞµÄCWndºÍwin32ÖĞµÄHWND
-Handler¿ÉÒÔÊ¹ÓÃtimer,ÔÚÍ¬Ò»looperºÍ¿çlooper sendMessage»òÕßpostMessage,Õì¶©ÆäËûHandlerµÄÏûÏ¢
+Handleræ˜¯CoreLooperæ¡†æ¶ç®¡ç†çš„åŸºæœ¬å¯¹è±¡ï¼Œç±»ä¼¼äºAndroidä¸­çš„Handler,MFCä¸­çš„CWndå’Œwin32ä¸­çš„HWND
+Handlerå¯ä»¥ä½¿ç”¨timer,åœ¨åŒä¸€looperå’Œè·¨looper sendMessageæˆ–è€…postMessage,ä¾¦è®¢å…¶ä»–Handlerçš„æ¶ˆæ¯
 
-### HandlerÉúÃüÖÜÆÚ
+### Handlerç”Ÿå‘½å‘¨æœŸ
 
 ![img](images/handler.lifecycle.png)
 
-<div style='display: none'>
-Í¼Æ¬Éú³É·½·¨:
-https://mermaidjs.github.io/mermaid-live-editor
-graph TD
-A("Begin") -->|"²ÉÓÃmake_shared< Handler>()¹¹ÔìHandler" |Start(Handler¹¹Ôìº¯Êı)
-Start -->|Handler.Create»òÕßparent.AddChild,°ó¶¨µ½Looper| B(Handler::OnCreate)
-B -->|Destroy| C(Handler::OnDestroy)
-C -->|"×îºóÒ»¸öÇ¿ÒıÓÃÏûÊ§Ê±"| D(Handler Îö¹¹º¯Êı )
-D --> End(End)
-</div>
+[//]: # ()
+[//]: # (<div style='display: none'>)
+[//]: # (å›¾ç‰‡ç”Ÿæˆæ–¹æ³•:)
+[//]: # (https://mermaidjs.github.io/mermaid-live-editor)
 
+#### åˆ›å»ºHandler
+é‡‡ç”¨ä¸¤æ®µå¼æ¥åˆ›å»ºHandler,
+- ç¬¬ä¸€æ®µæ˜¯c++è¯­è¨€å±‚é¢ä¸Šçš„åˆ›å»º,å³newè¯­ä¹‰
+  Handlerå¿…é¡»åœ¨heapä¸­åˆ›å»ºï¼Œä¸èƒ½åœ¨stackä¸­åˆ›å»º
+  å¼ºçƒˆå»ºè®®é‡‡ç”¨make_sharedæ¥åˆ›å»ºc++å¯¹è±¡ï¼Œä¸è¦ç›´æ¥è°ƒç”¨new,ä¸€ä¸ªnewä¹Ÿä¸è¦ï¼Œä¹Ÿä¸è¦è°ƒç”¨delete,è€Œæ˜¯å…¨éƒ¨é‡‡ç”¨smart pointeræ¥ç®¡ç†
 
-#### ´´½¨Handler
-²ÉÓÃÁ½¶ÎÊ½À´´´½¨Handler,
-- µÚÒ»¶ÎÊÇc++ÓïÑÔ²ãÃæÉÏµÄ´´½¨,¼´newÓïÒå
-  Handler±ØĞëÔÚheapÖĞ´´½¨£¬²»ÄÜÔÚstackÖĞ´´½¨
-  Ç¿ÁÒ½¨Òé²ÉÓÃmake_sharedÀ´´´½¨c++¶ÔÏó£¬²»ÒªÖ±½Óµ÷ÓÃnew,Ò»¸önewÒ²²»Òª£¬Ò²²»Òªµ÷ÓÃdelete,¶øÊÇÈ«²¿²ÉÓÃsmart pointerÀ´¹ÜÀí
-
-- µÚ¶ş¶ÎÊÇ¿ò¼Ü²ãÃæÉÏµÄ´´½¨,¼´°ó¶¨µ½Looper£¬¹¹½¨parent/child¹ØÏµ
- HandlerÖ»ÄÜÔÚLooper»·¾³ÏÂ´´½¨,²¢ÇÒ±ØĞë°ó¶¨µ½Looperºó²ÅÄÜÕı³£Ê¹ÓÃ
-¿ò¼Ü½Ó¿ÚÈçÏÂ
+- ç¬¬äºŒæ®µæ˜¯æ¡†æ¶å±‚é¢ä¸Šçš„åˆ›å»º,å³ç»‘å®šåˆ°Looperï¼Œæ„å»ºparent/childå…³ç³»
+ Handleråªèƒ½åœ¨Looperç¯å¢ƒä¸‹åˆ›å»º,å¹¶ä¸”å¿…é¡»ç»‘å®šåˆ°Looperåæ‰èƒ½æ­£å¸¸ä½¿ç”¨
+æ¡†æ¶æ¥å£å¦‚ä¸‹
 ```cpp
 virtual void LOOPER_SAFE Create(shared_ptr<Handler> parent);
 virtual int LOOPER_SAFE AddChild(std::weak_ptr<Handler> child, std::string name = "");
 ```
-ÓĞÈçÏÂ¼¸ÖÖµäĞÍÓÃ·¨
+æœ‰å¦‚ä¸‹å‡ ç§å…¸å‹ç”¨æ³•
 ```cpp
 auto obj=make_shared<Handler>();
-//´ËÊ±Handler»¹Ã»ÓĞ°ó¶¨µ½Looper,¿ÉÔÚHandler¹¹Ôì»òÕß´Ë´¦´«³õÊ¼»¯²ÎÊı
+//æ­¤æ—¶Handlerè¿˜æ²¡æœ‰ç»‘å®šåˆ°Looper,å¯åœ¨Handleræ„é€ æˆ–è€…æ­¤å¤„ä¼ åˆå§‹åŒ–å‚æ•°
 obj.Create(parent);
 ```
-»òÕß¸ü¼òµ¥Ò»µã£¬ÔÚ²»ĞèÒª³õÊ¼»¯Ê±
+æˆ–è€…æ›´ç®€å•ä¸€ç‚¹ï¼Œåœ¨ä¸éœ€è¦åˆå§‹åŒ–æ—¶
 ```cpp
 parent.AddChild(make_shared<Handler>());
 ```
-Èç¹ûÊÇÔÚ¸¸ÀàÖĞµ÷ÓÃ(Ò»°ãÊÇÔÚ¸¸Àà.OnCreate)£¬Ôò¿ÉÒÔ¼ò»¯Îª
+å¦‚æœæ˜¯åœ¨çˆ¶ç±»ä¸­è°ƒç”¨(ä¸€èˆ¬æ˜¯åœ¨çˆ¶ç±».OnCreate)ï¼Œåˆ™å¯ä»¥ç®€åŒ–ä¸º
 ```cpp
 AddChild(make_shared<Handler>());
 ```
-ËµÃ÷:
-- HandlerÖ§³Ö¿çlooper´´½¨,±ÈÈçÔÚMainLooperÖĞ´´½¨HandlerÈ»ºó°ó¶¨µ½WorkLooperÖĞ
-- Ö»ÓĞ°ó¶¨µ½LooperÖ®ºó,handler²ÅÄÜÊ¹ÓÃ¿ò¼ÜÌá¹©µÄ¹¦ÄÜ£¬±ÈÈçtimer,sendMessage,postMessageµÈ
+è¯´æ˜:
+- Handleræ”¯æŒè·¨looperåˆ›å»º,æ¯”å¦‚åœ¨MainLooperä¸­åˆ›å»ºHandlerç„¶åç»‘å®šåˆ°WorkLooperä¸­
+- åªæœ‰ç»‘å®šåˆ°Looperä¹‹å,handleræ‰èƒ½ä½¿ç”¨æ¡†æ¶æä¾›çš„åŠŸèƒ½ï¼Œæ¯”å¦‚timer,sendMessage,postMessageç­‰
 
 
-#### Ïú»ÙHandler
+#### é”€æ¯Handler
 ```cpp
 virtual void LOOPER_SAFE Destroy();
 ```
-²ÉÓÃHandler.Destroy()À´Ïú»ÙHandler,»áÔÚHandler°ó¶¨µÄLooperÖĞµ÷ÓÃOnDestroy()
-app¿ÉÒÔ¶à´Îµ÷ÓÃHandler.Destroy()£¬²»»áÒıÆğ´íÎó»ò²»Á¼Ó°Ïì£¬ÓÉ¿ò¼Ü±£Ö¤OnDestroy()»á±»µ÷ÓÃ²¢ÇÒÖ»±»µ÷ÓÃÒ»´Î
+é‡‡ç”¨Handler.Destroy()æ¥é”€æ¯Handler,ä¼šåœ¨Handlerç»‘å®šçš„Looperä¸­è°ƒç”¨OnDestroy()
+appå¯ä»¥å¤šæ¬¡è°ƒç”¨Handler.Destroy()ï¼Œä¸ä¼šå¼•èµ·é”™è¯¯æˆ–ä¸è‰¯å½±å“ï¼Œç”±æ¡†æ¶ä¿è¯OnDestroy()ä¼šè¢«è°ƒç”¨å¹¶ä¸”åªè¢«è°ƒç”¨ä¸€æ¬¡
 
-Ïú»ÙºÍÎö¹¹ÊÇ²»Í¬µÄ¸ÅÄî
-Ïú»ÙÊÇ±¾¿ò¼Ü¶¨ÒåµÄ£¬Îö¹¹ÊÇc++ÓïÑÔ¶¨ÒåµÄ
+é”€æ¯å’Œææ„æ˜¯ä¸åŒçš„æ¦‚å¿µ
+é”€æ¯æ˜¯æœ¬æ¡†æ¶å®šä¹‰çš„ï¼Œææ„æ˜¯c++è¯­è¨€å®šä¹‰çš„
 
-ËµÃ÷:
-- Ïú»Ù²»Ó°Ïìtimer,sendMessageºÍpostMessageµÈ¹¦ÄÜ£¬ÕâĞ©¹¦ÄÜÔÚÏú»ÙºóÈÔÈ»¿ÉÓÃ
-- Ïú»Ùºó´ËHandler²»ÄÜÔÙ´ÎCreate»òÕßAddChild
-- parentÏú»ÙÊ±»á×Ô¶¯µİ¹éÏú»ÙÆäËùÓĞµÄchild,ÒÀ´ËÀàÍÆ
-- parentÒÑÏú»ÙÊ±£¬Èç¹ûÔÙÏòËüAddChild,´ËÊ±childÄÜÕı³£´´½¨£¬µ«ÂíÉÏ×Ô¶¯Ïú»Ù
+è¯´æ˜:
+- é”€æ¯ä¸å½±å“timer,sendMessageå’ŒpostMessageç­‰åŠŸèƒ½ï¼Œè¿™äº›åŠŸèƒ½åœ¨é”€æ¯åä»ç„¶å¯ç”¨
+- é”€æ¯åæ­¤Handlerä¸èƒ½å†æ¬¡Createæˆ–è€…AddChild
+- parenté”€æ¯æ—¶ä¼šè‡ªåŠ¨é€’å½’é”€æ¯å…¶æ‰€æœ‰çš„child,ä¾æ­¤ç±»æ¨
+- parentå·²é”€æ¯æ—¶ï¼Œå¦‚æœå†å‘å®ƒAddChild,æ­¤æ—¶childèƒ½æ­£å¸¸åˆ›å»ºï¼Œä½†é©¬ä¸Šè‡ªåŠ¨é”€æ¯
 
-#### Îö¹¹
-µ±HandlerµÄ×îºóÒ»¸öshared_ptrÊ§Ğ§Ê±»áµ÷ÓÃÎö¹¹
+#### ææ„
+å½“Handlerçš„æœ€åä¸€ä¸ªshared_ptrå¤±æ•ˆæ—¶ä¼šè°ƒç”¨ææ„
 
-##### HandlerÎö¹¹º¯ÊıÔÚÄÄ¸öLooper±»µ÷ÓÃ
-- Èç¹ûÖ»ÔÚ°ó¶¨µÄLooperÄÚÊ¹ÓÃHandler,Ôò»áÔÚ´ËLooperÖĞÎö¹¹Handler
-- Èç¹û¿çLooperÊ¹ÓÃÁíÒ»LooperÖĞµÄshared_ptr< Handler>,²¢ÇÒÔÚHandler.Destroy()ºóÈÔÈ»±£³Ö´Ëshared_ptr,ÔòÓĞºÜµÍµÄ¼¸ÂÊ¿çLooperÎö¹¹Handler
-##### ¿çLooperÎö¹¹HandlerÏê½âºÍ½â¾ö°ì·¨
-µ±µ÷ÓÃHandler.Destroy()ºó,ÆäÔ­ÉúLooper±£ÁôÒ»¸öshared_ptr< Handler>²¢¼Óµ½gc(À¬»ø»ØÊÕ)²¢ÇÒÂíÉÏ¼ì²é»ØÊÕ¡£
-ÁíÍâ£¬µ±gcÁĞ±íÓĞÏîÄ¿Ê±Looper»á¶¨Ê±¼ì²é»ØÊÕ¡£
+##### Handlerææ„å‡½æ•°åœ¨å“ªä¸ªLooperè¢«è°ƒç”¨
+- å¦‚æœåªåœ¨ç»‘å®šçš„Looperå†…ä½¿ç”¨Handler,åˆ™ä¼šåœ¨æ­¤Looperä¸­ææ„Handler
+- å¦‚æœè·¨Looperä½¿ç”¨å¦ä¸€Looperä¸­çš„shared_ptr< Handler>,å¹¶ä¸”åœ¨Handler.Destroy()åä»ç„¶ä¿æŒæ­¤shared_ptr,åˆ™æœ‰å¾ˆä½çš„å‡ ç‡è·¨Looperææ„Handler
+##### è·¨Looperææ„Handlerè¯¦è§£å’Œè§£å†³åŠæ³•
+å½“è°ƒç”¨Handler.Destroy()å,å…¶åŸç”ŸLooperä¿ç•™ä¸€ä¸ªshared_ptr< Handler>å¹¶åŠ åˆ°gc(åƒåœ¾å›æ”¶)å¹¶ä¸”é©¬ä¸Šæ£€æŸ¥å›æ”¶ã€‚
+å¦å¤–ï¼Œå½“gcåˆ—è¡¨æœ‰é¡¹ç›®æ—¶Looperä¼šå®šæ—¶æ£€æŸ¥å›æ”¶ã€‚
 
-»ØÊÕËã·¨ÈçÏÂ
-1. ÏÈÓÃweak_ptrÒıÓÃ´ËHandler
-2. Çå³ıshared_ptr< Handler>
-3. ¶Ôweak_ptr½øĞĞlock(),Èç¹ûÎªnullptr,ËµÃ÷HandlerÒÑÎö¹¹;Èç¹û²»Îªnullptr,ËµÃ÷ÓĞÍâ½çÒıÓÃ,HandlerÒªÖØĞÂ¼Óµ½gcÁĞ±í
+å›æ”¶ç®—æ³•å¦‚ä¸‹
+1. å…ˆç”¨weak_ptrå¼•ç”¨æ­¤Handler
+2. æ¸…é™¤shared_ptr< Handler>
+3. å¯¹weak_ptrè¿›è¡Œlock(),å¦‚æœä¸ºnullptr,è¯´æ˜Handlerå·²ææ„;å¦‚æœä¸ä¸ºnullptr,è¯´æ˜æœ‰å¤–ç•Œå¼•ç”¨,Handlerè¦é‡æ–°åŠ åˆ°gcåˆ—è¡¨
 
-¼Ù¶¨:
-LooperAÔÚgcÖĞÒıÓÃÁËHandlerA,
- LooperBÓÃshared_ptrÒ²ÒıÓÃÁËHandlerA
-µ±LooperAÔËĞĞÍêÉÏÃæµÚ2²½,µ«»¹Ã»ÔËĞĞµÚ3²½£¬
-´ËÊ±ÔÚLooperBÖĞÇå³ıËüÒıÓÃµÄshared_ptr< HandlerA>,Ôò»áÔÚLooperBÖĞÎö¹¹HandlerA
+å‡å®š:
+LooperAåœ¨gcä¸­å¼•ç”¨äº†HandlerA,
+ LooperBç”¨shared_pträ¹Ÿå¼•ç”¨äº†HandlerA
+å½“LooperAè¿è¡Œå®Œä¸Šé¢ç¬¬2æ­¥,ä½†è¿˜æ²¡è¿è¡Œç¬¬3æ­¥ï¼Œ
+æ­¤æ—¶åœ¨LooperBä¸­æ¸…é™¤å®ƒå¼•ç”¨çš„shared_ptr< HandlerA>,åˆ™ä¼šåœ¨LooperBä¸­ææ„HandlerA
 
-¾¡¹Ü¼¸ÂÊºÜĞ¡£¬Õâ¸ö¾ºÕùÔÚ¿ò¼Ü²ãÃæºÍc++ÓïÑÔ²ãÃæ¶¼Ã»·¨Ïû³ı¡£
-×îºÃµÄ½â¾ö°ì·¨ÊÇÓÉapp±£Ö¤×Ô¶¨ÒåµÄHandler×ÓÀàÄÜÖ§³Ö¿çlooperÎö¹¹¡£
-¿ò¼Ü±¾ÉíµÄHanlderÊÇ¿çLooperÎö¹¹°²È«µÄ¡£
+å°½ç®¡å‡ ç‡å¾ˆå°ï¼Œè¿™ä¸ªç«äº‰åœ¨æ¡†æ¶å±‚é¢å’Œc++è¯­è¨€å±‚é¢éƒ½æ²¡æ³•æ¶ˆé™¤ã€‚
+æœ€å¥½çš„è§£å†³åŠæ³•æ˜¯ç”±appä¿è¯è‡ªå®šä¹‰çš„Handlerå­ç±»èƒ½æ”¯æŒè·¨looperææ„ã€‚
+æ¡†æ¶æœ¬èº«çš„Hanlderæ˜¯è·¨Looperææ„å®‰å…¨çš„ã€‚
 
- ËùÒÔ: ** todo ** ¿ò¼ÜÒªÌá¹©½Ó¿ÚÀ´·½±ãapp²âÊÔ¿çLooperÎö¹¹Handler£¬Ôö¼Ó°²È«ĞÔ¡£
+ æ‰€ä»¥: ** todo ** æ¡†æ¶è¦æä¾›æ¥å£æ¥æ–¹ä¾¿appæµ‹è¯•è·¨Looperææ„Handlerï¼Œå¢åŠ å®‰å…¨æ€§ã€‚
 
-#####  Îö¹¹×Ü½á
-¿ò¼Ü»ù±¾¿É±£Ö¤ÔÚ°ó¶¨µÄLooperÖĞÎö¹¹Handler(¼«¶ËÇé¿ö³ıÍâ)
-¿ò¼Ü±£Ö¤Handler×ÔÉí¿çÏßlooperÎö¹¹ÊÇ°²È«µÄ,app×Ô¶¨ÒåµÄHandler×ÓÀàÖ»ÄÜÓÉapp×ÔĞĞ±£Ö¤
-½â¾ö°ì·¨ºÜ¼òµ¥,Handler.OnDestroy()Ê¼ÖÕÊÇÔÚ°ó¶¨µÄLooperÖĞµ÷ÓÃµÄ,Handler×ÓÀàÖ»ĞèÒªÔÚOnDestroy()ÖĞÇåÀí¼´¿É¡£
+#####  ææ„æ€»ç»“
+æ¡†æ¶åŸºæœ¬å¯ä¿è¯åœ¨ç»‘å®šçš„Looperä¸­ææ„Handler(æç«¯æƒ…å†µé™¤å¤–)
+æ¡†æ¶ä¿è¯Handlerè‡ªèº«è·¨çº¿looperææ„æ˜¯å®‰å…¨çš„,appè‡ªå®šä¹‰çš„Handlerå­ç±»åªèƒ½ç”±appè‡ªè¡Œä¿è¯
+è§£å†³åŠæ³•å¾ˆç®€å•,Handler.OnDestroy()å§‹ç»ˆæ˜¯åœ¨ç»‘å®šçš„Looperä¸­è°ƒç”¨çš„,Handlerå­ç±»åªéœ€è¦åœ¨OnDestroy()ä¸­æ¸…ç†å³å¯ã€‚
 
 
 
-### ¶¨Ê±Æ÷ Timer
+### å®šæ—¶å™¨ Timer
 ``` cpp
 	virtual long SetTimer(long& timerId, UINT interval);
 	virtual long KillTimer(long& timerId);
 	virtual void OnTimer(long timerId);
 ```
 
-¿ò¼ÜÄÚ²¿²ÉÓÃÊ±¼äÂÖ¹ÜÀítimer
-´´½¨£¬Ïú»ÙºÍ´¥·¢timerµÄ¸´ÔÓ¶È¿ÉÈÏÎªÊÇO(1),¿ÉÇáËÉ¹ÜÀí¼¸°ÙÍò¸ötimer
+æ¡†æ¶å†…éƒ¨é‡‡ç”¨æ—¶é—´è½®ç®¡ç†timer
+åˆ›å»ºï¼Œé”€æ¯å’Œè§¦å‘timerçš„å¤æ‚åº¦å¯è®¤ä¸ºæ˜¯O(1),å¯è½»æ¾ç®¡ç†å‡ ç™¾ä¸‡ä¸ªtimer
 
 #### SetTimer
-ÔÚµ÷ÓÃHandler.Create»òÕß.AddChild´´½¨HandlerÖ®ºó£¬¾Í¿ÉÒÔµ÷ÓÃSetTimerÀ´´´½¨¶¨Ê±Æ÷
-²ÎÊı:
-- timerId:ÊäÈë&Êä³ö²ÎÊı,0ÎªÎŞĞ§Öµ,µ±´«Èë·Ç0µÄtimerIdÊ±,SetTimer»áÏÈÏú»Ù´Ëtimer,ÔÙ´´½¨²¢·µ»ØĞÂµÄtimerId
-- intervalÎªÊäÈë²ÎÊı£¬±íÊ¾¼ä¸ôÊ±¼ä£¬µ¥Î»:ºÁÃë,×îĞ¡¾«¶ÈÎª1ms,´«0Ê±»áÄ¬ÈÏÈ¡1ms,Êµ¼Ê´¥·¢OnTimerµÄ¾«¶ÈÈ¡¾öÓÚOS
+åœ¨è°ƒç”¨Handler.Createæˆ–è€….AddChildåˆ›å»ºHandlerä¹‹åï¼Œå°±å¯ä»¥è°ƒç”¨SetTimeræ¥åˆ›å»ºå®šæ—¶å™¨
+å‚æ•°:
+- timerId:è¾“å…¥&è¾“å‡ºå‚æ•°,0ä¸ºæ— æ•ˆå€¼,å½“ä¼ å…¥é0çš„timerIdæ—¶,SetTimerä¼šå…ˆé”€æ¯æ­¤timer,å†åˆ›å»ºå¹¶è¿”å›æ–°çš„timerId
+- intervalä¸ºè¾“å…¥å‚æ•°ï¼Œè¡¨ç¤ºé—´éš”æ—¶é—´ï¼Œå•ä½:æ¯«ç§’,æœ€å°ç²¾åº¦ä¸º1ms,ä¼ 0æ—¶ä¼šé»˜è®¤å–1ms,å®é™…è§¦å‘OnTimerçš„ç²¾åº¦å–å†³äºOS
 
 #### KillTimer
-µ±²»ÔÙĞèÒª¶¨Ê±Æ÷Ê±£¬¿Éµ÷ÓÃKillTimerÀ´Ïú»Ù
+å½“ä¸å†éœ€è¦å®šæ—¶å™¨æ—¶ï¼Œå¯è°ƒç”¨KillTimeræ¥é”€æ¯
 
-TimerµÄ²¹³äËµÃ÷:
-- µ±HandlerÎö¹¹Ê±»á×Ô¶¯Ïú»Ù´ËHandler´´½¨µÄËùÓĞ¶¨Ê±Æ÷
-- Handler.Destroy()²»Ó°Ïìtimer
+Timerçš„è¡¥å……è¯´æ˜:
+- å½“Handlerææ„æ—¶ä¼šè‡ªåŠ¨é”€æ¯æ­¤Handleråˆ›å»ºçš„æ‰€æœ‰å®šæ—¶å™¨
+- Handler.Destroy()ä¸å½±å“timer
 
