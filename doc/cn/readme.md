@@ -42,6 +42,28 @@
 个人感觉asio把简单的问题复杂化了。  
 尽管CoreLooper目前没有asio完善，但应该比asio简洁很多,易用性也有天壤之别。  
 做人还是要有理想的，万一实现了呢!  
+# Demo
+## 最简单的main()函数
+``` cpp
+class MainLooper :public MainLooper_
+{
+	SUPER(MainLooper)
+	
+	void OnCreate()
+	{
+		__super::OnCreate();
+
+		AddChild(make_shared<Handler>());
+		PostQuitMessage(2018);
+	}
+};
+
+int main()
+{
+	return make_shared<MainLooper>()->StartRun();
+}
+```
+作为一个代码洁癖患者，理想情况下,不管多么复杂的app,我们建议所有采用CoreLooper框架的app，其main()代码应该像上面这样只有一行(不能再多了),从这一细节也可以体现出CoreLooper框架的简洁之处。
 
 # CoreLooper授权
 CoreLooper是开源软件，但不是免费的，它采用灵活的授权方案。
@@ -70,7 +92,8 @@ CoreLooper远没有完善，还有很多计划在我们的todo列表中，所有这些工作都需要资源来实
 
 开放能带来更大的价值  
 本人比较喜欢近现代西方科学和开源软件,近几百年科技发展迅猛，一个很重要的原因是开放的精神,心向往之。      
-
+# 文档目录
+ [Index](index.md)
 # 反馈问题
 
 bug、修改建议、疑惑都欢迎提在issue中，或加入CoreLooper开发交流QQ群484544131讨论问题。
