@@ -4,22 +4,9 @@ CoreLooper不可避免的要和操作系统原生线程通讯，本文列出一些常用方法
 ## main入口函数
 最简单的main函数应该如下
 ```cpp
-int main()
-{
-	auto looper = make_shared<MainLooper>();
-	looper->StartRun();
-	return looper->GetQuitCode();
-}
-```
-如果需要处理main参数,可以如下
-```cpp
 int main(int argc,char* argv[])
 {
-	auto obj = make_shared<MainLooper>();
-	obj->ParseCommandLine(argc, argv);
-
-	obj->StartRun();
-	return obj->GetQuitCode();
+	return make_shared<MainLooper>(argc, argv)->StartRun();
 }
 ```
 个人非常反感在main中写一大堆代码

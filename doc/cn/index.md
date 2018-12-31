@@ -18,3 +18,14 @@
 在vs中单元测试时，可用DT工具来看调试信息  
 DT工具及其源码在projects\dt
 
+[和OS原生线程通讯](work.with.raw.thread.md)  
+[基于CoreLooper创建SDK](create.sdk.md)  
+[CoreLooper在Linux下的使用](linux.md)  
+[udp](udp.md)  
+[c++11代码原则](rules.md)  
+
+[文件命名](filename.md)  
+[关于C++的思考(未完待续)](c++.md)  
+
+[todo](todo.md)  
+想法很多，有待完成  
