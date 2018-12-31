@@ -41,8 +41,6 @@ MainLooper主要是用在main函数中,比如
 ```cpp
 int main()
 {
-	auto looper = make_shared<MainLooper>();
-	auto ret = looper->StartRun();
-	return looper->GetQuitCode();
+	return make_shared<MainLooper>()->StartRun();
 }
 ```
