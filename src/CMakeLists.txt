@@ -1,0 +1,32 @@
+﻿AUX_SOURCE_DIRECTORY(. SRC)
+AUX_SOURCE_DIRECTORY(arch/linux SRC)
+AUX_SOURCE_DIRECTORY(core/base SRC)
+AUX_SOURCE_DIRECTORY(core/file SRC)
+AUX_SOURCE_DIRECTORY(core/looper SRC)
+AUX_SOURCE_DIRECTORY(core/net SRC)
+AUX_SOURCE_DIRECTORY(core/string SRC)
+AUX_SOURCE_DIRECTORY(core/thread SRC)
+
+add_library(corelooper ${SRC})
+target_link_libraries(corelooper pthread rt)
+set_target_properties(corelooper PROPERTIES COMPILE_FLAGS "-std=c++11")
+
+SET(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+SET(INCLUDE_ROOT ${PROJECT_SOURCE_DIR}/include)
+SET(INCLUDE_CORE ${INCLUDE_ROOT}/core)
+INCLUDE_DIRECTORIES(${SRC_DIR}/../projects/libcorelooper/)
+INCLUDE_DIRECTORIES(${INCLUDE_ROOT})
+INCLUDE_DIRECTORIES(${INCLUDE_ROOT}/arch/linux)
+INCLUDE_DIRECTORIES(${INCLUDE_CORE})
+INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core)
+INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core/base)
+INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core/looper)
+
+install(TARGETS corelooper DESTINATION lib)
+
+#file(GLOB HEADERS "*.h")
+#install(FILES ${HEADERS} DESTINATION include/muduo/base)
+
+add_subdirectory(core/base/tests)
+add_subdirectory(core/file/tests)
+add_subdirectory(core/looper/tests)

@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{FD47E92B-7702-459F-BFB7-81C2D64C61B9}</ProjectGuid>
+    <Keyword>MFCDLLProj</Keyword>
+    <RootNamespace>corelooper</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SDK_DLL;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_SDK_DLL;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\arch\android\jnihelper.cpp" />
+    <ClCompile Include="..\..\src\arch\android\jnilooper.cpp" />
+    <ClCompile Include="..\..\src\arch\android\jni_entry.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\looper_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\serial\serialport_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\tcpclient_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\tcpserver_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\udpclient_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\udpserver_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\linuxsignal.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\iocpobject.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\looper_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\serialport_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\tcpclient_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\tcpserver_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\udpclient_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\udpserver_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\iocontext.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\udpiocontext.cpp" />
+    <ClCompile Include="..\..\src\core\base\object.cpp" />
+    <ClCompile Include="..\..\src\core\base\bytebuffer.cpp" />
+    <ClCompile Include="..\..\src\core\base\bytetool.cpp" />
+    <ClCompile Include="..\..\src\core\base\dt.cpp" />
+    <ClCompile Include="..\..\src\core\base\log.cpp" />
+    <ClCompile Include="..\..\src\core\base\namevalue.cpp" />
+    <ClCompile Include="..\..\src\core\base\shelltool.cpp" />
+    <ClCompile Include="..\..\src\core\base\stringtool.cpp" />
+    <ClCompile Include="..\..\src\core\base\tickdumper.cpp" />
+    <ClCompile Include="..\..\src\core\file\dumpfile.cpp" />
+    <ClCompile Include="..\..\src\core\file\file.cpp" />
+    <ClCompile Include="..\..\src\core\file\filefinder.cpp" />
+    <ClCompile Include="..\..\src\core\file\inifile.cpp" />
+    <ClCompile Include="..\..\src\core\file\virtualfolder.cpp" />
+    <ClCompile Include="..\..\src\core\looper\asynctask.cpp" />
+    <ClCompile Include="..\..\src\core\looper\asynctasklooper.cpp" />
+    <ClCompile Include="..\..\src\core\looper\handler.cpp" />
+    <ClCompile Include="..\..\src\core\looper\handlerex.cpp" />
+    <ClCompile Include="..\..\src\core\looper\handlerinternaldata.cpp" />
+    <ClCompile Include="..\..\src\core\looper\looper.cpp" />
+    <ClCompile Include="..\..\src\core\looper\looperimpl.cpp" />
+    <ClCompile Include="..\..\src\core\looper\looperinternaldata.cpp" />
+    <ClCompile Include="..\..\src\core\looper\procnode.cpp" />
+    <ClCompile Include="..\..\src\core\looper\timermanager.cpp" />
+    <ClCompile Include="..\..\src\core\net\channel.cpp" />
+    <ClCompile Include="..\..\src\core\net\speedcounter.cpp" />
+    <ClCompile Include="..\..\src\core\net\tcpclient.cpp" />
+    <ClCompile Include="..\..\src\core\net\tcpserver.cpp" />
+    <ClCompile Include="..\..\src\core\net\udpserver.cpp" />
+    <ClCompile Include="..\..\src\core\net\dnslooper.cpp" />
+    <ClCompile Include="..\..\src\core\net\nettool.cpp" />
+    <ClCompile Include="..\..\src\core\net\socktool.cpp" />
+    <ClCompile Include="..\..\src\core\net\urltool.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.cpp" />
+    <ClCompile Include="..\..\src\core\string\textprotocol.cpp" />
+    <ClCompile Include="..\..\src\core\string\textseparator.cpp" />
+    <ClCompile Include="..\..\src\core\string\utf8tool.cpp" />
+    <ClCompile Include="..\..\src\core\string\xmlstring.cpp" />
+    <ClCompile Include="..\..\src\core\thread\autolock.cpp" />
+    <ClCompile Include="..\..\src\core\thread\criticalsection.cpp" />
+    <ClCompile Include="..\..\src\core\thread\event.cpp" />
+    <ClCompile Include="corelooper.vs.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="tests\unittest.cpp" />
+    <ClCompile Include="tests\unittest_handy.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\doc\corelooper框架用户手册.docx" />
+    <None Include="..\..\include\core\base\base.inl" />
+    <None Include="..\..\include\core\looper\libcorelooper.inl" />
+    <None Include="..\..\include\core\looper\looperimpl.inl" />
+    <None Include="..\..\src\core\looper\message.inl" />
+    <None Include="corelooper.def" />
+    <None Include="res\corelooper.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\arch\android\jnihelper.h" />
+    <ClInclude Include="..\..\include\arch\android\jnilooper.h" />
+    <ClInclude Include="..\..\include\arch\linux\tcpclient_linux.h" />
+    <ClInclude Include="..\..\include\arch\linux\tcpserver_linux.h" />
+    <ClInclude Include="..\..\include\arch\linux\udpclient_linux.h" />
+    <ClInclude Include="..\..\include\arch\linux\udpserver_linux.h" />
+    <ClInclude Include="..\..\include\arch\linux\linuxsignal.h" />
+    <ClInclude Include="..\..\include\arch\linux\looper_linux.h" />
+    <ClInclude Include="..\..\include\arch\windows\iocpobject.h" />
+    <ClInclude Include="..\..\include\arch\windows\serialport_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\tcpclient_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\tcpserver_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\udpclient_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\udpserver_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\iocontext.h" />
+    <ClInclude Include="..\..\include\arch\windows\looper_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\udpiocontext.h" />
+    <ClInclude Include="..\..\include\core\base\bundle.h" />
+    <ClInclude Include="..\..\include\core\base\bundleex.h" />
+    <ClInclude Include="..\..\include\core\base\bytebuffer.h" />
+    <ClInclude Include="..\..\include\core\base\bytetool.h" />
+    <ClInclude Include="..\..\include\core\base\dt.h" />
+    <ClInclude Include="..\..\include\core\base\iparam.h" />
+    <ClInclude Include="..\..\include\core\base\log.h" />
+    <ClInclude Include="..\..\include\core\base\namevalue.h" />
+    <ClInclude Include="..\..\include\core\base\object.h" />
+    <ClInclude Include="..\..\include\core\base\shelltool.h" />
+    <ClInclude Include="..\..\include\core\base\sigslot.h" />
+    <ClInclude Include="..\..\include\core\base\stringtool.h" />
+    <ClInclude Include="..\..\include\core\base\tickdumper.h" />
+    <ClInclude Include="..\..\include\core\base\win32.h" />
+    <ClInclude Include="..\..\include\core\file\dumpfile.h" />
+    <ClInclude Include="..\..\include\core\file\file.h" />
+    <ClInclude Include="..\..\include\core\file\filefinder.h" />
+    <ClInclude Include="..\..\include\core\file\inifile.h" />
+    <ClInclude Include="..\..\include\core\file\transferfileinfo.h" />
+    <ClInclude Include="..\..\include\core\file\virtualfolder.h" />
+    <ClInclude Include="..\..\include\core\looper\asynctask.h" />
+    <ClInclude Include="..\..\include\core\looper\asynctasklooper.h" />
+    <ClInclude Include="..\..\include\core\looper\blocklooper.h" />
+    <ClInclude Include="..\..\include\core\looper\handler.h" />
+    <ClInclude Include="..\..\include\core\looper\handlerex.h" />
+    <ClInclude Include="..\..\include\core\looper\loop.h" />
+    <ClInclude Include="..\..\include\core\looper\looper.h" />
+    <ClInclude Include="..\..\include\core\looper\looperimpl.h" />
+    <ClInclude Include="..\..\include\core\looper\procnode.h" />
+    <ClInclude Include="..\..\include\core\looper\teststate.h" />
+    <ClInclude Include="..\..\include\core\net\speedcounter.h" />
+    <ClInclude Include="..\..\include\core\net\tcpclient.h" />
+    <ClInclude Include="..\..\include\core\net\tcpserver.h" />
+    <ClInclude Include="..\..\include\core\net\udpserver.h" />
+    <ClInclude Include="..\..\include\core\net\channel.h" />
+    <ClInclude Include="..\..\include\core\net\dnslooper.h" />
+    <ClInclude Include="..\..\include\core\net\nettool.h" />
+    <ClInclude Include="..\..\include\core\net\socktool.h" />
+    <ClInclude Include="..\..\include\core\net\urltool.h" />
+    <ClInclude Include="..\..\include\core\protocol\ctp\commontextprotocol.h" />
+    <ClInclude Include="..\..\include\core\string\textprotocol.h" />
+    <ClInclude Include="..\..\include\core\string\textseparator.h" />
+    <ClInclude Include="..\..\include\core\string\utf8tool.h" />
+    <ClInclude Include="..\..\include\core\string\xmlstring.h" />
+    <ClInclude Include="..\..\include\core\thread\autolock.h" />
+    <ClInclude Include="..\..\include\core\thread\criticalsection.h" />
+    <ClInclude Include="..\..\include\core\thread\event.h" />
+    <ClInclude Include="..\..\src\arch\linux\serial\serialport_linux.h" />
+    <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h" />
+    <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />
+    <ClInclude Include="..\..\src\core\looper\timernode.h" />
+    <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.h" />
+    <ClInclude Include="corelooper.vs.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="corelooper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

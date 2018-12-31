@@ -1,0 +1,947 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UDebug|Win32">
+      <Configuration>UDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UDebug|x64">
+      <Configuration>UDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5F3F2AAA-B99E-4878-8A32-6D460023F2A1}</ProjectGuid>
+    <RootNamespace>Device</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)..\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;./src;../common;$(OS_FOLDER)\ffmpeg\ffmpeg-3.0.1-win32-dev\include;../../share/bearcore;../../share/bearcore/core;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;src\arch\Ingenic\sdkv3\include;D:\Tools\Java\jdk1.8.0_25\include;D:\Tools\Java\jdk1.8.0_25\include\win32;src/arch/Ingenic;$(OS_FOLDER)/freetype/freetype-2.9/include;$(OS_FOLDER)/freetype/freetype-2.9/devel</AdditionalIncludeDirectories>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\asw\board\resource\boost\boost_1_60_0\stage\lib;../common/lib</AdditionalLibraryDirectories>
+      <ForceSymbolReferences>
+      </ForceSymbolReferences>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;./src;../common;..\..\..\os\ffmpeg\ffmpeg-3.0.1-win32-dev\include;../../share/bearcore;../../share/bearcore/core</AdditionalIncludeDirectories>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\..\asw\board\resource\boost\boost_1_60_0\stage\lib;../common/lib</AdditionalLibraryDirectories>
+      <ForceSymbolReferences>
+      </ForceSymbolReferences>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UDebug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;./src;../common;..\..\..\os\ffmpeg\ffmpeg-3.0.1-win32-dev\include;../../share/bearcore;../../share/bearcore/core;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;src\arch\Ingenic\sdkv3\include;D:\Tools\Java\jdk1.8.0_25\include;D:\Tools\Java\jdk1.8.0_25\include\win32;src/arch/Ingenic;../../../os/freetype/freetype-2.9/include;../../../os/freetype/freetype-2.9/devel;</AdditionalIncludeDirectories>
+      <AdditionalOptions>
+      </AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\asw\board\resource\boost\boost_1_60_0\stage\lib;../common/lib</AdditionalLibraryDirectories>
+      <ForceSymbolReferences>
+      </ForceSymbolReferences>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="2018.txt" />
+    <Text Include="a20.txt" />
+    <Text Include="camera和平台的通讯.txt" />
+    <Text Include="CMakeLists.txt" />
+    <Text Include="Device监测自查.txt" />
+    <Text Include="doc\libuv.txt" />
+    <Text Include="doc\sip\sip.txt" />
+    <Text Include="E:\project\p2p\Fw_Re_ 尚云订单_Sample_2016 [2016]14.1\2016110921_DID_APILicense.txt" />
+    <Text Include="faq.txt" />
+    <Text Include="gdb.txt" />
+    <Text Include="hi3516.txt" />
+    <Text Include="jjy.fee.txt" />
+    <Text Include="led指示灯用法.txt" />
+    <Text Include="moboss.txt" />
+    <Text Include="nfs.config.txt" />
+    <Text Include="onvif.txt" />
+    <Text Include="opencv.txt" />
+    <Text Include="p2p.txt" />
+    <Text Include="rs485.txt" />
+    <Text Include="ingenic t20.txt" />
+    <Text Include="sh学习.txt" />
+    <Text Include="svn.txt" />
+    <Text Include="todo.txt" />
+    <Text Include="3g.mtk6572硬件底层配合.txt" />
+    <Text Include="usb.txt" />
+    <Text Include="待机问题.txt" />
+    <Text Include="设备常见问题和解决办法.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\server\PlatformServer\src\cooperate\HJ212\hj212uploader.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Gps.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_ListAjaxCommand.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RtcTime.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetRtcTime.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetTime.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_CameraPlatform.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_DeleteFile.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_EthConfig.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_FolderContent.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_FormatTFCard.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_Ntp.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_SetEthConfig.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_SetNtp.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_SetUploadConfig.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_SetVideoColor.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_Snapshot2Platform.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_UploadConfig.cpp" />
+    <ClCompile Include="src\ajax.common\Ajax_VideoColor.cpp" />
+    <ClCompile Include="src\ajax.common\oem\twpow\Ajax_SetTwpowConfig.cpp" />
+    <ClCompile Include="src\ajax.common\oem\twpow\Ajax_TwpowConfig.cpp" />
+    <ClCompile Include="src\ajax.common\rs485\AjaxHandler_SensorConfig.cpp" />
+    <ClCompile Include="src\ajax.common\rs485\AjaxHandler_SensorData.cpp" />
+    <ClCompile Include="src\ajax.common\rs485\AjaxHandler_SensorReporterConfig.cpp" />
+    <ClCompile Include="src\ajax.common\rs485\AjaxHandler_SensorStatus.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_SetWifi.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_SetWifiAp.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_Wifi.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_WifiRouterConfigs.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_WifiScan.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_WifiScanResult.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\AjaxHandler_WifiStaStatus.cpp" />
+    <ClCompile Include="src\ajax.common\wifi\Ajax_WifiSignal.cpp" />
+    <ClCompile Include="src\ajax\Ajax_Profile.cpp" />
+    <ClCompile Include="src\arch\android\devicecb_android.cpp" />
+    <ClCompile Include="src\arch\android\jni.main.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\com.jni.AndroidDeviceJni.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\com.jni.CryptHelper.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\com.jni.LedJni.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\com.jni.PlatformProxyJni.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\com.jni.SerialPort.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\epmaster\epmaster.jni.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\PlatformProxy.cpp" />
+    <ClCompile Include="src\arch\android\jni_interface\TestDdns.cpp" />
+    <ClCompile Include="src\arch\android\MainLooper_Android.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\Board_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\gpiojni.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\IRLed_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\LedJni.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\LedManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\osd\OsdAsciiMixer.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\osd\OsdBaseMixer.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\osd\OsdManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\RecordManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\SnapManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\StorageManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\VideoCapture_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\mtk6572\WifiManager_MTK6572.cpp" />
+    <ClCompile Include="src\arch\android\VideoCapture_Android.cpp" />
+    <ClCompile Include="src\arch\hi3516\AudioRender_HI3516.cpp" />
+    <ClCompile Include="src\arch\hi3516\AudioSource_HI3516.cpp" />
+    <ClCompile Include="src\arch\hi3516\Board_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\Gpio_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\HisiOsd.cpp" />
+    <ClCompile Include="src\arch\hi3516\hiregion.cpp" />
+    <ClCompile Include="src\arch\hi3516\HisiCore.cpp" />
+    <ClCompile Include="src\arch\hi3516\hitool.cpp" />
+    <ClCompile Include="src\arch\hi3516\LedManager_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\MainLooper_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\loadbmp.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_audio.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_audio.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_isp.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_ive.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_sys.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_vda.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_venc.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_vi.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_vo.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_comm_vpss.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_region.cpp" />
+    <ClCompile Include="src\arch\hi3516\OsdManager_HI3516.cpp" />
+    <ClCompile Include="src\arch\hi3516\RtcHandler_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\SerialPort_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\SnapManager_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\StorageManager_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\TFCardHandler_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\UploadFileHandler_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\VideoCapture_HI3516.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Battery.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Dump.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DumpH264.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_GetLiveStreamInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Proc.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SwitchStream.cpp" />
+    <ClCompile Include="src\arch\hi3516\WatchDog_Hisi.cpp" />
+    <ClCompile Include="src\arch\hi3516\WifiManager_Hisi.cpp" />
+    <ClCompile Include="src\arch\Ingenic\Board_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\EthManager_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\Gpio_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\Gprs_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\IngenicCore.cpp" />
+    <ClCompile Include="src\arch\Ingenic\MainLooper_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\MotionHandler_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\osd\OsdManager_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\osd\OsdPicture_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\osd\OsdText_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\osd\osd_freetype.cpp" />
+    <ClCompile Include="src\arch\Ingenic\osd\Osd_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\Rtc_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\sdkv3\samples\libimp-samples\sample-common.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\arch\Ingenic\sdkv3\samples\libimp-samples\sample-Encoder-h264.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\arch\Ingenic\SnapManager_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\SqfsBinParser.cpp" />
+    <ClCompile Include="src\arch\Ingenic\StorageManager_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\TestMotion.cpp" />
+    <ClCompile Include="src\arch\Ingenic\TFCardHandler_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\UploadFileHandler_Ingenic.cpp" />
+    <ClCompile Include="src\arch\Ingenic\utfgbk.cpp" />
+    <ClCompile Include="src\arch\Ingenic\WatchDog_Ingenic.cpp" />
+    <ClCompile Include="src\arch\linux\serial\RS485Interface_Linux.cpp" />
+    <ClCompile Include="src\arch\windows\serial\RS485Interface_Windows.cpp" />
+    <ClCompile Include="src\cooperate\OemManager.cpp" />
+    <ClCompile Include="src\cooperate\twpow\TwPowHandler.cpp" />
+    <ClCompile Include="src\cooperate\UniverseStar\UniverseStarHandler.cpp" />
+    <ClCompile Include="src\project\epmaster\Ajax_EP_SetUid.cpp" />
+    <ClCompile Include="src\project\epmaster\Board_WQ.cpp" />
+    <ClCompile Include="src\project\epmaster\epmaster.cpp" />
+    <ClCompile Include="src\project\epmaster\GreenWoodSensor.cpp" />
+    <ClCompile Include="src\project\epmaster\mainlooper_epmaster.cpp" />
+    <ClCompile Include="src\project\epmaster\RS485Interface_EPMaster.cpp" />
+    <ClCompile Include="src\project\epmaster\RS485Interface_WQ.cpp" />
+    <ClCompile Include="src\project\epmaster\RS485Manager_WQ.cpp" />
+    <ClCompile Include="src\project\epmaster\sensordatauploader.cpp" />
+    <ClCompile Include="src\project\led\MainLooper_Led.cpp" />
+    <ClCompile Include="src\system\AlarmManager.cpp" />
+    <ClCompile Include="src\system\AppInfoHandler.cpp" />
+    <ClCompile Include="src\system\at\ATManager.cpp" />
+    <ClCompile Include="src\system\at\ATPage.cpp" />
+    <ClCompile Include="src\system\at\CameraPlatformHandler_Gprs.cpp" />
+    <ClCompile Include="src\system\at\GprsLooper.cpp" />
+    <ClCompile Include="src\system\at\LogCtrl.cpp" />
+    <ClCompile Include="src\system\at\Sim868.cpp" />
+    <ClCompile Include="src\system\at\VirtualSerial_Sim868.cpp" />
+    <ClCompile Include="src\system\BatteryManager.cpp" />
+    <ClCompile Include="src\system\BinFileUnpacker.cpp" />
+    <ClCompile Include="src\system\Board_JJY.cpp" />
+    <ClCompile Include="src\system\ButtonHandler.cpp" />
+    <ClCompile Include="src\system\DataInterface_BinParser.cpp" />
+    <ClCompile Include="src\system\DBMan.cpp" />
+    <ClCompile Include="src\system\DeviceFindHandler.cpp" />
+    <ClCompile Include="src\system\FileUploader.cpp" />
+    <ClCompile Include="src\system\FileUploader_Gprs.cpp" />
+    <ClCompile Include="src\system\font\FontRender.cpp" />
+    <ClCompile Include="src\system\FtpClient.cpp" />
+    <ClCompile Include="src\system\FtpLooper.cpp" />
+    <ClCompile Include="src\system\ikcp.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\system\MainLooper_Device.cpp" />
+    <ClCompile Include="src\system\EthManager.cpp" />
+    <ClCompile Include="src\system\gps\GpsHandler_NMEA.cpp" />
+    <ClCompile Include="src\system\gps\GpsManager.cpp" />
+    <ClCompile Include="src\system\gps\GpsNmeaParser.cpp" />
+    <ClCompile Include="src\system\HttpFileUploader.cpp" />
+    <ClCompile Include="src\system\IRLed.cpp" />
+    <ClCompile Include="src\system\LedManager.cpp" />
+    <ClCompile Include="src\system\MmapEx.cpp" />
+    <ClCompile Include="src\system\mtd\MtdDevice.cpp" />
+    <ClCompile Include="src\system\mtd\MtdTool.cpp" />
+    <ClCompile Include="src\system\NetChecker.cpp" />
+    <ClCompile Include="src\system\NtpManager.cpp" />
+    <ClCompile Include="src\system\onvif\Discover.cpp" />
+    <ClCompile Include="src\system\onvif\Onvifer.cpp" />
+    <ClCompile Include="src\system\onvif\OnvifHttpRequestFilter.cpp" />
+    <ClCompile Include="src\system\onvif\OnvifTool.cpp" />
+    <ClCompile Include="src\system\onvif\OnvifXml.cpp" />
+    <ClCompile Include="src\system\onvif\sdk\OnvifLooper.cpp" />
+    <ClCompile Include="src\system\PlatformHandler.cpp" />
+    <ClCompile Include="src\system\platform\CameraPlatformHandler.cpp" />
+    <ClCompile Include="src\system\ProfileHandler.cpp" />
+    <ClCompile Include="src\system\RecordHandler.cpp" />
+    <ClCompile Include="src\system\RecordLooper.cpp" />
+    <ClCompile Include="src\system\RecordManager.cpp" />
+    <ClCompile Include="src\system\FileUploadManager.cpp" />
+    <ClCompile Include="src\system\RtcHandler.cpp" />
+    <ClCompile Include="src\system\SerialPortManager.cpp" />
+    <ClCompile Include="src\system\serial\HumitureSensor.cpp" />
+    <ClCompile Include="src\system\serial\LedDisplay_OnBon.cpp" />
+    <ClCompile Include="src\system\serial\LedDisplay_WQ.cpp" />
+    <ClCompile Include="src\system\serial\onbon.cpp" />
+    <ClCompile Include="src\system\serial\Ptz.cpp" />
+    <ClCompile Include="src\system\serial\RelaySensor.cpp" />
+    <ClCompile Include="src\system\serial\RS485Manager.cpp" />
+    <ClCompile Include="src\system\serial\RS485Interface.cpp" />
+    <ClCompile Include="src\system\serial\RS485Device.cpp" />
+    <ClCompile Include="src\system\serial\SensorReporter.cpp" />
+    <ClCompile Include="src\system\serial\SuperSensor.cpp" />
+    <ClCompile Include="src\system\serial\WindDirectionSensor.cpp" />
+    <ClCompile Include="src\system\serial\WindSensor.cpp" />
+    <ClCompile Include="src\system\SimCardManager.cpp" />
+    <ClCompile Include="src\system\SnapManager.cpp" />
+    <ClCompile Include="src\system\SnapCache.cpp" />
+    <ClCompile Include="src\system\SnapRemover.cpp" />
+    <ClCompile Include="src\system\StorageManager.cpp" />
+    <ClCompile Include="src\system\storage\DiskEx.cpp" />
+    <ClCompile Include="src\system\storage\TFCardHandler.cpp" />
+    <ClCompile Include="src\system\SystemLogger.cpp" />
+    <ClCompile Include="src\system\TimeHelper.cpp" />
+    <ClCompile Include="src\system\TimeManager.cpp" />
+    <ClCompile Include="src\system\WatchDog.cpp" />
+    <ClCompile Include="Device.cpp" />
+    <ClCompile Include="DeviceDlg.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\ajax\AjaxHandler_AddUser.cpp" />
+    <ClCompile Include="src\ajax\AjaxHandler_Exit.cpp" />
+    <ClCompile Include="src\ajax\AjaxHandler_GetMenuInfo.cpp" />
+    <ClCompile Include="src\arch\hi3516\mpp_sample\sample_venc.cpp" />
+    <ClCompile Include="src\DemoTcpHandler.cpp" />
+    <ClCompile Include="src\StudIocpDlg.cpp" />
+    <ClCompile Include="src\system\wifi\iwprivex.cpp" />
+    <ClCompile Include="src\system\wifi\WifiChecker.cpp" />
+    <ClCompile Include="src\system\wifi\WifiManager.cpp" />
+    <ClCompile Include="src\system\wifi\WifiManager2.cpp" />
+    <ClCompile Include="src\test.cpp" />
+    <ClCompile Include="src\TestLooper.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_AlarmConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_CheckUpdateFirmware.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DeviceInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DeviceLang.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DeviceRecordInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DeviceRecordPlan.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_DeviceSnapPlan.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_EditCameraUserPassword.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_EnableApkKeepAlive.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_EnableGps.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_EnableStandBy.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_FirmwareUpdateConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_GetGpio.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_GetSensorData.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_GpsInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_HandlerInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_IRLed.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_LedDisplay.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_LogTagConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Login.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Monitor.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Osd.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_P2P.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Platform.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Ptz.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Reboot.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RecordFileMask.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RefreshSensor.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RequestDeviceSnap.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RequestDownloadFile.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RequestUploadFile.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_ResetToFactoryConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_RtspInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetAlarmConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetDeviceLang.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetDeviceRecordPlan.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetDeviceSnapPlan.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetFactoryUidInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetFirmwareUpdateConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetLedDisplay.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetName.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetGpio.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetIRLed.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetOsd.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetPlatform.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetSensorConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetSmartStream.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetTagConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetSensorReporterConfig.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SetVideoParam.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SimCard.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_SmartStream.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_StandByInfo.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_StartTalk.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_StopTalk.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Storage.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_Test.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_VideoParam.cpp" />
+    <ClCompile Include="src\ajax.common\AjaxHandler_WriteSerialData.cpp" />
+    <ClCompile Include="src\UdpIocpDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UDebug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UDebug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Device.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="camera.ini.字段说明.ini" />
+    <None Include="doc\BaseHandler设计.docx" />
+    <None Include="doc\hi3516\hi3516开发.docx" />
+    <None Include="doc\sim868 GPRS\SIM868项目.docx" />
+    <None Include="doc\uvc.android.docx" />
+    <None Include="doc\传感器\自校准粉尘仪使用说明V1.0.pdf" />
+    <None Include="doc\海思方案设计.docx" />
+    <None Include="doc\雄迈板端开发.docx" />
+    <None Include="opengl学习.docx" />
+    <None Include="p2p调试.docx" />
+    <None Include="res\Device.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Device.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\server\PlatformServer\src\cooperate\HJ212\hj212uploader.h" />
+    <ClInclude Include="..\..\share\bearcore\core\device\Sensor.h" />
+    <ClInclude Include="..\..\share\bearcore\depends\sqlite\sqlite3ext.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_AlarmConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_CheckUpdateFirmware.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DeviceInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DeviceLang.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DeviceRecordInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DeviceRecordPlan.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DeviceSnapPlan.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_EditCameraUserPassword.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_EnableApkKeepAlive.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_EnableGps.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_EnableStandBy.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_FirmwareUpdateConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_GetGpio.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_GetSensorData.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Gps.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_GpsInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_HandlerInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_IRLed.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_LedDisplay.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_ListAjaxCommand.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_LogTagConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Login.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Monitor.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Osd.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_P2P.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Platform.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Ptz.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Reboot.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RecordFileMask.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RefreshSensor.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RequestDeviceSnap.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RequestDownloadFile.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RequestUploadFile.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_ResetToFactoryConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RtcTime.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_RtspInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetAlarmConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetDeviceLang.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetDeviceRecordPlan.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetDeviceSnapPlan.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetFactoryUidInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetFirmwareUpdateConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetLedDisplay.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetName.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetGpio.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetIRLed.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetOsd.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetPlatform.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetRtcTime.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetSensorConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetSmartStream.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetTagConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetSensorReporterConfig.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetTime.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SetVideoParam.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SimCard.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SmartStream.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_StandByInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_StartTalk.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_StopTalk.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Storage.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Test.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_VideoParam.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_WriteSerialData.h" />
+    <ClInclude Include="src\ajax.common\Ajax_CameraPlatform.h" />
+    <ClInclude Include="src\ajax.common\Ajax_DeleteFile.h" />
+    <ClInclude Include="src\ajax.common\Ajax_EthConfig.h" />
+    <ClInclude Include="src\ajax.common\Ajax_FolderContent.h" />
+    <ClInclude Include="src\ajax.common\Ajax_FormatTFCard.h" />
+    <ClInclude Include="src\ajax.common\Ajax_Ntp.h" />
+    <ClInclude Include="src\ajax.common\Ajax_SetEthConfig.h" />
+    <ClInclude Include="src\ajax.common\Ajax_SetNtp.h" />
+    <ClInclude Include="src\ajax.common\Ajax_SetUploadConfig.h" />
+    <ClInclude Include="src\ajax.common\Ajax_SetVideoColor.h" />
+    <ClInclude Include="src\ajax.common\Ajax_Snapshot2Platform.h" />
+    <ClInclude Include="src\ajax.common\Ajax_UploadConfig.h" />
+    <ClInclude Include="src\ajax.common\Ajax_VideoColor.h" />
+    <ClInclude Include="src\ajax.common\apn\AjaxHandler_Apn.h" />
+    <ClInclude Include="src\ajax.common\apn\AjaxHandler_EditApn.h" />
+    <ClInclude Include="src\ajax.common\oem\twpow\Ajax_SetTwpowConfig.h" />
+    <ClInclude Include="src\ajax.common\oem\twpow\Ajax_TwpowConfig.h" />
+    <ClInclude Include="src\ajax.common\rs485\AjaxHandler_SensorConfig.h" />
+    <ClInclude Include="src\ajax.common\rs485\AjaxHandler_SensorData.h" />
+    <ClInclude Include="src\ajax.common\rs485\AjaxHandler_SensorReporterConfig.h" />
+    <ClInclude Include="src\ajax.common\rs485\AjaxHandler_SensorStatus.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_SetWifi.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_SetWifiAp.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_Wifi.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_WifiRouterConfigs.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_WifiScan.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_WifiScanResult.h" />
+    <ClInclude Include="src\ajax.common\wifi\AjaxHandler_WifiStaStatus.h" />
+    <ClInclude Include="src\ajax.common\wifi\Ajax_WifiSignal.h" />
+    <ClInclude Include="src\ajax\Ajax_Profile.h" />
+    <ClInclude Include="src\arch\android\jni_interface\com.jni.PlatformProxyJni.h" />
+    <ClInclude Include="src\arch\android\jni_interface\PlatformProxy.h" />
+    <ClInclude Include="src\arch\android\MainLooper_Android.h" />
+    <ClInclude Include="src\arch\android\mtk6572\Board_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\IRLed_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\LedManager_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\osd\OsdAsciiMixer.h" />
+    <ClInclude Include="src\arch\android\mtk6572\osd\OsdBaseMixer.h" />
+    <ClInclude Include="src\arch\android\mtk6572\osd\OsdManager_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\RecordManager_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\SnapManager_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\StorageManager_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\VideoCapture_MTK6572.h" />
+    <ClInclude Include="src\arch\android\mtk6572\WifiManager_MTK6572.h" />
+    <ClInclude Include="src\arch\hi3516\AudioRender_HI3516.h" />
+    <ClInclude Include="src\arch\hi3516\AudioSource_HI3516.h" />
+    <ClInclude Include="src\arch\hi3516\Board_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\Gpio_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\HisiOsd.h" />
+    <ClInclude Include="src\arch\hi3516\hiregion.h" />
+    <ClInclude Include="src\arch\hi3516\HisiCore.h" />
+    <ClInclude Include="src\arch\hi3516\hitool.h" />
+    <ClInclude Include="src\arch\hi3516\LedManager_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\MainLooper_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\mpp_sample\loadbmp.h" />
+    <ClInclude Include="src\arch\hi3516\mpp_sample\sample_comm.h" />
+    <ClInclude Include="src\arch\hi3516\mpp_sample\sample_comm_ive.h" />
+    <ClInclude Include="src\arch\hi3516\OsdManager_HI3516.h" />
+    <ClInclude Include="src\arch\hi3516\RtcHandler_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\SerialPort_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\SnapManager_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\StorageManager_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\TFCardHandler_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\UploadFileHandler_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\VideoCapture_HI3516.h" />
+    <ClInclude Include="src\arch\hi3516\WatchDog_Hisi.h" />
+    <ClInclude Include="src\arch\hi3516\WifiManager_Hisi.h" />
+    <ClInclude Include="src\arch\Ingenic\Board_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\EthManager_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\Gpio_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\Gprs_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\IngenicCore.h" />
+    <ClInclude Include="src\arch\Ingenic\MainLooper_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\MotionHandler_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\osd\OsdManager_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\osd\OsdPicture_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\osd\OsdText_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\osd\osd_freetype.h" />
+    <ClInclude Include="src\arch\Ingenic\osd\Osd_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\Rtc_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_audio.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_common.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_decoder.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_encoder.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_framesource.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_isp.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_ivs.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_ivs_move.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_log.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_osd.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_system.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\imp\imp_utils.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\sysutils\su_adc.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\sysutils\su_base.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\sysutils\su_battery.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\sysutils\su_cipher.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\include\sysutils\su_misc.h" />
+    <ClInclude Include="src\arch\Ingenic\sdkv3\samples\libimp-samples\sample-common.h" />
+    <ClInclude Include="src\arch\Ingenic\SnapManager_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\SqfsBinParser.h" />
+    <ClInclude Include="src\arch\Ingenic\StorageManager_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\TFCardHandler_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\UploadFileHandler_Ingenic.h" />
+    <ClInclude Include="src\arch\Ingenic\utfgbk.h" />
+    <ClInclude Include="src\arch\Ingenic\WatchDog_Ingenic.h" />
+    <ClInclude Include="src\arch\linux\serial\RS485Interface_Linux.h" />
+    <ClInclude Include="src\arch\windows\serial\RS485Interface_Windows.h" />
+    <ClInclude Include="src\cooperate\OemManager.h" />
+    <ClInclude Include="src\cooperate\twpow\TwPowHandler.h" />
+    <ClInclude Include="src\cooperate\UniverseStar\UniverseStarHandler.h" />
+    <ClInclude Include="src\project\epmaster\Ajax_EP_SetUid.h" />
+    <ClInclude Include="src\project\epmaster\Board_WQ.h" />
+    <ClInclude Include="src\project\epmaster\epmaster.h" />
+    <ClInclude Include="src\project\epmaster\GreenWoodSensor.h" />
+    <ClInclude Include="src\project\epmaster\mainlooper_epmaster.h" />
+    <ClInclude Include="src\project\epmaster\RS485Interface_EPMaster.h" />
+    <ClInclude Include="src\project\epmaster\RS485Interface_WQ.h" />
+    <ClInclude Include="src\project\epmaster\RS485Manager_WQ.h" />
+    <ClInclude Include="src\project\epmaster\sensordatauploader.h" />
+    <ClInclude Include="src\project\led\MainLooper_Led.h" />
+    <ClInclude Include="src\system\AlarmManager.h" />
+    <ClInclude Include="src\system\AppInfoHandler.h" />
+    <ClInclude Include="src\system\at\ATManager.h" />
+    <ClInclude Include="src\system\at\ATPage.h" />
+    <ClInclude Include="src\system\at\CameraPlatformHandler_Gprs.h" />
+    <ClInclude Include="src\system\at\GprsLooper.h" />
+    <ClInclude Include="src\system\at\LogCtrl.h" />
+    <ClInclude Include="src\system\at\Sim868.h" />
+    <ClInclude Include="src\system\at\VirtualSerial_Sim868.h" />
+    <ClInclude Include="src\system\BatteryManager.h" />
+    <ClInclude Include="src\system\BinFileUnpacker.h" />
+    <ClInclude Include="src\system\BinFileUnpackerCB.h" />
+    <ClInclude Include="src\system\Board_JJY.h" />
+    <ClInclude Include="src\system\ButtonHandler.h" />
+    <ClInclude Include="src\system\DataInterface_BinParser.h" />
+    <ClInclude Include="src\system\DBMan.h" />
+    <ClInclude Include="src\system\DeviceFindHandler.h" />
+    <ClInclude Include="src\system\FileUploader.h" />
+    <ClInclude Include="src\system\FileUploader_Gprs.h" />
+    <ClInclude Include="src\system\font\FontRender.h" />
+    <ClInclude Include="src\system\FtpClient.h" />
+    <ClInclude Include="src\system\FtpLooper.h" />
+    <ClInclude Include="src\system\ikcp.h" />
+    <ClInclude Include="src\system\MainLooper_Device.h" />
+    <ClInclude Include="src\system\EthManager.h" />
+    <ClInclude Include="src\system\FileReceiver.h" />
+    <ClInclude Include="src\system\FileReceiverCB.h" />
+    <ClInclude Include="src\system\gpio.h" />
+    <ClInclude Include="src\system\gps\GpsHandler_NMEA.h" />
+    <ClInclude Include="src\system\gps\GpsManager.h" />
+    <ClInclude Include="src\system\gps\GpsNmeaParser.h" />
+    <ClInclude Include="src\system\HttpFileUploader.h" />
+    <ClInclude Include="src\system\IRLed.h" />
+    <ClInclude Include="src\system\LedManager.h" />
+    <ClInclude Include="src\system\MmapEx.h" />
+    <ClInclude Include="src\system\mtd\MtdDevice.h" />
+    <ClInclude Include="src\system\mtd\MtdTool.h" />
+    <ClInclude Include="src\system\NetChecker.h" />
+    <ClInclude Include="src\system\NtpManager.h" />
+    <ClInclude Include="src\system\onvif\Discover.h" />
+    <ClInclude Include="src\system\onvif\Onvifer.h" />
+    <ClInclude Include="src\system\onvif\OnvifHttpRequestFilter.h" />
+    <ClInclude Include="src\system\onvif\OnvifTool.h" />
+    <ClInclude Include="src\system\onvif\OnvifXml.h" />
+    <ClInclude Include="src\system\onvif\sdk\OnvifLooper.h" />
+    <ClInclude Include="src\system\PlatformHandler.h" />
+    <ClInclude Include="src\system\platform\CameraPlatformHandler.h" />
+    <ClInclude Include="src\system\ProfileHandler.h" />
+    <ClInclude Include="src\system\RecordHandler.h" />
+    <ClInclude Include="src\system\RecordLooper.h" />
+    <ClInclude Include="src\system\RecordManager.h" />
+    <ClInclude Include="src\system\FileUploadManager.h" />
+    <ClInclude Include="src\system\RtcHandler.h" />
+    <ClInclude Include="src\system\SerialPortManager.h" />
+    <ClInclude Include="src\system\serial\HumitureSensor.h" />
+    <ClInclude Include="src\system\serial\LedDisplay_OnBon.h" />
+    <ClInclude Include="src\system\serial\LedDisplay_WQ.h" />
+    <ClInclude Include="src\system\serial\onbon.h" />
+    <ClInclude Include="src\system\serial\Ptz.h" />
+    <ClInclude Include="src\system\serial\RelaySensor.h" />
+    <ClInclude Include="src\system\serial\RS485Manager.h" />
+    <ClInclude Include="src\system\serial\RS485Interface.h" />
+    <ClInclude Include="src\system\serial\RS485Device.h" />
+    <ClInclude Include="src\system\serial\SensorReporter.h" />
+    <ClInclude Include="src\system\serial\SuperSensor.h" />
+    <ClInclude Include="src\system\serial\WindDirectionSensor.h" />
+    <ClInclude Include="src\system\serial\WindSensor.h" />
+    <ClInclude Include="src\system\SimCardManager.h" />
+    <ClInclude Include="src\system\SnapManager.h" />
+    <ClInclude Include="src\system\SnapCache.h" />
+    <ClInclude Include="src\system\SnapRemover.h" />
+    <ClInclude Include="src\system\StorageManager.h" />
+    <ClInclude Include="src\system\storage\DiskEx.h" />
+    <ClInclude Include="src\system\storage\TFCardHandler.h" />
+    <ClInclude Include="src\system\SystemLogger.h" />
+    <ClInclude Include="src\system\TimeHelper.h" />
+    <ClInclude Include="src\system\TimeManager.h" />
+    <ClInclude Include="src\system\WatchDog.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Battery.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Dump.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_DumpH264.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_GetLiveStreamInfo.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_Proc.h" />
+    <ClInclude Include="src\ajax.common\AjaxHandler_SwitchStream.h" />
+    <ClInclude Include="Device.h" />
+    <ClInclude Include="DeviceDlg.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="src\ajax\AjaxHandler_AddUser.h" />
+    <ClInclude Include="src\ajax\AjaxHandler_Exit.h" />
+    <ClInclude Include="src\ajax\AjaxHandler_GetMenuInfo.h" />
+    <ClInclude Include="src\DemoTcpHandler.h" />
+    <ClInclude Include="src\StudIocpDlg.h" />
+    <ClInclude Include="src\system\wifi\iwlib.h" />
+    <ClInclude Include="src\system\wifi\iwprivex.h" />
+    <ClInclude Include="src\system\wifi\WifiChecker.h" />
+    <ClInclude Include="src\system\wifi\WifiManager.h" />
+    <ClInclude Include="src\system\wifi\WifiManager2.h" />
+    <ClInclude Include="src\system\wifi\WifiScanner.h" />
+    <ClInclude Include="src\test.h" />
+    <ClInclude Include="src\TestLooper.h" />
+    <ClInclude Include="src\UdpIocpDlg.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="src\arch\android\devicecb_android.h" />
+    <ClInclude Include="src\arch\android\jni_interface\com.jni.AndroidDeviceJni.h" />
+    <ClInclude Include="src\arch\android\jni_interface\com.jni.CryptHelper.h" />
+    <ClInclude Include="src\arch\android\jni_interface\com.jni.LedJni.h" />
+    <ClInclude Include="src\arch\android\mtk6572\gpiojni.h" />
+    <ClInclude Include="src\arch\android\mtk6572\LedJni.h" />
+    <ClInclude Include="src\arch\android\Test.h" />
+    <ClInclude Include="src\arch\android\VideoCapture_Android.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Device.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

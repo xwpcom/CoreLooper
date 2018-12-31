@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\core\looper\asynctask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\asynctasklooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\thread\autolock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\bytebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\bytetool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\channel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\thread\criticalsection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\dnslooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\dt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\file\dumpfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\thread\event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\file\file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\file\filefinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\handlerex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\file\inifile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\iocontext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\linuxsignal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\looper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\looper_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\looper_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\looperimpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\namevalue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\nettool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\procnode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\shelltool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\socktool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\stringtool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\string\textprotocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\string\textseparator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\tickdumper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\timermanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\udpiocontext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\unittest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\file\virtualfolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="corelooper.vs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\handlerinternaldata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\looperinternaldata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\iocpobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\tcpclient_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\tcpclient_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\tcpclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\tcpserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\tcpserver_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\tcpserver_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\udpclient_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\udpclient_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\udpserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\udpserver_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\udpserver_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\string\xmlstring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\speedcounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\urltool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\serial\serialport_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\android\jnilooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\android\jnihelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\string\utf8tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\android\jni_entry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\unittest_handy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\serialport_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="corelooper.vs.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\asynctask.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\asynctasklooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\blocklooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\handler.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\loop.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\looper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\looperimpl.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\bundle.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\bundleex.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\bytebuffer.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\bytetool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\dt.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\iparam.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\log.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\namevalue.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\object.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\shelltool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\sigslot.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\stringtool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\tickdumper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\win32.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\textprotocol.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\textseparator.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\channel.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\dnslooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\nettool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\socktool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\iocontext.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\looper_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\udpiocontext.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\linuxsignal.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\looper_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\looper\looperinternaldata.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\teststate.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\iocpobject.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\tcpclient.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\tcpclient_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\tcpclient_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\tcpserver.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\tcpserver_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\tcpserver_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\udpclient_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\udpclient_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\udpserver.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\udpserver_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\udpserver_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\xmlstring.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\transferfileinfo.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\speedcounter.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\urltool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\arch\linux\serial\serialport_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\android\jnilooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\android\jnihelper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\utf8tool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\ctp\commontextprotocol.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\serialport_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\handlerex.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\procnode.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\thread\autolock.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\thread\criticalsection.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\file.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\inifile.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\dumpfile.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\filefinder.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\file\virtualfolder.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\thread\event.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\looper\timernode.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\doc\corelooper框架用户手册.docx" />
+    <None Include="corelooper.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="res\corelooper.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\include\core\looper\looperimpl.inl">
+      <Filter>header files</Filter>
+    </None>
+    <None Include="..\..\include\core\base\base.inl">
+      <Filter>header files</Filter>
+    </None>
+    <None Include="..\..\src\core\looper\message.inl">
+      <Filter>header files</Filter>
+    </None>
+    <None Include="..\..\include\core\looper\libcorelooper.inl">
+      <Filter>header files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="header files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="corelooper.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -1,6 +1,80 @@
-[中文版readme](readme_cn.md)
+# CoreLooper简介
+- CoreLooper是一个基于c++11的全平台通用组件框架,支持通用业务和网络通讯。
+- 与一般的网络框架不同，在框架设计层面CoreLooper更侧重于通用业务。
+- CoreLooper对标Android java层和Windows MFC中的业务层，提供完善的基础设施。 
+- CoreLooper目前不直接支持UI,但可以和UI层交互。后续可考虑集成OpenGL/DirectX UI.
 
-# CoreLooper
-CoreLooper is a c++11 framework for general application and network.
+## 主要功能
+- 组件通讯, 跨线程通讯,网络通讯,三者自然统一
+- 组件命名,布局,定位
+- 事件管理
+- 定时器
 
-# The source code is under refactoring and I will commit it before 2019.01.01
+## 主要特点
+- 对象生命周期管理，对象同线程/跨线程通讯，事件等基础设施完善，让用户专注于自身业务
+- 能采用android java style来写C++
+- 采用智能指针管理c++对象,避免手工new,delete等琐碎任务,并且和框架良好匹配
+- 框架帮助用户养成有始有终的编码习惯,app都必须干净的退出
+- 不依赖其他库, 仅基于c++11(只用到shared_ptr,weak_ptr,auto等少量c++11特性,后续可能会加上lambda)
+- 框架默默填坑，对用户无坑(或者说少坑),比如说用户不需要自己加锁
+- 异步
+- 简洁
+- 具有无限扩展性
+- 跨平台,支持Android, iOS, Linux, Windows(x86/x64),并可方便的移植到其他平台
+  
+
+## CoreLooper能做什么
+- 开发TCP,UDP服务器
+- 开发设备端
+- 开发客户端
+- 开发产品SDK
+- 开发串口应用
+- 开发ActiveX/OCX控件
+- 开发模拟器
+- 开发其他通用库 CoreLooper提供了众多基础功能，可在此基础上构建你自己的库
+-  其他应用场景,只要支持c++11，就可以使用CoreLooper
+# 愿景
+- 希望能被广泛使用，成为行业事实标准
+- 带动C++开源发展
+- 成为C++标准
+
+为什么定这么"宏大"的目标呢? 主要是风闻asio要进c++标准，这让我大吃一惊。  
+个人感觉asio把简单的问题复杂化了。  
+尽管CoreLooper目前没有asio完善，但应该比asio简洁很多,易用性也有天壤之别。  
+做人还是要有理想的，万一实现了呢!  
+
+# CoreLooper授权
+CoreLooper是开源软件，但不是免费的，它采用灵活的授权方案。
+
+## 在中国内地使用corelooper的授权
+- 按C++开发人员收年费，每人每年100元(或一次性捐助1000元即可终生使用CoreLooper)
+- 对在校学生和无收入的用户每人每年0元,相当于免费使用
+- 自愿原则  
+
+## 捐助
+### 微信
+![img](../images/wepay.png)
+<br>此<br>处<br>特<br>意<br>保<br>留<br>一<br>些<br>空<br>白<br>,<br>避<br>免<br>误<br>操<br>作<br>!<br>
+### 支付宝
+![img](../images/alipay.png)
+  
+
+## 在其他国家和地区使用CoreLooper的授权
+- 按C++开发人员收年费，每人每年50美元
+
+
+## CoreLooper授权收益会用来做什么
+CoreLooper远没有完善，还有很多计划在我们的todo列表中，所有这些工作都需要资源来实现。
+
+# CoreLooper为什么要开源
+
+开放能带来更大的价值  
+本人比较喜欢近现代西方科学和开源软件,近几百年科技发展迅猛，一个很重要的原因是开放的精神,心向往之。      
+
+# 反馈问题
+
+bug、修改建议、疑惑都欢迎提在issue中，或加入CoreLooper开发交流QQ群484544131讨论问题。
+
+作者  
+Bear熊万平  2018.12.31
+

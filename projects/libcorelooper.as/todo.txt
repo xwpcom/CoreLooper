@@ -1,0 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////////////////
+2018.09.22//////////////////////////////////////////////////////////////////////////////////
+.要在android studio中单步调试c++代码，需要在build.gradle(module:app)中增加
+buildTypes{
+   debug{
+        jniDebuggable true
+        jniDebuggable = true
+    }
+
+发现as jni是用如下编译器
+D:\Tools\AndroidStudioSdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\bin\clang++.exe
+查看它的预定义宏
+clang++.exe  -E -dM -c d:/t.cpp >> d:/marco_arm.txt
+
+

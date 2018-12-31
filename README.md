@@ -1,4 +1,4 @@
-[中文版readme](readme_cn.md)
+[中文版readme](doc/cn/readme.md)
 
 # CoreLooper
 CoreLooper is a c++11 framework for general application and network.

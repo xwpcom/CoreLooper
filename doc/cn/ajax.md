@@ -8,7 +8,8 @@ CoreLooper采用AJAX在浏览器中展示app运行时的Handler结构树
 
 如果有时间，可以做精美的网页来更好的展示
 这对于开发调试来说是很方便的  
-正式运营时也可以使用。
+正式运营时也可以使用。  
+url中的user,password仅供演示，正式使用时请注意接口安全性
 
 ## AjaxHandler
 CoreLooper提供了AjaxHandler，用来很方便的扩展ajax指令，比如proc.xml的实现如下:
