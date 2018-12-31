@@ -74,6 +74,8 @@ CoreLooper远没有完善，还有很多计划在我们的todo列表中，所有这些工作都需要资源来实
 # 反馈问题
 
 bug、修改建议、疑惑都欢迎提在issue中，或加入CoreLooper开发交流QQ群484544131讨论问题。
+## QQ群
+![img](../images/qq.group.png)
 
 作者  
 Bear熊万平  2018.12.31
