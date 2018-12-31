@@ -27,5 +27,7 @@ DT工具及其源码在projects\dt
 [文件命名](filename.md)  
 [关于C++的思考(未完待续)](c++.md)  
 
+[Demo](demo.md)
+
 [todo](todo.md)  
 想法很多，有待完成  
