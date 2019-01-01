@@ -2,7 +2,7 @@
 using namespace Bear::Core;
 class MainLooper :public MainLooper_
 {
-	SUPER(Looper)
+	SUPER(MainLooper_)
 protected:
 	long  mTimerDelayExit = 0;
 	long  mTimerTest = 0;
