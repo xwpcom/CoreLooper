@@ -7,6 +7,9 @@ projects	vs,android stuido,xcode工程
 src			核心代码
 
 .在linux下编译
+	git clone后c和build.sh目前没有自带+x权限，正在研究自动加权限的办法，目前需要手工加上
+	chmod +x ./c
+	chmod +x ./build.sh
 	运行./c
 	或./build.sh即可
 	编译后可运行demo,比如:
