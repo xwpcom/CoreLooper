@@ -2,6 +2,7 @@
 [CoreLooper框架介绍](corelooper.md)  
 [Handler](handler.md)  
 [Looper](looper.md)  
+[Event,Message&sigslot事件,消息和信号槽](event.message.sigslot.md)  
 [MainLooper主Looper](mainlooper.md)  
 [BlockLooper可能阻塞的Looper](.md)  
 [Timer定时器](timer.md)  
@@ -18,6 +19,7 @@
 在vs中单元测试时，可用DT工具来看调试信息  
 DT工具及其源码在projects\dt
 
+[智能指针](smartpointer.md)  
 [和OS原生线程通讯](work.with.raw.thread.md)  
 [基于CoreLooper创建SDK](create.sdk.md)  
 [CoreLooper在Linux下的使用](linux.md)  

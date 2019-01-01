@@ -221,6 +221,77 @@ TEST_CLASS(_TestCPP11)
 
 namespace UnitTest
 {
+TEST_CLASS(Sigslot_)
+{
+public:
+	TEST_METHOD(Base)
+	{
+		class EventSource :public Handler
+		{
+			SUPER(Handler)
+		public:
+			sigslot::signal3<Handler*, const string&, int> SignalSomeEvent;
+
+		protected:
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				class Worker :public Runnable
+				{
+				public:
+					weak_ptr<EventSource> mObject;
+				protected:
+					void Run()
+					{
+						auto obj = mObject.lock();
+						if (obj)
+						{
+							obj->SignalSomeEvent(obj.get(), "hello", 2019);
+						}
+					}
+				};
+
+				auto obj = make_shared<Worker>();
+				obj->mObject = dynamic_pointer_cast<EventSource>(shared_from_this());
+				postDelayedRunnable(obj, 1000);
+			}
+
+		};
+		class EventListener :public Handler
+		{
+			SUPER(Handler)
+		public:
+			void OnSomeEvent(Handler*, const string& msg, int value)
+			{
+				DW("%s,msg=%s,value=%d", __func__, msg.c_str(), value);
+
+				Looper::CurrentLooper()->PostQuitMessage(0);
+			}
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			SUPER(MainLooper_);
+
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto source = make_shared<EventSource>();
+				AddChild(source);
+
+				auto listener = make_shared<EventListener>();
+				AddChild(listener);
+
+				source->SignalSomeEvent.connect(listener.get(), &EventListener::OnSomeEvent);
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+
+};
 
 TEST_CLASS(Handler_)
 {
