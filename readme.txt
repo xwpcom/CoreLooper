@@ -22,6 +22,13 @@ src			核心代码
 	编译debug版
 	BUILD_TYPE=Debug ./build.sh VERBOSE=1
 	参考 https://blog.csdn.net/liuweihui521/article/details/52556375
+	单步调试:
+	cd CoreLooper/build/Debug/bin
+	gdb -tui timer
+	b main在main函数设置断点
+	s是跟踪进函数
+	n是执行下一条语句
+	gdb调试太麻烦，还是vs方便些
 
 .在windows下编译
 	用vs2017打开projects\libcorelooper\corelooper.sln
