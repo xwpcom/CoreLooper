@@ -11,6 +11,7 @@
 [Channel数据通道](channel.md)  
 [SerialPort串口通讯](serialport.md)  
 [HttpServer网页服务器](httpserver.md)  
+[LOOPER_SAFE,SUPER,\_Object,\_MObject,\_Shortcut等几个常用宏的说明](macro.md)  
 
 [Ajax](ajax.md)  
 非常好用的数据接口,比如可在浏览器观察运行时信息等
