@@ -119,7 +119,12 @@ DWORD ShellTool::GetTickCount()
 	struct timespec tp;
 	tp.tv_sec = 0;
 	tp.tv_nsec = 0;
-	long ret = clock_gettime(CLOCK_MONOTONIC, &tp);
+
+	auto flag = CLOCK_MONOTONIC;
+#ifdef CLOCK_MONOTONIC_RAW
+	flag = CLOCK_MONOTONIC_RAW;
+#endif
+	long ret = clock_gettime(flag, &tp);
 	if (ret)
 	{
 		DW("err=%d(%s)", errno, strerror(errno));
@@ -142,7 +147,7 @@ ULONGLONG ShellTool::GetTickCount64()
 	struct timespec tp;
 	tp.tv_sec = 0;
 	tp.tv_nsec = 0;
-	long ret = clock_gettime(CLOCK_MONOTONIC, &tp);
+	long ret = clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
 	if (ret)
 	{
 		DW("err=%d(%s)", errno, strerror(errno));
@@ -1085,7 +1090,7 @@ int ShellTool::ShowInFolder(const string& filePath)
 
 #endif
 
-//把text1,text2,....的字符串解析出来，并保证不重复
+//text1,text2,....
 void ShellTool::String2Vector(const string& text, vector<string>& vec)
 {
 	vec.clear();
