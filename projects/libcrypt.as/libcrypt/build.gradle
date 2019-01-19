@@ -1,0 +1,66 @@
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+
+android {
+    signingConfigs {
+        debug {
+            keyAlias 'wipc'
+            keyPassword 'xwp.jjy'
+            storeFile file('wipc.keystore')
+            storePassword 'xwp.jjy'
+        }
+    }
+    compileSdkVersion 27
+    defaultConfig {
+        //applicationId "com.jjyip.libcrypt"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions -D _CONFIG_ANDROID"
+            }
+        }
+        ndk {
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            //只编译常用的arm版
+            abiFilters 'armeabi-v7a' //目前libav由于用到了ffmpeg,只支持arm版android,所以加此限制
+        }
+
+        signingConfig signingConfigs.debug
+    }
+    buildTypes {
+        debug {
+            jniDebuggable true
+            jniDebuggable = true
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            debuggable true
+            jniDebuggable true
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation project(':libcorelooper')
+}

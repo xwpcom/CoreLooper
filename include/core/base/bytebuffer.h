@@ -27,14 +27,14 @@ public:
 	int MakeSureEndWithNull();
 	bool IsEndWithNull();
 
-	void SetUserData(DWORD dwUserData)
+	void SetUserData(ULONGLONG dwUserData)
 	{
-		m_dwUserData = dwUserData;
+		mUserData = dwUserData;
 	}
 
-	DWORD GetUserData()const
+	ULONGLONG GetUserData()const
 	{
-		return m_dwUserData;
+		return mUserData;
 	}
 
 	// **************************************************************
@@ -288,7 +288,7 @@ protected:
 	int		m_nDataOff;	//有效数据起始偏移
 	int		m_nData;	//有效数据字节数
 
-	DWORD	m_dwUserData;//用户自定义数据，默认为0,ByteBuffer不会对其做任何操作
+	ULONGLONG	mUserData=0;//用户自定义数据，ByteBuffer不会对其做任何操作
 
 	std::string	mName;//给ByteBuffer加个标记，方便诊断问题
 };

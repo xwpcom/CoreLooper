@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "handlerex.h"
 #include "file/inifile.h"
 #include "message.inl"
@@ -141,17 +141,9 @@ int HandlerEx::Test()
 	return 0;
 }
 
-void HandlerEx::DumpProcData(string& xmlAck)
+void HandlerEx::DumpProcData(string& xmlAck, DWORD flags)
 {
 	bool debug = false;
-#ifdef _DEBUG
-	//发现CPhoneConnectSvr在proc.xml中不出现,仅在android下出现
-	//查找好久，原来是TcpServer_Linux::OnMessage中写了Handler::OnMessage,改用__super::OnMessage即可
-	//是提取HandlerEx时遗漏了修改此处
-	//坑爹,强烈建议所有.cpp中都用__super来调用父类
-	//debug = (GetObjectName() == "CPhoneConnectSvr");
-#endif
-
 	if (!IsMyselfThread())
 	{
 		if (debug)
@@ -205,7 +197,7 @@ void HandlerEx::DumpProcData(string& xmlAck)
 				if (item && !item->MaybeLongBlock())
 				{
 					//DV("item=[%s]", item->GetObjectName().c_str());
-					item->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xmlChild);//item有可能位于其他线程
+					item->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xmlChild,(LPARAM)(LONGLONG)flags);//item有可能位于其他线程
 				}
 			}
 
@@ -229,7 +221,7 @@ void HandlerEx::DumpProcData(string& xmlAck)
 		}
 	}
 
-	if (hasData)
+	if (hasData || (flags&1))
 	{
 		xml += StringTool::Format("</%s>", name.c_str());
 		xmlAck += xml;
@@ -485,7 +477,8 @@ LRESULT HandlerEx::OnMessage(UINT msg,WPARAM wp,LPARAM lp)
 		string* xml = (string*)wp;
 		if (xml)
 		{
-			DumpProcData(*xml);
+			DWORD flags = (DWORD)lp;
+			DumpProcData(*xml,flags);
 		}
 		else
 		{

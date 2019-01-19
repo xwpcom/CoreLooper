@@ -690,7 +690,7 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 
 #ifdef _DEBUG
 	{
-		//_StackLooperSendMessage比较低效，所以这里打印出一些信息,上层可据引优化，比如调用BindTlsLooper
+		//_StackLooperSendMessage比较低效，所以这里打印出一些信息,上层可据此优化，比如调用BindTlsLooper
 		string desc;
 		if (handler)
 		{
@@ -720,7 +720,7 @@ void LooperImpl::sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& loop
 	}
 
 	PostQueuedCompletionStatus((HANDLE)mLooperHandle);
-
+/*
 #ifdef _DEBUG
 	string info;
 	info = StringTool::Format("%s,msg=%d", __func__, msg.mMsg);
@@ -728,7 +728,7 @@ void LooperImpl::sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& loop
 #else
 	TickDumper check(__func__, false, 100);
 #endif
-
+*/
 	while (!*msg.mDone)
 	{
 		looper.SingleStep();

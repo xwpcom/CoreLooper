@@ -313,7 +313,7 @@ void SerialPort_Linux::OnCreate()
 	ret = epoll_ctl((int)handle, EPOLL_CTL_ADD, s, &evt);
 #endif
 
-	DV("serial bind ret=%d", ret);
+	DV("serial ret=%d", ret);
 	ASSERT(ret == 0);
 }
 

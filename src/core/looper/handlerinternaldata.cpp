@@ -576,7 +576,6 @@ void tagHandlerInternalData::Dump(int level, bool includingChild)
 				{
 					extraInfo += ",AttachThread.Looper";
 				}
-				//extraInfo += StringTool::Format(",name=[]")
 			}
 		}
 

@@ -154,7 +154,7 @@ int UdpServer_Linux::OnNewConnect(struct sockaddr_in  *addr, shared_ptr<ByteBuff
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(mPort);
 	my_addr.sin_addr.s_addr = INADDR_ANY;
-	if (bind(s, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)) == -1)
+	if (::bind(s, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)) == -1)
 	{
 		DW("fail bind");
 		return -1;
@@ -170,7 +170,7 @@ int UdpServer_Linux::OnNewConnect(struct sockaddr_in  *addr, shared_ptr<ByteBuff
 
 	auto client = CreateClient();
 	if (!client)
-	{
+		{
 		ASSERT(FALSE);
 		SockTool::CLOSE_SOCKET(s);
 		return -1;

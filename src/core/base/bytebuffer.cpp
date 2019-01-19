@@ -13,7 +13,7 @@ ByteBuffer::ByteBuffer(void)
 	m_cbMaxBuf=0;
 	m_nDataOff=0;
 	m_nData=0;
-	m_dwUserData=0;
+	mUserData=0;
 }
 
 ByteBuffer::~ByteBuffer(void)

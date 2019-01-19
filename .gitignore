@@ -1,4 +1,6 @@
-/projects/dt/.vs
-/projects/dt/*.pdb
-/projects/dt/Release
-/projects/dt/Debug
+.vs
+*.pdb
+Debug
+x64
+Release
+.vs

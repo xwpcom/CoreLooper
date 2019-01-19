@@ -721,7 +721,7 @@ string File::GetPathLastName(const char *pszPathFile)
 	return name;
 }
 
-BOOL File::PathIsDirectory(const char *psz)
+bool File::PathIsDirectory(const char *psz)
 {
 	if (!psz)
 	{

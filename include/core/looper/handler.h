@@ -221,6 +221,7 @@ public:
 	//可能阻塞很长时间,比如在looper中调用p2p api
 	virtual bool LOOPER_SAFE MaybeLongBlock()const;
 protected:
+	void *operator new(size_t) = delete; //disable new,please use make_shared
 	typedef LRESULT(Handler::*PFN_OnMessage)(WPARAM wp, LPARAM lp);
 
 

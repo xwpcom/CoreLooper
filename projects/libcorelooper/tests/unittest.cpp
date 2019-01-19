@@ -6,8 +6,15 @@
 #include <atomic> 
 #include <functional>
 
+class Demo
+{
+public:
+	void *operator new(size_t) = delete;
+};
+
+
 #ifdef _MSC_VER_DEBUG
-#define new DEBUG_NEW
+//#define new DEBUG_NEW
 #endif
 
 using namespace std;
@@ -2209,6 +2216,47 @@ public:
 		}
 	}
 
+	TEST_METHOD(New_Test)
+	{
+		auto obj = ::new Demo();
+		make_shared<Demo>();
+
+		{
+			BYTE s_memPool[1000];
+			class Demo2
+			{
+
+			};
+
+			auto obj = new (s_memPool)Demo2();
+		}
+	}
+
+	TEST_METHOD(New_Test2)
+	{
+		static char macBuffer[1024 * 6] = { 0 };
+
+		class MyClass {
+		public:
+			MyClass(std::string b) {
+				this->a = b;
+			}
+
+			~MyClass() {
+				std::cout << "~MyClass" << std::endl;
+			}
+			std::string GetA() { return  a; }
+			std::string a;
+		};
+		
+		{
+			MyClass *ptMyClass = NULL;
+			char *p = (char *)malloc(sizeof(MyClass) + sizeof(int));
+			ptMyClass = ::new( p) MyClass("Hello world");
+		}
+
+	}
+
 	TEST_METHOD(Bundle_Test)
 	{
 		int ret = -1;
@@ -2794,6 +2842,81 @@ public:
 		}
 
 		DV("sum=%.4f", sum);
+	}
+
+	TEST_METHOD(TestWait)
+	{
+		DWORD bytes = 0;
+		ULONG_PTR ptr = NULL;
+		LPOVERLAPPED ov = NULL;
+		HANDLE handle = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, NULL, 0);
+		DWORD ms = 1;
+
+		for (int i = 0; i < 100; i++)
+		{
+			auto tick = ShellTool::GetTickCount64();
+			auto ret = GetQueuedCompletionStatus(handle, &bytes, &ptr, &ov, ms);
+			tick = ShellTool::GetTickCount64() - tick;
+			DV("tick[%04d]=%lld", i,tick);//经测试,tick大部分为0,有时为15或16,是windows线程切换引起的
+		}
+
+		CloseHandle(handle);
+	}
+
+	//测试发现windows下timer精度在16ms左右，主要是线程切换引起
+	TEST_METHOD(TestDelta)
+	{
+		class MainLooper :public MainLooper_
+		{
+			SUPER(MainLooper_);
+
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				SetTimer(mTimerTest, 5);
+				mStartTick = ShellTool::GetTickCount64();
+			}
+
+			void OnTimer(long id)
+			{
+				if (id == mTimerTest)
+				{
+					auto tickNow = ShellTool::GetTickCount64();
+					if (mDebugTick)
+					{
+						auto delay = tickNow - mDebugTick;
+						if (delay > 10)
+						{
+							static int idx = -1;
+							++idx;
+							DW("phone timer delay[%04d]=%lld", idx, delay);
+						}
+
+						mDebugTick = tickNow;
+					}
+					else
+					{
+						mDebugTick = tickNow;
+					}
+
+					if (tickNow > mStartTick + 10 * 1000)
+					{
+						PostQuitMessage();
+					}
+
+					return;
+				}
+
+				__super::OnTimer(id);
+			}
+
+			long		mTimerTest = 0;
+			ULONGLONG	mDebugTick = 0;
+			ULONGLONG	mStartTick=0;
+		};
+
+		make_shared<MainLooper>()->StartRun();
 	}
 
 };

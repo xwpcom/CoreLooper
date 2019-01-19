@@ -86,7 +86,11 @@ public:
 	{
 		return GetPathLastName(pathFile.c_str());
 	}
-	static BOOL PathIsDirectory(const char *psz);
+	static bool PathIsDirectory(const string& sz)
+	{
+		return PathIsDirectory(sz.c_str());
+	}
+	static bool PathIsDirectory(const char *psz);
 	static char *concat_path_file(const char *path, const char *filename, char *outbuf, int cbOutBuf);
 #ifndef _MSC_VER
 	static int remove_file(const char *path, int flags);

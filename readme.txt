@@ -3,6 +3,7 @@ demo		演示代码
 depends		第三方依赖代码库
 doc			文档
 include		头文件
+lib			生成的lib库(目前没用到)
 projects	vs,android stuido,xcode工程
 src			核心代码
 

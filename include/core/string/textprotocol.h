@@ -17,6 +17,10 @@ public:
 	}
 	virtual ~TextProtocol();
 	int Parse(const char *psz, char sepChar = '=');
+	int Parse(const string& sz, char sepChar = '=')
+	{
+		return Parse(sz.c_str(), sepChar);
+	}
 	int ParseSingleLine(const std::string& sz, const std::string& sepItem="=", const std::string& sepItems=",");
 
 protected:

@@ -700,6 +700,64 @@ int SockTool::Send(SOCKET s, const LPVOID pData, int cbData)
 	return 0;
 }
 
+int SockTool::SetSendBuf(SOCKET s, int bufLen)
+{
+	int ret = 0;
+	int value = 0;
+
+#ifdef _DEBUG
+	socklen_t len = sizeof(value);
+	ret = getsockopt(s, SOL_SOCKET, SO_SNDBUF, (char*)&value, &len);
+	//DV("default SO_SNDBUF=%d",value);
+#endif
+
+	value = bufLen;
+	ret = setsockopt(s, SOL_SOCKET, SO_SNDBUF, (const char*)&value, sizeof(value));
+	//DV("set SO_SNDBUF=%d,ret=%d",value,ret);
+
+#ifdef _DEBUG
+	value = 0;
+	ret = getsockopt(s, SOL_SOCKET, SO_SNDBUF, (char*)&value, &len);
+	//DV("new SO_SNDBUF=%d", value);
+	if (value != bufLen)
+	{
+		//ASSERT(FALSE);
+		DW("SetSendBuf fail,ret=%d",ret);
+	}
+#endif
+
+	return ret;
+}
+
+int SockTool::SetRecvBuf(SOCKET s, int bufLen)
+{
+	int ret = 0;
+	int value = 0;
+
+#ifdef _DEBUG
+	socklen_t len = sizeof(value);
+	ret = getsockopt(s, SOL_SOCKET, SO_RCVBUF, (char*)&value, &len);
+	//DT("default SO_RCVBUF=%d",value);
+#endif
+
+	value = bufLen;
+	ret = setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&value, sizeof(value));
+	//DV("set SO_RCVBUF=%d,ret=%d",value,ret);
+
+#ifdef _DEBUG
+	value = 0;
+	ret = getsockopt(s, SOL_SOCKET, SO_RCVBUF, (char*)&value, &len);
+	//DT("new SO_RCVBUF=%d",value);
+#endif
+	if (value != bufLen)
+	{
+		//ASSERT(FALSE);
+		DW("SetRecvBuf fail,ret=%d", ret);
+	}
+
+	return ret;
+}
+
 }
 }
 }
