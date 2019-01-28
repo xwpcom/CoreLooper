@@ -74,12 +74,14 @@ CoreLooper是开源软件，但不是免费的，它采用灵活的授权方案。
 - 自愿原则  
 
 ## 捐助
-### 微信
-![img](../images/wepay.png)
-<br>此<br>处<br>特<br>意<br>保<br>留<br>一<br>些<br>空<br>白<br>,<br>避<br>免<br>误<br>操<br>作<br>!<br>
-### 支付宝
-![img](../images/alipay.png)
-  
+如果觉得CoreLooper对您有帮助，可以在自愿的基础上通过如下方式捐助本项目
+
+[微信](https://github.com/xwpcom/CoreLooper/blob/master/doc/images/wepay.png)
+
+[支付宝](https://github.com/xwpcom/CoreLooper/blob/master/doc/images/alipay.png)
+
+
+
 
 ## 在其他国家和地区使用CoreLooper的授权
 - 按C++开发人员收年费，每人每年50美元
