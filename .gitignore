@@ -1,6 +1,8 @@
 .vs
-*.pdb
+.pdb
+.idea
+bin
 Debug
-x64
 Release
-.vs
+x64
+
