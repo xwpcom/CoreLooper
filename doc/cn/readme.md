@@ -42,6 +42,15 @@
 个人感觉asio把简单的问题复杂化了。  
 尽管CoreLooper目前没有asio完善，但应该比asio简洁很多,易用性也有天壤之别。  
 做人还是要有理想的，万一实现了呢!  
+
+
+
+# [文档目录](index.md)
+
+点击[文档目录](index.md)可以查看到详细的文档。
+
+
+
 # Demo
 ## 最简单的main()函数
 ``` cpp
@@ -73,12 +82,8 @@ CoreLooper是开源软件，但不是免费的，它采用灵活的授权方案。
 - 对在校学生和无收入的用户每人每年0元,相当于免费使用
 - 自愿原则  
 
-## 捐助
-如果觉得CoreLooper对您有帮助，可以在自愿的基础上通过如下方式捐助本项目
-
-[微信](https://github.com/xwpcom/CoreLooper/blob/master/doc/images/wepay.png)
-
-[支付宝](https://github.com/xwpcom/CoreLooper/blob/master/doc/images/alipay.png)
+## [捐助](donate.md)
+如果觉得CoreLooper对您有帮助，可以在自愿的基础上捐助本项目
 
 
 
@@ -94,12 +99,15 @@ CoreLooper远没有完善，还有很多计划在我们的todo列表中，所有这些工作都需要资源来实
 
 开放能带来更大的价值  
 本人比较喜欢近现代西方科学和开源软件,近几百年科技发展迅猛，一个很重要的原因是开放的精神,心向往之。      
-# 文档目录
- [Index](index.md)
+
 # 反馈问题
 
-bug、修改建议、疑惑都欢迎提在issue中，或加入CoreLooper开发交流QQ群484544131讨论问题。
+bug、修改建议、疑惑都欢迎提在issue中，或加入CoreLooper QQ群讨论问题。
 ## QQ群
+QQ群:484544131
+
+或扫码进群
+
 ![img](../images/qq.group.png)
 
 作者  
