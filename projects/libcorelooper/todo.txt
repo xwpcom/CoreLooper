@@ -1,4 +1,51 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////
+﻿2019.01.19//////////////////////////////////////////////////////////////////////////////////
+changes:
+.增加了HttpGet和用法demo,在UnitTest Http.HttpDownload中
+ 
+2019.01.17//////////////////////////////////////////////////////////////////////////////////
+changes:
+.ShellTool增加了如下接口，在ini中保存windows pos
+static void SaveWindowPos(HWND hWnd, CString szWinName, IniFile& ini);
+static void LoadWindowPos(HWND hWnd, CString szWinName,IniFile& ini);
+作用:有时需要同时运行同一app的多个实例,需要把窗口放置在不同的位置并恢复
+用注册表不方便
+
+2019.01.16//////////////////////////////////////////////////////////////////////////////////
+changes:
+.增加了JniHelper::SystemClock_elapsedRealtime()
+ 并应用于ShellTool::GetTickCount64()，java和jni采用统一的tick，计时会比较方便
+
+2019.01.13//////////////////////////////////////////////////////////////////////////////////
+bug fixed:
+.HttpTool::ParseUrlParam中字符串解析bug
+//是CStringEx改为string时api参数意义不同引起的
+
+ 
+2019.01.11//////////////////////////////////////////////////////////////////////////////////
+svn ignore:
+*.o *.lo *.la *.al .libs *.so.[0-9]*  *.pyc *.pyo __pycache__ *.rej *~ #*# .#* .*.swp .DS_Store [Tt]humbs.db ipch Debug Bin Bin2 Release *.sdf UpgradeLog.htm  *.suo bin gen libs *.aps .vs debug release obj *.mp4 *.pdb *.ilk *.log *.d .idea  bin bin2 *.apk *.a *.pc *.db *.opendb *.ipa *.user *.cmd *.order *.symvers *.ko .tmp_versions *.mod.c *.dir ~*.docx *.tmp ~*.tmp UDebug URelease x64 .git sample-* Media build ~$* .*gradle *.lst obj
+主要改动是.*gradle
+它忽略.gradle文件夹，添加build.gradle
+
+
+2019.01.09//////////////////////////////////////////////////////////////////////////////////
+changes:
+.Handler增加了void *operator new(size_t) = delete; //disable new,please use make_shared
+ 即强制使用make_shared来创建Handler
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+2018.12.31//////////////////////////////////////////////////////////////////////////////////
+changes:
+.Looper.StartRun()返回GetQuitCode()
+ 这样main可做到一行代码，和mfc,ios框架一样
+
+
+todo:
+.很多file相关代码没有考虑超过2GB的大文件情况
+ 目前没这个需求，后面可考虑完善
+////////////////////////////////////////////////////////////////////////////////////////////
 2018.12.31//////////////////////////////////////////////////////////////////////////////////
 changes:
 .Looper.StartRun()返回GetQuitCode()
@@ -295,8 +342,8 @@ enum eHangUpReason
 	eHangUpReason_TimeOut,				//超时
 };
 比如 eHangUpReason mHangupReason;
-BindProcData(mHangupReason,"HangupReason",CPhoneConnect::GetHangUpReasonDesc);
-原型为const char *CPhoneConnect::GetHangUpReasonDesc(eHangUpReason value)
+BindProcData(mHangupReason,"HangupReason",PhoneConnect::GetHangUpReasonDesc);
+原型为const char *PhoneConnect::GetHangUpReasonDesc(eHangUpReason value)
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 2018.10.13//////////////////////////////////////////////////////////////////////////////////

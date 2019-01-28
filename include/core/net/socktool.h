@@ -22,6 +22,8 @@ namespace Net {
 class CORE_EXPORT SockTool
 {
 public:
+	static int SetSendBuf(SOCKET s, int bufLen);
+	static int SetRecvBuf(SOCKET s, int bufLen);
 	static BOOL SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut = -1);
 	static SOCKET SocketEx(int af, int type, int protocol);
 	static int CompareIP(const char *ip0, const char *ip1);

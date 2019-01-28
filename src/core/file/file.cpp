@@ -721,7 +721,7 @@ string File::GetPathLastName(const char *pszPathFile)
 	return name;
 }
 
-BOOL File::PathIsDirectory(const char *psz)
+bool File::PathIsDirectory(const char *psz)
 {
 	if (!psz)
 	{
@@ -963,6 +963,35 @@ int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 	return 0;
 }
 
+//return 0表示内容相同，否则表示内容不同
+int File::CompareFileContent(const string& filePath1, const string& filePath2)
+{
+	int ret = -1;
+
+	auto bytes1 = GetFileLength(filePath1.c_str());
+	auto bytes2 = GetFileLength(filePath2.c_str());
+	if (bytes1 != bytes2)
+	{
+		return -1;
+	}
+
+	if (bytes1 == 0)
+	{
+		return 0;
+	}
+
+	ByteBuffer box1,box2;
+	File::ReadFile(filePath1, box1);
+	File::ReadFile(filePath2, box2);
+
+	if (box1.length() == 0 || box1.length() != box2.length())
+	{
+		DW("fail read file?");
+		return -1;
+	}
+
+	return memcmp(box1.data(),box2.data(),box1.length());
+}
 
 }
 }

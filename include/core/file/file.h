@@ -86,7 +86,11 @@ public:
 	{
 		return GetPathLastName(pathFile.c_str());
 	}
-	static BOOL PathIsDirectory(const char *psz);
+	static bool PathIsDirectory(const string& sz)
+	{
+		return PathIsDirectory(sz.c_str());
+	}
+	static bool PathIsDirectory(const char *psz);
 	static char *concat_path_file(const char *path, const char *filename, char *outbuf, int cbOutBuf);
 #ifndef _MSC_VER
 	static int remove_file(const char *path, int flags);
@@ -135,11 +139,17 @@ public:
 	{
 		return Dump(box, szFile.c_str());
 	}
+	static int Dump(const std::string&szFile, ByteBuffer& box )
+	{
+		return Dump(box, szFile.c_str());
+	}
 	static int Dump(std::string sz, const char *pszFile);
 	static const char *GetFileExt(const char *filepath);
 	static std::string GetPathFileName(std::string path);
 	static std::string GetFileTitle(const char *filepath);
 	static ULONGLONG CalcFolderContentBytes(std::string folder);
+
+	static int CompareFileContent(const string& filePath1, const string& filePath2);
 };
 
 }

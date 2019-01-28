@@ -18,7 +18,7 @@ extern "C" void av_log_set_level(int level);
 extern "C" int av_jni_set_java_vm(void *vm, void *log_ctx);//ffmpeg h264_mediacodec需要调用
 extern "C" void av_log_set_callback(void(*callback)(void*, int, const char*, va_list));
 
-void ffmpeg_log(void* contextAVClass, int level, const char* fmt, va_list varargs)
+static void ffmpeg_log(void* contextAVClass, int level, const char* fmt, va_list varargs)
 {
 	va_list vl2;
 

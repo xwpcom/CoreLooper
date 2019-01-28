@@ -21,6 +21,8 @@ DumpFile::~DumpFile()
 int DumpFile::Open(const char *filename)
 {
 	Close();
+
+	File::CreateFolderForFile(filename);
 	mFile = fopen(filename, "wb");
 	return mFile ? 0 : -1;
 }

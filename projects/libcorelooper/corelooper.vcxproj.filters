@@ -196,6 +196,9 @@
     <ClCompile Include="..\..\src\arch\windows\serialport_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\net\simpleconnect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -415,6 +418,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\looper\timernode.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\simpleconnect.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

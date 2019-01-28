@@ -194,13 +194,16 @@
     <ClCompile Include="libhttp.cpp" />
     <ClCompile Include="src\ajaxcommandhandler.cpp" />
     <ClCompile Include="src\ajaxhandler.cpp" />
+    <ClCompile Include="src\ajax_exit.cpp" />
     <ClCompile Include="src\ajax_listajaxcommand.cpp" />
     <ClCompile Include="src\ajax_proc.cpp" />
+    <ClCompile Include="src\ajax_tree.cpp" />
     <ClCompile Include="src\demohttprequesthandler.cpp" />
     <ClCompile Include="src\httpackheader.cpp" />
     <ClCompile Include="src\httpackparser.cpp" />
     <ClCompile Include="src\httpformfield.cpp" />
     <ClCompile Include="src\httpformfield_file.cpp" />
+    <ClCompile Include="src\httpget.cpp" />
     <ClCompile Include="src\httphandler.cpp" />
     <ClCompile Include="src\httpheader.cpp" />
     <ClCompile Include="src\httppostcommandhandler.cpp" />
@@ -229,6 +232,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\libhttp\ajaxcommandhandler.h" />
     <ClInclude Include="..\..\include\libhttp\ajaxhandler.h" />
+    <ClInclude Include="..\..\include\libhttp\httpget.h" />
     <ClInclude Include="..\..\include\libhttp\httphandler.h" />
     <ClInclude Include="..\..\include\libhttp\httpserver.h" />
     <ClInclude Include="..\..\include\libhttp\demohttprequesthandler.h" />
@@ -255,8 +259,10 @@
     <ClInclude Include="..\..\src\libhttp\ajax_proc.h" />
     <ClInclude Include="libhttp.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="src\ajax_exit.h" />
     <ClInclude Include="src\ajax_listajaxcommand.h" />
     <ClInclude Include="src\ajax_proc.h" />
+    <ClInclude Include="src\ajax_tree.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

@@ -3,7 +3,11 @@
 namespace Bear {
 namespace Core
 {
-
+namespace FileSystem
+{
+	class IniFile;
+};
+using namespace FileSystem;
 #ifdef _MSC_VER
 #include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
@@ -99,6 +103,10 @@ public:
 	static void SaveWindowPos(HWND hWnd, CString szWinName);
 	static void LoadWindowPos(HWND hWnd, CString szWinName, BOOL bShow = TRUE);
 	static void SaveWindowPosHelper(HWND hWnd, CString szWinName, BOOL bSave, BOOL bShow = TRUE);
+
+	static void SaveWindowPos(HWND hWnd, CString szWinName, IniFile& ini);
+	static void LoadWindowPos(HWND hWnd, CString szWinName,IniFile& ini);
+	static void SaveWindowPosHelper(HWND hWnd, CString szWinName, BOOL bSave, IniFile& ini);
 
 	static void EatUpMessage(BOOL bDiscardUserOp = TRUE);
 	static void DispatchMessageWaitFalse(BOOL& bNeedWait, HWND hWndTempDisable = NULL);

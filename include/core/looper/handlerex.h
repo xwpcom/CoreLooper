@@ -6,11 +6,11 @@
 namespace Bear {
 namespace Core
 {
-//ÒªÍ¬²½static char levels[] = { '.','.','V','D','I','W','E','A', };
+//è¦åŒæ­¥static char levels[] = { '.','.','V','D','I','W','E','A', };
 enum
 {
 	eLogMin = 2,
-	eLogV = 2,//ÊıÖµºÍandroidÉÏµÄ¶ÔÓ¦
+	eLogV = 2,//æ•°å€¼å’Œandroidä¸Šçš„å¯¹åº”
 	eLogD,
 	eLogI,
 	eLogW,
@@ -27,8 +27,8 @@ struct tagObjectLogConfig
 		mDumpFileLevel = eLogI;
 	}
 
-	int	mDumpLevel;		//Êä³öÔÚlogcatÖĞµÄ¼¶±ğ
-	int	mDumpFileLevel; //±£´æµ½ÎÄ¼ş
+	int	mDumpLevel;		//è¾“å‡ºåœ¨logcatä¸­çš„çº§åˆ«
+	int	mDumpFileLevel; //ä¿å­˜åˆ°æ–‡ä»¶
 };
 
 struct tagLogItem
@@ -67,7 +67,7 @@ struct tagLogItem
 	}while(0)
 
 //XiongWanPing 2018.07
-//Ïë¾¡Á¿±£³ÖHandler¼ò½à£¬ËùÒÔ°ÑÒ»Ğ©¹¦ÄÜ´ÓHandlerÌß³öÀ´·ÅÔÚHandlerExÖĞ,ÓĞ´ı²ÉÓÃĞÂ·½·¨À´ÊµÏÖÕâĞ©¹¦ÄÜ
+//æƒ³å°½é‡ä¿æŒHandlerç®€æ´ï¼Œæ‰€ä»¥æŠŠä¸€äº›åŠŸèƒ½ä»Handlerè¸¢å‡ºæ¥æ”¾åœ¨HandlerExä¸­,æœ‰å¾…é‡‡ç”¨æ–°æ–¹æ³•æ¥å®ç°è¿™äº›åŠŸèƒ½
 class CORE_EXPORT HandlerEx :public Handler
 	, public IProcDataGetter
 	, public IProcDataSetter
@@ -82,12 +82,12 @@ public:
 	static void SaveLogConfig(FileSystem::IniFile *ini, const std::string& section);
 	static int GetLogLevel(char ch);
 
-	//flagsÎªeProcDataFlag,¿É|¶à¸ö±êÖ¾
+	//flagsä¸ºeProcDataFlag,å¯|å¤šä¸ªæ ‡å¿—
 	template<class T> int BindProcData(T& value, std::string name, std::string desc = "", DWORD flags = PDF_READ)
 	{
 		ASSERT(IsMyselfThread());
 
-		if (name == CHILD_NODE_NAME)//²»ÒªÖØÃû
+		if (name == CHILD_NODE_NAME)//ä¸è¦é‡å
 		{
 			ASSERT(FALSE);
 			return -1;
@@ -128,7 +128,7 @@ public:
 	int OnProcDataSetter(std::string name, ULONGLONG value);
 
 	virtual int Test();
-	virtual void DumpProcData(std::string& xml);
+	virtual void DumpProcData(std::string& xml,DWORD flags=0);
 
 	virtual void LogV(const char* pszFormat, ...);
 	virtual void LogD(const char* pszFormat, ...);

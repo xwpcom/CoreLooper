@@ -175,7 +175,7 @@ int HttpTool::ParseUrlParam(const char *pszUrl, string & uri, NameValue& params)
 			if (pos != -1)
 			{
 				string  name = line.substr(0, pos);
-				string  value = line.substr(line.length() - pos - 1);
+				string  value = line.substr(pos+1);
 				char szValue[4096];
 				strncpy(szValue, value.c_str(), sizeof(szValue) - 1);
 				EscapeUrlString(szValue);

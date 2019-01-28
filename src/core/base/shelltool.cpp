@@ -3,7 +3,7 @@
 #include "bytetool.h"
 #include "string/textseparator.h"
 #include "base/stringtool.h"
-
+#include "file/inifile.h"
 #ifdef _MSC_VER
 #include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
@@ -21,6 +21,10 @@
 #endif
 #include <sys/syscall.h>
 #include <sys/prctl.h>
+#endif
+
+#ifdef _CONFIG_ANDROID
+#include "arch/android/jnihelper.h"
 #endif
 
 #ifdef __APPLE__
@@ -144,6 +148,14 @@ ULONGLONG ShellTool::GetTickCount64()
 #elif defined __APPLE__
 	return (ULONGLONG)GetTickCount_ios();
 #else
+
+#ifdef _CONFIG_ANDROID
+	JavaVM* jvm = AfxGetJavaVM();
+	if(jvm)
+	{
+		return JniHelper::SystemClock_elapsedRealtime();
+	}
+#endif
 	struct timespec tp;
 	tp.tv_sec = 0;
 	tp.tv_nsec = 0;
@@ -586,16 +598,14 @@ void ShellTool::SaveWindowPosHelper(HWND hWnd, CString szWinName, BOOL bSave, BO
 		WINDOWPLACEMENT wndStatus = { 0 };
 		wndStatus.length = sizeof(WINDOWPLACEMENT);
 		GetWindowPlacement(hWnd, &wndStatus);
-		AfxGetApp()->WriteProfileBinary(_T("Settings"), szWinName,
-			(LPBYTE)&wndStatus, sizeof(wndStatus));
+		AfxGetApp()->WriteProfileBinary(_T("Settings"), szWinName,(LPBYTE)&wndStatus, sizeof(wndStatus));
 	}
 	else
 	{
 		unsigned char * pData = NULL;
 		UINT nRead = 0;
 		WINDOWPLACEMENT wndStatus = { 0 };
-		AfxGetApp()->GetProfileBinary(_T("Settings"), szWinName,
-			&pData, &nRead);
+		AfxGetApp()->GetProfileBinary(_T("Settings"), szWinName,&pData, &nRead);
 		if (nRead == sizeof(wndStatus))
 		{
 			memcpy((char*)&wndStatus, (char*)pData, nRead);
@@ -610,9 +620,48 @@ void ShellTool::SaveWindowPosHelper(HWND hWnd, CString szWinName, BOOL bSave, BO
 			ShowWindow(hWnd, SW_SHOWMAXIMIZED);
 		}
 
-
 		delete pData;
 		pData = NULL;
+	}
+}
+
+void ShellTool::SaveWindowPosHelper(HWND hWnd, CString szWinName, BOOL bSave, IniFile& ini)
+{
+	if (bSave)
+	{
+		// save windows position info
+		WINDOWPLACEMENT wndStatus = { 0 };
+		wndStatus.length = sizeof(WINDOWPLACEMENT);
+		GetWindowPlacement(hWnd, &wndStatus);
+
+		auto sz=ByteTool::ByteToHexChar((LPBYTE)&wndStatus, sizeof(wndStatus));
+		//AfxGetApp()->WriteProfileBinary(_T("Settings"), szWinName, (LPBYTE)&wndStatus, sizeof(wndStatus));
+		USES_CONVERSION;
+		ini.SetString(T2A(szWinName),"windowPos",sz.c_str());
+	}
+	else
+	{
+		unsigned char * pData = NULL;
+		UINT nRead = 0;
+		WINDOWPLACEMENT wndStatus = { 0 };
+		//AfxGetApp()->GetProfileBinary(_T("Settings"), szWinName, &pData, &nRead);
+		USES_CONVERSION;
+		auto sz = ini.GetString(T2A(szWinName), "windowPos"); 
+		if (sz.length() == sizeof(wndStatus) * 2)
+		{
+			ByteTool::HexCharToByte(sz.c_str(), (LPBYTE)&wndStatus, sizeof(wndStatus));
+			//memcpy((char*)&wndStatus, (char*)pData, nRead);
+			VERIFY(SetWindowPlacement(hWnd, &wndStatus));
+			//ByteTool::ByteToHexChar((LPBYTE)&wndStatus, sizeof(wndStatus));
+		}
+		//AfxGetApp()->WriteProfileBinary(_T("Settings"), szWinName, (LPBYTE)&wndStatus, sizeof(wndStatus));
+		else
+		{
+			ShowWindow(hWnd, SW_SHOWMAXIMIZED);
+		}
+
+		//delete pData;
+		//pData = NULL;
 	}
 }
 
@@ -629,6 +678,16 @@ void ShellTool::SaveWindowPos(HWND hWnd, CString szWinName)
 void ShellTool::LoadWindowPos(HWND hWnd, CString szWinName, BOOL bShow)
 {
 	SaveWindowPosHelper(hWnd, szWinName, FALSE, bShow);
+}
+
+void ShellTool::SaveWindowPos(HWND hWnd, CString szWinName, IniFile& ini)
+{
+	SaveWindowPosHelper(hWnd, szWinName, true, ini);
+}
+
+void ShellTool::LoadWindowPos(HWND hWnd, CString szWinName, IniFile& ini)
+{
+	SaveWindowPosHelper(hWnd, szWinName, false,ini);
 }
 
 //有些子线程需要向主线程SendMessage,

@@ -184,6 +184,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 
 #ifdef _CONFIG_ANDROID
 	//AndroidStudio自带时间，所以这里不再添加时间
+	auto len = 0;
 #else
 	auto len=strlen(header);
 	_snprintf(header+len,sizeof(header)-len-1,

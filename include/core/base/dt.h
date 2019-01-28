@@ -53,6 +53,10 @@ protected:
 #define DE	__noop
 #define DF	__noop
 #else
+//在android下输出在logcat
+//在windows下用DT.exe接收,其源码在projects\dt\DebugHelper.sln
+//在linux下输出在Terminal或SecureCRT
+//在xcode中输出到output中
 #define DV	(CDT( __FILE__, __LINE__,DT_VERBOSE))
 #define DT	(CDT( __FILE__, __LINE__,DT_TRACE))
 #define DG	(CDT( __FILE__, __LINE__,DT_NOTICE))

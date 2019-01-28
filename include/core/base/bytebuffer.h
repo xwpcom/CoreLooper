@@ -27,14 +27,14 @@ public:
 	int MakeSureEndWithNull();
 	bool IsEndWithNull();
 
-	void SetUserData(DWORD dwUserData)
+	void SetUserData(ULONGLONG dwUserData)
 	{
-		m_dwUserData = dwUserData;
+		mUserData = dwUserData;
 	}
 
-	DWORD GetUserData()const
+	ULONGLONG GetUserData()const
 	{
-		return m_dwUserData;
+		return mUserData;
 	}
 
 	// **************************************************************
@@ -118,6 +118,10 @@ public:
 
 	//返回数据指针
 	LPBYTE GetDataPointer()const;
+	LPBYTE data()const
+	{
+		return GetDataPointer();
+	}
 
 	//返回有效数据的字节数
 	int GetActualDataLength()const
@@ -125,6 +129,10 @@ public:
 		return m_nData;
 	}
 
+	int length()const
+	{
+		return m_nData;
+	}
 	int GetDataLength()const
 	{
 		return m_nData;
@@ -166,7 +174,7 @@ public:
 	}
 
 	//清除有效数据
-	void clear()
+	virtual void clear()
 	{
 		m_nDataOff = 0;
 		m_nData = 0;
@@ -288,7 +296,7 @@ protected:
 	int		m_nDataOff;	//有效数据起始偏移
 	int		m_nData;	//有效数据字节数
 
-	DWORD	m_dwUserData;//用户自定义数据，默认为0,ByteBuffer不会对其做任何操作
+	ULONGLONG	mUserData=0;//用户自定义数据，ByteBuffer不会对其做任何操作
 
 	std::string	mName;//给ByteBuffer加个标记，方便诊断问题
 };

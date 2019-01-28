@@ -216,11 +216,12 @@ public:
 	int LOOPER_SAFE RegisterShortcut(const string& name, weak_ptr<Handler> obj);
 	shared_ptr<Handler> LOOPER_SAFE Shortcut(const string& name);
 
-#define _Shortcut(className,name) dynamic_pointer_cast<className>(Shortcut(name))
+#define _Shortcut(obj,className,name) dynamic_pointer_cast<className>(obj->Shortcut(name))
 
 	//可能阻塞很长时间,比如在looper中调用p2p api
 	virtual bool LOOPER_SAFE MaybeLongBlock()const;
 protected:
+	void *operator new(size_t) = delete; //disable new,please use make_shared
 	typedef LRESULT(Handler::*PFN_OnMessage)(WPARAM wp, LPARAM lp);
 
 

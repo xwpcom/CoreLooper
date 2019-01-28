@@ -36,6 +36,23 @@ protected:
 	{
 		return (long)mSock;
 	}
+	virtual int ConfigSendBuf(int bytes)
+	{
+		return SockTool::SetSendBuf(mSock,bytes);
+	}
+	virtual int ConfigRecvBuf(int bytes)
+	{
+		return SockTool::SetRecvBuf(mSock, bytes);
+	}
+
+	virtual int GetSendBuf(int bytes)
+	{
+		return -1;
+	}
+	virtual int GetRecvBuf(int bytes)
+	{
+		return -1;
+	}
 
 	virtual int ConnectHelper(std::string ip);
 

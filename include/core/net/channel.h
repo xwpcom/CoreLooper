@@ -39,6 +39,24 @@ public:
 		return mLocalDesc;
 	}
 
+	virtual int ConfigSendBuf(int bytes)
+	{
+		return -1;
+	}
+	virtual int ConfigRecvBuf(int bytes)
+	{
+		return -1;
+	}
+
+	virtual int GetSendBuf(int bytes)
+	{
+		return -1;
+	}
+	virtual int GetRecvBuf(int bytes)
+	{
+		return -1;
+	}
+
 	virtual const std::string& GetPeerDesc()const
 	{
 		return mPeerDesc;

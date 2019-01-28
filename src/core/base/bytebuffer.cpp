@@ -13,7 +13,7 @@ ByteBuffer::ByteBuffer(void)
 	m_cbMaxBuf=0;
 	m_nDataOff=0;
 	m_nData=0;
-	m_dwUserData=0;
+	mUserData=0;
 }
 
 ByteBuffer::~ByteBuffer(void)
@@ -256,11 +256,6 @@ int ByteBuffer::Append(const ByteBuffer& src, bool makeSureEndNull)
 
 LPBYTE ByteBuffer::GetDataPointer()const
 {
-	//ASSERT(m_pBuf);
 	auto p = m_pBuf + m_nDataOff;
-	if (p)
-	{
-		//DW("ByteBuffer data pointer is nullptr");
-	}
 	return p;
 }

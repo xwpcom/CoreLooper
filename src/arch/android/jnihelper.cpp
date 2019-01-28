@@ -252,3 +252,41 @@ string JniHelper::Utf8ToGB2312(string utf8)
 
 	return ret;
 }
+
+//SystemClock.elapsedRealtime()
+ULONGLONG JniHelper::SystemClock_elapsedRealtime()
+{
+	int ret = -1;
+	JavaVM* jvm = AfxGetJavaVM();
+	//DV("jvm=%p", jvm);
+	bool needDeatch = false;
+	if (jvm)
+	{
+		PJniEnv pEnv = NULL;
+		jvm->GetEnv((LPVOID*)&pEnv, JNI_VERSION_1_6);
+		if(!pEnv)
+		{
+			PJniEnv env = nullptr;
+			ret=jvm->AttachCurrentThread(&env, nullptr);
+			//DV("AttachCurrentThread ret=%d",ret);
+			needDeatch = true;
+		}
+	}
+
+	auto env = tagJniInfo::GetJniEnv();
+
+	jclass cls = env->FindClass("android/os/SystemClock");
+	//注意获取static方法时要用GetStaticMethodID,非static方法要用GetMethodID
+	auto mid = env->GetStaticMethodID(cls, "elapsedRealtime", "()J");
+	//DV("cls=%p", cls);
+	//DV("mid=%p", mid);
+	auto tick = env->CallStaticLongMethod(cls, mid);
+	env->DeleteLocalRef(cls);
+
+	if (needDeatch)
+	{
+		jvm->DetachCurrentThread();
+	}
+
+	return tick;
+}

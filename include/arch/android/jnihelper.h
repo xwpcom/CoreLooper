@@ -20,7 +20,7 @@ struct CORE_EXPORT tagJniInfo
 	static JNIEnv* GetJniEnv();
 	jclass  mJavaClass = nullptr;
 	jobject	mJavaObj = nullptr;
-	std::string	mDesc;//for debug use
+	string	mDesc;//for debug use
 };
 
 
@@ -103,10 +103,11 @@ static shared_ptr<cppClassName> JObj2CppObj(JNIEnv *env,jobject jObj)	\
 class CORE_EXPORT JniHelper
 {
 public:
-	static std::string GetJString(JNIEnv*env, jstring jstr);
+	static string GetJString(JNIEnv*env, jstring jstr);
 	static jstring ToJString(JNIEnv* env, const char* pat);
 
-	static std::string Utf8ToGB2312(std::string utf8);
+	static string Utf8ToGB2312(string utf8);
+	static ULONGLONG SystemClock_elapsedRealtime();
 };
 
 }
