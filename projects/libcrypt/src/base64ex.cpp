@@ -283,7 +283,7 @@ BOOL Base64::Base64Encode(LPCSTR szEncoding, int nSize,char *pszOutput,int cbOut
 	LPCSTR szInput = szEncoding;
 
 	int nBitsRemaining = 0, nPerRowCount = 0;//换行计数
-    register int nBitStorage = 0, nScratch = 0;
+    int nBitStorage = 0, nScratch = 0;
 	int i, lp, endlCount;
 
 	for(i=0, lp=0, endlCount = 0; lp < nSize; lp++)

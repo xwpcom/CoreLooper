@@ -36,9 +36,9 @@ namespace Core
 {
 namespace Net {
 class TcpClient;
-class CORE_EXPORT TcpServer_Windows :public IocpObject, public HandlerEx
+class CORE_EXPORT TcpServer_Windows :public IocpObject, public Handler
 {
-	SUPER(HandlerEx);
+	SUPER(Handler);
 	friend class TcpClient;
 public:
 	TcpServer_Windows();

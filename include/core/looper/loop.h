@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "handlerex.h"
-
 namespace Bear {
 namespace Core
 {
@@ -27,7 +25,7 @@ struct tagLoopMessage
 #include "looper/handler.h"
 //XiongWanPing 2016.01.08
 //Loop抽象类提供外界调用的接口
-class CORE_EXPORT Loop :public HandlerEx
+class CORE_EXPORT Loop :public Handler
 {
 	friend class  Handler;
 	friend struct tagHandlerInternalData;

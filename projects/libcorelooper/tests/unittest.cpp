@@ -29,11 +29,204 @@ XiongWanPing 2016~
 以此来保证CoreLooper框架在各种调用场景的稳定性
 .每个测试必须能快速进行，以便快速迭代
 */
+#include <algorithm>
+#include <iostream>
+#include <vector>
+using namespace std;
+
 namespace CPP11_Test
 {
 TEST_CLASS(_TestCPP11)
 	{
 	public:
+		TEST_METHOD(_bind)
+		{
+			class DemoLooper:public Looper
+			{
+			public:
+				DemoLooper()
+				{
+					SetObjectName("DemoLooper");
+				}
+			};
+
+			class MainLooper :public MainLooper_
+			{
+				void OnCreate()
+				{
+					__super::OnCreate();
+
+					{
+						DV("main threadId=%d", ShellTool::GetCurrentThreadId());
+
+						auto obj = make_shared<DemoLooper>();
+						AddChild(obj);
+						obj->Start();
+
+						string name = "xwp";
+						auto func = [=, &name](int a, int b, float c)
+						{
+							Assert::IsTrue(obj->IsMyselfThread());
+
+							DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
+							DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(),obj->GetObjectName().c_str());
+							name = "bear";
+							Looper::GetMainLooper()->PostQuitMessage();
+						};
+
+						obj->sendRunnable(std::bind(func, 100, 'c', 2.5f));
+						DV("name=%s", name.c_str());
+					}
+				}
+
+			};
+
+			make_shared<MainLooper>()->StartRun();
+		}
+
+		TEST_METHOD(_lambda_base)
+		{
+			// Create a vector object that contains 10 elements.
+			vector<int> v;
+			for (int i = 1; i < 10; ++i) {
+				v.push_back(i);
+			}
+
+			std::sort(v.begin(), v.end(), 
+				[](int a, int b) {
+					return a < b;
+				}
+				);
+			
+			{
+				string name = "bear";
+				auto obj = [&name](int first, int second)
+				{
+					return first + second;
+				};
+
+				obj(12, 34);
+
+				function<LRESULT (shared_ptr<Handler>,int, int)> fn;
+			}
+
+			// Count the number of even numbers in the vector by
+			// using the for_each function and a lambda.
+			int evenCount = 0;
+			for_each(v.begin(), v.end(), [&evenCount](int n) {
+				cout << n;
+				if (n % 2 == 0) {
+					cout << " is even " << endl;
+					++evenCount;
+				}
+				else {
+					cout << " is odd " << endl;
+				}
+				});
+			vector<string> v2;
+			v2.push_back("hello");
+			for_each(v2.begin(), v2.end(), [&evenCount](string& n) {
+				n = "world";
+				});
+
+			DV("item=%s", v2[0].c_str());
+
+			// Print the count of even numbers to the console.
+			cout << "There are " << evenCount
+				<< " even numbers in the vector." << endl;
+		}
+		TEST_METHOD(_lambda_)
+		{
+			class LambdaTest
+			{
+			public:
+				static void abssort(float* x, unsigned n) {
+					int i = 0;
+					std::sort(x, x + n,
+						// Lambda expression begins
+						[](float a, float b) {
+							return (std::abs(a) < std::abs(b));
+						} // end of lambda expression
+					);
+				}
+			};
+
+			{
+				float arr[] = { 1,2,3 };
+				LambdaTest::abssort(arr, COUNT_OF(arr));
+			}
+
+			class TestHandler :public Handler
+			{
+			public:
+				UINT mMessageTest = AllocMessageId();
+				typedef void(*PFN)();
+				void OnCreate()
+				{
+					__super::OnCreate();
+
+					/*
+					auto object = shared_from_this();
+					auto fn = [object]()
+					{
+						DV("%s", __func__);
+					};
+
+					PFN obj = fn;
+					fn(shared_from_this(), 12);
+					auto fn2 = fn;
+					DV("sizeof(fn2)=%d", sizeof(fn2));
+					sendMessage(mMessageTest, (WPARAM)&fn);
+					//*/
+
+					Looper::CurrentLooper()->PostQuitMessage();
+				}
+
+				LRESULT OnMessage(UINT msg,WPARAM wp, LPARAM lp)
+				{
+					if (msg == mMessageTest)
+					{
+						PFN fn = *(PFN)wp;
+						//fn();
+
+						return 0;
+					}
+
+					return __super::OnMessage(msg, wp, lp);
+				}
+			};
+
+			class MainLooper :public Looper
+			{
+				void OnCreate()
+				{
+					__super::OnCreate();
+
+					AddChild(make_shared<TestHandler>());
+				}
+			};
+
+			make_shared<MainLooper>()->StartRun();
+
+			/*
+			int age = 38;
+			auto func = [&](int v1,int v2)
+			{
+				if (age == 38)
+				{
+					age = 123;
+					return 0;
+				}
+				return v1 > v2 ? v1 : v2;
+			};
+
+			auto x = func(12, 34);
+			DV("age=%d", age);
+			int i = 0;
+			*/
+
+		}
+
 		TEST_METHOD(Test_typeid)
 		{
 			class TestHandler :public Handler
@@ -2380,6 +2573,58 @@ public:
 	}
 };
 
+TEST_CLASS(AsyncTask_UnitTest)
+{
+public:
+	TEST_METHOD(AsyncTask_Demo)
+	{
+		class DemoTask :public AsyncTask
+		{
+		public:
+			DemoTask()
+			{
+				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+			}
+			~DemoTask()
+			{
+				DG("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+			}
+		protected:
+			virtual void OnPreExecute()
+			{
+				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+			}
+
+			virtual void OnPostExecute()
+			{
+				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+
+				Looper::GetMainLooper()->PostQuitMessage();
+			}
+
+			virtual void Run()
+			{
+				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+			}
+
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				make_shared<DemoTask>()->Execute();
+				make_shared<DemoTask>()->Execute();
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
+	}
+
+};
 
 TEST_CLASS(Runnable_UnitTest)
 {
@@ -2918,9 +3163,24 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
-
+	
 };
 
+TEST_CLASS(StringTool_UnitTest)
+{
+	TEST_METHOD(Format)
+	{
+		auto text = StringTool::Format(
+			"hello,this is a very long text,value=%d",1000
+		);
+		
+		DV("text#1=%s", text.c_str());
+
+		StringTool::AppendFormat(text, ",name=%s", "xwp");
+		DV("text#2=%s", text.c_str());
+
+	}
+};
 
 }
 

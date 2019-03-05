@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "HttpFormField_File.h"
+#include "httpformfield_file.h"
 using namespace Bear::Core;
 
 namespace Bear {

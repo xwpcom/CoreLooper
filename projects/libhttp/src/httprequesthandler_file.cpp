@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "httprequesthandler_file.h"
 #include "file/virtualfolder.h"
-#include "HttpTool.h"
+#include "httptool.h"
 using namespace Bear::Core;
 
 namespace Bear {

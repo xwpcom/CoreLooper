@@ -77,20 +77,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)..\bin\</OutDir>
-    <TargetName>$(ProjectName)D</TargetName>
+    <TargetName>libcorelooperD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)..\bin\$(Platform)\</OutDir>
-    <TargetName>$(ProjectName)D</TargetName>
+    <TargetName>libcorelooperD</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)..\bin\</OutDir>
+    <TargetName>libcorelooper</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)..\bin\$(Platform)\</OutDir>
+    <TargetName>libcorelooper</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -237,7 +239,6 @@
     <ClCompile Include="..\..\src\core\looper\asynctask.cpp" />
     <ClCompile Include="..\..\src\core\looper\asynctasklooper.cpp" />
     <ClCompile Include="..\..\src\core\looper\handler.cpp" />
-    <ClCompile Include="..\..\src\core\looper\handlerex.cpp" />
     <ClCompile Include="..\..\src\core\looper\handlerinternaldata.cpp" />
     <ClCompile Include="..\..\src\core\looper\looper.cpp" />
     <ClCompile Include="..\..\src\core\looper\looperimpl.cpp" />
@@ -324,7 +325,6 @@
     <ClInclude Include="..\..\include\core\looper\asynctasklooper.h" />
     <ClInclude Include="..\..\include\core\looper\blocklooper.h" />
     <ClInclude Include="..\..\include\core\looper\handler.h" />
-    <ClInclude Include="..\..\include\core\looper\handlerex.h" />
     <ClInclude Include="..\..\include\core\looper\loop.h" />
     <ClInclude Include="..\..\include\core\looper\looper.h" />
     <ClInclude Include="..\..\include\core\looper\looperimpl.h" />

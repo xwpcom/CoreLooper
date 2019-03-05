@@ -3,6 +3,9 @@
 #include <unordered_map>
 #include "base/sigslot.h"
 #include "base/object.h"
+#include "procnode.h"
+#include <functional>
+
 namespace Bear {
 namespace Core
 {
@@ -91,6 +94,71 @@ struct tagPostDisposeInfo :public tagAutoObject
 
 };
 
+#define _CONFIG_HANDLER_PROC
+
+#ifdef _CONFIG_HANDLER_PROC
+//要同步static char levels[] = { '.','.','V','D','I','W','E','A', };
+enum
+{
+	eLogMin = 2,
+	eLogV = 2,//数值和android上的对应
+	eLogD,
+	eLogI,
+	eLogW,
+	eLogE,
+	eLogA,//ASSERT
+	eLogMax = eLogA,
+};
+
+struct tagObjectLogConfig
+{
+	tagObjectLogConfig()
+	{
+		mDumpLevel = eLogI;
+		mDumpFileLevel = eLogI;
+	}
+
+	int	mDumpLevel;		//输出在logcat中的级别
+	int	mDumpFileLevel; //保存到文件
+};
+
+struct tagLogItem
+{
+	int		mLevel;
+	std::string	mTag;
+	std::string	mText;
+	DWORD	mThreadId;
+};
+
+
+#ifdef _MSC_VER
+#define vsnprintf _vsnprintf
+#endif
+
+#define LOG_IMPL(Tag,logLevel)										\
+	do{																\
+		int level = logLevel;										\
+		string tag2=Tag;												\
+		tagObjectLogConfig cfg;										\
+		Handler::GetLogConfig(tag2, cfg);						\
+		if (cfg.mDumpFileLevel > level && cfg.mDumpLevel > level)	\
+		{															\
+			return;													\
+		}															\
+																	\
+		char szMsg[1024 * 64 * sizeof(TCHAR)];						\
+		memset(szMsg, 0, sizeof(szMsg));							\
+																	\
+		va_list argList;											\
+		va_start(argList, pszFormat);								\
+		vsnprintf(szMsg,sizeof(szMsg)-1, (char*)pszFormat, argList);	\
+		va_end(argList);											\
+																	\
+		Handler::Log(tag2,level, cfg, szMsg);					\
+	}while(0)
+
+#endif
+
 //约定:
 //采用LOOPER_SAFE修饰的接口可以安全的跨looper调用
 //没有采用LOOPER_SAFE修饰的接口，不保证跨looper安全调用，应该只在handler所在looper里调用
@@ -100,6 +168,10 @@ struct tagPostDisposeInfo :public tagAutoObject
 class CORE_EXPORT Handler :public Object
 	, public enable_shared_from_this<Handler>
 	, public sigslot::has_slots<>
+#ifdef _CONFIG_HANDLER_PROC
+	, public IProcDataGetter
+	, public IProcDataSetter
+#endif
 {
 	friend class Looper;
 	friend class LooperImpl;
@@ -108,7 +180,7 @@ class CORE_EXPORT Handler :public Object
 	friend class TimerManager;
 	friend struct tagHandlerInternalData;
 	friend struct tagLooperInternalData;
-	friend class HandlerEx;
+	friend class Handler;
 public:
 	Handler();
 	virtual ~Handler();
@@ -158,6 +230,15 @@ public:
 	virtual LRESULT LOOPER_SAFE sendMessage(shared_ptr<Message> message);
 	virtual LRESULT LOOPER_SAFE postMessage(shared_ptr<Message> message);
 	//CoreLooper can implement all features of Android.Handler if necessary
+
+	//lambda+functional
+	virtual LRESULT LOOPER_SAFE sendRunnable(const std::function<void()>& fn);
+
+	bool LOOPER_SAFE IsMyselfThread()const
+	{
+		DWORD tid = ShellTool::GetCurrentThreadId();
+		return mThreadId == tid;
+	}
 
 	virtual long SetTimer(long& timerId, UINT interval);
 	virtual void KillTimer(long& timerId);
@@ -220,10 +301,83 @@ public:
 
 	//可能阻塞很长时间,比如在looper中调用p2p api
 	virtual bool LOOPER_SAFE MaybeLongBlock()const;
+
+#ifdef _CONFIG_HANDLER_PROC
+	static void GetLogMap(std::map<std::string, tagObjectLogConfig>& obj);
+	static void SetTagConfig(const std::string& tag, int dumpLevel, int dumpFileLevel);
+	static void LoadLogConfig(FileSystem::IniFile *ini, const std::string& section);
+	static void SaveLogConfig(FileSystem::IniFile *ini, const std::string& section);
+	static int GetLogLevel(char ch);
+
+	//flags为eProcDataFlag,可|多个标志
+	template<class T> int BindProcData(T& value, std::string name, std::string desc = "", DWORD flags = PDF_READ)
+	{
+		ASSERT(IsMyselfThread());
+
+		if (name == CHILD_NODE_NAME)//不要重名
+		{
+			ASSERT(FALSE);
+			return -1;
+		}
+
+		if (!mProcNode)
+		{
+			mProcNode = make_shared<ProcNode>();
+		}
+
+		weak_ptr<IProcDataGetter>	getter;
+		weak_ptr<IProcDataSetter>	setter;
+
+		if (flags & PDF_GETTER)
+		{
+			getter = dynamic_pointer_cast<IProcDataGetter>(shared_from_this());
+		}
+
+		if (flags & PDF_SETTER)
+		{
+			setter = dynamic_pointer_cast<IProcDataSetter>(shared_from_this());;
+		}
+
+		int ret = mProcNode->Bind(name, value, desc, flags, getter, setter);
+		return ret;
+	}
+
+	int OnProcDataGetter(const std::string& name, std::string& desc);
+
+	int OnProcDataSetter(std::string name, int value);
+	int OnProcDataSetter(std::string name, bool value);
+	int OnProcDataSetter(std::string name, BYTE value);
+	int OnProcDataSetter(std::string name, std::string value);
+	int OnProcDataSetter(std::string name, WORD value);
+	int OnProcDataSetter(std::string name, DWORD value);
+	int OnProcDataSetter(std::string name, double value);
+	int OnProcDataSetter(std::string name, LONGLONG value);
+	int OnProcDataSetter(std::string name, ULONGLONG value);
+
+	virtual int Test();
+	virtual void DumpProcData(std::string& xml, DWORD flags = 0);
+
+	virtual void LogV(const char* pszFormat, ...);
+	virtual void LogD(const char* pszFormat, ...);
+	virtual void LogI(const char* pszFormat, ...);
+	virtual void LogW(const char* pszFormat, ...);
+	virtual void LogE(const char* pszFormat, ...);
+	static  void Log(const std::string&tag, int level, tagObjectLogConfig& cfg, const char* text);
+
+	static void GetLogConfig(const std::string& objName, tagObjectLogConfig& cfg);
+
+#endif
+
 protected:
 	void *operator new(size_t) = delete; //disable new,please use make_shared
 	typedef LRESULT(Handler::*PFN_OnMessage)(WPARAM wp, LPARAM lp);
 
+#ifdef _CONFIG_HANDLER_PROC
+	std::shared_ptr<ProcNode> mProcNode;
+
+	static CriticalSection	mLogConfigCS;
+	static std::map<std::string, tagObjectLogConfig> sLogMap;
+#endif
 
 	UINT AllocMessageId();
 	int BindMessageEx_(UINT msg, PFN_OnMessage entry);
@@ -241,12 +395,6 @@ protected:
 	DWORD GetThreadId()const
 	{
 		return mThreadId;
-	}
-
-	bool LOOPER_SAFE IsMyselfThread()const
-	{
-		DWORD tid = ShellTool::GetCurrentThreadId();
-		return mThreadId == tid;
 	}
 
 	virtual LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp);

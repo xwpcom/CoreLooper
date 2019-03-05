@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "HttpPostCommandHandler.h"
-#include "HttpFormField_File.h"
+#include "httppostcommandhandler.h"
+#include "httpformfield_file.h"
 namespace Bear {
 namespace Core {
 namespace Net {

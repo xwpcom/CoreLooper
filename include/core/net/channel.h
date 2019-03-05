@@ -19,9 +19,9 @@ https://msdn.microsoft.com/en-us/library/3d46645f.aspx
 */
 
 //数据端口基类
-class CORE_EXPORT Channel :public HandlerEx
+class CORE_EXPORT Channel :public Handler
 {
-	SUPER(HandlerEx)
+	SUPER(Handler)
 public:
 	Channel();
 	virtual ~Channel();

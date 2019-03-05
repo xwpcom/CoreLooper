@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
 #include "httprequest.h"
-#include "HttpTool.h"
+#include "httptool.h"
 #include "httppostparser.h"
 #include "httprequesthandler.h"
 #include "httprequesthandler_ajax.h"

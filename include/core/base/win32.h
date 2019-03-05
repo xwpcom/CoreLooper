@@ -5,6 +5,8 @@
 #define UNUSED(x) (void)(x)	//avoid gcc warning: unused variable
 #endif
 
+#define unused(...) (void)(__VA_ARGS__)
+
 
 #ifdef _MSC_VER
 #define SUPER(X) using X::X;

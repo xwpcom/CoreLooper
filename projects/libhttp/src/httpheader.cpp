@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
-#include "HttpHeader.h"
-#include "string/TextSeparator.h"
-#include "HttpTool.h"
+#include "httpheader.h"
+#include "string/textseparator.h"
+#include "httptool.h"
 using namespace Bear::Core;
 
 namespace Bear {

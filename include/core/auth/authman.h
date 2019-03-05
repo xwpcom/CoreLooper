@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "UserInfo.h"
+#include "userinfo.h"
 namespace Bear {
 namespace Core
 {

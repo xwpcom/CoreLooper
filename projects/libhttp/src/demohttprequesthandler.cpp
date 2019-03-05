@@ -1,8 +1,8 @@
 ﻿#include "stdafx.h"
-#include "DemoHttpRequestHandler.h"
+#include "demohttprequesthandler.h"
 #include "net/channel.h"
-#include "looper/Loop.h"
-#include "HttpTool.h"
+#include "looper/loop.h"
+#include "httptool.h"
 using namespace Bear::Core::Net;
 namespace Bear {
 namespace Core {

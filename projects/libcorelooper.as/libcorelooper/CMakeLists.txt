@@ -67,7 +67,6 @@ ${CORE_DIR}/file/virtualfolder.cpp
 ${CORE_DIR}/looper/asynctask.cpp
 ${CORE_DIR}/looper/asynctasklooper.cpp
 ${CORE_DIR}/looper/handler.cpp
-${CORE_DIR}/looper/handlerex.cpp
 ${CORE_DIR}/looper/handlerinternaldata.cpp
 ${CORE_DIR}/looper/looper.cpp
 ${CORE_DIR}/looper/looperimpl.cpp

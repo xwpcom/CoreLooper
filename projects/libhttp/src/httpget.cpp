@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "libhttp/httpget.h"
-#include "net/DnsLooper.h"
-//#include "net/http/HttpAckParser.h"
+#include "net/dnslooper.h"
 #include "net/tcpclient.h"
 using namespace Bear::Core::FileSystem;
 namespace Bear {

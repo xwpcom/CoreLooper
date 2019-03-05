@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "HttpPostCommandHandler.h"
+#include "httppostcommandhandler.h"
 
 using namespace Bear::Core;
 namespace Bear {

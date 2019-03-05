@@ -126,9 +126,9 @@ public:
 				}
 
 				{
-					class DemoHandler :public HandlerEx
+					class DemoHandler :public Handler
 					{
-						SUPER(HandlerEx);
+						SUPER(Handler);
 
 						void OnCreate()
 						{

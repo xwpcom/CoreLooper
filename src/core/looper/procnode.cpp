@@ -75,6 +75,8 @@ void ProcNode::DumpData(string& xml)
 	mWords.Dump(xml);
 	mDwords.Dump(xml);
 	mDoubles.Dump(xml);
+	mLongLongs.Dump(xml);
+	mULongLongs.Dump(xml);
 	mStrings.DumpString(xml);
 }
 }

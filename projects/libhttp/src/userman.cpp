@@ -2,8 +2,8 @@
 #include "auth/userman.h"
 #include "libcrypt/base64ex.h"
 #include "libcrypt/tea.h"
-#include "string/TextProtocol.h"
-#include "looper/Looper.h"
+#include "string/textprotocol.h"
+#include "looper/looper.h"
 #ifndef __APPLE__
 //#include "src/system/PlatformHandler.h"
 #endif

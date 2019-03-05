@@ -1,4 +1,10 @@
-cd /d %~dp0
-call gradlew assembleDebug
+@echo on
 
-call copyAARD.bat
+if "%1"=="release" (
+	set config=Release
+) else (
+	set config=Debug
+)
+
+cd /d %~dp0
+call gradlew assemble%config%

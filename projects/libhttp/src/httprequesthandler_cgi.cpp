@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "httprequesthandler_cgi.h"
-#include "HttpTool.h"
+#include "httptool.h"
 using namespace Bear::Core;
 namespace Bear {
 namespace Core {

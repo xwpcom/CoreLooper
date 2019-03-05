@@ -40,20 +40,20 @@ void Tea::SetPassword(const char *pszPassword)
 void Tea::Encrypt(const ULONG *in, ULONG *out) 
 {
 	ULONG *k = (ULONG*)m_key;
-	register ULONG y = (in[0]);
-	register ULONG z = (in[1]);
-	register ULONG a = (k[0]);
-	register ULONG b = (k[1]);
-	register ULONG c = (k[2]);
-	register ULONG d = (k[3]);
+	ULONG y = (in[0]);
+	ULONG z = (in[1]);
+	ULONG a = (k[0]);
+	ULONG b = (k[1]);
+	ULONG c = (k[2]);
+	ULONG d = (k[3]);
 
 	ULONG NUM0_PART1 = TEA_MAGIC_NUM0_PART1;
 	ULONG NUM0_PART2 = TEA_MAGIC_NUM0_PART2;
 
-	register ULONG delta = NUM0_PART1 + NUM0_PART2;
+	ULONG delta = NUM0_PART1 + NUM0_PART2;
 	//ASSERT(delta == TEA_MAGIC_NUM0);
-	register int round = m_round;
-	register ULONG sum = 0;
+	int round = m_round;
+	ULONG sum = 0;
 
 	while (round--) 
 	{
@@ -69,17 +69,17 @@ void Tea::Encrypt(const ULONG *in, ULONG *out)
 void Tea::Decrypt(const ULONG *in, ULONG *out)
 {
 	ULONG *k = (ULONG*)m_key;
-	register ULONG y = (in[0]);
-	register ULONG z = (in[1]);
-	register ULONG a = (k[0]);
-	register ULONG b = (k[1]);
-	register ULONG c = (k[2]);
-	register ULONG d = (k[3]);
+	ULONG y = (in[0]);
+	ULONG z = (in[1]);
+	ULONG a = (k[0]);
+	ULONG b = (k[1]);
+	ULONG c = (k[2]);
+	ULONG d = (k[3]);
 	 ULONG NUM0_PART1 = TEA_MAGIC_NUM0_PART1;
 	 ULONG NUM0_PART2 = TEA_MAGIC_NUM0_PART2;
-	register ULONG delta = NUM0_PART1 + NUM0_PART2;
-	register int round = m_round;
-	register ULONG sum = 0;
+	ULONG delta = NUM0_PART1 + NUM0_PART2;
+	int round = m_round;
+	ULONG sum = 0;
 
 	if (round == 32)
 	{

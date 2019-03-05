@@ -9,65 +9,49 @@ namespace Core
 
 string StringTool::Format(const char* fmt, ...)
 {
-	string ret;
 	if (!fmt || fmt[0] == 0)
-		return ret;
+	{
+		return "";
+	}
 
 	string result;
 	va_list list;
 	va_start(list, fmt);
 
-	int bufBytes = 1024;
-	int len = 0;
-	while (1)
+	int ret = 0;
+	ret = vsnprintf(nullptr, 0, fmt, list);
+	if (ret >0)
 	{
-		result.resize(bufBytes);
-		len = vsnprintf((char*)result.c_str(), bufBytes, fmt, list);
-		//printf("bufBytes=%d,len=%d\r\n", bufBytes,len);
-		if (len <= 0)
-		{
-			break;
-		}
-
-		if (bufBytes >= len)
-		{
-			result.erase(len);
-			break;
-		}
-
-		bufBytes = len + 1;
+		result.resize(ret + 1);
+		ret = vsnprintf((char*)result.c_str(), ret + 1, fmt, list);
+		result.erase(ret);
 	}
+
 	va_end(list);
 
 	return result;
 }
+
 string& StringTool::AppendFormat(string& obj, const char* fmt, ...)
 {
 	if (!fmt || fmt[0] == 0)
 		return obj;
 
 	string result;
-	//将字符串的长度初始化为1024  
-	int tlen = 1024;
-	int len = 0;
-	result.resize(tlen);
-
-	//为string赋值  
 	va_list list;
 	va_start(list, fmt);
-	len = vsnprintf((char*)result.c_str(), tlen, fmt, list);
 
-	//如果结果字符串长度比初始长度长，就重新设置字符串长度，然后再赋值  
-	if (len >= tlen)
+	int ret = 0;
+	ret = vsnprintf(nullptr, 0, fmt, list);
+	if (ret > 0)
 	{
-		tlen = len + 1;
-		result.resize(tlen);
-		len = vsnprintf((char*)result.c_str(), tlen, fmt, list);
+		result.resize(ret + 1);
+		ret = vsnprintf((char*)result.c_str(), ret + 1, fmt, list);
+		result.erase(ret);
 	}
+
 	va_end(list);
 
-	//删除字符串尾部的0字符  
-	result.erase(len);
 	obj += result;
 	return obj;
 }

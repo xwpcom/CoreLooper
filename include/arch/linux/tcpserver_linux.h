@@ -17,9 +17,9 @@ enum
 	BM_CLIENT_CLOSE,
 };
 
-class CORE_EXPORT TcpServer_Linux :public HandlerEx, public EpollProxy
+class CORE_EXPORT TcpServer_Linux :public Handler, public EpollProxy
 {
-	SUPER(HandlerEx)
+	SUPER(Handler)
 public:
 	TcpServer_Linux();
 	virtual ~TcpServer_Linux();

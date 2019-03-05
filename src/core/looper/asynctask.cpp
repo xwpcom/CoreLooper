@@ -19,14 +19,25 @@ int AsyncTask::Execute(bool enablePreExecute, bool enablePostExecute)
 		Create(Looper::CurrentLooper()->shared_from_this());
 	}
 
-	//这里有竞争，可能导致创建多个AsyncTaskLooper
-	//发生的几率很小，并且即使有多个AsyncTaskLooper则不影响正常的使用,所以没做加锁处理
-	auto looper = _MObject(AsyncTaskLooper,"AsyncTaskLooper");
+	auto looper = _MObject(AsyncTaskLooper, "AsyncTaskLooper");
 	if(!looper)
 	{
-		looper = make_shared<AsyncTaskLooper>();
-		mainLooper->AddChild(looper);
-		looper->Start();
+		//在mainlooper中创建
+		auto func = [=, &looper]()
+		{
+			ASSERT(mainLooper->IsCurrentThread());
+
+			//find again
+			looper = _MObject(AsyncTaskLooper, "AsyncTaskLooper");
+			if (!looper)
+			{
+				looper = make_shared<AsyncTaskLooper>();
+				mainLooper->AddChild(looper);
+				looper->Start();
+			}
+		};
+
+		mainLooper->sendRunnable(std::bind(func));
 	}
 
 	if (looper)

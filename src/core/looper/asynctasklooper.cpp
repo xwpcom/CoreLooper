@@ -120,6 +120,6 @@ void AsyncTaskLooper::OnExecuteTask(shared_ptr<AsyncTask> task)
 		task->Run();
 	}
 }
-}
 
+}
 }

@@ -43,9 +43,6 @@
     <ClCompile Include="..\..\src\core\looper\handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\looper\handlerex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\file\inifile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -385,9 +382,6 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\arch\windows\serialport_windows.h">
-      <Filter>header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\core\looper\handlerex.h">
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\looper\procnode.h">

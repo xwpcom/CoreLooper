@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "HttpTool.h"
+#include "httptool.h"
 #include "libcrypt/base64ex.h"
 #include <sys/stat.h>
 namespace Bear {

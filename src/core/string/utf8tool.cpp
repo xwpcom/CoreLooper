@@ -5,6 +5,9 @@ namespace Bear {
 namespace Core {
 
 #ifdef _MSC_VER
+//http ://www.knowsky.com/resource/gb2312tbl.htm
+//GB2312简体中文编码表
+
 //https://www.cnblogs.com/lidabo/p/3903616.html
 //https ://blog.poxiao.me/p/unicode-character-encoding-conversion-in-cpp11/
 CString Utf8Tool::UTF8_to_UNICODE(const char *utf8_string, int length)
@@ -31,6 +34,21 @@ void Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString, std::string& str)
 
 	delete[] buffer;
 }
+
+string Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString)
+{
+	int stringLength = ::WideCharToMultiByte(CP_UTF8, NULL, unicodeString, wcslen(unicodeString), NULL, 0, NULL, NULL);
+
+	char* buffer = new char[stringLength + 1];
+	::WideCharToMultiByte(CP_UTF8, NULL, unicodeString, wcslen(unicodeString), buffer, stringLength, NULL, NULL);
+	buffer[stringLength] = '\0';
+
+	string str = buffer;
+
+	delete[] buffer;
+	return std::move(str);
+}
+
 #endif
 
 //说明:

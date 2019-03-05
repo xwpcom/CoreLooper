@@ -416,6 +416,7 @@ int LooperImpl::SingleStep()
 		dispatchMessage(msg);
 
 #ifdef _CONFIG_DEBUG_LOOPER
+#error _CONFIG_DEBUG_LOOPER
 		if (isMainLooper)
 		{
 			tick = ShellTool::GetTickCount64() - tick;
