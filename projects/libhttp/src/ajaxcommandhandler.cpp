@@ -85,6 +85,9 @@ string  AjaxCommandHandler::Process(string  url)
 				info->mPermission.c_str()
 			);
 		}
+
+		delete handler;
+		handler = nullptr;
 	}
 	else
 	{
