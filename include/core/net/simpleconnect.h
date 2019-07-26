@@ -48,7 +48,7 @@ protected:
 	virtual void OnSend(Channel*);
 	virtual void OnReceive(Channel*);
 	void OnDestroy();
-	void OnTimer(UINT id);
+	void OnTimer(long id);
 
 	void CheckSend();
 	void Close();

@@ -689,9 +689,10 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 	return 0;
 #endif
 
-#ifdef _DEBUG
+#ifdef _DEBUGx
 	{
 		//_StackLooperSendMessage比较低效，所以这里打印出一些信息,上层可据此优化，比如调用BindTlsLooper
+		//已采用SmartTlsLooper优化
 		string desc;
 		if (handler)
 		{

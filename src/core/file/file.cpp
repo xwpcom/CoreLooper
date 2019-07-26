@@ -966,8 +966,6 @@ int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 //return 0表示内容相同，否则表示内容不同
 int File::CompareFileContent(const string& filePath1, const string& filePath2)
 {
-	int ret = -1;
-
 	auto bytes1 = GetFileLength(filePath1.c_str());
 	auto bytes2 = GetFileLength(filePath2.c_str());
 	if (bytes1 != bytes2)

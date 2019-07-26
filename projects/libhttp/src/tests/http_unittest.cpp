@@ -207,6 +207,52 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
+
+	TEST_METHOD(websocket)
+	{
+		//http://www.blue-zero.com/WebSocket/
+		//注意要在路由器做端口映射，然后采用wan ip,不能使用lan/local ip
+		//ws://219.133.68.41:8080
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto svr(make_shared<HttpServer>());
+				AddChild(svr);
+
+				{
+					string webRootFolder = "g:/test/web/";
+					auto config = make_shared<tagWebServerConfig>();
+					auto ajaxHandler = make_shared<AjaxCommandHandler>();
+					config->mWebRootFolder = webRootFolder.c_str();
+					config->mAjaxCommandHandler = ajaxHandler;
+					svr->SetConfig(config);
+					svr->AddChild(ajaxHandler);
+				}
+
+				int ret = svr->StartServer(8080);
+
+				/*
+				{
+					class DelayExit :public Runnable
+					{
+						void Run()
+						{
+							Looper::CurrentLooper()->PostQuitMessage();
+						}
+					};
+
+					postDelayedRunnable(make_shared<DelayExit>(), 30 * 1000);
+				}
+				*/
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+
 };
 
 }

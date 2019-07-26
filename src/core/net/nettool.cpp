@@ -11,7 +11,11 @@
 #else
 #include <sys/types.h>
 #include <ifaddrs.h>
+
+#ifndef __APPLE__
 #include <net/route.h>
+#endif
+
 #endif
 
 using namespace std;
@@ -389,6 +393,8 @@ string NetTool::GetMac(string eth)
 			DW("fail GetAdaptersInfo");
 		}
 	}
+#elif defined __APPLE__
+	
 #else
 	int fd;
 	struct ifreq ifr;
@@ -436,7 +442,7 @@ string NetTool::GetGateWay(string ifName)
 	char szIfName[16] = { 0 };
 	strncpy(szIfName, ifName.c_str(), sizeof(szIfName) - 1);
 
-#ifndef _MSC_VER
+#if !defined _MSC_VER && !defined __APPLE__
 	char buffer[200] = { 0 };
 	auto bufLen = sizeof(buffer);
 

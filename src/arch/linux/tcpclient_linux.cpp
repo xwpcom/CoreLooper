@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "tcpclient_linux.h"
 #include "looper/handler.h"
 #include "tcpserver_linux.h"
@@ -245,7 +245,12 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 
 			static int idx = -1;
 			++idx;
-			if ((idx % 50) == 0)
+			
+			int interval=50;
+#ifdef __APPLE__
+			interval=1000;
+#endif
+			if ((idx % interval) == 0)
 			{
 				DV("send only partial,err=%d(%s),this=%p", err, strerror(err), this);
 			}

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "looper_linux.h"
 #include "looper/looper.h"
 #include "../../core/looper/timermanager.h"
@@ -128,15 +128,107 @@ int Looper_Linux::StartHelper(bool newThread)
 	return 0;
 }
 
+#define _CONFIG_SMART_TLS_LOOPER
+
+#ifdef _CONFIG_SMART_TLS_LOOPER
+class SmartTlsLooperManager_Linux
+{
+	static void clear();
+public:
+	shared_ptr<Looper_Linux> PopTlsLooper()
+	{
+		{
+			AutoLock lock(&mCS);
+			if (!mLoopers.empty())
+			{
+				auto obj = mLoopers.back();
+				mLoopers.pop_back();
+				return obj;
+			}
+		}
+
+		{
+			static bool first = true;
+			if (first)
+			{
+				first = false;
+
+				atexit(SmartTlsLooperManager_Linux::clear);
+			}
+
+		}
+
+		auto looper = make_shared<Looper_Linux >();
+		looper->mThreadId = ShellTool::GetCurrentThreadId();
+		looper->mLooperInternalData->mAttachThread = true;
+
+#ifdef __APPLE__
+		looper->mLooperHandle = (HANDLE)kqueue();
+#else	
+		looper->mLooperHandle = (HANDLE)(LONGLONG)epoll_create(1);
+#endif
+		looper->CreateSocketPair();
+
+		return looper;
+	}
+
+	void PushTlsLooper(shared_ptr<Looper_Linux> obj)
+	{
+		AutoLock lock(&mCS);
+		mLoopers.push_back(obj);
+	}
+
+protected:
+	CriticalSection mCS;
+	list<shared_ptr<Looper_Linux>> mLoopers;
+};
+
+static SmartTlsLooperManager_Linux gTlsLooperManager;
+
+void SmartTlsLooperManager_Linux::clear()
+{
+	AutoLock lock(&gTlsLooperManager.mCS);
+	gTlsLooperManager.mLoopers.clear();
+}
+
+class SmartTlsLooper_Linux
+{
+public:
+	SmartTlsLooper_Linux(LooperImpl* obj)
+	{
+		mLooper = gTlsLooperManager.PopTlsLooper();
+		mLooper->mThreadId = ShellTool::GetCurrentThreadId();
+
+		mLooperImpl = obj;
+		mLooperImpl->SetCurrentLooper(mLooper.get());
+	}
+
+	~SmartTlsLooper_Linux()
+	{
+		gTlsLooperManager.PushTlsLooper(mLooper);
+		mLooperImpl->SetCurrentLooper(nullptr);
+	}
+
+	LooperImpl* mLooperImpl;
+	shared_ptr<Looper_Linux> mLooper;
+};
+#endif
+
+
 void Looper_Linux::_StackLooperSendMessage(tagLoopMessageInternal& loopMsg)
 {
+#ifdef _CONFIG_SMART_TLS_LOOPER
+	SmartTlsLooper_Linux obj(this);
+	sendMessageHelper(loopMsg, *obj.mLooper.get());
+#else
+
 	//构造一个stack looper来实现sendMessage
 	auto looper = make_shared<Looper_Linux>();
 	SetCurrentLooper(looper.get());
 	looper->mThreadId = ShellTool::GetCurrentThreadId();
 	looper->mLooperInternalData->mAttachThread = true;
 #ifdef __APPLE__
-	looper.mLooperHandle = (HANDLE)kqueue();
+	looper->mLooperHandle = (HANDLE)kqueue();
 #else	
 	looper->mLooperHandle = (HANDLE)(LONGLONG)epoll_create(1);
 #endif
@@ -144,6 +236,8 @@ void Looper_Linux::_StackLooperSendMessage(tagLoopMessageInternal& loopMsg)
 	sendMessageHelper(loopMsg, *looper.get());
 	SetCurrentLooper(nullptr);
 	looper = nullptr;
+#endif
+
 }
 
 int Looper_Linux::getMessage(tagLoopMessageInternal& msg)

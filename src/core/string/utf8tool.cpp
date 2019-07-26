@@ -37,7 +37,7 @@ void Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString, std::string& str)
 
 string Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString)
 {
-	int stringLength = ::WideCharToMultiByte(CP_UTF8, NULL, unicodeString, wcslen(unicodeString), NULL, 0, NULL, NULL);
+	auto stringLength = ::WideCharToMultiByte(CP_UTF8, NULL, unicodeString, wcslen(unicodeString), NULL, 0, NULL, NULL);
 
 	char* buffer = new char[stringLength + 1];
 	::WideCharToMultiByte(CP_UTF8, NULL, unicodeString, wcslen(unicodeString), buffer, stringLength, NULL, NULL);

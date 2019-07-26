@@ -20,7 +20,9 @@
 #include <sys/reboot.h>
 #endif
 #include <sys/syscall.h>
+#ifndef __APPLE__
 #include <sys/prctl.h>
+#endif
 #endif
 
 #ifdef _CONFIG_ANDROID
@@ -356,9 +358,17 @@ string ShellTool::GetAppPathName()
 #ifdef _MSC_VER
 	::GetModuleFileNameA(NULL, buf, sizeof(buf) - 1);
 #else
-	auto count = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
-	ASSERT(count<sizeof(buf) - 1);
-	UNUSED(count);
+	auto count = readlink("/proc/self/exe", buf, sizeof(buf) - 1);//fail in ios
+#ifdef __APPLE__
+	DV("count=%d",count);
+#endif
+	if(count>0)
+	{
+		ASSERT(count<sizeof(buf) - 1);
+	}
+	else{
+		DV("error=%d(%s)",errno,strerror(errno));//ios:error=2(No such file or directory)
+	}
 #endif
 	
 	File::PathMakePretty(buf);
@@ -508,6 +518,7 @@ void ShellTool::SetThreadName(LPCSTR szThreadName, DWORD dwThreadID)
 	__except (EXCEPTION_CONTINUE_EXECUTION)
 	{
 	}
+#elif defined __APPLE__
 #else
 	prctl(PR_SET_NAME, (unsigned long)szThreadName, 0, 0, 0);
 #endif

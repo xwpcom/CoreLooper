@@ -55,6 +55,15 @@ protected:
 	void MarkEndOfRecv();
 	void MarkEndOfSend();
 
+	virtual int ConfigSendBuf(int bytes)
+	{
+		return SockTool::SetSendBuf(mSock, bytes);
+	}
+	virtual int ConfigRecvBuf(int bytes)
+	{
+		return SockTool::SetRecvBuf(mSock, bytes);
+	}
+
 	bool	mServerSide;//为true被动连接,为false时表示主动连接
 	bool	mListenWritable;
 	bool    mWaitFirstEvent;

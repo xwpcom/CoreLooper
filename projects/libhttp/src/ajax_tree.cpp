@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "ajax_tree.h"
 
 namespace Bear {
@@ -34,12 +34,12 @@ string Ajax_Tree::Process(const NameValue& params)
 		auto obj = looper->FindObject(url);
 		if (obj)
 		{
-			obj->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xml, flags);
+			obj->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xml, (LPARAM)(long)flags);
 		}
 	}
 	else
 	{
-		looper->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xml, flags);
+		looper->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xml, (LPARAM)(long)flags);
 	}
 
 	string ack=StringTool::Format("<Result><Error>0</Error>%s</Result>"

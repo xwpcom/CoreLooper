@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "net/simpleconnect.h"
 #include "net/tcpclient.h"
 
@@ -73,7 +73,7 @@ void SimpleConnect::OnReceive(Channel*)
 {
 	while (mDataEndPoint)
 	{
-		BYTE buf[1024];
+		BYTE buf[1024*4];
 		int ret = mDataEndPoint->Receive(buf, sizeof(buf) - 1);
 		if (ret <= 0)
 		{
@@ -151,7 +151,7 @@ void SimpleConnect::Close()
 	}
 }
 
-void SimpleConnect::OnTimer(UINT id)
+void SimpleConnect::OnTimer(long id)
 {
 	if (id == mTimer_AutoClose)
 	{

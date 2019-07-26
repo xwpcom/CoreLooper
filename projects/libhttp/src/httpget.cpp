@@ -115,8 +115,8 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		//DV("C=>S %s", req.c_str());
 
 		//在android下面，有时网络不正常，但connect返回连接成功，此时send时会以EPIPE失败
-		int len = req.length();
-		int ret = mDataEndPoint->Send((LPVOID)req.c_str(), len);
+		auto len = req.length();
+		int ret = mDataEndPoint->Send((LPVOID)req.c_str(), (int)len);
 		if (ret == len)
 		{
 			mInbox.PrepareBuf(4 * 1024);
@@ -182,8 +182,8 @@ void HttpGet::ParseInbox()
 				}
 			}
 
-			int eat = pEnd + strlen(key) - ps;
-			mInbox.Eat(eat);
+			auto eat = pEnd + strlen(key) - ps;
+			mInbox.Eat((int)eat);
 			if (!mInbox.IsEmpty())
 			{
 				OnRecvHttpAckBody(mInbox.GetDataPointer(), mInbox.GetActualDataLength());
@@ -227,7 +227,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 			return;
 		}
 
-		long ret = fwrite(data, 1, dataLen, mAckInfo.mFile);
+		auto ret = (long)fwrite(data, 1, dataLen, mAckInfo.mFile);
 		if (ret != dataLen)
 		{
 			Destroy();
@@ -261,7 +261,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 		{
 			mAckInfo.mAckBody.MakeSureEndWithNull();
 			auto p = (char*)mAckInfo.mAckBody.GetDataPointer();
-			done = (strstr(p, "\r\n0\r\n\r\n") != nullptr);
+			done = (strstr(p, "0\r\n\r\n") != nullptr);
 		}
 		else if (mAckInfo.mAckBody.GetActualDataLength() == mAckInfo.mContentLength)
 		{
@@ -303,7 +303,7 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 			if (pStart)
 			{
 				pStart += strlen(key);
-				box.Eat(pStart - ps);
+				box.Eat((int)(pStart - ps));
 				int tailBytes = box.GetActualDataLength() - bytes;
 				if (tailBytes > 0)
 				{

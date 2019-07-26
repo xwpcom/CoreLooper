@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "udpclient_linux.h"
 #include "../../core/looper/message.inl"
 
@@ -224,7 +224,7 @@ void UdpClient_Linux::EnableListenWritable()
 	struct kevent evt = { 0 };
 	EV_SET(&evt, s, EVFILT_WRITE, EV_ADD, 0, 0, (EpollProxy*)this);
 
-	ret = kevent(handle, &evt, 1, NULL, 0, NULL);
+	ret = kevent((int)(long)handle, &evt, 1, NULL, 0, NULL);
 #else
 	struct epoll_event evt = { 0 };
 	evt.events = EPOLLIN
@@ -253,7 +253,7 @@ void UdpClient_Linux::DisableListenWritable()
 	struct kevent evt = { 0 };
 	EV_SET(&evt, s, EVFILT_WRITE, EV_DISABLE, 0, 0, (EpollProxy*)this);
 
-	ret = kevent(handle, &evt, 1, NULL, 0, NULL);
+	ret = kevent((int)(long)handle, &evt, 1, NULL, 0, NULL);
 #else
 	struct epoll_event evt = { 0 };
 	evt.events = EPOLLIN

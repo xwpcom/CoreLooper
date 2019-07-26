@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "timermanager.h"
 #include "timerextrainfo.h"
 #include "handlerinternaldata.h"
@@ -542,10 +542,6 @@ long TimerManager::GetMinIdleTime()const
 							return ms2;
 						}
 
-						if (hasTimer2)
-						{
-
-						}
 					}
 				}
 

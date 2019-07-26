@@ -156,6 +156,12 @@ LRESULT Handler::postMessage(shared_ptr<Message> obj)
 
 LRESULT Handler::sendRunnable(const std::function<void()>& fn)
 {
+	if (IsMyselfThread())
+	{
+		fn();
+		return 0;
+	}
+
 	return sendMessage(BM_SEND_RUNNABLE_FUNCTIONAL, (WPARAM)&fn);
 }
 
@@ -163,6 +169,12 @@ LRESULT Handler::sendRunnable(shared_ptr<Runnable> obj)
 {
 	if (!obj)
 	{
+		return 0;
+	}
+
+	if (IsMyselfThread())
+	{
+		obj->Run();
 		return 0;
 	}
 
@@ -397,7 +409,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		string* xml = (string*)wp;
 		if (xml)
 		{
-			DWORD flags = (DWORD)lp;
+			DWORD flags = (DWORD)(long)lp;
 			DumpProcData(*xml, flags);
 		}
 		else

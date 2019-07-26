@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "xml_requestdownloadfile.h"
 #include "xmlparser.h"
 

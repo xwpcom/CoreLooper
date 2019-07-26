@@ -44,7 +44,7 @@ int TcpServer_Linux::StartServer(int port)
 #ifdef __APPLE__
 		struct kevent evt = { 0 };
 		EV_SET(&evt, s, EVFILT_READ, EV_ADD, 0, 0, (EpollProxy*)this);
-		ret = kevent(handle, &evt, 1, NULL, 0, NULL);
+		ret = kevent((int)(long)handle, &evt, 1, NULL, 0, NULL);
 
 #else
 		struct epoll_event evt = { 0 };

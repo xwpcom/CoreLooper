@@ -196,6 +196,24 @@
     <ClCompile Include="..\..\src\core\net\simpleconnect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\looperpool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\dnser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\net\tests\test_dnser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\core\net\test\speedhandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\core\net\test\speedserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\include\core\net\test\unittest_speed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -415,6 +433,18 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\net\simpleconnect.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\looper\looperpool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\dnser.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\test\speedhandler.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\net\test\speedserver.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

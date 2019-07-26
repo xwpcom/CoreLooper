@@ -100,6 +100,8 @@ protected:
 class CORE_EXPORT Looper_Linux :public LooperImpl
 {
 	SUPER(LooperImpl)
+	friend class SmartTlsLooperManager_Linux;
+
 public:
 	Looper_Linux();
 	virtual ~Looper_Linux();

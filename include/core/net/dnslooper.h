@@ -6,6 +6,7 @@ namespace Net {
 
 //XiongWanPing 2016.08.16
 //提供异步域名解析
+//已过时，建议使用Dnser
 class CORE_EXPORT DnsLooper :public Bear::Core::Looper
 {
 	SUPER(Looper)
@@ -15,8 +16,8 @@ public:
 	~DnsLooper();
 
 	//Add和Cancel内部通过sendMessage实现，所以是线程安全的
-	int AddRequest(std::string dns, std::weak_ptr<Handler> handler, UINT msg);
-	void CancelRequest(std::weak_ptr<Handler> handler);
+	int LOOPER_SAFE AddRequest(std::string dns, std::weak_ptr<Handler> handler, UINT msg);
+	void LOOPER_SAFE CancelRequest(std::weak_ptr<Handler> handler);
 
 protected:
 	LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp);

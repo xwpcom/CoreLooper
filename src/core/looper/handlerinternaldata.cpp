@@ -508,7 +508,7 @@ string tagHandlerInternalData::GetName()const
 		name = mObjectName;
 	}
 
-	return std::move(name);
+	return name;
 }
 
 void tagHandlerInternalData::SetName(const string& name)

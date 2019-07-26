@@ -44,14 +44,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -107,7 +107,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -132,7 +132,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -161,7 +161,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -190,7 +190,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -203,6 +203,9 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\core\net\test\speedhandler.cpp" />
+    <ClCompile Include="..\..\include\core\net\test\speedserver.cpp" />
+    <ClCompile Include="..\..\include\core\net\test\unittest_speed.cpp" />
     <ClCompile Include="..\..\src\arch\android\jnihelper.cpp" />
     <ClCompile Include="..\..\src\arch\android\jnilooper.cpp" />
     <ClCompile Include="..\..\src\arch\android\jni_entry.cpp" />
@@ -243,13 +246,16 @@
     <ClCompile Include="..\..\src\core\looper\looper.cpp" />
     <ClCompile Include="..\..\src\core\looper\looperimpl.cpp" />
     <ClCompile Include="..\..\src\core\looper\looperinternaldata.cpp" />
+    <ClCompile Include="..\..\src\core\looper\looperpool.cpp" />
     <ClCompile Include="..\..\src\core\looper\procnode.cpp" />
     <ClCompile Include="..\..\src\core\looper\timermanager.cpp" />
     <ClCompile Include="..\..\src\core\net\channel.cpp" />
+    <ClCompile Include="..\..\src\core\net\dnser.cpp" />
     <ClCompile Include="..\..\src\core\net\simpleconnect.cpp" />
     <ClCompile Include="..\..\src\core\net\speedcounter.cpp" />
     <ClCompile Include="..\..\src\core\net\tcpclient.cpp" />
     <ClCompile Include="..\..\src\core\net\tcpserver.cpp" />
+    <ClCompile Include="..\..\src\core\net\tests\test_dnser.cpp" />
     <ClCompile Include="..\..\src\core\net\udpserver.cpp" />
     <ClCompile Include="..\..\src\core\net\dnslooper.cpp" />
     <ClCompile Include="..\..\src\core\net\nettool.cpp" />
@@ -328,12 +334,16 @@
     <ClInclude Include="..\..\include\core\looper\loop.h" />
     <ClInclude Include="..\..\include\core\looper\looper.h" />
     <ClInclude Include="..\..\include\core\looper\looperimpl.h" />
+    <ClInclude Include="..\..\include\core\looper\looperpool.h" />
     <ClInclude Include="..\..\include\core\looper\procnode.h" />
     <ClInclude Include="..\..\include\core\looper\teststate.h" />
+    <ClInclude Include="..\..\include\core\net\dnser.h" />
     <ClInclude Include="..\..\include\core\net\simpleconnect.h" />
     <ClInclude Include="..\..\include\core\net\speedcounter.h" />
     <ClInclude Include="..\..\include\core\net\tcpclient.h" />
     <ClInclude Include="..\..\include\core\net\tcpserver.h" />
+    <ClInclude Include="..\..\include\core\net\test\speedhandler.h" />
+    <ClInclude Include="..\..\include\core\net\test\speedserver.h" />
     <ClInclude Include="..\..\include\core\net\udpserver.h" />
     <ClInclude Include="..\..\include\core\net\channel.h" />
     <ClInclude Include="..\..\include\core\net\dnslooper.h" />

@@ -70,6 +70,7 @@ int Looper::SetMainLooper(Looper* looper)
 //在非looper线程中如果要频繁向looper发送消息，每次都会创建临时looper
 //为提高性能，可在非looper线程中调用本接口来创建一个looper并缓存
 //stackLooper自己没有消息循环，只能向looper sendMessage或postMessage
+/*
 shared_ptr<Looper> Looper::BindTLSLooper()
 {
 	if (CurrentLooper())
@@ -96,6 +97,7 @@ shared_ptr<Looper> Looper::BindTLSLooper()
 
 	return looper;
 }
+*/
 
 }
 }

@@ -11,6 +11,7 @@ namespace Core
 class CORE_EXPORT Looper_Windows :public LooperImpl
 {
 	friend class Handler;
+	friend class SmartTlsLooperManager;
 public:
 	Looper_Windows();
 	virtual ~Looper_Windows();

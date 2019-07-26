@@ -6,6 +6,16 @@
 namespace Bear {
 namespace Core
 {
+
+template<typename ... Args>
+std::string StringFormat(const char* format, Args ... args)
+{
+	size_t size = snprintf(nullptr, 0, format, args ...) + 1;
+	std::unique_ptr<char[]> buf(new char[size]);
+	snprintf(buf.get(), size, format, args ...);
+	return std::string(buf.get(), buf.get() + size - 1);
+};
+
 //XiongWanPing 2018.04.21
 class CORE_EXPORT StringTool
 {

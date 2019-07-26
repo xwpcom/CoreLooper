@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #ifndef _MSC_VER
 #ifndef NDEBUG
@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#if !defined _CONFIG_ANDROID && defined __clang__
+#if !defined _CONFIG_ANDROID && defined __clang__ && !defined __APPLE__
 //android studio use clang compile now
 #define _CONFIG_ANDROID
 #endif

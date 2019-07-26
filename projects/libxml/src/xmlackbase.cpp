@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "xmlackbase.h"
 #include "xmlparser.h"
 #include "net/urltool.h"

@@ -25,8 +25,10 @@ public:
 	static int SetMainLooper(Looper*);
 	static bool IsMainLooper(LooperImpl *looper);
 	
+	//2019.04.14 BindTLSLooper已过时,内部采用SmartTlsLooper优化
 	//说明:上层要保证在同一线程创建和析构tls looper
-	static std::shared_ptr<Looper> BindTLSLooper();
+	//__declspec(deprecated) 
+	//static std::shared_ptr<Looper> BindTLSLooper();
 };
 
 //main looper helper

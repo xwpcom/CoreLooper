@@ -5,6 +5,7 @@
 #include "core/net/tcpclient.h"
 #include <atomic> 
 #include <functional>
+#include <mutex>  
 
 class Demo
 {
@@ -155,76 +156,6 @@ TEST_CLASS(_TestCPP11)
 				float arr[] = { 1,2,3 };
 				LambdaTest::abssort(arr, COUNT_OF(arr));
 			}
-
-			class TestHandler :public Handler
-			{
-			public:
-				UINT mMessageTest = AllocMessageId();
-				typedef void(*PFN)();
-				void OnCreate()
-				{
-					__super::OnCreate();
-
-					/*
-					auto object = shared_from_this();
-					auto fn = [object]()
-					{
-						DV("%s", __func__);
-					};
-
-					PFN obj = fn;
-					fn(shared_from_this(), 12);
-					auto fn2 = fn;
-					DV("sizeof(fn2)=%d", sizeof(fn2));
-					sendMessage(mMessageTest, (WPARAM)&fn);
-					//*/
-
-					Looper::CurrentLooper()->PostQuitMessage();
-				}
-
-				LRESULT OnMessage(UINT msg,WPARAM wp, LPARAM lp)
-				{
-					if (msg == mMessageTest)
-					{
-						PFN fn = *(PFN)wp;
-						//fn();
-
-						return 0;
-					}
-
-					return __super::OnMessage(msg, wp, lp);
-				}
-			};
-
-			class MainLooper :public Looper
-			{
-				void OnCreate()
-				{
-					__super::OnCreate();
-
-					AddChild(make_shared<TestHandler>());
-				}
-			};
-
-			make_shared<MainLooper>()->StartRun();
-
-			/*
-			int age = 38;
-			auto func = [&](int v1,int v2)
-			{
-				if (age == 38)
-				{
-					age = 123;
-					return 0;
-				}
-				return v1 > v2 ? v1 : v2;
-			};
-
-			auto x = func(12, 34);
-			DV("age=%d", age);
-			int i = 0;
-			*/
-
 		}
 
 		TEST_METHOD(Test_typeid)
@@ -241,7 +172,6 @@ TEST_CLASS(_TestCPP11)
 		//https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=vs-2017
 		TEST_METHOD(StdMove)
 		{
-
 			class MemoryBlock
 			{
 			public:
@@ -1073,7 +1003,134 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
-	
+
+	TEST_METHOD(TestStdMutex)
+	{
+		std::mutex obj;
+		CriticalSection cs;
+
+		auto tick = ShellTool::GetTickCount64();
+
+		int times = 1000 * 1000*10;
+
+		for (int i = 0; i < times; i++)
+		{
+			obj.lock();
+			obj.unlock();
+			//cs.Lock();
+			//cs.Unlock();
+		}
+
+		tick =ShellTool::GetTickCount()-tick;
+		DV("tick=%lld", tick);
+
+	}
+
+	TEST_METHOD(SmartTlsLooper_)
+	{
+		
+		class MainLooper :public MainLooper_
+		{
+			enum
+			{
+				BM_TEST=1,
+			};
+
+			static void* WINAPI _RawThreadCB(void* p)
+			{
+				int i = (int)(LONGLONG)p;
+
+				//DV("%s,i=%d#begin", __func__, i);
+				auto obj=Looper::GetMainLooper();
+				for(int idx=0;idx<10;idx++)
+				{
+					obj->sendMessage(BM_TEST, (WPARAM)i);
+					
+					string name = "xwp";
+					
+					auto func2 = [=, &name](int a, int b, float c)
+					{
+						Assert::IsTrue(obj->IsMyselfThread());
+
+						DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
+						DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
+						name = "bear";
+						//Looper::GetMainLooper()->PostQuitMessage();
+					};
+
+
+					auto func = [=, &name](int a, int b, float c)
+					{
+						Assert::IsTrue(obj->IsMyselfThread());
+
+						DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
+						DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
+						name = "bear";
+						//Looper::GetMainLooper()->PostQuitMessage();
+
+						obj->sendRunnable(std::bind(func2, 100, 'c', 2.5f));
+					};
+
+					obj->sendRunnable(std::bind(func, 100, 'c', 2.5f));
+				}
+				//DV("%s,i=%d#end", __func__, i);
+				return nullptr;
+			}
+
+			class WorkLooper :public Looper
+			{
+				int mTimes = 10;
+				void OnCreate()
+				{
+					__super::OnCreate();
+
+					for (int i = 0; i < mTimes; i++)
+					{
+						LONGLONG index = i;
+						ShellTool::QueueUserWorkItem((LPTHREAD_START_ROUTINE)_RawThreadCB, (void*)index);
+
+						ShellTool::Sleep(10);
+					}
+				}
+
+			};
+
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto obj = make_shared<WorkLooper>();
+				AddChild(obj);
+				obj->Start();
+
+				SetTimer(mTimerDelayExit, 5000);
+			}
+			long mTimerDelayExit=0;
+			void OnTimer(long id)
+			{
+				if (id == mTimerDelayExit)
+				{
+					PostQuitMessage();
+					return;
+				}
+
+				__super::OnTimer(id);
+			}
+
+			LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp)
+			{
+				if (msg == BM_TEST)
+				{
+					//DV("index=%d", (int)wp);
+				}
+
+				return __super::OnMessage(msg, wp, lp);
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+
 	TEST_METHOD(TestCreate)
 	{
 		class MainLooper :public MainLooper_
@@ -1386,7 +1443,7 @@ public:
 			}
 		};
 
-		auto tlsLooper = Looper::BindTLSLooper();
+		//auto tlsLooper = Looper::BindTLSLooper();
 
 		if (bindCPU)
 		{
@@ -2358,6 +2415,12 @@ public:
 		}
 	}
 
+	TEST_METHOD(TestStringFormat)
+	{
+		auto sz = StringFormat("hello,%d,%s", 123,"bear");
+		DV("%s", sz.c_str());
+	}
+
 	TEST_METHOD(TestCpp)
 	{
 		class Base
@@ -2462,7 +2525,7 @@ public:
 
 		Bundle obj2;
 		obj2 = obj;
-		DV("name=%s", obj2.GetString("name").c_str());
+		DV("name=%s", obj2.GetString("name").c_str()); ;
 
 		DV("pack=[%s]", obj2.Pack().c_str());
 	}
@@ -2717,7 +2780,7 @@ public:
 			shared_ptr<WifiHelper> mBuddy;
 		};
 
-		auto tlsLooper = Looper::BindTLSLooper();
+		//auto tlsLooper = Looper::BindTLSLooper();
 		auto event = make_shared<Event>();
 		{
 			auto looper = make_shared<MainLooper>();
@@ -2759,7 +2822,7 @@ public:
 		};
 
 		LONGLONG tick = 0;
-		auto tlsLooper = Looper::BindTLSLooper();
+		//auto tlsLooper = Looper::BindTLSLooper();
 		auto event = make_shared<Event>();
 		{
 			auto looper = make_shared<MainLooper_>();
@@ -2837,7 +2900,7 @@ public:
 			bool mExecuted = false;
 		};
 
-		auto tlsLooper = Looper::BindTLSLooper();
+		//auto tlsLooper = Looper::BindTLSLooper();
 		auto event = make_shared<Event>();
 		auto obj = make_shared<WifiHelper>();
 		{
