@@ -2,6 +2,7 @@
 #include "httpserver.h"
 #include "httphandler.h"
 #include "net/tcpclient.h"
+
 namespace Bear {
 namespace Core {
 namespace Net {
@@ -23,6 +24,12 @@ std::shared_ptr<Channel> HttpServer::CreateChannel()
 	//DV("%s",__func__);
 
 	auto client(make_shared<Net::TcpClient>());
+#ifdef _CONFIG_OPENSSL
+	if (mUseTls)
+	{
+		client->EnableTls();
+	}
+#endif
 	client->SignalOnConnect.connect(this, &HttpServer::OnConnect);
 	return client;
 }
@@ -34,7 +41,7 @@ void HttpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bund
 	TcpClient* client = (TcpClient*)endPoint;
 	client->SignalOnConnect.disconnect(this);
 
-	shared_ptr<HttpHandler> handler(make_shared<HttpHandler>());
+	auto handler(make_shared<HttpHandler>());
 	handler->mChannel = dynamic_pointer_cast<TcpClient>(client->shared_from_this());
 	handler->SetConfig(mWebConfig);
 
@@ -45,6 +52,7 @@ void HttpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bund
 	AddChild(handler);
 	handler->OnConnect(endPoint, error, extraInfo);
 }
+
 
 }
 }

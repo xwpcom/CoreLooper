@@ -15,6 +15,7 @@
 
 #include "ajaxcommandhandler.h"
 #include "ajaxhandler.h"
+#include "jsonhandler.h"
 #include "httpackheader.h"
 #include "httpackparser.h"
 //#include "httpclient.h"

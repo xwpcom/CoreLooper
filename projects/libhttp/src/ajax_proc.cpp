@@ -8,7 +8,7 @@ class UserInfo;
 namespace Net {
 namespace Http {
 
-IMPLEMENT_AJAX_CLASS(Ajax_Proc, "proc", "DeviceConfig")
+IMPLEMENT_AJAX_CLASS(Ajax_Proc, "proc", "")
 
 Ajax_Proc::Ajax_Proc()
 {

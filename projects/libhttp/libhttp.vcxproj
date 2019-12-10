@@ -21,21 +21,21 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6D2BAB04-C6FB-4B65-A6C9-E2DC05E34E80}</ProjectGuid>
     <RootNamespace>libhttp</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <Keyword>MFCDLLProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -43,17 +43,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -102,6 +102,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\libhttp.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>E:\tools\OpenSSL-Win32\lib\VC\static</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -198,7 +199,6 @@
     <ClCompile Include="src\ajax_listajaxcommand.cpp" />
     <ClCompile Include="src\ajax_proc.cpp" />
     <ClCompile Include="src\ajax_tree.cpp" />
-    <ClCompile Include="src\demohttprequesthandler.cpp" />
     <ClCompile Include="src\httpackheader.cpp" />
     <ClCompile Include="src\httpackparser.cpp" />
     <ClCompile Include="src\httpformfield.cpp" />
@@ -214,14 +214,21 @@
     <ClCompile Include="src\httprequesthandler_ajax.cpp" />
     <ClCompile Include="src\httprequesthandler_cgi.cpp" />
     <ClCompile Include="src\httprequesthandler_file.cpp" />
+    <ClCompile Include="src\httprequesthandler_json.cpp" />
     <ClCompile Include="src\httpserver.cpp" />
     <ClCompile Include="src\httptool.cpp" />
+    <ClCompile Include="src\jsonhandler.cpp" />
     <ClCompile Include="src\posthandler_uploadpicture.cpp" />
     <ClCompile Include="src\posthandler_uploadvideo.cpp" />
     <ClCompile Include="src\procmanager.cpp" />
+    <ClCompile Include="src\tests\demohttprequesthandler.cpp" />
     <ClCompile Include="src\tests\http_unittest.cpp" />
+    <ClCompile Include="src\textparser.cpp" />
     <ClCompile Include="src\userinfo.cpp" />
     <ClCompile Include="src\userman.cpp" />
+    <ClCompile Include="src\websockethandler.cpp" />
+    <ClCompile Include="src\websocketsplitter.cpp" />
+    <ClCompile Include="src\wshandler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -237,8 +244,8 @@
     <ClInclude Include="..\..\include\libhttp\ajaxhandler.h" />
     <ClInclude Include="..\..\include\libhttp\httpget.h" />
     <ClInclude Include="..\..\include\libhttp\httphandler.h" />
+    <ClInclude Include="..\..\include\libhttp\httprequesthandler_json.h" />
     <ClInclude Include="..\..\include\libhttp\httpserver.h" />
-    <ClInclude Include="..\..\include\libhttp\demohttprequesthandler.h" />
     <ClInclude Include="..\..\include\libhttp\httpackheader.h" />
     <ClInclude Include="..\..\include\libhttp\httpackparser.h" />
     <ClInclude Include="..\..\include\libhttp\httpconfig.h" />
@@ -255,9 +262,13 @@
     <ClInclude Include="..\..\include\libhttp\httprequesthandler_cgi.h" />
     <ClInclude Include="..\..\include\libhttp\httprequesthandler_file.h" />
     <ClInclude Include="..\..\include\libhttp\httptool.h" />
+    <ClInclude Include="..\..\include\libhttp\jsonhandler.h" />
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadpicture.h" />
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadvideo.h" />
     <ClInclude Include="..\..\include\libhttp\procmanager.h" />
+    <ClInclude Include="..\..\include\libhttp\websockethandler.h" />
+    <ClInclude Include="..\..\include\libhttp\websocketsplitter.h" />
+    <ClInclude Include="..\..\include\libhttp\wshandler.h" />
     <ClInclude Include="..\..\src\libhttp\ajax_listajaxcommand.h" />
     <ClInclude Include="..\..\src\libhttp\ajax_proc.h" />
     <ClInclude Include="libhttp.h" />
@@ -266,12 +277,54 @@
     <ClInclude Include="src\ajax_listajaxcommand.h" />
     <ClInclude Include="src\ajax_proc.h" />
     <ClInclude Include="src\ajax_tree.h" />
+    <ClInclude Include="src\openssl\SSLBox.h" />
+    <ClInclude Include="src\openssl\SSLUtil.h" />
+    <ClInclude Include="src\tests\demohttprequesthandler.h" />
+    <ClInclude Include="src\textparser.h" />
+    <ClInclude Include="src\zltoolkit\Network\Buffer.h" />
+    <ClInclude Include="src\zltoolkit\Network\Socket.h" />
+    <ClInclude Include="src\zltoolkit\Network\sockutil.h" />
+    <ClInclude Include="src\zltoolkit\Network\TcpClient.h" />
+    <ClInclude Include="src\zltoolkit\Network\TcpServer.h" />
+    <ClInclude Include="src\zltoolkit\Network\TcpSession.h" />
+    <ClInclude Include="src\zltoolkit\Poller\EventPoller.h" />
+    <ClInclude Include="src\zltoolkit\Poller\Pipe.h" />
+    <ClInclude Include="src\zltoolkit\Poller\PipeWrap.h" />
+    <ClInclude Include="src\zltoolkit\Poller\SelectWrap.h" />
+    <ClInclude Include="src\zltoolkit\Poller\Timer.h" />
+    <ClInclude Include="src\zltoolkit\Thread\semaphore.h" />
+    <ClInclude Include="src\zltoolkit\Thread\TaskExecutor.h" />
+    <ClInclude Include="src\zltoolkit\Thread\TaskQueue.h" />
+    <ClInclude Include="src\zltoolkit\Thread\threadgroup.h" />
+    <ClInclude Include="src\zltoolkit\Thread\ThreadPool.h" />
+    <ClInclude Include="src\zltoolkit\Thread\WorkThreadPool.h" />
+    <ClInclude Include="src\zltoolkit\Util\base64.h" />
+    <ClInclude Include="src\zltoolkit\Util\CMD.h" />
+    <ClInclude Include="src\zltoolkit\Util\File.h" />
+    <ClInclude Include="src\zltoolkit\Util\function_traits.h" />
+    <ClInclude Include="src\zltoolkit\Util\List.h" />
+    <ClInclude Include="src\zltoolkit\Util\logger.h" />
+    <ClInclude Include="src\zltoolkit\Util\MD5.h" />
+    <ClInclude Include="src\zltoolkit\Util\mini.h" />
+    <ClInclude Include="src\zltoolkit\Util\NoticeCenter.h" />
+    <ClInclude Include="src\zltoolkit\Util\onceToken.h" />
+    <ClInclude Include="src\zltoolkit\Util\ResourcePool.h" />
+    <ClInclude Include="src\zltoolkit\Util\RingBuffer.h" />
+    <ClInclude Include="src\zltoolkit\Util\SHA1.h" />
+    <ClInclude Include="src\zltoolkit\Util\SqlConnection.h" />
+    <ClInclude Include="src\zltoolkit\Util\SqlPool.h" />
+    <ClInclude Include="src\zltoolkit\Util\SSLBox.h" />
+    <ClInclude Include="src\zltoolkit\Util\SSLUtil.h" />
+    <ClInclude Include="src\zltoolkit\Util\TimeTicker.h" />
+    <ClInclude Include="src\zltoolkit\Util\util.h" />
+    <ClInclude Include="src\zltoolkit\Util\uv_errno.h" />
+    <ClInclude Include="src\zltoolkit\win32\getopt.h" />
+    <ClInclude Include="src\zltoolkit\win32\tailor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\include\libhttp\libhttp.inl" />
-    <None Include="..\..\src\libhttp\t.bat" />
     <None Include="libhttp.def" />
     <None Include="res\libhttp.rc2" />
   </ItemGroup>

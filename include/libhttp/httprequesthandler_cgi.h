@@ -8,11 +8,11 @@ namespace Net {
 namespace Http {
 //XiongWanPing 2013.06.13
 //处理.cgi命令
-class HTTP_EXPORT CHttpRequestHandler_CGI :public HttpRequestHandler
+class HTTP_EXPORT HttpRequestHandler_CGI :public HttpRequestHandler
 {
 public:
-	CHttpRequestHandler_CGI();
-	virtual ~CHttpRequestHandler_CGI();
+	HttpRequestHandler_CGI();
+	virtual ~HttpRequestHandler_CGI();
 
 	virtual int Start(tagHttpHeaderInfo *headerInfo);
 	virtual int Process();

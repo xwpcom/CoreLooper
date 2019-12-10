@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "ToastWnd.h"
+#include "../include/ToastWnd.h"
 
 #define CLASS_WND _T("ToastWnd")
 using namespace Bear::Core;

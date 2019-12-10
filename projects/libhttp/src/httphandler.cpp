@@ -3,6 +3,7 @@
 #include "base/log.h"
 #include "httprequest.h"
 #include "net/tcpclient.h"
+#include "websockethandler.h"
 
 namespace Bear {
 namespace Core {
@@ -47,6 +48,37 @@ void HttpHandler::OnSend(Channel*)
 
 void HttpHandler::CheckSend()
 {
+	if (mCheckSending)
+	{
+		return;
+	}
+	
+	mCheckSending = true;
+	class AutoReset
+	{
+	public:
+		AutoReset(bool& v) :mValue(v)
+		{
+
+		}
+
+		~AutoReset()
+		{
+			mValue = false;
+		}
+
+		bool& mValue;
+	};
+
+	AutoReset v(mCheckSending);
+
+	auto outbox = GetOutbox();
+	if (!outbox)
+	{
+		ASSERT(false);
+		return;
+	}
+
 	while (1)
 	{
 		if (mHttpRequest)
@@ -58,8 +90,13 @@ void HttpHandler::CheckSend()
 			}
 		}
 
-		LPBYTE pData = mOutbox.GetDataPointer();
-		int len = mOutbox.GetActualDataLength();
+		if (outbox != &mOutbox)
+		{
+			TransformOutboxData();
+		}
+
+		LPBYTE pData = outbox->GetDataPointer();
+		int len = outbox->GetActualDataLength();
 		if (len <= 0)
 		{
 			break;
@@ -71,7 +108,14 @@ void HttpHandler::CheckSend()
 			ret = mChannel->Send(pData, len);
 			if (ret > 0)
 			{
-				mOutbox.Eat(ret);
+				outbox->Eat(ret);
+			}
+
+			//大数据流量管控,比如下载较大文件时
+			int maxCacheBytes = 8 * 1024;
+			if (outbox->length() > maxCacheBytes || mChannel->GetOutboxCacheBytes() > maxCacheBytes)
+			{
+				return;
 			}
 		}
 
@@ -136,54 +180,78 @@ void HttpHandler::OnReceive(Channel*)
 				//File::ReadFile("d:/recv.bin", mInbox);
 			}
 #endif
-
-			while (1)
-			{
-				if (!mHttpRequest)
-				{
-					/*
-					if (strncmp((char*)buf, "OPTIONS", strlen("OPTIONS")) == 0
-						|| strncmp((char*)buf, "DESCRIBE", strlen("DESCRIBE")) == 0
-						)
-					{
-						//work as rtsp
-						auto rtspServer = mWebConfig->mRtspServer.lock();
-						if (rtspServer)
-						{
-							mChannel->SignalOnSend.disconnect(this);
-							mChannel->SignalOnReceive.disconnect(this);
-							mChannel->SignalOnClose.disconnect(this);
-
-							ByteBuffer box;
-							box.Write(buf, ret);
-							DW("todo:rtsp");
-							ASSERT(FALSE);
-							//rtspServer->OnHttpRequestTransform(mChannel,box);
-							mChannel->Destroy();
-							mChannel = nullptr;
-							Destroy();
-							return;
-						}
-					}
-					*/
-
-					mHttpRequest = make_shared<CHttpRequest>();
-					mHttpRequest->SetConfig(mWebConfig);
-					mHttpRequest->SetOutbox(&mOutbox);
-					mHttpRequest->SetPeerAddr(mChannel->GetPeerDesc());
-					mHttpRequest->SetLocalAddr(mChannel->GetLocalDesc());
-				}
-
-				int bytes = mInbox.GetActualDataLength();
-				ret = mHttpRequest->Input(mInbox);
-				CheckSend();
-				if (bytes == mInbox.GetActualDataLength())
-				{
-					break;
-				}
-			}
+			ParseInbox();
 		}
 		else
+		{
+			break;
+		}
+	}
+}
+
+void HttpHandler::ParseInbox()
+{
+	auto inbox=GetBuffer_ParseInbox();
+	if (!inbox)
+	{
+		ASSERT(FALSE);
+		return;
+	}
+
+	while (1)
+	{
+		auto d = inbox->data();
+		auto bytes = inbox->length();
+		if (bytes == 0)
+		{
+			break;
+		}
+		if (!mHttpRequest)
+		{
+			mHttpRequest = make_shared<HttpRequest>();
+			mHttpRequest->SetConfig(mWebConfig);
+			mHttpRequest->SetOutbox(&mOutbox);
+			mHttpRequest->SetPeerAddr(mChannel->GetPeerDesc());
+			mHttpRequest->SetLocalAddr(mChannel->GetLocalDesc());
+		}
+
+		bytes = inbox->length();
+		auto ret = mHttpRequest->Input(*inbox);
+		CheckSend();
+		if (mHttpRequest && mHttpRequest->IsWebSocket())
+		{
+			auto url = mHttpRequest->GetUrl();
+			mHttpRequest = nullptr;
+
+			if (mWebConfig->mWSFacotry)
+			{
+				mChannel->SignalOnSend.disconnect(this);
+				mChannel->SignalOnReceive.disconnect(this);
+				mChannel->SignalOnClose.disconnect(this);
+
+				auto obj = mWebConfig->mWSFacotry->CreateWebSocketHandler(url);
+				if (obj)
+				{
+					AddChild(obj);
+					obj->Attach(mChannel);
+					mChannel = nullptr;
+
+					return;
+				}
+			}
+
+			if (mChannel)
+			{
+				DW("no handler for websockt url:%s", url.c_str());
+
+				mChannel->Destroy();
+				mChannel = nullptr;
+				Destroy();
+				return;
+			}
+
+		}
+		if (bytes == inbox->length())
 		{
 			break;
 		}

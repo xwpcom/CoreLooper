@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "file/file.h"
 #include "base/shelltool.h"
 #include "base/stringtool.h"

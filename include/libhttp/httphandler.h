@@ -6,7 +6,7 @@ namespace Core {
 namespace Net {
 class Channel;
 namespace Http {
-class CHttpRequest;
+class HttpRequest;
 
 //XiongWanPing 2016.03.25
 //处理一个http socket连接
@@ -25,16 +25,31 @@ public:
 
 	std::shared_ptr<Channel> mChannel;
 protected:
-	void CheckSend();
-
 	virtual void OnClose(Channel*);
 	virtual void OnSend(Channel*);
 	virtual void OnReceive(Channel*);
 
 	virtual void OnConnect(Channel*, long, Bundle*);
+
+	void CheckSend();
+	virtual void ParseInbox();
+	
+	virtual ByteBuffer* GetBuffer_ParseInbox()//便于https扩展
+	{
+		return &mInbox;
+	}
+
+	virtual ByteBuffer* GetOutbox()//便于https扩展
+	{
+		return &mOutbox;
+	}
+
+	virtual void TransformOutboxData() {}
+	bool mCheckSending = false;
+
 	ByteBuffer					mInbox;//缓存已接收但还没完成解析的数据
 	ByteBuffer					mOutbox;
-	std::shared_ptr<CHttpRequest>	mHttpRequest;
+	std::shared_ptr<HttpRequest>	mHttpRequest;
 	std::shared_ptr<tagWebServerConfig> mWebConfig;
 };
 }

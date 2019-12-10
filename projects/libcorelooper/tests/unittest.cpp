@@ -15,7 +15,7 @@ public:
 
 
 #ifdef _MSC_VER_DEBUG
-//#define new DEBUG_NEW
+#define new DEBUG_NEW
 #endif
 
 using namespace std;
@@ -471,6 +471,42 @@ public:
 		};
 
 		make_shared<MainLooper>()->StartRun();
+	}
+
+	//测试android jni下需要用到的场景
+	TEST_METHOD(JniTest)
+	{
+		class AHandler :public Handler
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+				DG("%s,threadId=%d", __func__,ShellTool::GetCurrentThreadId());
+			}
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				DG("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+			}
+		};
+
+		auto looper = make_shared<MainLooper>();
+		looper->Start();
+		looper->sendMessage(BM_NULL);
+
+		auto obj = make_shared<AHandler>();
+		looper->AddChild(obj);
+
+		while (1)
+		{
+			ShellTool::Sleep(1);
+			break;
+		}
 	}
 
 	TEST_METHOD(DemoAndroidActivity)
@@ -2474,6 +2510,8 @@ public:
 
 	TEST_METHOD(New_Test)
 	{
+
+		/*
 		auto obj = ::new Demo();
 		make_shared<Demo>();
 
@@ -2486,31 +2524,12 @@ public:
 
 			auto obj = new (s_memPool)Demo2();
 		}
+		*/
 	}
 
 	TEST_METHOD(New_Test2)
 	{
-		static char macBuffer[1024 * 6] = { 0 };
-
-		class MyClass {
-		public:
-			MyClass(std::string b) {
-				this->a = b;
-			}
-
-			~MyClass() {
-				std::cout << "~MyClass" << std::endl;
-			}
-			std::string GetA() { return  a; }
-			std::string a;
-		};
-		
-		{
-			MyClass *ptMyClass = NULL;
-			char *p = (char *)malloc(sizeof(MyClass) + sizeof(int));
-			ptMyClass = ::new( p) MyClass("Hello world");
-		}
-
+		auto p = new int;
 	}
 
 	TEST_METHOD(Bundle_Test)
@@ -3241,6 +3260,74 @@ TEST_CLASS(StringTool_UnitTest)
 
 		StringTool::AppendFormat(text, ",name=%s", "xwp");
 		DV("text#2=%s", text.c_str());
+
+	}
+};
+
+TEST_CLASS(Log)
+{
+	TEST_METHOD(SharedMemory_Writer)
+	{
+		ULONGLONG bytes = 1024 * 4*1024;
+		auto fd=CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, (DWORD)bytes, _T("Local\\CoreLooper"));
+		//auto fd2 = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, bytes, _T("Local\\CoreLooper"));
+		//DV("fd=%p,fd2=%p", fd,fd2);
+
+		auto d = (LPBYTE)MapViewOfFile(fd,FILE_MAP_ALL_ACCESS,0,0, (SIZE_T)bytes);
+		d[0] = 0x12;
+		d[1] = 0x34;
+		//d[bytes] = 0xCD;//test overflow,vs can detect it
+		ULONGLONG times = 1000;
+		auto tick = ShellTool::GetTickCount64();
+		for (ULONGLONG i = 0; i < times; i++)
+		{
+			for (int i = 0; i < bytes; i++)
+			{
+				d[i] = i%256;
+			}
+		}
+
+		tick = ShellTool::GetTickCount64()-tick;
+		ULONGLONG totalBytes = times * bytes;
+		double speed = 0;
+		if (tick > 0)
+		{
+			speed = (double)(totalBytes * 1000 / tick/1024/1024);
+		}
+		DV("tick=%lld,totalBytes =%lld(%.1f MB/S)", tick, totalBytes,speed);
+		int x = 0;
+
+	}
+};
+
+TEST_CLASS(STL)
+{
+	TEST_METHOD(MultiMap)
+	{
+#define strcasecmp _stricmp
+
+		struct StrCaseCompare
+		{
+			bool operator()(const string& __x, const string& __y) const
+			{
+				return strcasecmp(__x.data(), __y.data()) < 0;
+			};
+		};
+
+		multimap<string, string, StrCaseCompare> items;
+		items.emplace("player","tom");
+		items.emplace("player", "jerry");
+
+		for (auto& item : items)
+		{
+			DV("%s=%s", item.first.c_str(), item.second.c_str());
+		}
+
+		auto iter = items.find("Player");
+		if (iter != items.end())
+		{
+			DV("value=%s", iter->second.c_str());
+		}
 
 	}
 };

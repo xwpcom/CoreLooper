@@ -7,11 +7,11 @@ namespace Net {
 namespace Http {
 //XiongWanPing 2013.06.20
 //用来统一管理http ack header
-class HTTP_EXPORT CHttpAckHeader
+class HTTP_EXPORT HttpAckHeader
 {
 public:
-	CHttpAckHeader();
-	virtual ~CHttpAckHeader();
+	HttpAckHeader();
+	virtual ~HttpAckHeader();
 
 	void SetHttpVersion(std::string  httpVersion)
 	{

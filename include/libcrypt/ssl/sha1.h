@@ -48,7 +48,7 @@ extern "C" {
  *
  * \param ctx      context to be initialized
  */
-void sha1_starts_EX( sha1_context *ctx );
+void CRYPT_EXT_CLASS sha1_starts_EX( sha1_context *ctx );
 
 /**
  * \brief          SHA-1 process buffer
@@ -57,7 +57,7 @@ void sha1_starts_EX( sha1_context *ctx );
  * \param input    buffer holding the  data
  * \param ilen     length of the input data
  */
-void sha1_update_EX( sha1_context *ctx, unsigned char *input, int ilen );
+void CRYPT_EXT_CLASS sha1_update_EX( sha1_context *ctx, unsigned char *input, int ilen );
 
 /**
  * \brief          SHA-1 final digest
@@ -65,7 +65,7 @@ void sha1_update_EX( sha1_context *ctx, unsigned char *input, int ilen );
  * \param ctx      SHA-1 context
  * \param output   SHA-1 checksum result
  */
-void sha1_finish_EX( sha1_context *ctx, unsigned char output[20] );
+void CRYPT_EXT_CLASS sha1_finish_EX( sha1_context *ctx, unsigned char output[20] );
 
 /**
  * \brief          Output = SHA-1( input buffer )
@@ -74,7 +74,7 @@ void sha1_finish_EX( sha1_context *ctx, unsigned char output[20] );
  * \param ilen     length of the input data
  * \param output   SHA-1 checksum result
  */
-void sha1_EX( unsigned char *input, int ilen, unsigned char output[20] );
+void CRYPT_EXT_CLASS sha1_EX( unsigned char *input, int ilen, unsigned char output[20] );
 
 /**
  * \brief          Output = SHA-1( file contents )

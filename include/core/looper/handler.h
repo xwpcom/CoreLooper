@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include <map>
 #include <unordered_map>
-#include "base/sigslot.h"
-#include "base/object.h"
-#include "procnode.h"
+#include "core/base/sigslot.h"
+#include "core/base/object.h"
+#include "core/looper/procnode.h"
 #include <functional>
 
 namespace Bear {

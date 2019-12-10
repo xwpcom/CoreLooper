@@ -281,7 +281,7 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 		mOutbox.Append(body);
 	}
 
-	if (!mReset)
+	if (!mReset && needAck)
 	{
 		mWaitAckItems[seq] = bundle;
 	}

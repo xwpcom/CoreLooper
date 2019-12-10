@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
-#include "base/shelltool.h"
-#include "base/dt.h"
-#include "file/file.h"
+#include "core/base/shelltool.h"
+#include "core/base/dt.h"
+#include "core/file/file.h"
 
 using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;

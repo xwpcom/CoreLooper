@@ -7,11 +7,11 @@ namespace Http {
 
 //XiongWanPing 2013.06.09
 //处理普通文件
-class HTTP_EXPORT CHttpRequestHandler_File :public HttpRequestHandler
+class HTTP_EXPORT HttpRequestHandler_File :public HttpRequestHandler
 {
 public:
-	CHttpRequestHandler_File();
-	virtual ~CHttpRequestHandler_File();
+	HttpRequestHandler_File();
+	virtual ~HttpRequestHandler_File();
 
 	virtual int Start(tagHttpHeaderInfo *headerInfo);
 	virtual int Process();

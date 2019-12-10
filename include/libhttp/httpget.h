@@ -35,6 +35,8 @@ protected:
 	enum eHttpAckStatus
 	{
 		eHttpAckStatus_WaitHeader,
+		eHttpAckStatus_ReceivingChunkedLength,
+		eHttpAckStatus_ReceivingChunkedBody,
 		eHttpAckStatus_ReceivingBody,
 		eHttpAckStatus_Done,
 	};
@@ -61,7 +63,6 @@ protected:
 			mHttpAckCode = 0;
 			mHttpAckStatus = eHttpAckStatus_WaitHeader;
 			mContentLength = 0;
-			mBodyReceivedBytes = 0;
 			mAckBody.clear();
 
 			if (mFile)
@@ -74,13 +75,15 @@ protected:
 		int				mHttpAckCode;
 		eHttpAckStatus	mHttpAckStatus;
 		DWORD			mContentLength;
-		ULONGLONG		mBodyReceivedBytes = 0;
 		ByteBuffer		mAckBody;
 		string			mSaveAsFilePath;
 		FILE			*mFile;
 		ULONGLONG		mStartTick=0;//用来计算下载速度
 		bool			mChunked = false;//是否采用Transfer-Encoding: chunked
 		double			mSpeed=0.0f;//KB/秒,仅在下载成功后有效
+		bool			mChunkedDoubleCRLF = false;
+		ULONGLONG		mChunkedTotalBytes=0;
+		ULONGLONG		mChunkedReceivedBytes = 0;
 	}mAckInfo;
 
 	string	mUrl;

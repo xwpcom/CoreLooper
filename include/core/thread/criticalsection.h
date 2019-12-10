@@ -4,7 +4,7 @@
 #include <pthread.h>
 #endif
 
-#include "thread/autolock.h"
+#include "core/thread/autolock.h"
 namespace Bear {
 namespace Core
 {

@@ -21,7 +21,7 @@ struct tagVirtualFolderPoint
 class CORE_EXPORT VirtualFolder :public Handler
 {
 public:
-	std::shared_ptr<tagVirtualFolderPoint> AddMount(const char *name, const char *path);
+	std::shared_ptr<tagVirtualFolderPoint> AddMount(const string& name, const string& path);
 
 	std::string GetVirtualRootPath()
 	{

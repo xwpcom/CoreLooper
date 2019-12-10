@@ -47,6 +47,13 @@ public:
 	virtual int StartServer(int port);
 	virtual void Stop();
 
+#ifdef _CONFIG_OPENSSL
+	static int InitSSL(const string& filePath);
+	void EnableTls()
+	{
+		mUseTls = true;
+	}
+#endif
 	int GetPort()const
 	{
 		return mPort;
@@ -61,13 +68,17 @@ protected:
 
 	virtual int OnAccept(SOCKET s);
 
-private:
+protected:
 	HANDLE mIocp;
 	SOCKET mSock;
 	int mPort;
 
 	LPFN_ACCEPTEX mAcceptEx=nullptr;
 	LPFN_GETACCEPTEXSOCKADDRS mGetAcceptExSockAddrs = nullptr;
+
+#ifdef _CONFIG_OPENSSL
+	bool mUseTls = false;
+#endif
 };
 }
 }

@@ -39,7 +39,7 @@
 
 #include "havege.h"
 #include "timing.h"
-
+using namespace Bear::Core;
 /* ------------------------------------------------------------------------
  * On average, one iteration accesses two 8-word blocks in the havege WALK
  * table, and generates 16 words in the RES array.

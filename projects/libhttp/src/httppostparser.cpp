@@ -7,17 +7,17 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-CHttpPostParser::CHttpPostParser()
+HttpPostParser::HttpPostParser()
 {
 	Reset();
 }
 
-CHttpPostParser::~CHttpPostParser()
+HttpPostParser::~HttpPostParser()
 {
 	Empty();
 }
 
-void CHttpPostParser::Reset()
+void HttpPostParser::Reset()
 {
 	m_ePostParserStatus = ePostParserStatus_Idle;
 	m_ContentLength = 0;
@@ -28,13 +28,13 @@ void CHttpPostParser::Reset()
 
 }
 
-void CHttpPostParser::Empty()
+void HttpPostParser::Empty()
 {
 	m_lstField.clear();
 }
 
 
-void CHttpPostParser::SwitchStatus(ePostParserStatus status)
+void HttpPostParser::SwitchStatus(ePostParserStatus status)
 {
 	m_ePostParserStatus = status;
 }
@@ -42,7 +42,7 @@ void CHttpPostParser::SwitchStatus(ePostParserStatus status)
 
 //输入服务器接收到的HTTP POST数据,可分批次输入,不需要一次性输入完整
 //pData指向的数据不需要以'\0'结尾
-int CHttpPostParser::Input(const LPBYTE pData, int cbData)
+int HttpPostParser::Input(const LPBYTE pData, int cbData)
 {
 	if (!pData || cbData <= 0)
 	{
@@ -94,7 +94,7 @@ int CHttpPostParser::Input(const LPBYTE pData, int cbData)
 }
 
 //解析m_inbox中的数据
-CHttpPostParser::eParseResult CHttpPostParser::Parse()
+HttpPostParser::eParseResult HttpPostParser::Parse()
 {
 	m_inbox.MakeSureEndWithNull();//确保字符串结尾
 
@@ -121,7 +121,7 @@ CHttpPostParser::eParseResult CHttpPostParser::Parse()
 	return res;
 }
 
-CHttpPostParser::eParseResult CHttpPostParser::ParseHelper()
+HttpPostParser::eParseResult HttpPostParser::ParseHelper()
 {
 	int ret = 0;
 	eParseResult res = eParseResult_ContinueParse;
@@ -400,12 +400,12 @@ CHttpPostParser::eParseResult CHttpPostParser::ParseHelper()
 }
 
 //是否接收完HTTP POST数据
-BOOL CHttpPostParser::IsFinished()
+BOOL HttpPostParser::IsFinished()
 {
 	return FALSE;//todo
 }
 
-tagHttpPostField* CHttpPostParser::GetField(const char *fieldName)
+tagHttpPostField* HttpPostParser::GetField(const char *fieldName)
 {
 	for (auto iter = m_lstField.begin(); iter != m_lstField.end(); ++iter)
 	{
@@ -420,7 +420,7 @@ tagHttpPostField* CHttpPostParser::GetField(const char *fieldName)
 
 
 #ifdef _DEBUG
-void CHttpPostParser::DumpField()
+void HttpPostParser::DumpField()
 {
 	{
 		for (auto iter = m_lstField.begin(); iter != m_lstField.end(); ++iter)
@@ -435,7 +435,7 @@ void CHttpPostParser::DumpField()
 
 }
 
-int CHttpPostParser::Test()
+int HttpPostParser::Test()
 {
 	return 0;
 }

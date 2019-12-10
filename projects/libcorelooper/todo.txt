@@ -1,4 +1,307 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////
+2019.12.05//////////////////////////////////////////////////////////////////////////////////
+changes:
+.https server重构
+ 和普通http server的区别是
+ .要调用TcpServer_Windows::InitSSL设定证书
+ .要调用EnableTls()
+ .端口由80改为443或其他
+	string folder = "D:/bear/server/bin/";
+	auto crtFile = folder + "bear.jjyip.com.p12";
+	TcpServer_Windows::InitSSL(crtFile);
+
+	auto svr(make_shared<HttpServer>());
+	svr->EnableTls();
+	AddChild(svr);
+
+	int ret = svr->StartServer(443);
+
+.http/https client/server在windows下都能正常工作了
+ 调用EnableTls()即可，和普通用法一样了
+
+已知问题:
+openssl init有memory leak,不会积累
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.11.26//////////////////////////////////////////////////////////////////////////////////
+changes:
+.https server初步ok,以后再做https client
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.11.25//////////////////////////////////////////////////////////////////////////////////
+changes:
+.libhttp测试https ok
+ 参照了zlmediakit中的openssl用法
+
+.https下载超大文件改进
+https://xwpcom.tpddns.cn/x.rar
+会报很多ByteByteffer overflow,但下载的文件是正常的
+//没再重现
+
+.给vs写一个插件，实现类似android studio logcat功能，结合MemoryLog
+ 在vs中像Text Explorer那样作为一个面板使用
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.31//////////////////////////////////////////////////////////////////////////////////
+spdlog日志做的不错，代码在
+E:\os\spdlog\build
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.29//////////////////////////////////////////////////////////////////////////////////
+如果main()已结束，但process还没结束时,如果还有子线程在运行,此时的行为感觉是未定义的
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.27//////////////////////////////////////////////////////////////////////////////////
+todo:
+.MemoryLog可用atexit作标记位
+ 在atexit api执行之后，每次重新创建再删除logger
+ 这样可避免false memory leak
+.MemoryLog可检测log丢失,可自动转移/扩充buffer大小
+ 共享区分为header和body
+ header中有process id
+ body采用TLV
+ type采用两个ascii字符表示，比如,TI表示thread id
+ length采用2 bytes,即限定了单条log总长度为64KB,对log来说是足够的
+.每个log的字段
+thread id
+tag
+msg
+level
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.26//////////////////////////////////////////////////////////////////////////////////
+todo:
+.构造一个通用机制来实现类似如下功能
+ 以串口为例,在UI层创建一个UartObject,绑定looper中的UartHandler
+ UartObject的所有接口都可在UI线程中直接调用
+ UartObject内部和looper中UartHandler通讯来完成业务功能
+ 这样的好处是UI层使用UartObject很简单，不涉及多线程交互
+ 类似C#中对串口的封装接口
+ 这个机制可扩展在其他地方，应用很普遍
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.16//////////////////////////////////////////////////////////////////////////////////
+最近在思考改进log和串口工具时,想到用websocket+网页来做会比MFC/QT更加通用一些
+要求网页能实现高性能的类似Scintilla编辑器的功能
+发现vscode可能有参考
+
+用了一个vscode,发现很好用
+vscode是用浏览器chrome做的，支持linux,windows和macos
+可编译，调试其他上所有的语言
+
+.http header字段名称要改为大小写不敏感
+ websocket判断用到了
+ netty websocket client发upgrade请求时字段是小写的
+
+.参考zlmediakit中的class StrCaseMap增加了StringCaseMap
+.发现mutable有时比较好用
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.08//////////////////////////////////////////////////////////////////////////////////
+todo:
+.为了更好的并发,可以让tcp server和client handler处于不同的looper
+ client handler仅在OnCreate中绑定iocp/epoll/kqueue
+.tcpserver和client handler默认为parent-child关系，但在多looper下面可以不是parent-child关系
+ 可以像windows hwnd parent/owner那样增加一个owner关系
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.02//////////////////////////////////////////////////////////////////////////////////
+UIHandler和CWnd交互
+感觉不需要用继承，handler只是想post一段代码在mfc ui thread中执行,
+此代码在执行时要保证mfc ui中对应的wndObject是有效的
+
+构想如下
+CWnd中创建
+shared_ptr<UIHandler>	//运行在corelooper中
+shared_ptr<UIProxy>	//运行在mfc ui thread中
+CWnd对两者都做强引用
+UIHandler对UIProxy作弱引用
+
+CWnd可随时对UIHandler调用sendMessage和postMessage
+UIHandler要和CWnd交互时，post lambda到mfc ui中执行
+在lambda中
+对UIProxy.lock()，有效则执行
+
+CWnd析构时自动销毁UIProxy
+如果UIHandler需要清理，可由CWnd主动进行
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.10.01//////////////////////////////////////////////////////////////////////////////////
+todo:
+.需要做一个通用的机制，便于MFC中Wnd绑定corelooper中的handler
+ 可仿照android下的JniMainLooper来做个MfcMainLooper
+WndManager管理MfcMainLooper
+mfc wnd可send,post消息给handler
+为避免死锁,handler只能post,不能send给
+由于handler.post2Wnd需要一些清理操作，所以统一由WndManager来做
+
+corelooper中WndHandler
+mfc中HandlerWnd和WndManager
+WndManager引用shared_ptr<HandlerWnd>并与和shared_ptr<WndHandler>,并维护它们的绑定关系
+一个HandlerWnd可绑定多个WndHandler
+WndHandler只能绑定一个HandlerWnd
+
+HandlerWnd/WndHandler在OnDestroy时要通知WndManager撤销引用和绑定
+
+更简单的办法是handler可以post一个lambda给WndManager在mfc主线程中调用
+
+发现BearStudio中已做了UIHandler和MfcMainLooper,并且UIHandler能post lamba到mfc ui
+
+考虑UIHandler和Wnd的绑定创建和解除
+感觉可以做一个helper class,由mfc class继承，在helper class析构时自动解除绑定
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.29//////////////////////////////////////////////////////////////////////////////////
+最近一直在重新考虑高性能日志的实现办法,发现只有共享内存能满足我的要求
+windows下共享内存是CreateFileMapping
+linux下共享内存shmget
+
+在TEST_CLASS(Log)测试file mapping
+
+TEST_METHOD(SharedMemory_Writer)
+测试写数据，速度440MB/S
+
+可以把MemoryLog集成到Handler中
+Handler默认采用全局MemoryLog,在需要时可采用自定义的log
+好处是LogStudio中可以非常灵活的观看特定handler的log,避免其他业务日志干扰
+LogStudio可合并同一pid,同一threadId的log
+每条log的time精确到us或更高
+
+想设计一个日志类,卡在下面的问题上了：
+.要支持在全局变量的构造和析构函数中打印日志（要用自己的class实现Log，不能用printf之类的）
+.不能有内存泄漏
+由于全局变量析构顺序不确定，所以还没找到办法
+
+熊子良说shared_ptr<Log>可解决此问题
+我觉得主要缺点是要在全局变量类构造中引用shared_ptr<Log>,否则调用到析构函数时没用安全的保证Log对象的有效性,局限性比较大
+
+全局类变量在有引起场合下是比较有用的，比如ajx command框架就用到了
+
+todo:
+.实现MemoryLog
+
+进程间通讯：RingBuffer的性能测试
+用到了linux shm
+https://zhuanlan.zhihu.com/p/82371061
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.18//////////////////////////////////////////////////////////////////////////////////
+E:\os\microsoft\WindowsSDK7-Samples\com\fundamentals\dcom\simple
+dcom test ok
+dcom可以跨PC或process使用com组件
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.17//////////////////////////////////////////////////////////////////////////////////
+iocp几个可能改进的地方
+corelooper目前采用的是每个iocp对应一个线程,每个socket每次投递最多一个recv和一个send,这样能极大简化框架
+https://docs.microsoft.com/en-us/windows/win32/fileio/i-o-completion-ports
+官网(简称msdn)上建议开多个线程来做iocp,至少和cpu个数相同
+一直没理解这样的好处
+按msdn上说，最高效的应该是多线程,每个socket投递多个recv,write操作
+实例使用时会遇到一些问题，以tcp为例,网络服务于业务，业务一般要求有序进行
+对同一socket post多个recv时，为保证recv完成时的有序处理,需要在postRecv时给recv分配唯一递增编号UIndex
+{
+	//加锁
+	//分配UIndexA
+	postRecvA
+	//解锁
+}
+{
+	//加锁
+	//分配UIndexB
+	postRecvB
+	//解锁
+}
+{
+	//加锁
+	//分配UIndexC
+	postRecvC
+	//解锁
+}
+分配UIndex和postRecv必须在加锁后完成,否则会有竞争
+当recv完成时，由于可能有多个线程在GetQueuedCompletionStatus等待，
+此时windows保证GetQueuedCompletionStatus是按postRecv的次序来完成recv的
+但由于线程调度等原因，业务只能根据postRecv的UIndex来保证recv数据的有序性
+
+WSASend面临的问题更加严重,一般情况下，在多个线程中即使用加锁，也没法保证WSASend的调用顺序
+而很明显，对绝大部分tcp应用来说,数据发送的有序性是基本的要求,所以归根结底，还是要在单线程中调用postWrite
+
+没有必要迷信msdn,发现microsoft提供的一些sample其实比较垃圾,比如WindowsSDK7-Samples\netds\winsock\iocp中的例子很一般
+一切以实测为准
+
+为了保证业务层简单，避免使用锁,提高cpu cache命中率,感觉更高效的做法如下
+网络socket和对应的业务worker采用各自独立的looper
+每个iocp对应一个looper
+accept到新socket时，绑定到当前最空闲的iocp,选择空闲iocp的策略可定制
+单个socket只绑定到某一个iocp,可以post多个recv和send
+业务worker也只限制在一个looper,socket收到数据后post给worker,
+worker要发数据时可直接在work.looper发，也可以post给socket所在looper来发，需要实测才能知道哪种最高效
+更极致的做法:iocp线程可绑定cpu,如有需要，可定时动态调整到空闲的cpu
+上面说的这些细节都可以做成配置，实测一下，看哪种最有效
+
+Riocreatecompletionqueue
+https://docs.microsoft.com/en-us/windows/win32/api/mswsock/nc-mswsock-lpfn_riocreatecompletionqueue
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.16//////////////////////////////////////////////////////////////////////////////////
+.为简化流程，约定android,ios等场景下MainLooper保持一直运行，不再stop
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.15//////////////////////////////////////////////////////////////////////////////////
+todo:
+.研究libuv
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.14//////////////////////////////////////////////////////////////////////////////////
+todo:
+.把corelooper集成到vcpkg
+.做一个通用的MfcMainLooper，用于在mfc app中使用corelooper功能，要达到如下效果:
+ 便于重用，方便集成,在app和多个dll都要用到corelooper框架的情况下，只需要创建一个MfcMainLooper
+ 统一通过static shared_ptr<Looper> MfcMainLooper::CreateMainLooper();来创建
+ 不要把项目私有功能加到MfcMainLooper中
+ mfc app和dll采用各自的xxxWnd来和corelooper中的xxxHandler通讯完成业务
+ xxxWnd运行在MFC主线程
+ xxxHandler运行在MfcMainLooper
+ 提供一个规范,约定Wnd和Handler的交互，让mfc只需要和Wnd通讯，Wnd内部封装和Handler的交互
+.Handler和Wnd交互细节设计
+ 针对具体的串口通讯业务，看是不是有必要存在定制的Handler和Wnd，有没有办法把两者或者其中一方做成通用的
+ 注意:为避免死锁,looper不能SendMessage到mfc
+ looper只能PostMessage到mfc
+ mfc可以send/postMessage到looper
+ 主要class:
+ HandlerWnd
+ WndHandler
+ 没有必要让每个HandlerWnd都直接和looper PostMessage的打交道,可用一个HandlerWndManager来代理此项业务
+ HandlerWndManager收到消息后在mfc主线程分派消息给对应的HandlerWnd
+ 为简化起见，handler可以post一个lambda给HandlerWndManager在mfc主线程中调用
+
+.MfcMainLooper的安全退出
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.09.13//////////////////////////////////////////////////////////////////////////////////
+app在使用lib应该做到只指定一个include dir,include一个头文件即可
+
+////////////////////////////////////////////////////////////////////////////////////////////
+2019.08.07//////////////////////////////////////////////////////////////////////////////////
+旧版本vs工程升级后报找不到
+#include "CppUnitTest.h"
+的解决办法:
+以vs2019为例
+cd C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC>
+mklink /d UnitTest Auxiliary\VS\UnitTest
+
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC>mklink /d UnitTest Auxiliary\VS\UnitTest
+symbolic link created for UnitTest <<===>> Auxiliary\VS\UnitTest
+
+更好的办法是:
+$(VCInstallDir)Auxiliary\vs\UnitTest\include
+$(VCInstallDir)Auxiliary\VS\UnitTest\lib
+////////////////////////////////////////////////////////////////////////////////////////////
 2019.05.18//////////////////////////////////////////////////////////////////////////////////
 todo:
 .handler settimer增加lambda接囗
@@ -137,16 +440,6 @@ changes:
 .Handler增加了void *operator new(size_t) = delete; //disable new,please use make_shared
  即强制使用make_shared来创建Handler
 
-////////////////////////////////////////////////////////////////////////////////////////////
-2018.12.31//////////////////////////////////////////////////////////////////////////////////
-changes:
-.Looper.StartRun()返回GetQuitCode()
- 这样main可做到一行代码，和mfc,ios框架一样
-
-
-todo:
-.很多file相关代码没有考虑超过2GB的大文件情况
- 目前没这个需求，后面可考虑完善
 ////////////////////////////////////////////////////////////////////////////////////////////
 2018.12.31//////////////////////////////////////////////////////////////////////////////////
 changes:
@@ -1888,7 +2181,7 @@ https://github.com/gperftools/gperftools
 2018.01.04/////////////////////////////////////////////////////////////////////////////////////////////
 .增加了BaseLooper::Object,为BaseLooper::CurrentLooper()->FindObject的简写
 .增加了_Object宏
- auto obj = _Object(Board_JJY, "Board");
+ 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 2018.01.02/////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,9 +14,14 @@ class HTTP_EXPORT HttpServer :public Net::TcpServer
 public:
 	HttpServer();
 	virtual ~HttpServer();
+
 	virtual void SetConfig(std::shared_ptr<tagWebServerConfig> config)
 	{
 		mWebConfig = config;
+	}
+	virtual shared_ptr<tagWebServerConfig> GetConfig()const
+	{
+		return mWebConfig;
 	}
 
 protected:

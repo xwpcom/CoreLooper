@@ -78,12 +78,51 @@ int ByteTool::HexCharToByte(const char *pSrc, LPBYTE pDst, int cbDst)
 	return 0;
 }
 
-string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte)
+string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte,const char* fmt)
 {
 	string text;
 	for (int i = 0; i < cbByte; i++)
 	{
-		text+=StringTool::Format("%02x", pByte[i]);
+		text+=StringTool::Format(fmt, pByte[i]);
 	}
 	return text;
+}
+
+void ByteTool::HexString2Bin(const char* hexString, ByteBuffer& box)
+{
+	auto pSrc = hexString;
+	for (int i = 0; 1; i++)
+	{
+		//每个hex由pSrc中的两个hex字符组成
+		if (pSrc[0] && pSrc[1])
+		{
+			char ch0 = (char)tolower(pSrc[0]);
+			char ch1 = (char)tolower(pSrc[1]);
+
+			int nHigh = 0;
+			int nLow = 0;
+
+			if (ch0 >= '0' && ch0 <= '9')
+				nHigh = ch0 - '0';
+			else if (ch0 >= 'a' && ch0 <= 'f')
+				nHigh = ch0 - 'a' + 10;
+
+			if (ch1 >= '0' && ch1 <= '9')
+				nLow = ch1 - '0';
+			else if (ch1 >= 'a' && ch1 <= 'f')
+				nLow = ch1 - 'a' + 10;
+
+			int value = ((nHigh << 4) | nLow);
+			ASSERT(value <= 255);
+
+			//pDst[i] = (BYTE)value;
+			box.WriteByte(value);
+		}
+		else
+		{
+			break;
+		}
+
+		pSrc += 2;
+	}
 }

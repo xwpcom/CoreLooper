@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "base/bundleex.h"
-#include "base/sigslot.h"
-#include "looper/handler.h"
+#include "core/base/bundleex.h"
+#include "core/base/sigslot.h"
+#include "core/looper/handler.h"
 namespace Bear {
 namespace Core
 {
@@ -69,6 +69,10 @@ public:
 
 	//连接成功或失败会调用本接口
 	virtual int OnConnect(long handle, Bundle* extraInfo) = 0;
+	virtual int GetOutboxCacheBytes()
+	{
+		return 0;
+	}
 protected:
 	void OnCreate();
 	void OnTimer(long timerId);

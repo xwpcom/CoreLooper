@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-#include "base/base.inl"
+#include "core/base/base.inl"
+
+#define _SUPPORT_SSL
 
 #ifdef _CRYPT_DLL
 #define CRYPT_EXT_CLASS	__declspec(dllexport)

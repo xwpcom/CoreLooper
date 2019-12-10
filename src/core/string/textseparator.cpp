@@ -14,6 +14,15 @@ TextSeparator::TextSeparator(const char *text, const char *delimiter)
 	ASSERT(mDelimiter);
 }
 
+TextSeparator::TextSeparator(const string& text, const char* delimiter)
+{
+	mBegin = text.c_str();
+	mDelimiter = delimiter;
+
+	ASSERT(mBegin);
+	ASSERT(mDelimiter);
+}
+
 int TextSeparator::GetNext(string& sz, eTextFlag flag)
 {
 	sz.clear();

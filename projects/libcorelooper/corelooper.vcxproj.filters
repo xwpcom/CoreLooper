@@ -166,9 +166,6 @@
     <ClCompile Include="..\..\src\core\net\urltool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\arch\linux\serial\serialport_linux.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\arch\android\jnilooper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -212,6 +209,108 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\include\core\net\test\unittest_speed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\android\jnimainlooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\serialport_linux.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\unittest.study.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\memorylog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\handlerwnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\wndhandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\Buffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\Socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\sockutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\TcpSession.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Poller\EventPoller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Poller\Pipe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Poller\PipeWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Poller\SelectWrap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Poller\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Thread\WorkThreadPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\base64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\CMD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\MD5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\mini.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\NoticeCenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SHA1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SqlPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\uv_errno.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\win32\getopt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\file_zl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\TcpClient_zl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Network\TcpServer_zl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -262,9 +361,6 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\base\dt.h">
-      <Filter>header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\core\base\iparam.h">
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\base\log.h">
@@ -381,9 +477,6 @@
     <ClInclude Include="..\..\include\core\net\urltool.h">
       <Filter>header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\arch\linux\serial\serialport_linux.h">
-      <Filter>header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\arch\android\jnilooper.h">
       <Filter>header files</Filter>
     </ClInclude>
@@ -447,6 +540,225 @@
     <ClInclude Include="..\..\include\core\net\test\speedserver.h">
       <Filter>header files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\arch\android\jnimainlooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\serialport_linux.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\memorylog.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\handlerwnd.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\wndmanager.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\wndhandler.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\uirunnable.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\stringcasemap.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\Buffer.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\Socket.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\sockutil.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\TcpSession.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Poller\EventPoller.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Poller\Pipe.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Poller\PipeWrap.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Poller\SelectWrap.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Poller\Timer.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\semaphore.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\TaskExecutor.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\TaskQueue.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\threadgroup.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\ThreadPool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Thread\WorkThreadPool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\base64.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\CMD.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\function_traits.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\List.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\logger.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\MD5.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\mini.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\NoticeCenter.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\onceToken.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\ResourcePool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\RingBuffer.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\SHA1.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\SqlConnection.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\SqlPool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\SSLBox.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\SSLUtil.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\TimeTicker.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\util.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\uv_errno.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\win32\getopt.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\win32\tailor.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Util\File_zl.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\TcpClient_zl.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\zltoolkit\Network\TcpServer_zl.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\jsonhelper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\Configuration.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\DynamicJsonBuffer.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonArray.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonArrayImpl.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonArraySubscript.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonBuffer.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonBufferBase.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonBufferImpl.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonObject.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonObjectImpl.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonObjectSubscript.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonPair.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariant.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantBase.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantCasts.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantComparisons.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantImpl.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantOr.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\JsonVariantSubscripts.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\RawJson.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\StaticJsonBuffer.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\json\ArduinoJson\version.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\doc\corelooper框架用户手册.docx" />
@@ -468,6 +780,9 @@
     <None Include="..\..\include\core\looper\libcorelooper.inl">
       <Filter>header files</Filter>
     </None>
+    <None Include="..\..\doc\cn\log.md">
+      <Filter>doc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
@@ -484,6 +799,9 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="doc">
+      <UniqueIdentifier>{c9ef7814-061c-45c1-899a-5471fe61dd95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

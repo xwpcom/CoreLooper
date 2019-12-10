@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "looper/loop.h"
-#include "looperimpl.inl"
+#include "core/looper/loop.h"
+#include "core/looper/looperimpl.inl"
 
 #ifdef _DEBUG
 //#define _CONFIG_CALC_EVER_MAX_SIZE

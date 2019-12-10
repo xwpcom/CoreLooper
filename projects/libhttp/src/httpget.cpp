@@ -42,6 +42,16 @@ int HttpGet::Execute(string url, string saveAsFilePath)
 	string pageUrl;
 	int ret = HttpTool::ParseUrl(url, host, port, pageUrl);
 
+#ifdef _MSC_VER
+	if (port == 80)
+	{
+		if (mUseTls)
+		{
+			port = 443;
+		}
+	}
+#endif
+
 	mReqInfo.mPageUrl = pageUrl;
 	mReqInfo.mHost = host;
 	mReqInfo.mPort = port;
@@ -78,22 +88,17 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 			string tmpFilePath = mAckInfo.mSaveAsFilePath + ".tmp";
 			ASSERT(!mAckInfo.mFile);
 
-			if (File::PathIsDirectory(tmpFilePath))
+			//if (File::PathIsDirectory(tmpFilePath))
 			{
-				File::DeleteFolder(tmpFilePath.c_str());
+				//File::DeleteFolder(tmpFilePath.c_str());
 			}
 
 			File::CreateFolderForFile(tmpFilePath);
-			mAckInfo.mFile = fopen(tmpFilePath.c_str(), "a+b");
+			mAckInfo.mFile = fopen(tmpFilePath.c_str(), "wb");
 			if (!mAckInfo.mFile)
 			{
 				Destroy();
 
-				if (mDataEndPoint)
-				{
-					mDataEndPoint->Close();
-					mDataEndPoint->Destroy();
-				}
 
 				mSignaled = true;
 				SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
@@ -132,13 +137,15 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 
 void HttpGet::ParseInbox()
 {
+	KeepAlive();
+	
 	switch (mAckInfo.mHttpAckStatus)
 	{
 	case eHttpAckStatus_WaitHeader:
 	{
 		mInbox.MakeSureEndWithNull();
 
-		const char *ps = (const char*)mInbox.GetDataPointer();
+		const char *ps = (const char*)mInbox.data();
 		const char *key = "\r\n\r\n";
 		const char *pEnd = strstr(ps, key);
 		if (pEnd)
@@ -174,7 +181,10 @@ void HttpGet::ParseInbox()
 
 				if (mAckInfo.mChunked)
 				{
-					SwitchStatus(eHttpAckStatus_ReceivingBody);
+					auto eat = pEnd + strlen(key) - ps;
+					mInbox.Eat((int)eat);
+					SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
+					return;
 				}
 				else
 				{
@@ -182,19 +192,114 @@ void HttpGet::ParseInbox()
 				}
 			}
 
-			auto eat = pEnd + strlen(key) - ps;
-			mInbox.Eat((int)eat);
+			int eat = (int)(pEnd + strlen(key) - ps);
+			mInbox.Eat(eat);
 			if (!mInbox.IsEmpty())
 			{
-				OnRecvHttpAckBody(mInbox.GetDataPointer(), mInbox.GetActualDataLength());
+				OnRecvHttpAckBody(mInbox.data(), mInbox.length());
 				mInbox.clear();
 			}
 		}
 		break;
 	}
+	case eHttpAckStatus_ReceivingChunkedLength:
+	{
+		mInbox.MakeSureEndWithNull();
+
+		if (mAckInfo.mChunkedDoubleCRLF)
+		{
+			//格式为\r\nbytes\r\n
+			//即必须包含两个\r\n
+			auto data = (char*)mInbox.data();
+			auto bytes = mInbox.length();
+			if (bytes < 5)
+			{
+				return;
+			}
+			auto end = strstr(data+2, "\r\n");
+			if (!end)
+			{
+				return;
+			}
+
+			ASSERT(data[0] == '\r');
+			ASSERT(data[1] == '\n');
+			mInbox.Eat(2);//eat first \r\n
+			mAckInfo.mChunkedDoubleCRLF = false;
+		}
+		else
+		{
+			//格式为bytes\r\n
+		}
+
+		auto data = (char*)mInbox.data();
+		auto bytes = mInbox.length();
+		auto end = strstr(data, "\r\n");
+		if (bytes < 3 || !end)
+		{
+			return;
+		}
+
+		//注意chunk长度是用十六进制字符串表示的
+		auto bodyBytes = strtol(data, nullptr, 16);
+		if (bodyBytes == 0)
+		{
+			mInbox.clear();
+			SwitchStatus(eHttpAckStatus_Done);
+			return;
+		}
+
+		mInbox.Eat((int)(end-data)+2);
+		mAckInfo.mChunkedTotalBytes = bodyBytes;
+		mAckInfo.mChunkedReceivedBytes = 0;
+		DG("chunked.bytes=%d", bodyBytes);
+		SwitchStatus(eHttpAckStatus_ReceivingChunkedBody);
+		break;
+	}
+	case eHttpAckStatus_ReceivingChunkedBody:
+	{
+		auto data = mInbox.data();
+		auto bytes = mInbox.length();
+		auto eatBytes = (int)MIN(bytes, mAckInfo.mChunkedTotalBytes - mAckInfo.mChunkedReceivedBytes);
+		if (eatBytes > 0)
+		{
+			OnRecvHttpAckBody(mInbox.data(), eatBytes);
+			mInbox.Eat(eatBytes);
+
+			mAckInfo.mChunkedReceivedBytes += eatBytes;
+
+			auto pendingBytes = mAckInfo.mChunkedTotalBytes - mAckInfo.mChunkedReceivedBytes;
+			DV("chunked=%d / %d,pending %d"
+				, mAckInfo.mChunkedReceivedBytes
+				, mAckInfo.mChunkedTotalBytes
+				, pendingBytes
+			);
+
+			if (pendingBytes == 0)
+			{
+				int x = 0;
+			}
+		}
+
+		if (mAckInfo.mChunkedReceivedBytes == mAckInfo.mChunkedTotalBytes)
+		{
+			mAckInfo.mChunkedTotalBytes = 0;
+			mAckInfo.mChunkedReceivedBytes = 0;
+
+			data = mInbox.data();
+
+			mAckInfo.mChunkedDoubleCRLF=true;
+			SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
+			ParseInbox();
+			return;
+		}
+		
+		int x = 0;
+		break;
+	}
 	case eHttpAckStatus_ReceivingBody:
 	{
-		OnRecvHttpAckBody(mInbox.GetDataPointer(), mInbox.GetActualDataLength());
+		OnRecvHttpAckBody(mInbox.data(), mInbox.length());
 		mInbox.clear();
 		break;
 	}
@@ -214,7 +319,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 {
 	if (dataLen > 0)
 	{
-		mAckInfo.mBodyReceivedBytes += dataLen;
+		mAckInfo.mChunkedReceivedBytes += dataLen;
 	}
 
 	if (mAckInfo.mFile)
@@ -234,41 +339,21 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 			return;
 		}
 
-		long len = ftell(mAckInfo.mFile);
-		//DV("len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
-		if (len == mAckInfo.mContentLength)
+		if (!mAckInfo.mChunked)
 		{
-			fclose(mAckInfo.mFile);
-			mAckInfo.mFile = nullptr;
-
-			File::rename(mAckInfo.mSaveAsFilePath + ".tmp", mAckInfo.mSaveAsFilePath);
-
-			//在mAckBody中返回下载保存的文件路径
-			ByteBuffer& box = mAckInfo.mAckBody;
-			box.clear();
-			box.Write(mAckInfo.mSaveAsFilePath);
-			box.MakeSureEndWithNull();
-
-			SwitchStatus(eHttpAckStatus_Done);
+			long len = ftell(mAckInfo.mFile);
+			//DV("len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
+			if (len == mAckInfo.mContentLength)
+			{
+				SwitchStatus(eHttpAckStatus_Done);
+			}
 		}
 	}
 	else
 	{
 		mAckInfo.mAckBody.Write(data, dataLen);
 
-		bool done = false;
-		if (mAckInfo.mChunked)
-		{
-			mAckInfo.mAckBody.MakeSureEndWithNull();
-			auto p = (char*)mAckInfo.mAckBody.GetDataPointer();
-			done = (strstr(p, "0\r\n\r\n") != nullptr);
-		}
-		else if (mAckInfo.mAckBody.GetActualDataLength() == mAckInfo.mContentLength)
-		{
-			done = true;
-		}
-
-		if (done)
+		if (!mAckInfo.mChunked && mAckInfo.mAckBody.length() == mAckInfo.mContentLength)
 		{
 			mAckInfo.mAckBody.MakeSureEndWithNull();
 			SwitchStatus(eHttpAckStatus_Done);
@@ -284,32 +369,18 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 	{
 	case eHttpAckStatus_Done:
 	{
-		//mDumpFile.Close();
-		if (mAckInfo.mChunked && !mAckInfo.mAckBody.IsEmpty())
+		if (mAckInfo.mFile)
 		{
-			//chunked格式:
-			//16进制长度\r\n
-			//数据\r\n
-			//0\r\n
-			//\r\n
+			fclose(mAckInfo.mFile);
+			mAckInfo.mFile = nullptr;
 
-			//下面去掉16进制长度\r\n和\r\n0\r\n\r\n,让mAckBody中只保留数据
-			mAckInfo.mAckBody.MakeSureEndWithNull();
-			auto& box = mAckInfo.mAckBody;
-			auto ps = (const char*)box.GetDataPointer();
-			auto bytes = strtol(ps, nullptr, 16);
-			auto key = "\r\n";
-			auto pStart = strstr(ps, key);
-			if (pStart)
-			{
-				pStart += strlen(key);
-				box.Eat((int)(pStart - ps));
-				int tailBytes = box.GetActualDataLength() - bytes;
-				if (tailBytes > 0)
-				{
-					box.ReverseEat(tailBytes);
-				}
-			}
+			File::rename(mAckInfo.mSaveAsFilePath + ".tmp", mAckInfo.mSaveAsFilePath);
+
+			//在mAckBody中返回下载保存的文件路径
+			ByteBuffer& box = mAckInfo.mAckBody;
+			box.clear();
+			box.Write(mAckInfo.mSaveAsFilePath);
+			box.MakeSureEndWithNull();
 		}
 
 		{
@@ -317,7 +388,7 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 			if (tickNow > mAckInfo.mStartTick)
 			{
 				auto ms = tickNow - mAckInfo.mStartTick;
-				auto speed = (double)(mAckInfo.mBodyReceivedBytes *1000.0/ ms/1024);
+				auto speed = (double)(mAckInfo.mChunkedReceivedBytes *1000.0/ ms/1024);
 				mAckInfo.mSpeed = speed;
 			}
 		}

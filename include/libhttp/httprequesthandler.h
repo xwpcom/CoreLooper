@@ -2,7 +2,6 @@
 #include "httpheaderinfo.h"
 #include "httpackheader.h"
 #include "auth/authman.h"
-#include "base/iparam.h"
 #include "libhttp/httpconfig.h"
 
 namespace Bear {
@@ -11,11 +10,11 @@ using namespace FileSystem;
 namespace Net {
 namespace Http {
 
-class CHttpRequest;
+class HttpRequest;
 
 //XiongWanPing 2013.06.09
-//发块发送时，每块大小约4KB
-class HTTP_EXPORT HttpRequestHandler :public UserInfo, public IParam
+//分块发送时，每块大小约4KB
+class HTTP_EXPORT HttpRequestHandler :public UserInfo
 {
 public:
 	HttpRequestHandler();
@@ -26,7 +25,7 @@ public:
 		mWebConfig = config;
 	}
 
-	void SetHttpRequest(CHttpRequest *httpRequest)
+	void SetHttpRequest(HttpRequest *httpRequest)
 	{
 		m_httpRequest = httpRequest;
 	}
@@ -99,12 +98,12 @@ protected:
 	}
 
 protected:
-	CHttpRequest * m_httpRequest;
-	tagHttpHeaderInfo		*m_headerInfo;
-	ByteBuffer				*m_outbox;
+	HttpRequest * m_httpRequest=nullptr;
+	tagHttpHeaderInfo		*m_headerInfo = nullptr;
+	ByteBuffer				*m_outbox = nullptr;
 
 	eHttpHandlerStatus		m_status;
-	std::shared_ptr<tagWebServerConfig> mWebConfig;
+	shared_ptr<tagWebServerConfig> mWebConfig;
 };
 
 }

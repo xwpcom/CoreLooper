@@ -16,7 +16,7 @@ VirtualFolder::~VirtualFolder(void)
 {
 }
 
-shared_ptr<tagVirtualFolderPoint> VirtualFolder::AddMount(const char *name, const char *path)
+shared_ptr<tagVirtualFolderPoint> VirtualFolder::AddMount(const string& name, const string& path)
 {
 	auto item(make_shared<tagVirtualFolderPoint>());
 	item->mName = name;

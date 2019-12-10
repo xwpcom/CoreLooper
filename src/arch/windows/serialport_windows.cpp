@@ -38,7 +38,7 @@ void SerialPort_Windows::OnCreate()
 		0);
 	if (mFile == INVALID_HANDLE_VALUE)
 	{
-		DW("fail open %s", mDeviceName.c_str());
+		//DW("fail open %s", mDeviceName.c_str());
 #ifndef _MSC_VER
 		ASSERT(FALSE);
 #endif
@@ -194,6 +194,11 @@ void SerialPort_Windows::OnCreate()
 	HANDLE handle = CreateIoCompletionPort(mFile, iocp, (ULONG_PTR)(IocpObject*)this, 0);
 	ASSERT(handle == iocp);
 	mIoContextRecv.PostRecv();
+}
+
+int SerialPort_Windows::Open()
+{
+	return -1;
 }
 
 void SerialPort_Windows::OnDestroy()
@@ -582,6 +587,33 @@ void SerialPort_Windows::GetDevices(vector<tagSerialPort>& items)
 
 	RegCloseKey(hKey);
 }
+
+int SerialPort_Windows::SetBaudRate(int rate)
+{
+	mBaudRate = rate;
+	if (mFile != INVALID_HANDLE_VALUE)
+	{
+		DCB dcb = { 0 };
+		dcb.DCBlength = sizeof(dcb);
+		auto ok = GetCommState(mFile, &dcb);
+
+		//SetCommMask(mFile, EV_CTS | EV_DSR|0xFFFF);
+
+		dcb.BaudRate = mBaudRate;// mBaudRate;// 9600; 
+		dcb.ByteSize = 8;//8; 
+		dcb.Parity = NOPARITY;
+		dcb.StopBits = ONESTOPBIT;
+		dcb.fBinary = TRUE;
+		dcb.fParity = FALSE;
+
+		ok &= SetCommState(mFile, &dcb);
+		int x = 0;
+	}
+
+	return 0;
+}
+
+
 
 }
 }

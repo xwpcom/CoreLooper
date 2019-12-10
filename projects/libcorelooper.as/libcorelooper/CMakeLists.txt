@@ -41,8 +41,10 @@ add_library( # Sets the name of the library.
 ${SRC_DIR}/arch/android/jni_entry.cpp
 ${SRC_DIR}/arch/android/jnihelper.cpp
 ${SRC_DIR}/arch/android/jnilooper.cpp
+${SRC_DIR}/arch/android/jnimainlooper.cpp
 ${SRC_DIR}/arch/linux/linuxsignal.cpp
 ${SRC_DIR}/arch/linux/looper_linux.cpp
+${SRC_DIR}/arch/linux/serialport_linux.cpp
 ${SRC_DIR}/arch/linux/tcpclient_linux.cpp
 ${SRC_DIR}/arch/linux/tcpserver_linux.cpp
 ${SRC_DIR}/arch/linux/udpclient_linux.cpp
@@ -83,6 +85,8 @@ ${CORE_DIR}/net/tcpclient.cpp
 ${CORE_DIR}/net/tcpserver.cpp
 ${CORE_DIR}/net/udpserver.cpp
 ${CORE_DIR}/net/urltool.cpp
+${CORE_DIR}/protocol/ctp/commontextprotocol.cpp
+${CORE_DIR}/protocol/ctp/commontextprotocol_impl.cpp
 ${CORE_DIR}/string/textprotocol.cpp
 ${CORE_DIR}/string/textseparator.cpp
 ${CORE_DIR}/string/xmlstring.cpp

@@ -14,6 +14,14 @@ public:
 	SimpleConnect();
 	virtual ~SimpleConnect();
 
+#ifdef _MSC_VER
+	//目前只有windows下做了openssl支持
+	void EnableTls()
+	{
+		mUseTls = true;
+	}
+#endif
+
 	int StartConnect(Bundle& bundle);
 	void DelayAutoClose(int ms);
 	void KeepAlive()
@@ -60,6 +68,10 @@ protected:
 	ByteBuffer mOutbox;
 
 	long mTimer_AutoClose = 0;
+
+#ifdef _MSC_VER
+	bool mUseTls = false;
+#endif
 };
 
 }

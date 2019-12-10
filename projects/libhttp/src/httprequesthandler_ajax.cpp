@@ -9,22 +9,22 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-CHttpRequestHandler_Ajax::CHttpRequestHandler_Ajax()
+HttpRequestHandler_Ajax::HttpRequestHandler_Ajax()
 {
 }
 
-CHttpRequestHandler_Ajax::~CHttpRequestHandler_Ajax()
+HttpRequestHandler_Ajax::~HttpRequestHandler_Ajax()
 {
 }
 
-int CHttpRequestHandler_Ajax::Process()
+int HttpRequestHandler_Ajax::Process()
 {
 	//ajax命令总是一次性解决的
 	ASSERT(FALSE);
 	return 0;
 }
 
-int CHttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
+int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 {
 	HttpRequestHandler::Start(headerInfo);
 	SetStatus(eHttpHandlerStatus_Processing);
@@ -55,7 +55,7 @@ int CHttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 			ajax->Process(headerInfo->mUrl);// , headerInfo->m_urlParam);
 		DWORD len = (int)xml.length();
 
-		CHttpAckHeader httpAckHeader;
+		HttpAckHeader httpAckHeader;
 		httpAckHeader.SetStatusCode("200 OK");
 #ifndef _MINI_HTTP
 		httpAckHeader.SetConnection("Keep-Alive");

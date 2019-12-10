@@ -24,11 +24,11 @@ struct tagHttpPostField
 //XiongWanPing 2011.10.31
 //解析服务器从HTTP POST接收到的数据
 //用于上传配置文件等
-class HTTP_EXPORT CHttpPostParser
+class HTTP_EXPORT HttpPostParser
 {
 public:
-	CHttpPostParser();
-	~CHttpPostParser();
+	HttpPostParser();
+	~HttpPostParser();
 
 	vector<tagHttpPostField>	m_lstField;
 #ifdef _DEBUG

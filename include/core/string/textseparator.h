@@ -13,6 +13,7 @@ class CORE_EXPORT TextSeparator
 {
 public:
 	TextSeparator(const char *text, const char *delimiter = "\r\n");
+	TextSeparator(const string& text, const char* delimiter = "\r\n");
 	int GetNext(std::string& sz, eTextFlag flag = eTextFlag_None);
 	static void Parse(const std::string& text, const std::string& delimiter, std::vector<std::string>& items);
 	/*

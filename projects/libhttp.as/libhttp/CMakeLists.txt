@@ -35,7 +35,6 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/ajax_listajaxcommand.h
         ${SRC_DIR}/ajax_proc.cpp
         ${SRC_DIR}/ajax_proc.h
-        ${SRC_DIR}/demohttprequesthandler.cpp
         ${SRC_DIR}/httpackheader.cpp
         ${SRC_DIR}/httpackparser.cpp
         ${SRC_DIR}/httpformfield.cpp
@@ -55,8 +54,12 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/posthandler_uploadpicture.cpp
         ${SRC_DIR}/posthandler_uploadvideo.cpp
         ${SRC_DIR}/procmanager.cpp
+        ${SRC_DIR}/textparser.cpp
         ${SRC_DIR}/userinfo.cpp
         ${SRC_DIR}/userman.cpp
+        ${SRC_DIR}/websockethandler.cpp
+        ${SRC_DIR}/websocketsplitter.cpp
+        ${SRC_DIR}/wshandler.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

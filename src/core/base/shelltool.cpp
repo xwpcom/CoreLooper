@@ -77,12 +77,12 @@ void backtrace_symbols_fd(void *const *buffer, int size, int fd) {}
 namespace Bear {
 namespace Core {
 
-void DumpCallStack()
+void DumpCallStackX()
 {
 	int j, nptrs;
 #define SIZE 100
-	void *buffer[100];
-	char **strings;
+	void* buffer[100];
+	char** strings;
 
 	nptrs = backtrace(buffer, SIZE);
 	//printf("backtrace() returned %d addresses\n", nptrs);
@@ -102,6 +102,7 @@ void DumpCallStack()
 
 	free(strings);
 }
+
 }
 }
 
@@ -1249,7 +1250,7 @@ bool ShellTool::IsExists(vector<int>& vec, int number)
 
 void ShellTool::DumpCallStack()
 {
-	::DumpCallStack();
+	DumpCallStackX();
 }
 
 #ifndef _MSC_VER

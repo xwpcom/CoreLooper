@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "looper/handler.h"
-#include "looper/looperimpl.h"
+#include "core/looper/handler.h"
+#include "core/looper/looperimpl.h"
 namespace Bear {
 namespace Core
 {

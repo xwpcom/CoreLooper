@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "win32.h"
 #include <stdarg.h>
-#include "shelltool.h"
+#include "core/base/win32.h"
+#include "core/base/shelltool.h"
 //XiongWanPing 2014.07.10
 namespace Bear {
 namespace Core
@@ -70,11 +70,11 @@ protected:
 		static BOOL b(x);	\
 	}while(0)
 
-void DumpCallStack();
+void DumpCallStackX();
 
 #ifndef _MSC_VER
 #ifdef _DEBUG
-#define ASSERT(x)	do{if((x)){}else{DumpCallStack();while(1){DE("###ASSERT Fail:%s (File:[%s:%d])\n",#x,__FILE__,__LINE__);sleep(1000*5);};}}while(0)
+#define ASSERT(x)	do{if((x)){}else{DumpCallStackX();while(1){DE("###ASSERT Fail:%s (File:[%s:%d])\n",#x,__FILE__,__LINE__);sleep(1000*5);};}}while(0)
 #else
 #define ASSERT(x)		do{}while(0)
 #endif

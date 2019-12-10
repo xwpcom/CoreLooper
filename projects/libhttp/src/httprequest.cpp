@@ -4,9 +4,13 @@
 #include "httppostparser.h"
 #include "httprequesthandler.h"
 #include "httprequesthandler_ajax.h"
+#include "httprequesthandler_json.h"
 #include "httprequesthandler_cgi.h"
 #include "httprequesthandler_file.h"
 #include "HttpPostHandler.h"
+#include "textparser.h"
+#include "libcrypt/ssl/sha1.h"
+#include "libcrypt/base64ex.h"
 
 using namespace Bear::Core;
 namespace Bear {
@@ -14,9 +18,9 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-NameValue *CHttpRequest::m_mapUriFile = NULL;
+NameValue *HttpRequest::m_mapUriFile = NULL;
 
-CHttpRequest::CHttpRequest()
+HttpRequest::HttpRequest()
 {
 	m_outbox = NULL;
 	m_httpRequestTransform = NULL;
@@ -26,13 +30,13 @@ CHttpRequest::CHttpRequest()
 	Reset();
 }
 
-CHttpRequest::~CHttpRequest()
+HttpRequest::~HttpRequest()
 {
-	//DW("CHttpRequest::~CHttpRequest,this=0x%x",this);
+	//DW("HttpRequest::~HttpRequest,this=0x%x",this);
 	m_handler = nullptr;
 }
 
-void CHttpRequest::Reset()
+void HttpRequest::Reset()
 {
 	m_eHttpRequestStatus = eHttpRequestStatus_Idle;
 	m_headerInfo.Reset();
@@ -40,9 +44,9 @@ void CHttpRequest::Reset()
 	ASSERT(!m_handler);
 }
 
-//由于需要支持超大文件上传、下载，所以需要由CHttpRequest来负责解析完整的request body
+//由于需要支持超大文件上传、下载，所以需要由HttpRequest来负责解析完整的request body
 //并且需要渐进处理机制
-int CHttpRequest::Input(ByteBuffer& inbox)
+int HttpRequest::Input(ByteBuffer& inbox)
 {
 	if (mHttpPostHandler)
 	{
@@ -56,17 +60,6 @@ int CHttpRequest::Input(ByteBuffer& inbox)
 		//处理http post时要返回一些数据，否则浏览器可能一直等待
 		if (mHttpPostHandler->IsDone())
 		{
-			/*
-			Output(
-				"HTTP/1.1 302\r\n"
-				"Content-Type: text/html\r\n"
-				"Transfer-Encoding: chunked\r\n"
-				"\r\n"
-				"0"
-				"\r\n"
-				"\r\n"
-			);
-			*/
 			Output(
 				"HTTP/1.1 200 OK\r\n"
 				"\r\n"
@@ -148,7 +141,8 @@ int CHttpRequest::Input(ByteBuffer& inbox)
 			inbox.MakeSureEndWithNull();
 			m_headerInfo.m_request = (char*)pData;
 			m_headerInfo.m_len = hi.m_headerLength;//如果有content,后面会再修改
-
+			
+			/*
 			{
 				//传感器2G网络，有时多发几个0,可能是起保活作用，这里屏蔽掉
 				auto ps = m_headerInfo.m_request;
@@ -167,8 +161,13 @@ int CHttpRequest::Input(ByteBuffer& inbox)
 					inbox.Eat(bytes);
 				}
 			}
+			*/
 
 			int ret = OnHeaderReady();
+			if (mIsWebSocket)
+			{
+				return 0;
+			}
 #ifdef _MINI_HTTP
 			if (ret)
 			{
@@ -233,28 +232,25 @@ int CHttpRequest::Input(ByteBuffer& inbox)
 		OnHeaderContentReady();
 		pData[len] = chSave;
 		inbox.Eat(len);
-
-		return 0;
 	}
-
 
 	return 0;
 }
 
-void CHttpRequest::SetOutbox(ByteBuffer *outbox)
+void HttpRequest::SetOutbox(ByteBuffer *outbox)
 {
 	m_outbox = outbox;
 }
 
 //解析到完整的http header(不包括contentLength指定的数据)之后会调用本接口
-int CHttpRequest::OnHeaderReady()
+int HttpRequest::OnHeaderReady()
 {
 	int ret = ParseHeader();
 	return ret;
 }
 
 //解析到完整的http header+content之后会调用本接口
-int CHttpRequest::OnHeaderContentReady()
+int HttpRequest::OnHeaderContentReady()
 {
 	if (m_handler)
 	{
@@ -326,7 +322,7 @@ int CHttpRequest::OnHeaderContentReady()
 	return 0;
 }
 
-int CHttpRequest::Transform(string  target, ByteBuffer& box)
+int HttpRequest::Transform(string  target, ByteBuffer& box)
 {
 #ifdef _MSC_VER_DEBUG
 	File::Dump(box, "g:/test/http.post.bin");
@@ -353,17 +349,6 @@ int CHttpRequest::Transform(string  target, ByteBuffer& box)
 
 		if (mHttpPostHandler->IsDone())
 		{
-			/*
-			Output(
-				"HTTP/1.1 302\r\n"
-				"Content-Type: text/html\r\n"
-				"Transfer-Encoding: chunked\r\n"
-				"\r\n"
-				"0"
-				"\r\n"
-				"\r\n"
-			);
-			*/
 			Output(
 				"HTTP/1.1 200 OK\r\n"
 				"\r\n"
@@ -383,8 +368,74 @@ int CHttpRequest::Transform(string  target, ByteBuffer& box)
 	return ret;
 }
 
+int HttpRequest::CheckWebSocket()
+{
+	char* request = m_headerInfo.m_request;
+	UINT len = m_headerInfo.m_len;
+
+	TextParser obj;
+	obj.Parse(string(request, len));
+	auto& bundle = obj.mBundle;
+	auto SecWebSocketKey = bundle.GetString("Sec-WebSocket-Key");
+	if (SecWebSocketKey.empty())
+	{
+		SecWebSocketKey = bundle.GetString("sec-websocket-key");
+	}
+	if (SecWebSocketKey.empty())
+	{
+		return -1;
+	}
+
+	SecWebSocketKey += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+	sha1_context context = { 0 };
+
+	sha1_starts_EX(&context);
+	sha1_update_EX(&context, (LPBYTE)SecWebSocketKey.c_str(), SecWebSocketKey.length());
+	BYTE output[20] = { 0 };
+	sha1_finish_EX(&context, output);
+
+	auto Sec_WebSocket_Accept = Base64::Encode(output, sizeof(output));
+
+	string ack;
+	ack=StringTool::Format(
+		"HTTP/1.1 101 Switching Protocols\r\n"
+		"Upgrade: websocket\r\n"
+		"Connection: Upgrade\r\n"
+		"Sec-WebSocket-Accept: %s\r\n"
+		, Sec_WebSocket_Accept.c_str()
+	);
+
+	auto Sec_WebSocket_Protocol = bundle.GetString("Sec-WebSocket-Protocol");
+	if (Sec_WebSocket_Protocol.empty())
+	{
+		Sec_WebSocket_Protocol = bundle.GetString("sec-websocket-protocol");
+	}
+	if (!Sec_WebSocket_Protocol.empty())
+	{
+		ack += "Sec-WebSocket-Protocol: " + Sec_WebSocket_Protocol + "\r\n";
+	}
+
+	ack += "\r\n";
+
+	Output(ack);
+
+	return 0;
+
+	/*
+KeyValue headerOut;
+headerOut["Upgrade"] = "websocket";
+headerOut["Connection"] = "Upgrade";
+headerOut["Sec-WebSocket-Accept"] = Sec_WebSocket_Accept;
+if(!_parser["Sec-WebSocket-Protocol"].empty()){
+	headerOut["Sec-WebSocket-Protocol"] = _parser["Sec-WebSocket-Protocol"];
+}
+sendResponse("101 Switching Protocols",headerOut,"");
+*/
+}
+
 //parse http header
-int CHttpRequest::ParseHeader()
+int HttpRequest::ParseHeader()
 {
 	char *request = m_headerInfo.m_request;
 	UINT len = m_headerInfo.m_len;
@@ -430,6 +481,14 @@ int CHttpRequest::ParseHeader()
 		//DW("HTTP Method=[%s]",m_headerInfo.m_httpMethod.c_str());
 
 		HttpTool::ParseUrlParam(szUrl, m_headerInfo.m_uri, m_headerInfo.m_urlParam);
+		{
+			auto ret = CheckWebSocket();
+			if (ret == 0)
+			{
+				mIsWebSocket = true;
+				return 0;
+			}
+		}
 
 		{
 			m_headerInfo.m_szReferer = HttpTool::GetString(request, "Referer");
@@ -590,13 +649,13 @@ int CHttpRequest::ParseHeader()
 	return 0;
 }
 
-int	CHttpRequest::GetParamInt(const char *pszName, int nDefaultValue)
+int	HttpRequest::GetParamInt(const char *pszName, int nDefaultValue)
 {
 	return m_headerInfo.m_urlParam.GetInt(pszName, nDefaultValue);
 }
 
 //返回pszName值是否为on,一般用于checkbox
-BOOL CHttpRequest::IsParamOn(const char *pszName, BOOL bCheckOn)
+BOOL HttpRequest::IsParamOn(const char *pszName, BOOL bCheckOn)
 {
 	string  szValue = GetParamString(pszName);
 	if (szValue.empty())
@@ -605,7 +664,7 @@ BOOL CHttpRequest::IsParamOn(const char *pszName, BOOL bCheckOn)
 }
 
 //判断参数是否存在
-BOOL CHttpRequest::IsParamExists(const char *pszName)
+BOOL HttpRequest::IsParamExists(const char *pszName)
 {
 	//url优先
 	if (m_headerInfo.m_urlParam.IsExists(pszName))
@@ -623,7 +682,7 @@ BOOL CHttpRequest::IsParamExists(const char *pszName)
 }
 
 //在url param,cookie,表单中查找pszName字段
-string  CHttpRequest::GetParamString(const char *pszName, const char *pszDefaultValue)
+string  HttpRequest::GetParamString(const char *pszName, const char *pszDefaultValue)
 {
 	string  value = m_headerInfo.m_urlParam.GetString(pszName, pszDefaultValue);
 	if (StringTool::CompareNoCase(value, pszDefaultValue) == 0)
@@ -634,7 +693,7 @@ string  CHttpRequest::GetParamString(const char *pszName, const char *pszDefault
 	return value;
 }
 
-void CHttpRequest::CheckSubmit()
+void HttpRequest::CheckSubmit()
 {
 	ASSERT(m_outbox);
 
@@ -656,7 +715,7 @@ void CHttpRequest::CheckSubmit()
 	}
 }
 
-void CHttpRequest::Process()
+void HttpRequest::Process()
 {
 	CheckSubmit();
 
@@ -681,14 +740,14 @@ void CHttpRequest::Process()
 	}
 }
 
-int CHttpRequest::Output(LPBYTE pData, int cbData)
+int HttpRequest::Output(LPBYTE pData, int cbData)
 {
 	ASSERT(m_outbox);
 
 	int ret = m_outboxPending.Write(pData, cbData);
 	if (ret != cbData)
 	{
-		DW("CHttpRequest outbox overflow");
+		DW("HttpRequest outbox overflow");
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -697,7 +756,7 @@ int CHttpRequest::Output(LPBYTE pData, int cbData)
 	return 0;
 }
 
-string  CHttpRequest::GetServerName()
+string  HttpRequest::GetServerName()
 {
 	string  name;
 	if (m_httpServerInfo)
@@ -708,7 +767,7 @@ string  CHttpRequest::GetServerName()
 	return name;
 }
 
-int CHttpRequest::CheckAuth()
+int HttpRequest::CheckAuth()
 {
 	if (m_headerInfo.m_curUserLevel == eUser_Invalid)
 		return -1;
@@ -716,7 +775,7 @@ int CHttpRequest::CheckAuth()
 }
 
 //判断当前uri是否需要权限才能访问
-BOOL CHttpRequest::IsNeedAuth()
+BOOL HttpRequest::IsNeedAuth()
 {
 	string  uri = m_headerInfo.m_uri;
 	if (uri == "/" || uri.empty())
@@ -775,7 +834,7 @@ BOOL CHttpRequest::IsNeedAuth()
 	return needAuth;
 }
 
-int CHttpRequest::OnUnsupportedHttpMethod()
+int HttpRequest::OnUnsupportedHttpMethod()
 {
 	string  content = StringTool::Format(
 		"<html><body>Invalid/Unsupported Http Method</body></html>"
@@ -801,7 +860,7 @@ int CHttpRequest::OnUnsupportedHttpMethod()
 }
 
 //重定位到pszPage页面
-int CHttpRequest::OnRedirect(const char *pszPage)
+int HttpRequest::OnRedirect(const char *pszPage)
 {
 	string  content = StringTool::Format(
 		"<html><meta http-equiv=\"refresh\" content=\"0;url=%s\"/></html>",
@@ -828,7 +887,7 @@ int CHttpRequest::OnRedirect(const char *pszPage)
 	return 0;
 }
 
-bool CHttpRequest::IsSending()const
+bool HttpRequest::IsSending()const
 {
 	if (m_outboxPending.GetActualDataLength() > 0)
 	{
@@ -843,14 +902,14 @@ bool CHttpRequest::IsSending()const
 	return false;
 }
 
-bool CHttpRequest::IsDone()
+bool HttpRequest::IsDone()
 {
 	return m_eHttpRequestStatus == eHttpRequestStatus_Done && m_outboxPending.empty();
 }
 
 //当前用户是否有权执行pszAction操作
 //pszUserGroup为NULL时，返回当前用户的操作权限，否则返回pszUserGroup用户组的权限.
-bool CHttpRequest::IsAuthAction(const char *pszAction, const char *pszUserGroup)
+bool HttpRequest::IsAuthAction(const char *pszAction, const char *pszUserGroup)
 {
 	eUserLevel usrLevel = GetCurUserLevel();
 	if (pszUserGroup)
@@ -882,7 +941,7 @@ bool CHttpRequest::IsAuthAction(const char *pszAction, const char *pszUserGroup)
 }
 
 //根据uri来确定handler
-shared_ptr<HttpRequestHandler> CHttpRequest::CreateHandler(string  uri)
+shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri)
 {
 	shared_ptr<HttpRequestHandler> handler;
 	if (mWebConfig && mWebConfig->mHttpRequestFilter)
@@ -964,18 +1023,22 @@ shared_ptr<HttpRequestHandler> CHttpRequest::CreateHandler(string  uri)
 
 		if (StringTool::CompareNoCase(ext, ".xml") == 0 || ext.empty())
 		{
-			handler = make_shared<CHttpRequestHandler_Ajax>();
+			handler = make_shared<HttpRequestHandler_Ajax>();
+		}
+		else if (ext == ".json")
+		{
+			handler = make_shared<HttpRequestHandler_Json>();
 		}
 		else if (StringTool::CompareNoCase(ext, ".cgi") == 0)
 		{
-			handler = make_shared<CHttpRequestHandler_CGI>();
+			handler = make_shared<HttpRequestHandler_CGI>();
 		}
 	}
 
 	if (!handler)
 	{
 		//当作普通文件
-		handler = make_shared<CHttpRequestHandler_File>();
+		handler = make_shared<HttpRequestHandler_File>();
 	}
 
 	//通用配置
@@ -986,7 +1049,7 @@ shared_ptr<HttpRequestHandler> CHttpRequest::CreateHandler(string  uri)
 	return handler;
 }
 
-int CHttpRequest::PreProcessHeader()
+int HttpRequest::PreProcessHeader()
 {
 	char *request = m_headerInfo.m_request;
 	int len = m_headerInfo.m_len;
@@ -1031,7 +1094,7 @@ int CHttpRequest::PreProcessHeader()
 }
 
 //返回0表示已成功处理，不需要后续操作
-int CHttpRequest::CheckProcessPostRequest(ByteBuffer& inbox)
+int HttpRequest::CheckProcessPostRequest(ByteBuffer& inbox)
 {
 	if (m_headerInfo.m_httpMethod != "POST" || m_headerInfo.m_uri.find("onvif/") != -1)
 	{
@@ -1065,7 +1128,7 @@ int CHttpRequest::CheckProcessPostRequest(ByteBuffer& inbox)
 	return -1;
 }
 
-void CHttpRequest::SetStatus(eHttpRequestStatus status)
+void HttpRequest::SetStatus(eHttpRequestStatus status)
 {
 #ifdef _DEBUG
 	if (status == eHttpRequestStatus_Done)

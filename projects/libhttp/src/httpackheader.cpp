@@ -7,18 +7,18 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-string  CHttpAckHeader::m_serverDesc = "";
+string  HttpAckHeader::m_serverDesc = "";
 
-CHttpAckHeader::CHttpAckHeader()
+HttpAckHeader::HttpAckHeader()
 {
 }
 
-CHttpAckHeader::~CHttpAckHeader()
+HttpAckHeader::~HttpAckHeader()
 {
 	//测试中文
 }
 
-string  CHttpAckHeader::ack(BOOL addTail)
+string  HttpAckHeader::ack(BOOL addTail)
 {
 	ASSERT(!m_contentType.empty());
 

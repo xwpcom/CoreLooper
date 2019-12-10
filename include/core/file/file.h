@@ -1,7 +1,7 @@
 #pragma once
 
 //#include "base/stringex.h"
-#include "base/bytebuffer.h"
+#include "core/base/bytebuffer.h"
 
 #ifdef _MSC_VER
 #define FILE_PATH_SPLIT		"\\"

@@ -1,0 +1,384 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B0110BDA2249CD50006DB64F /* libcrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = B0110BD92249CD50006DB64F /* libcrypt.m */; };
+		B0110BDB2249CD50006DB64F /* libcrypt.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B0110BD82249CD50006DB64F /* libcrypt.h */; };
+		B0110C102249D04E006DB64F /* bcd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C072249D04E006DB64F /* bcd.cpp */; };
+		B0110C112249D04E006DB64F /* aes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C082249D04E006DB64F /* aes.cpp */; };
+		B0110C122249D04E006DB64F /* crc16.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C092249D04E006DB64F /* crc16.cpp */; };
+		B0110C132249D04E006DB64F /* tea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0A2249D04E006DB64F /* tea.cpp */; };
+		B0110C142249D04E006DB64F /* crypthelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0B2249D04E006DB64F /* crypthelper.cpp */; };
+		B0110C152249D04E006DB64F /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0C2249D04E006DB64F /* md5.cpp */; };
+		B0110C162249D04E006DB64F /* digestaccessauth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0D2249D04E006DB64F /* digestaccessauth.cpp */; };
+		B0110C172249D04E006DB64F /* base64ex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0E2249D04E006DB64F /* base64ex.cpp */; };
+		B0110C182249D04E006DB64F /* md5ex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C0F2249D04E006DB64F /* md5ex.cpp */; };
+		B0110C222249D060006DB64F /* bignum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C192249D05F006DB64F /* bignum.cpp */; };
+		B0110C232249D060006DB64F /* x509parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1A2249D060006DB64F /* x509parse.cpp */; };
+		B0110C242249D060006DB64F /* rsa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1B2249D060006DB64F /* rsa.cpp */; };
+		B0110C252249D060006DB64F /* ssl_tls.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1C2249D060006DB64F /* ssl_tls.cpp */; };
+		B0110C262249D060006DB64F /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1D2249D060006DB64F /* sha1.cpp */; };
+		B0110C272249D060006DB64F /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1E2249D060006DB64F /* base64.cpp */; };
+		B0110C282249D060006DB64F /* arc4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C1F2249D060006DB64F /* arc4.cpp */; };
+		B0110C292249D060006DB64F /* ssl_cli.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C202249D060006DB64F /* ssl_cli.cpp */; };
+		B0110C2A2249D060006DB64F /* havege.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C212249D060006DB64F /* havege.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0110BD32249CD50006DB64F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				B0110BDB2249CD50006DB64F /* libcrypt.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B0110BD52249CD50006DB64F /* liblibcrypt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibcrypt.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0110BD82249CD50006DB64F /* libcrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libcrypt.h; sourceTree = "<group>"; };
+		B0110BD92249CD50006DB64F /* libcrypt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libcrypt.m; sourceTree = "<group>"; };
+		B0110C072249D04E006DB64F /* bcd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bcd.cpp; path = ../libcrypt/src/bcd.cpp; sourceTree = "<group>"; };
+		B0110C082249D04E006DB64F /* aes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aes.cpp; path = ../libcrypt/src/aes.cpp; sourceTree = "<group>"; };
+		B0110C092249D04E006DB64F /* crc16.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crc16.cpp; path = ../libcrypt/src/crc16.cpp; sourceTree = "<group>"; };
+		B0110C0A2249D04E006DB64F /* tea.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tea.cpp; path = ../libcrypt/src/tea.cpp; sourceTree = "<group>"; };
+		B0110C0B2249D04E006DB64F /* crypthelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = crypthelper.cpp; path = ../libcrypt/src/crypthelper.cpp; sourceTree = "<group>"; };
+		B0110C0C2249D04E006DB64F /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = md5.cpp; path = ../libcrypt/src/md5.cpp; sourceTree = "<group>"; };
+		B0110C0D2249D04E006DB64F /* digestaccessauth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = digestaccessauth.cpp; path = ../libcrypt/src/digestaccessauth.cpp; sourceTree = "<group>"; };
+		B0110C0E2249D04E006DB64F /* base64ex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = base64ex.cpp; path = ../libcrypt/src/base64ex.cpp; sourceTree = "<group>"; };
+		B0110C0F2249D04E006DB64F /* md5ex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = md5ex.cpp; path = ../libcrypt/src/md5ex.cpp; sourceTree = "<group>"; };
+		B0110C192249D05F006DB64F /* bignum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bignum.cpp; path = ../libcrypt/src/ssl/bignum.cpp; sourceTree = "<group>"; };
+		B0110C1A2249D060006DB64F /* x509parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = x509parse.cpp; path = ../libcrypt/src/ssl/x509parse.cpp; sourceTree = "<group>"; };
+		B0110C1B2249D060006DB64F /* rsa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rsa.cpp; path = ../libcrypt/src/ssl/rsa.cpp; sourceTree = "<group>"; };
+		B0110C1C2249D060006DB64F /* ssl_tls.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ssl_tls.cpp; path = ../libcrypt/src/ssl/ssl_tls.cpp; sourceTree = "<group>"; };
+		B0110C1D2249D060006DB64F /* sha1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sha1.cpp; path = ../libcrypt/src/ssl/sha1.cpp; sourceTree = "<group>"; };
+		B0110C1E2249D060006DB64F /* base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = base64.cpp; path = ../libcrypt/src/ssl/base64.cpp; sourceTree = "<group>"; };
+		B0110C1F2249D060006DB64F /* arc4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = arc4.cpp; path = ../libcrypt/src/ssl/arc4.cpp; sourceTree = "<group>"; };
+		B0110C202249D060006DB64F /* ssl_cli.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ssl_cli.cpp; path = ../libcrypt/src/ssl/ssl_cli.cpp; sourceTree = "<group>"; };
+		B0110C212249D060006DB64F /* havege.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = havege.cpp; path = ../libcrypt/src/ssl/havege.cpp; sourceTree = "<group>"; };
+		B0110C2B2249D06C006DB64F /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = ../libcrypt/stdafx.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B0110BD22249CD50006DB64F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B0110BCC2249CD50006DB64F = {
+			isa = PBXGroup;
+			children = (
+				B0110BE12249CD7E006DB64F /* src */,
+				B0110BD72249CD50006DB64F /* libcrypt */,
+				B0110BD62249CD50006DB64F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0110BD62249CD50006DB64F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0110BD52249CD50006DB64F /* liblibcrypt.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0110BD72249CD50006DB64F /* libcrypt */ = {
+			isa = PBXGroup;
+			children = (
+				B0110BD82249CD50006DB64F /* libcrypt.h */,
+				B0110BD92249CD50006DB64F /* libcrypt.m */,
+			);
+			path = libcrypt;
+			sourceTree = "<group>";
+		};
+		B0110BE12249CD7E006DB64F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B0110C2B2249D06C006DB64F /* stdafx.h */,
+				B0110C1F2249D060006DB64F /* arc4.cpp */,
+				B0110C1E2249D060006DB64F /* base64.cpp */,
+				B0110C192249D05F006DB64F /* bignum.cpp */,
+				B0110C212249D060006DB64F /* havege.cpp */,
+				B0110C1B2249D060006DB64F /* rsa.cpp */,
+				B0110C1D2249D060006DB64F /* sha1.cpp */,
+				B0110C202249D060006DB64F /* ssl_cli.cpp */,
+				B0110C1C2249D060006DB64F /* ssl_tls.cpp */,
+				B0110C1A2249D060006DB64F /* x509parse.cpp */,
+				B0110C082249D04E006DB64F /* aes.cpp */,
+				B0110C0E2249D04E006DB64F /* base64ex.cpp */,
+				B0110C072249D04E006DB64F /* bcd.cpp */,
+				B0110C092249D04E006DB64F /* crc16.cpp */,
+				B0110C0B2249D04E006DB64F /* crypthelper.cpp */,
+				B0110C0D2249D04E006DB64F /* digestaccessauth.cpp */,
+				B0110C0C2249D04E006DB64F /* md5.cpp */,
+				B0110C0F2249D04E006DB64F /* md5ex.cpp */,
+				B0110C0A2249D04E006DB64F /* tea.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B0110BD42249CD50006DB64F /* libcrypt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0110BDE2249CD50006DB64F /* Build configuration list for PBXNativeTarget "libcrypt" */;
+			buildPhases = (
+				B0110BD12249CD50006DB64F /* Sources */,
+				B0110BD22249CD50006DB64F /* Frameworks */,
+				B0110BD32249CD50006DB64F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libcrypt;
+			productName = libcrypt;
+			productReference = B0110BD52249CD50006DB64F /* liblibcrypt.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B0110BCD2249CD50006DB64F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = jjy;
+				TargetAttributes = {
+					B0110BD42249CD50006DB64F = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = B0110BD02249CD50006DB64F /* Build configuration list for PBXProject "libcrypt" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B0110BCC2249CD50006DB64F;
+			productRefGroup = B0110BD62249CD50006DB64F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0110BD42249CD50006DB64F /* libcrypt */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0110BD12249CD50006DB64F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0110C272249D060006DB64F /* base64.cpp in Sources */,
+				B0110C112249D04E006DB64F /* aes.cpp in Sources */,
+				B0110C162249D04E006DB64F /* digestaccessauth.cpp in Sources */,
+				B0110C172249D04E006DB64F /* base64ex.cpp in Sources */,
+				B0110C232249D060006DB64F /* x509parse.cpp in Sources */,
+				B0110C122249D04E006DB64F /* crc16.cpp in Sources */,
+				B0110C282249D060006DB64F /* arc4.cpp in Sources */,
+				B0110C142249D04E006DB64F /* crypthelper.cpp in Sources */,
+				B0110C242249D060006DB64F /* rsa.cpp in Sources */,
+				B0110C132249D04E006DB64F /* tea.cpp in Sources */,
+				B0110C262249D060006DB64F /* sha1.cpp in Sources */,
+				B0110C2A2249D060006DB64F /* havege.cpp in Sources */,
+				B0110C252249D060006DB64F /* ssl_tls.cpp in Sources */,
+				B0110BDA2249CD50006DB64F /* libcrypt.m in Sources */,
+				B0110C222249D060006DB64F /* bignum.cpp in Sources */,
+				B0110C182249D04E006DB64F /* md5ex.cpp in Sources */,
+				B0110C152249D04E006DB64F /* md5.cpp in Sources */,
+				B0110C102249D04E006DB64F /* bcd.cpp in Sources */,
+				B0110C292249D060006DB64F /* ssl_cli.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B0110BDC2249CD50006DB64F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		B0110BDD2249CD50006DB64F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B0110BDF2249CD50006DB64F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V4HWBC8N2Y;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B0110BE02249CD50006DB64F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V4HWBC8N2Y;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B0110BD02249CD50006DB64F /* Build configuration list for PBXProject "libcrypt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0110BDC2249CD50006DB64F /* Debug */,
+				B0110BDD2249CD50006DB64F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0110BDE2249CD50006DB64F /* Build configuration list for PBXNativeTarget "libcrypt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0110BDF2249CD50006DB64F /* Debug */,
+				B0110BE02249CD50006DB64F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B0110BCD2249CD50006DB64F /* Project object */;
+}

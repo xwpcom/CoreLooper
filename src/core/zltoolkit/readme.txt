@@ -1,0 +1,2 @@
+corelooper目前只是采用了zltoolkit中的openssl相关功能
+

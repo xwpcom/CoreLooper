@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "IoContext.h"
-#include "net/channel.h"
-#include "iocpobject.h"
+#include "arch/windows/iocontext.h"
+#include "arch/windows/iocpobject.h"
+#include "core/net/channel.h"
 namespace Bear {
 namespace Core {
 using namespace Net;
@@ -24,12 +24,7 @@ public:
 	{
 		return mBaudRate;
 	}
-
-	void SetBaudRate(int rate)
-	{
-		mBaudRate = rate;
-	}
-
+	int SetBaudRate(int rate);
 	void SetDeviceName(string name)
 	{
 		mDeviceName = name;
@@ -39,11 +34,15 @@ public:
 	{
 		return mDeviceName;
 	}
-
+	virtual int Open();
 	virtual int Connect(Bundle& info);//bundle中传送连接所需的信息，比如ip,port,p2p id等
 	virtual void Close();
 	virtual int Send(LPVOID data, int dataLen);
 	virtual int Receive(LPVOID buf, int bufLen);
+	bool IsOpen()const
+	{
+		return mFile != INVALID_HANDLE_VALUE;
+	}
 
 protected:
 	void OnCreate();

@@ -1733,7 +1733,7 @@ int ssl_set_hostname( ssl_context *ssl, char *hostname )
     ssl->hostname = (unsigned char *) malloc( ssl->hostname_len + 1 );
 	if(!ssl->hostname)
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 		return -1;
 	}
 

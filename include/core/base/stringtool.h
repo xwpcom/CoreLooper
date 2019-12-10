@@ -1,7 +1,7 @@
 #pragma once
-#include "win32.h"
+#include "core/base/win32.h"
 #include <stdlib.h>
-#include "dt.h"
+#include "core/base/dt.h"
 
 namespace Bear {
 namespace Core

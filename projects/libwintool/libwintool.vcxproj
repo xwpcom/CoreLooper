@@ -23,7 +23,7 @@
     <ProjectGuid>{08408EDD-ED9C-4DF5-99A0-842B1ADB052A}</ProjectGuid>
     <Keyword>MFCDLLProj</Keyword>
     <RootNamespace>libwintool</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -44,17 +44,17 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -99,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core/;../../include/libcloudp2p;include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,7 +122,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core/;../../include/libcloudp2p;include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core/;../../include/libcloudp2p;include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -174,7 +174,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core/;../../include/libcloudp2p;include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -222,6 +222,9 @@
   <ItemGroup>
     <ProjectReference Include="..\libcorelooper\corelooper.vcxproj">
       <Project>{fd47e92b-7702-459f-bfb7-81c2d64c61b9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libcrypt\libcrypt.vcxproj">
+      <Project>{67b8d09d-c9c6-41f2-b3b9-caa3be1d20e5}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

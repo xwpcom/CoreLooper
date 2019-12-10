@@ -701,12 +701,21 @@ int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & 
 	memset(host, 0, sizeof(host));
 	memset(page, 0, sizeof(page));
 
-	//去掉可选的http:前缀
-	const char *p = StringTool::stristr(szUrl.c_str(), "http:");
+	//去掉可选的http:前缀和https:前缀
+	const char *p = StringTool::stristr(szUrl.c_str(), "http://");
 	if (p == szUrl.c_str())
 	{
 		szUrl = StringTool::Right(url, (int)(url.length() - strlen("http://")));
 	}
+	else
+	{
+		p=StringTool::stristr(szUrl.c_str(), "https://");
+		if (p == szUrl.c_str())
+		{
+			szUrl = StringTool::Right(url, (int)(url.length() - strlen("https://")));
+		}
+	}
+
 	fmt = StringTool::Format("%%%d[^/]%%%ds", sizeof(host) - 1, sizeof(page) - 1);
 
 	int ret = sscanf(szUrl.c_str(), fmt.c_str(), host, page);

@@ -5,6 +5,12 @@
 #include "looper/looper.h"
 #include "../../core/looper/handlerinternaldata.h"
 
+#ifdef _CONFIG_OPENSSL
+#include "Util/SSLBox.h"
+using namespace toolkit;
+#endif
+
+
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
 #endif
@@ -102,7 +108,7 @@ int TcpServer_Windows::StartServer(int port)
 	ASSERT(ret == 0);
 
 	{
-		typedef int socklen_t;
+		//typedef int socklen_t;
 		struct sockaddr_in ClientAddr;
 		socklen_t ClientAddrLen = sizeof(ClientAddr);
 		if (0 == getsockname(mSock, (struct sockaddr *)&ClientAddr, &ClientAddrLen))
@@ -285,6 +291,27 @@ LRESULT TcpServer_Windows::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 
 	return __super::OnMessage(msg, wp, lp);
 }
+
+#ifdef _CONFIG_OPENSSL
+int TcpServer_Windows::InitSSL(const string& filePath)
+{
+	Logger::Instance().add(std::make_shared<ConsoleChannel>());
+	//Logger::Instance().add(std::make_shared<FileChannel>("FileChannel", folder + "log/"));
+	Logger::Instance().setWriter(std::make_shared<AsyncLogWriter>());
+
+	//加载证书，证书包含公钥和私钥
+	auto ok = SSL_Initor::Instance().loadCertificate(filePath.data());
+	//信任某个自签名证书
+	ok &= SSL_Initor::Instance().trustCertificate(filePath.data());
+	//不忽略无效证书证书(例如自签名或过期证书)
+	SSL_Initor::Instance().ignoreInvalidCertificate(false);
+	return ok ? 0 : -1;
+}
+#endif
+
+
+
+
 }
 }
 }

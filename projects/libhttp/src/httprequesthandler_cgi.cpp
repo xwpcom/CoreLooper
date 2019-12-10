@@ -7,22 +7,22 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-CHttpRequestHandler_CGI::CHttpRequestHandler_CGI()
+HttpRequestHandler_CGI::HttpRequestHandler_CGI()
 {
 }
 
-CHttpRequestHandler_CGI::~CHttpRequestHandler_CGI()
+HttpRequestHandler_CGI::~HttpRequestHandler_CGI()
 {
 }
 
-int CHttpRequestHandler_CGI::Process()
+int HttpRequestHandler_CGI::Process()
 {
 	//总是一次性解决的
 	ASSERT(FALSE);
 	return 0;
 }
 
-int CHttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
+int HttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
 {
 	HttpRequestHandler::Start(headerInfo);
 	SetStatus(eHttpHandlerStatus_Processing);
@@ -30,7 +30,7 @@ int CHttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
 	string  cgiAck;
 	ProcessCgi(cgiAck);
 
-	CHttpAckHeader httpAckHeader;
+	HttpAckHeader httpAckHeader;
 	httpAckHeader.SetStatusCode("200 OK");
 	httpAckHeader.SetCacheControl("no-cache,no-store,must-revalidate");
 	httpAckHeader.SetContentLength((int)cgiAck.length());
@@ -61,7 +61,7 @@ int CHttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
 
 //XiongWanPing 2010.10.15
 //
-int CHttpRequestHandler_CGI::ProcessCgi(string & ack)
+int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 {
 	string  szUri = m_headerInfo->m_uri;
 	ack = "";

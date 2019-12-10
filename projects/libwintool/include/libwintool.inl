@@ -10,4 +10,7 @@
 #endif
 #endif
 
-#include "core/looper/libcorelooper.inl"
+#include "libcorelooper.inl"
+#include "basepage.h"
+#include "ToastWnd.h"
+

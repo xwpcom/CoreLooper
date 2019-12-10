@@ -21,8 +21,8 @@ struct tagLoopMessage
 	LPARAM	mLP;
 };
 
-#include "base/object.h"
-#include "looper/handler.h"
+#include "core/base/object.h"
+#include "core/looper/handler.h"
 //XiongWanPing 2016.01.08
 //Loop抽象类提供外界调用的接口
 class CORE_EXPORT Loop :public Handler

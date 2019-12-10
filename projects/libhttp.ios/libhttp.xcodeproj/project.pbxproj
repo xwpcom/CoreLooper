@@ -1,0 +1,456 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B0110C3A2249D17E006DB64F /* libhttp.m in Sources */ = {isa = PBXBuildFile; fileRef = B0110C392249D17E006DB64F /* libhttp.m */; };
+		B0110C3B2249D17E006DB64F /* libhttp.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = B0110C382249D17E006DB64F /* libhttp.h */; };
+		B0110C632249D1D2006DB64F /* httprequesthandler_cgi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C422249D1CF006DB64F /* httprequesthandler_cgi.cpp */; };
+		B0110C642249D1D2006DB64F /* userinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C432249D1CF006DB64F /* userinfo.cpp */; };
+		B0110C652249D1D2006DB64F /* httphandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C442249D1CF006DB64F /* httphandler.cpp */; };
+		B0110C662249D1D2006DB64F /* userman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C452249D1CF006DB64F /* userman.cpp */; };
+		B0110C672249D1D2006DB64F /* posthandler_uploadvideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C462249D1CF006DB64F /* posthandler_uploadvideo.cpp */; };
+		B0110C682249D1D2006DB64F /* ajax_tree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C472249D1CF006DB64F /* ajax_tree.cpp */; };
+		B0110C692249D1D2006DB64F /* httpheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C482249D1CF006DB64F /* httpheader.cpp */; };
+		B0110C6A2249D1D2006DB64F /* ajaxhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C492249D1CF006DB64F /* ajaxhandler.cpp */; };
+		B0110C6B2249D1D2006DB64F /* httpget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C4A2249D1CF006DB64F /* httpget.cpp */; };
+		B0110C6C2249D1D2006DB64F /* httpackparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C4B2249D1CF006DB64F /* httpackparser.cpp */; };
+		B0110C6D2249D1D2006DB64F /* httprequesthandler_ajax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C4C2249D1D0006DB64F /* httprequesthandler_ajax.cpp */; };
+		B0110C6E2249D1D2006DB64F /* ajaxcommandhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C4D2249D1D0006DB64F /* ajaxcommandhandler.cpp */; };
+		B0110C6F2249D1D2006DB64F /* httpackheader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C4E2249D1D0006DB64F /* httpackheader.cpp */; };
+		B0110C702249D1D2006DB64F /* httppostcommandhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C502249D1D0006DB64F /* httppostcommandhandler.cpp */; };
+		B0110C712249D1D2006DB64F /* ajax_exit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C522249D1D0006DB64F /* ajax_exit.cpp */; };
+		B0110C732249D1D2006DB64F /* httptool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C542249D1D0006DB64F /* httptool.cpp */; };
+		B0110C742249D1D2006DB64F /* httprequesthandler_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C552249D1D0006DB64F /* httprequesthandler_file.cpp */; };
+		B0110C752249D1D2006DB64F /* httpformfield.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C562249D1D0006DB64F /* httpformfield.cpp */; };
+		B0110C762249D1D2006DB64F /* httprequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C572249D1D0006DB64F /* httprequest.cpp */; };
+		B0110C772249D1D2006DB64F /* httppostparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C582249D1D0006DB64F /* httppostparser.cpp */; };
+		B0110C782249D1D2006DB64F /* ajax_proc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C592249D1D1006DB64F /* ajax_proc.cpp */; };
+		B0110C792249D1D2006DB64F /* posthandler_uploadpicture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5A2249D1D1006DB64F /* posthandler_uploadpicture.cpp */; };
+		B0110C7A2249D1D2006DB64F /* httpposthandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5C2249D1D1006DB64F /* httpposthandler.cpp */; };
+		B0110C7B2249D1D2006DB64F /* ajax_listajaxcommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5D2249D1D1006DB64F /* ajax_listajaxcommand.cpp */; };
+		B0110C7C2249D1D2006DB64F /* httprequesthandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5E2249D1D1006DB64F /* httprequesthandler.cpp */; };
+		B0110C7D2249D1D2006DB64F /* httpserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5F2249D1D1006DB64F /* httpserver.cpp */; };
+		B0110C7E2249D1D2006DB64F /* procmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C602249D1D1006DB64F /* procmanager.cpp */; };
+		B0110C7F2249D1D2006DB64F /* httpformfield_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C622249D1D1006DB64F /* httpformfield_file.cpp */; };
+		B0AA413B231A8875002566A5 /* textparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4136231A8874002566A5 /* textparser.cpp */; };
+		B0AA413C231A8875002566A5 /* websockethandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4138231A8874002566A5 /* websockethandler.cpp */; };
+		B0AA413D231A8875002566A5 /* websocketsplitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4139231A8874002566A5 /* websocketsplitter.cpp */; };
+		B0AA413E231A8875002566A5 /* wshandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA413A231A8875002566A5 /* wshandler.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B0110C332249D17E006DB64F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				B0110C3B2249D17E006DB64F /* libhttp.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B0110C352249D17E006DB64F /* liblibhttp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibhttp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0110C382249D17E006DB64F /* libhttp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libhttp.h; sourceTree = "<group>"; };
+		B0110C392249D17E006DB64F /* libhttp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = libhttp.m; sourceTree = "<group>"; };
+		B0110C422249D1CF006DB64F /* httprequesthandler_cgi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequesthandler_cgi.cpp; path = ../libhttp/src/httprequesthandler_cgi.cpp; sourceTree = "<group>"; };
+		B0110C432249D1CF006DB64F /* userinfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = userinfo.cpp; path = ../libhttp/src/userinfo.cpp; sourceTree = "<group>"; };
+		B0110C442249D1CF006DB64F /* httphandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httphandler.cpp; path = ../libhttp/src/httphandler.cpp; sourceTree = "<group>"; };
+		B0110C452249D1CF006DB64F /* userman.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = userman.cpp; path = ../libhttp/src/userman.cpp; sourceTree = "<group>"; };
+		B0110C462249D1CF006DB64F /* posthandler_uploadvideo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = posthandler_uploadvideo.cpp; path = ../libhttp/src/posthandler_uploadvideo.cpp; sourceTree = "<group>"; };
+		B0110C472249D1CF006DB64F /* ajax_tree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajax_tree.cpp; path = ../libhttp/src/ajax_tree.cpp; sourceTree = "<group>"; };
+		B0110C482249D1CF006DB64F /* httpheader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpheader.cpp; path = ../libhttp/src/httpheader.cpp; sourceTree = "<group>"; };
+		B0110C492249D1CF006DB64F /* ajaxhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajaxhandler.cpp; path = ../libhttp/src/ajaxhandler.cpp; sourceTree = "<group>"; };
+		B0110C4A2249D1CF006DB64F /* httpget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpget.cpp; path = ../libhttp/src/httpget.cpp; sourceTree = "<group>"; };
+		B0110C4B2249D1CF006DB64F /* httpackparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpackparser.cpp; path = ../libhttp/src/httpackparser.cpp; sourceTree = "<group>"; };
+		B0110C4C2249D1D0006DB64F /* httprequesthandler_ajax.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequesthandler_ajax.cpp; path = ../libhttp/src/httprequesthandler_ajax.cpp; sourceTree = "<group>"; };
+		B0110C4D2249D1D0006DB64F /* ajaxcommandhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajaxcommandhandler.cpp; path = ../libhttp/src/ajaxcommandhandler.cpp; sourceTree = "<group>"; };
+		B0110C4E2249D1D0006DB64F /* httpackheader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpackheader.cpp; path = ../libhttp/src/httpackheader.cpp; sourceTree = "<group>"; };
+		B0110C4F2249D1D0006DB64F /* ajax_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ajax_tree.h; path = ../libhttp/src/ajax_tree.h; sourceTree = "<group>"; };
+		B0110C502249D1D0006DB64F /* httppostcommandhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httppostcommandhandler.cpp; path = ../libhttp/src/httppostcommandhandler.cpp; sourceTree = "<group>"; };
+		B0110C512249D1D0006DB64F /* ajax_exit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ajax_exit.h; path = ../libhttp/src/ajax_exit.h; sourceTree = "<group>"; };
+		B0110C522249D1D0006DB64F /* ajax_exit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajax_exit.cpp; path = ../libhttp/src/ajax_exit.cpp; sourceTree = "<group>"; };
+		B0110C542249D1D0006DB64F /* httptool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httptool.cpp; path = ../libhttp/src/httptool.cpp; sourceTree = "<group>"; };
+		B0110C552249D1D0006DB64F /* httprequesthandler_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequesthandler_file.cpp; path = ../libhttp/src/httprequesthandler_file.cpp; sourceTree = "<group>"; };
+		B0110C562249D1D0006DB64F /* httpformfield.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpformfield.cpp; path = ../libhttp/src/httpformfield.cpp; sourceTree = "<group>"; };
+		B0110C572249D1D0006DB64F /* httprequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequest.cpp; path = ../libhttp/src/httprequest.cpp; sourceTree = "<group>"; };
+		B0110C582249D1D0006DB64F /* httppostparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httppostparser.cpp; path = ../libhttp/src/httppostparser.cpp; sourceTree = "<group>"; };
+		B0110C592249D1D1006DB64F /* ajax_proc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajax_proc.cpp; path = ../libhttp/src/ajax_proc.cpp; sourceTree = "<group>"; };
+		B0110C5A2249D1D1006DB64F /* posthandler_uploadpicture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = posthandler_uploadpicture.cpp; path = ../libhttp/src/posthandler_uploadpicture.cpp; sourceTree = "<group>"; };
+		B0110C5B2249D1D1006DB64F /* ajax_listajaxcommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ajax_listajaxcommand.h; path = ../libhttp/src/ajax_listajaxcommand.h; sourceTree = "<group>"; };
+		B0110C5C2249D1D1006DB64F /* httpposthandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpposthandler.cpp; path = ../libhttp/src/httpposthandler.cpp; sourceTree = "<group>"; };
+		B0110C5D2249D1D1006DB64F /* ajax_listajaxcommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ajax_listajaxcommand.cpp; path = ../libhttp/src/ajax_listajaxcommand.cpp; sourceTree = "<group>"; };
+		B0110C5E2249D1D1006DB64F /* httprequesthandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequesthandler.cpp; path = ../libhttp/src/httprequesthandler.cpp; sourceTree = "<group>"; };
+		B0110C5F2249D1D1006DB64F /* httpserver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpserver.cpp; path = ../libhttp/src/httpserver.cpp; sourceTree = "<group>"; };
+		B0110C602249D1D1006DB64F /* procmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = procmanager.cpp; path = ../libhttp/src/procmanager.cpp; sourceTree = "<group>"; };
+		B0110C612249D1D1006DB64F /* ajax_proc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ajax_proc.h; path = ../libhttp/src/ajax_proc.h; sourceTree = "<group>"; };
+		B0110C622249D1D1006DB64F /* httpformfield_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpformfield_file.cpp; path = ../libhttp/src/httpformfield_file.cpp; sourceTree = "<group>"; };
+		B0110C802249D1DA006DB64F /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = ../libhttp/stdafx.h; sourceTree = "<group>"; };
+		B0AA4136231A8874002566A5 /* textparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = textparser.cpp; path = ../libhttp/src/textparser.cpp; sourceTree = "<group>"; };
+		B0AA4137231A8874002566A5 /* textparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textparser.h; path = ../libhttp/src/textparser.h; sourceTree = "<group>"; };
+		B0AA4138231A8874002566A5 /* websockethandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = websockethandler.cpp; path = ../libhttp/src/websockethandler.cpp; sourceTree = "<group>"; };
+		B0AA4139231A8874002566A5 /* websocketsplitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = websocketsplitter.cpp; path = ../libhttp/src/websocketsplitter.cpp; sourceTree = "<group>"; };
+		B0AA413A231A8875002566A5 /* wshandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wshandler.cpp; path = ../libhttp/src/wshandler.cpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B0110C322249D17E006DB64F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B0110C2C2249D17E006DB64F = {
+			isa = PBXGroup;
+			children = (
+				B0110C412249D1B3006DB64F /* src */,
+				B0110C372249D17E006DB64F /* libhttp */,
+				B0110C362249D17E006DB64F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B0110C362249D17E006DB64F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B0110C352249D17E006DB64F /* liblibhttp.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B0110C372249D17E006DB64F /* libhttp */ = {
+			isa = PBXGroup;
+			children = (
+				B0110C382249D17E006DB64F /* libhttp.h */,
+				B0110C392249D17E006DB64F /* libhttp.m */,
+			);
+			path = libhttp;
+			sourceTree = "<group>";
+		};
+		B0110C412249D1B3006DB64F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B0AA4136231A8874002566A5 /* textparser.cpp */,
+				B0AA4137231A8874002566A5 /* textparser.h */,
+				B0AA4138231A8874002566A5 /* websockethandler.cpp */,
+				B0AA4139231A8874002566A5 /* websocketsplitter.cpp */,
+				B0AA413A231A8875002566A5 /* wshandler.cpp */,
+				B0110C802249D1DA006DB64F /* stdafx.h */,
+				B0110C522249D1D0006DB64F /* ajax_exit.cpp */,
+				B0110C512249D1D0006DB64F /* ajax_exit.h */,
+				B0110C5D2249D1D1006DB64F /* ajax_listajaxcommand.cpp */,
+				B0110C5B2249D1D1006DB64F /* ajax_listajaxcommand.h */,
+				B0110C592249D1D1006DB64F /* ajax_proc.cpp */,
+				B0110C612249D1D1006DB64F /* ajax_proc.h */,
+				B0110C472249D1CF006DB64F /* ajax_tree.cpp */,
+				B0110C4F2249D1D0006DB64F /* ajax_tree.h */,
+				B0110C4D2249D1D0006DB64F /* ajaxcommandhandler.cpp */,
+				B0110C492249D1CF006DB64F /* ajaxhandler.cpp */,
+				B0110C4E2249D1D0006DB64F /* httpackheader.cpp */,
+				B0110C4B2249D1CF006DB64F /* httpackparser.cpp */,
+				B0110C622249D1D1006DB64F /* httpformfield_file.cpp */,
+				B0110C562249D1D0006DB64F /* httpformfield.cpp */,
+				B0110C4A2249D1CF006DB64F /* httpget.cpp */,
+				B0110C442249D1CF006DB64F /* httphandler.cpp */,
+				B0110C482249D1CF006DB64F /* httpheader.cpp */,
+				B0110C502249D1D0006DB64F /* httppostcommandhandler.cpp */,
+				B0110C5C2249D1D1006DB64F /* httpposthandler.cpp */,
+				B0110C582249D1D0006DB64F /* httppostparser.cpp */,
+				B0110C572249D1D0006DB64F /* httprequest.cpp */,
+				B0110C4C2249D1D0006DB64F /* httprequesthandler_ajax.cpp */,
+				B0110C422249D1CF006DB64F /* httprequesthandler_cgi.cpp */,
+				B0110C552249D1D0006DB64F /* httprequesthandler_file.cpp */,
+				B0110C5E2249D1D1006DB64F /* httprequesthandler.cpp */,
+				B0110C5F2249D1D1006DB64F /* httpserver.cpp */,
+				B0110C542249D1D0006DB64F /* httptool.cpp */,
+				B0110C5A2249D1D1006DB64F /* posthandler_uploadpicture.cpp */,
+				B0110C462249D1CF006DB64F /* posthandler_uploadvideo.cpp */,
+				B0110C602249D1D1006DB64F /* procmanager.cpp */,
+				B0110C432249D1CF006DB64F /* userinfo.cpp */,
+				B0110C452249D1CF006DB64F /* userman.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B0110C342249D17E006DB64F /* libhttp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0110C3E2249D17E006DB64F /* Build configuration list for PBXNativeTarget "libhttp" */;
+			buildPhases = (
+				B0110C312249D17E006DB64F /* Sources */,
+				B0110C322249D17E006DB64F /* Frameworks */,
+				B0110C332249D17E006DB64F /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libhttp;
+			productName = libhttp;
+			productReference = B0110C352249D17E006DB64F /* liblibhttp.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B0110C2D2249D17E006DB64F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = jjy;
+				TargetAttributes = {
+					B0110C342249D17E006DB64F = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = B0110C302249D17E006DB64F /* Build configuration list for PBXProject "libhttp" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = B0110C2C2249D17E006DB64F;
+			productRefGroup = B0110C362249D17E006DB64F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B0110C342249D17E006DB64F /* libhttp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B0110C312249D17E006DB64F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0110C692249D1D2006DB64F /* httpheader.cpp in Sources */,
+				B0110C632249D1D2006DB64F /* httprequesthandler_cgi.cpp in Sources */,
+				B0110C752249D1D2006DB64F /* httpformfield.cpp in Sources */,
+				B0AA413B231A8875002566A5 /* textparser.cpp in Sources */,
+				B0AA413D231A8875002566A5 /* websocketsplitter.cpp in Sources */,
+				B0110C6B2249D1D2006DB64F /* httpget.cpp in Sources */,
+				B0110C7F2249D1D2006DB64F /* httpformfield_file.cpp in Sources */,
+				B0110C6E2249D1D2006DB64F /* ajaxcommandhandler.cpp in Sources */,
+				B0110C7B2249D1D2006DB64F /* ajax_listajaxcommand.cpp in Sources */,
+				B0110C6A2249D1D2006DB64F /* ajaxhandler.cpp in Sources */,
+				B0110C662249D1D2006DB64F /* userman.cpp in Sources */,
+				B0110C702249D1D2006DB64F /* httppostcommandhandler.cpp in Sources */,
+				B0110C782249D1D2006DB64F /* ajax_proc.cpp in Sources */,
+				B0110C642249D1D2006DB64F /* userinfo.cpp in Sources */,
+				B0AA413C231A8875002566A5 /* websockethandler.cpp in Sources */,
+				B0110C792249D1D2006DB64F /* posthandler_uploadpicture.cpp in Sources */,
+				B0110C6D2249D1D2006DB64F /* httprequesthandler_ajax.cpp in Sources */,
+				B0110C672249D1D2006DB64F /* posthandler_uploadvideo.cpp in Sources */,
+				B0110C652249D1D2006DB64F /* httphandler.cpp in Sources */,
+				B0110C712249D1D2006DB64F /* ajax_exit.cpp in Sources */,
+				B0110C7E2249D1D2006DB64F /* procmanager.cpp in Sources */,
+				B0110C732249D1D2006DB64F /* httptool.cpp in Sources */,
+				B0110C7D2249D1D2006DB64F /* httpserver.cpp in Sources */,
+				B0110C742249D1D2006DB64F /* httprequesthandler_file.cpp in Sources */,
+				B0110C6F2249D1D2006DB64F /* httpackheader.cpp in Sources */,
+				B0110C6C2249D1D2006DB64F /* httpackparser.cpp in Sources */,
+				B0110C772249D1D2006DB64F /* httppostparser.cpp in Sources */,
+				B0110C3A2249D17E006DB64F /* libhttp.m in Sources */,
+				B0110C7A2249D1D2006DB64F /* httpposthandler.cpp in Sources */,
+				B0110C682249D1D2006DB64F /* ajax_tree.cpp in Sources */,
+				B0AA413E231A8875002566A5 /* wshandler.cpp in Sources */,
+				B0110C7C2249D1D2006DB64F /* httprequesthandler.cpp in Sources */,
+				B0110C762249D1D2006DB64F /* httprequest.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B0110C3C2249D17E006DB64F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SDKROOT = iphoneos;
+				STRIP_STYLE = debugging;
+			};
+			name = Debug;
+		};
+		B0110C3D2249D17E006DB64F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7,
+				);
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "../../include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
+				SDKROOT = iphoneos;
+				STRIP_STYLE = debugging;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B0110C3F2249D17E006DB64F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V4HWBC8N2Y;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B0110C402249D17E006DB64F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V4HWBC8N2Y;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B0110C302249D17E006DB64F /* Build configuration list for PBXProject "libhttp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0110C3C2249D17E006DB64F /* Debug */,
+				B0110C3D2249D17E006DB64F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0110C3E2249D17E006DB64F /* Build configuration list for PBXNativeTarget "libhttp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0110C3F2249D17E006DB64F /* Debug */,
+				B0110C402249D17E006DB64F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B0110C2D2249D17E006DB64F /* Project object */;
+}

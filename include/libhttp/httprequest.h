@@ -42,15 +42,25 @@ class HttpPostHandler;
 
 //XiongWanPing 2013.06.08
 //处理单个http事务
-class HTTP_EXPORT CHttpRequest :public UserInfo
+class HTTP_EXPORT HttpRequest :public UserInfo
 {
 public:
-	CHttpRequest();
-	virtual ~CHttpRequest();
+	HttpRequest();
+	virtual ~HttpRequest();
+
+	bool IsWebSocket()const
+	{
+		return mIsWebSocket;
+	}
 
 	void SetConfig(std::shared_ptr<tagWebServerConfig> config)
 	{
 		mWebConfig = config;
+	}
+
+	string GetUrl()const
+	{
+		return m_headerInfo.mUrl;
 	}
 
 	void SetPeerAddr(std::string  peerAddr)
@@ -134,6 +144,8 @@ protected:
 
 	std::string  GetServerName();
 protected:
+	int CheckWebSocket();
+	bool mIsWebSocket = false;
 	ByteBuffer * m_outbox;
 	ByteBuffer				m_outboxPending;		//有待发给m_outbox的数据
 	//m_outboxPending给CHttpRequestHandlerXXX提供足够大的空间，保证至少能提交普通的http ack header+4KB数据

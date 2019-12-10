@@ -10,16 +10,16 @@ using namespace FileSystem;
 namespace Net {
 namespace Http {
 
-NameValue	*CHttpRequestHandler_File::m_mapUriFile = NULL;
+NameValue	*HttpRequestHandler_File::m_mapUriFile = NULL;
 
-CHttpRequestHandler_File::CHttpRequestHandler_File()
+HttpRequestHandler_File::HttpRequestHandler_File()
 {
 	m_hFile = NULL;
 	m_fileSize = 0;
 	m_fileOffset = 0;
 }
 
-CHttpRequestHandler_File::~CHttpRequestHandler_File()
+HttpRequestHandler_File::~HttpRequestHandler_File()
 {
 	if (m_hFile)
 	{
@@ -28,7 +28,7 @@ CHttpRequestHandler_File::~CHttpRequestHandler_File()
 	}
 }
 
-bool CHttpRequestHandler_File::IsSending()
+bool HttpRequestHandler_File::IsSending()
 {
 	if (!m_hFile)
 	{
@@ -48,7 +48,7 @@ http range bytes是[min,max]
 比如bytes=0-100时服务器会传101字节
 已确认min是从0开始的
 */
-int CHttpRequestHandler_File::Process()
+int HttpRequestHandler_File::Process()
 {
 	ASSERT(GetStatus() == eHttpHandlerStatus_Processing);
 
@@ -87,7 +87,7 @@ int CHttpRequestHandler_File::Process()
 	return 0;
 }
 
-int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
+int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 {
 	ASSERT(!m_hFile);
 	ASSERT(m_fileSize == 0);
@@ -175,7 +175,7 @@ int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		m_hFile = NULL;
 		m_fileSize = 0;
 
-		CHttpAckHeader header;
+		HttpAckHeader header;
 		header.SetStatusCode("304 Not Modified");
 		header.SetContentType(contentType);
 		header.SetConnection("Keep-Alive");
@@ -217,7 +217,7 @@ int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		{
 			auto contentLength = m_headerInfo->m_rangeEnd - m_headerInfo->m_range + 1;
 
-			CHttpAckHeader httpAckHeader;
+			HttpAckHeader httpAckHeader;
 			httpAckHeader.SetStatusCode("206 Partial Content");
 			httpAckHeader.SetContentLength(contentLength);
 			httpAckHeader.SetContentType(contentType);
@@ -253,7 +253,7 @@ int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		}
 		else
 		{
-			CHttpAckHeader httpAckHeader;
+			HttpAckHeader httpAckHeader;
 			httpAckHeader.SetStatusCode("416 Requested Range Not Satisfiable");
 			httpAckHeader.SetContentLength(m_fileSize);
 			httpAckHeader.SetContentType(contentType);
@@ -280,7 +280,7 @@ int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	}
 	else
 	{
-		CHttpAckHeader httpAckHeader;
+		HttpAckHeader httpAckHeader;
 		httpAckHeader.SetStatusCode("200 OK");
 		if (ext == ".avi" || ext == ".mp4")
 		{
@@ -316,14 +316,14 @@ int CHttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	return Process();//发第一块文件数据
 }
 
-int CHttpRequestHandler_File::OutputPlainText(string  text, string  statusCode)
+int HttpRequestHandler_File::OutputPlainText(string  text, string  statusCode)
 {
 	string  content = StringTool::Format(
 		"<html><body>%s</body></html>",
 		text.c_str()
 	);
 
-	CHttpAckHeader httpAckHeader;
+	HttpAckHeader httpAckHeader;
 	httpAckHeader.SetStatusCode(statusCode);//"200 OK");
 	httpAckHeader.SetContentType("text/html;charset=UTF-8");
 	httpAckHeader.SetContentLength((int)content.length());
@@ -357,12 +357,12 @@ int CHttpRequestHandler_File::OutputPlainText(string  text, string  statusCode)
 	return 0;
 }
 
-int CHttpRequestHandler_File::OnFileNoAuth()
+int HttpRequestHandler_File::OnFileNoAuth()
 {
 	return OutputPlainText("No Auth", "401 No Auth");
 }
 
-int CHttpRequestHandler_File::OnFileNoFound(string  uri)
+int HttpRequestHandler_File::OnFileNoFound(string  uri)
 {
 	string  msg = StringTool::Format("Resource not found: %s", uri.c_str());
 
@@ -371,7 +371,7 @@ int CHttpRequestHandler_File::OnFileNoFound(string  uri)
 
 //filepath为真实路径,不会进行虚拟目录转换
 //所有uri file map都需要管理员权限才能访问
-void CHttpRequestHandler_File::AddUriFileMap(string  uri, string  filepath)
+void HttpRequestHandler_File::AddUriFileMap(string  uri, string  filepath)
 {
 	if (!m_mapUriFile)
 	{
@@ -381,7 +381,7 @@ void CHttpRequestHandler_File::AddUriFileMap(string  uri, string  filepath)
 	m_mapUriFile->Set(uri.c_str(), filepath.c_str());
 }
 
-void CHttpRequestHandler_File::EmptyUriFileMap()
+void HttpRequestHandler_File::EmptyUriFileMap()
 {
 	delete m_mapUriFile;
 	m_mapUriFile = NULL;

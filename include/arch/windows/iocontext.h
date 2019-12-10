@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "base/bytebuffer.h"
-#include "base/object.h"
+#include "core/base/bytebuffer.h"
+#include "core/base/object.h"
 namespace Bear {
 namespace Core
 {

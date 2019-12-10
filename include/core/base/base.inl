@@ -1,4 +1,10 @@
-#pragma once
+﻿#pragma once
+
+#ifdef _MSC_VER
+#define _CONFIG_OPENSSL //2019.12,用来支持https做微信小程序
+#define ENABLE_OPENSSL //for zltoolkit
+#endif
+
 
 #ifndef _MSC_VER
 #ifndef NDEBUG
@@ -28,7 +34,7 @@
 #endif
 
 #ifdef _CONFIG_BOOST_SP
-//由于boost sp这一部分完全是在.hpp中实现的，所以不需要编译boost, 直接引用头文件即可
+//boost sp is implemented in header
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/make_shared.hpp>
 #include <boost/smart_ptr/weak_ptr.hpp>
@@ -113,7 +119,7 @@
 #endif
 
 #ifndef _MSC_VER
-#include "win32.h"
+#include "core/base/win32.h"
 typedef unsigned long long ULONGLONG;
 #define __FUNCSIG__ __func__
 #define INVALID_HANDLE_VALUE -1
@@ -160,37 +166,40 @@ typedef struct _WSABUF {
 #include <string>
 #include <memory>
 
-//禁用复制类
+//disable copy
 #define DISABLE_COPY_CLASS(cls)		\
 private:							\
 	cls(const cls&); 				\
 	cls& operator=(const cls&);		
 
-#include "base/shelltool.h"
-#include "base/dt.h"
-#include "thread/autolock.h"
-#include "thread/criticalsection.h"
-#include "base/bytebuffer.h"
-//#include "stringex.h"
-//#include "base/keyvalue.h"
-#include "base/namevalue.h"
-#include "base/stringtool.h"
-#include "base/tickdumper.h"
-//#include "listex.h"
-#include "net/socktool.h"
-#include "file/file.h"
-#include "file/inifile.h"
-#include "file/dumpfile.h"
-#include "bundle.h"
-#include "bundleex.h"
-#include "thread/event.h"
-#include "log.h"
-//#include "string/Utf8Tool.h"
-#include "string/textprotocol.h"
-#include "string/textseparator.h"
-#include "string/xmlstring.h"
-#include "looper/handler.h"
-#include "looper/looper.h"
-#include "looper/blocklooper.h"
-#include "looper/asynctasklooper.h"
-#include "net/channel.h"
+#include "core/base/shelltool.h"
+#include "core/base/dt.h"
+#include "core/thread/autolock.h"
+#include "core/thread/criticalsection.h"
+#include "core/base/bytebuffer.h"
+//#include "core/stringex.h"
+//#include "core/base/keyvalue.h"
+#include "core/base/namevalue.h"
+#include "core/base/stringtool.h"
+#include "core/base/tickdumper.h"
+//#include "core/listex.h"
+#include "core/net/socktool.h"
+#include "core/file/file.h"
+#include "core/file/inifile.h"
+#include "core/file/dumpfile.h"
+#include "core/base/bundle.h"
+#include "core/base/bundleex.h"
+#include "core/thread/event.h"
+#include "core/base/log.h"
+//#include "core/string/Utf8Tool.h"
+#include "core/string/stringcasemap.h"
+#include "core/string/textprotocol.h"
+#include "core/string/textseparator.h"
+#include "core/string/xmlstring.h"
+#include "core/looper/handler.h"
+#include "core/looper/looper.h"
+#include "core/looper/blocklooper.h"
+#include "core/looper/asynctasklooper.h"
+#include "core/net/channel.h"
+#include "json/ArduinoJson.h"
+#include "json/jsonhelper.h"

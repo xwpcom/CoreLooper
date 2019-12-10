@@ -17,6 +17,10 @@
 #include <Windows.h>  
 #include <process.h>  
 
+#ifdef _CONFIG_OPENSSL
+#include "Util/SSLBox.h"
+#endif
+
 #ifdef _MSC_VER_DEBUG
 	#define new DEBUG_NEW
 #endif
@@ -41,11 +45,6 @@ TcpClient_Windows::TcpClient_Windows()
 
 	//DV("%s,this=0x%x", __func__, this);
 	mIocp = (HANDLE)Looper::CurrentLooper()->GetLooperHandle();
-	mSock = INVALID_SOCKET;
-	m_lpfnConnectEx = nullptr;
-
-	mSingalClosePending = false;
-	mSignalCloseHasFired = false;
 }
 
 TcpClient_Windows::~TcpClient_Windows()
@@ -63,14 +62,17 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 
 	context->mBusying = false;
 	bool repost = false;
+	auto inbox = GetRawInbox();
+	ASSERT(inbox);
+
 	if (bytes > 0)
 	{
 		UpdateRecvTick();
 
-		int ret = mInbox.Write((LPBYTE)context->mByteBuffer.GetDataPointer(), bytes);
+		int ret = inbox->Write((LPBYTE)context->mByteBuffer.GetDataPointer(), bytes);
 		if (ret == bytes)
 		{
-			int freeBytes = mInbox.GetTailFreeSize();
+			int freeBytes = inbox->GetTailFreeSize();
 			if (freeBytes > 0)
 			{
 				ret = context->PostRecv(freeBytes);
@@ -93,14 +95,6 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 	{
 		Close();
 	}
-
-	/*
-	if (!repost)
-	{
-		Close();
-		return -1;
-	}
-	*/
 
 	OnReceive();
 
@@ -194,7 +188,28 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 
 void TcpClient_Windows::OnReceive()
 {
-	SignalOnReceive(this);
+	bool fireEvent = true;
+
+#ifdef _CONFIG_OPENSSL
+	if (mTlsInfo)
+	{
+		fireEvent = false;
+		if (mTlsInfo->mSslBox && !mTlsInfo->mInboxSSL.empty())
+		{
+			char* data = (char*)mTlsInfo->mInboxSSL.data();
+			int bytes = mTlsInfo->mInboxSSL.length();
+			mTlsInfo->mInBuffer->assign((char*)data, bytes);
+			mTlsInfo->mInboxSSL.clear();
+			DV("ssl.onRecv,bytes=%d", bytes);
+			mTlsInfo->mSslBox->onRecv(mTlsInfo->mInBuffer);
+		}
+	}
+#endif
+
+	if (fireEvent)
+	{
+		SignalOnReceive(this);
+	}
 }
 
 //当可写时会调用本接口
@@ -263,21 +278,37 @@ int TcpClient_Windows::Send(LPVOID data, int dataLen)
 {
 	ASSERT(IsMyselfThread());
 
+#ifdef _CONFIG_OPENSSL
+	if (mTlsInfo)
+	{
+		mTlsInfo->mOutBuffer->assign((char*)data, dataLen);
+		if (mTlsInfo->mSslBox)
+		{
+			mTlsInfo->mSslBox->onSend(mTlsInfo->mOutBuffer);
+		}
+
+		return dataLen;
+	}
+#endif
+
 	int freeSize = mOutbox.GetFreeSize();
 	int bytes = MIN(dataLen, freeSize);
 	int ret = mOutbox.Write(data, bytes);
 
-	if (ret > 0 && !mIoContextSend.mBusying)
+	CheckSend();
+	return ret>=0?ret:0;
+}
+
+void TcpClient_Windows::CheckSend()
+{
+	if (!mIoContextSend.mBusying)
 	{
 		int ack = SendOutBox();
 		if (ack)
 		{
 			Close();
-			return 0;
 		}
 	}
-
-	return ret;
 }
 
 int TcpClient_Windows::SendOutBox()
@@ -400,15 +431,14 @@ int TcpClient_Windows::Connect(Bundle& info)
 
 	if (mainLooper)
 	{
-		auto dnsLooper = dynamic_pointer_cast<DnsLooper>(mainLooper->FindObject("DnsLooper"));
+		auto dnsLooper = _MObject(DnsLooper, "DnsLooper");
 		if (!dnsLooper)
 		{
 			auto looper = make_shared<DnsLooper>();
-			//looper->SetExitEvent(mainLooper->CreateExitEvent());
 			mainLooper->AddChild(looper);
 			looper->Start();
 
-			dnsLooper = dynamic_pointer_cast<DnsLooper>(mainLooper->FindObject("DnsLooper"));
+			dnsLooper = _MObject(DnsLooper,"DnsLooper");
 		}
 
 		if (dnsLooper)
@@ -452,6 +482,7 @@ void TcpClient_Windows::Close()
 	}
 }
 
+//服务器收到连接会运行到此
 int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 {
 	ASSERT(IsMyselfThread());
@@ -461,6 +492,8 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 	{
 		ASSERT(mSock == INVALID_SOCKET);
 		mSock = s;
+
+		CheckInitTls(true);
 
 		{
 			mPeerDesc = StringTool::Format("%s:%d", SockTool::GetPeerIP(s).c_str(), SockTool::GetPeerPort(s));
@@ -506,6 +539,7 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 	return 0;
 }
 
+//作为客户端工作，连接ack时会调用本接口
 void TcpClient_Windows::OnConnectAck()
 {
 	int ret = -1;
@@ -551,6 +585,7 @@ void TcpClient_Windows::OnConnectAck()
 	else
 	{
 		ConfigCacheBox();
+		CheckInitTls(false);
 		mIoContextRecv.PostRecv();
 
 		SignalOnConnect(this, 0, nullptr, nullptr);
@@ -560,7 +595,7 @@ void TcpClient_Windows::OnConnectAck()
 void TcpClient_Windows::ConfigCacheBox()
 {
 	{
-		mOutbox.SetBufferSize(4 * 1024, 8 * 1024);
+		mOutbox.SetBufferSize(4 * 1024, 16 * 1024);
 		mOutbox.PrepareBuf(4 * 1024);
 
 		IoContext& context = mIoContextSend;
@@ -627,6 +662,82 @@ void TcpClient_Windows::MarkEndOfSend()
 		shutdown(mSock, SD_SEND);
 	}
 }
+
+ByteBuffer* TcpClient_Windows::GetRawInbox()
+{
+#ifdef _CONFIG_OPENSSL
+	if (mTlsInfo)
+	{
+		return &mTlsInfo->mInboxSSL;
+	}
+#endif
+
+	return &mInbox;
+}
+
+#ifdef _CONFIG_OPENSSL
+
+void TcpClient_Windows::EnableTls()
+{
+	if (!mTlsInfo)
+	{
+		mTlsInfo = make_unique<tagTlsInfo>();
+	}
+}
+#endif
+
+int TcpClient_Windows::GetOutboxCacheBytes()
+{
+	return mOutbox.length();
+}
+
+void TcpClient_Windows::CheckInitTls(bool serverMode)
+{
+#ifdef _CONFIG_OPENSSL
+	if (mTlsInfo)
+	{
+		auto& obj = mTlsInfo;
+		obj->mInboxSSL.PrepareBuf(1024 * 16);
+
+		obj->mInBuffer = make_shared<BufferRaw>();
+		obj->mOutBuffer = make_shared<BufferRaw>();
+
+		obj->mSslBox = make_shared<SSL_Box>(serverMode);
+		obj->mSslBox->setOnDecData([this](const Buffer::Ptr& buffer) {
+			//public_onRecv(pBuf);
+			auto data = buffer->data();
+			auto bytes = buffer->size();
+			DV("setOnDecData,bytes=%d", bytes);
+			int ret = mInbox.Write(data, bytes);
+			ASSERT(ret == bytes);
+			mInbox.MakeSureEndWithNull();
+
+			SignalOnReceive(this);
+		});
+		obj->mSslBox->setOnEncData([this](const Buffer::Ptr& buffer) {
+			int x = 0;
+			auto data = buffer->data();
+			auto bytes = buffer->size();
+			//DV("setOnEncData,bytes=%d", bytes);
+			//public_send(buffer);
+			auto ret = mOutbox.Write(data, bytes);
+			ASSERT(ret == bytes);
+
+			CheckSend();
+		});
+
+		if (!serverMode)
+		{
+			if (!isIP(mAddress.c_str())) {
+				//设置ssl域名
+				obj->mSslBox->setHost(mAddress.c_str());//服务器不能调用setHost,否则tls握手会只返回7字节导致失败
+			}
+		}
+	}
+#endif
+
+}
+
 
 }
 }
