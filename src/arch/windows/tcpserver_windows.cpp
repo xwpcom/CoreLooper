@@ -242,6 +242,8 @@ int TcpServer_Windows::OnAccept(SOCKET s)
 		return -1;
 	}
 
+	//DV("%s,peer=%s",__func__,SockTool::GetPeerIP(s).c_str());
+
 	{
 		auto client(CreateChannel());
 		if (client)

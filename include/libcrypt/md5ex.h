@@ -1,28 +1,5 @@
-﻿// **************************************************************
-// File		   : MD5.h
-// Description : MD5数据加密操作类
-// Author	   : duanbingyang
-// Date		   : 2010-08-20
-// Revisions   :
-// **************************************************************
-
-#ifndef _MD5_DATA_CRYPT_H_
-#define _MD5_DATA_CRYPT_H_
-
-// **************************************************************
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
-// **************************************************************
-
-
-// ***********************
-//										  
-// MD5加密实现
-//
-// ***********************
 namespace Bear {
 namespace Core
 {
@@ -70,6 +47,5 @@ protected:
 	unsigned char m_szBuffer[64];		/* input buffer */
 };
 
-#endif // _MD5_DATA_CRYPT_H_
 }
 }

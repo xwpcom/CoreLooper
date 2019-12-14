@@ -200,7 +200,7 @@ void TcpClient_Windows::OnReceive()
 			int bytes = mTlsInfo->mInboxSSL.length();
 			mTlsInfo->mInBuffer->assign((char*)data, bytes);
 			mTlsInfo->mInboxSSL.clear();
-			DV("ssl.onRecv,bytes=%d", bytes);
+			//DV("ssl.onRecv,bytes=%d", bytes);
 			mTlsInfo->mSslBox->onRecv(mTlsInfo->mInBuffer);
 		}
 	}

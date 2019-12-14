@@ -15,3 +15,4 @@
 #endif
 
 #include "base64ex.h"
+#include "md5ex.h"

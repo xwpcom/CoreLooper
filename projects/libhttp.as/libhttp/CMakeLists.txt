@@ -49,8 +49,10 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/httprequesthandler_ajax.cpp
         ${SRC_DIR}/httprequesthandler_cgi.cpp
         ${SRC_DIR}/httprequesthandler_file.cpp
+        ${SRC_DIR}/httprequesthandler_json.cpp
         ${SRC_DIR}/httpserver.cpp
         ${SRC_DIR}/httptool.cpp
+        ${SRC_DIR}/jsonhandler.cpp
         ${SRC_DIR}/posthandler_uploadpicture.cpp
         ${SRC_DIR}/posthandler_uploadvideo.cpp
         ${SRC_DIR}/procmanager.cpp
