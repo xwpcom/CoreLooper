@@ -37,6 +37,8 @@
 		B0110C7D2249D1D2006DB64F /* httpserver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C5F2249D1D1006DB64F /* httpserver.cpp */; };
 		B0110C7E2249D1D2006DB64F /* procmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C602249D1D1006DB64F /* procmanager.cpp */; };
 		B0110C7F2249D1D2006DB64F /* httpformfield_file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0110C622249D1D1006DB64F /* httpformfield_file.cpp */; };
+		B091BEA623A712360054D954 /* httprequesthandler_json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B091BEA423A712350054D954 /* httprequesthandler_json.cpp */; };
+		B091BEA723A712360054D954 /* jsonhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B091BEA523A712360054D954 /* jsonhandler.cpp */; };
 		B0AA413B231A8875002566A5 /* textparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4136231A8874002566A5 /* textparser.cpp */; };
 		B0AA413C231A8875002566A5 /* websockethandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4138231A8874002566A5 /* websockethandler.cpp */; };
 		B0AA413D231A8875002566A5 /* websocketsplitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0AA4139231A8874002566A5 /* websocketsplitter.cpp */; };
@@ -93,6 +95,8 @@
 		B0110C612249D1D1006DB64F /* ajax_proc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ajax_proc.h; path = ../libhttp/src/ajax_proc.h; sourceTree = "<group>"; };
 		B0110C622249D1D1006DB64F /* httpformfield_file.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httpformfield_file.cpp; path = ../libhttp/src/httpformfield_file.cpp; sourceTree = "<group>"; };
 		B0110C802249D1DA006DB64F /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdafx.h; path = ../libhttp/stdafx.h; sourceTree = "<group>"; };
+		B091BEA423A712350054D954 /* httprequesthandler_json.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = httprequesthandler_json.cpp; path = ../libhttp/src/httprequesthandler_json.cpp; sourceTree = "<group>"; };
+		B091BEA523A712360054D954 /* jsonhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsonhandler.cpp; path = ../libhttp/src/jsonhandler.cpp; sourceTree = "<group>"; };
 		B0AA4136231A8874002566A5 /* textparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = textparser.cpp; path = ../libhttp/src/textparser.cpp; sourceTree = "<group>"; };
 		B0AA4137231A8874002566A5 /* textparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = textparser.h; path = ../libhttp/src/textparser.h; sourceTree = "<group>"; };
 		B0AA4138231A8874002566A5 /* websockethandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = websockethandler.cpp; path = ../libhttp/src/websockethandler.cpp; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 		B0110C412249D1B3006DB64F /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B091BEA423A712350054D954 /* httprequesthandler_json.cpp */,
+				B091BEA523A712360054D954 /* jsonhandler.cpp */,
 				B0AA4136231A8874002566A5 /* textparser.cpp */,
 				B0AA4137231A8874002566A5 /* textparser.h */,
 				B0AA4138231A8874002566A5 /* websockethandler.cpp */,
@@ -251,11 +257,13 @@
 				B0110C662249D1D2006DB64F /* userman.cpp in Sources */,
 				B0110C702249D1D2006DB64F /* httppostcommandhandler.cpp in Sources */,
 				B0110C782249D1D2006DB64F /* ajax_proc.cpp in Sources */,
+				B091BEA723A712360054D954 /* jsonhandler.cpp in Sources */,
 				B0110C642249D1D2006DB64F /* userinfo.cpp in Sources */,
 				B0AA413C231A8875002566A5 /* websockethandler.cpp in Sources */,
 				B0110C792249D1D2006DB64F /* posthandler_uploadpicture.cpp in Sources */,
 				B0110C6D2249D1D2006DB64F /* httprequesthandler_ajax.cpp in Sources */,
 				B0110C672249D1D2006DB64F /* posthandler_uploadvideo.cpp in Sources */,
+				B091BEA623A712360054D954 /* httprequesthandler_json.cpp in Sources */,
 				B0110C652249D1D2006DB64F /* httphandler.cpp in Sources */,
 				B0110C712249D1D2006DB64F /* ajax_exit.cpp in Sources */,
 				B0110C7E2249D1D2006DB64F /* procmanager.cpp in Sources */,
