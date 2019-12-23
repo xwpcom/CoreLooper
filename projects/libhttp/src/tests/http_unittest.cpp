@@ -149,15 +149,19 @@ public:
 					//auto crtFile = "D:/bear/server/bin/xwpcom.tpddns.cn.p12";//这个没备案，不能在微信小程序中使用
 					TcpServer_Windows::InitSSL(crtFile);
 
-					auto svr(make_shared<HttpServer>());
-					svr->SetConfig(config);
+					for(int i=0;i<2;i++)
+					{
+						auto svr(make_shared<HttpServer>());
+						svr->SetConfig(config);
 
-					svr->EnableTls();
+						svr->EnableTls();
 
-					AddChild(svr);
-					int ret = svr->StartServer(443);
+						AddChild(svr);
+
+						int port = i == 0 ? 443 : 8443;
+						int ret = svr->StartServer(port);
+					}
 				}
-
 
 				{
 					class DelayExit :public Runnable

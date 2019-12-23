@@ -55,8 +55,16 @@ std::string SSLUtil::getLastError(){
         return "No error";
     }
 }
+
+string SSLUtil::gP12FilePath;
+
 shared_ptr<X509> SSLUtil::loadPublicKey(const string &file_path_or_data, const string &passwd,bool isFile) {
 #if defined(ENABLE_OPENSSL)
+	if (isFile)
+	{
+		gP12FilePath = file_path_or_data;
+	}
+
     BIO *bio = isFile ?
               BIO_new_file((char*)file_path_or_data.data(), "r") :
               BIO_new_mem_buf((char *)file_path_or_data.data(),file_path_or_data.size());
@@ -178,6 +186,12 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
         if(cer && key && SSL_CTX_check_private_key(ctx) != 1 ){
             break;
         }
+		{
+			if (!gP12FilePath.empty() && !(SSL_CTX_load_verify_locations(ctx, gP12FilePath.c_str(), 0)))//加载ssl中间证书
+			{
+				break;
+			}
+		}
 
         return shared_ptr<SSL_CTX>(ctx,[](SSL_CTX *ptr){
             SSL_CTX_free(ptr);

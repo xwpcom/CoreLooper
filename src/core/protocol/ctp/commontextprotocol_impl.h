@@ -22,7 +22,7 @@ public:
 	{
 		mCB = cb;
 	}
-	void Reset();
+	void ResetX();
 
 	//收到网络包时调用本接口来解析处理
 	virtual int Input(void *data, int dataBytes);
@@ -49,14 +49,15 @@ protected:
 
 	CommonTextProtocolCB* mCB = nullptr;
 
-	ByteBuffer mInbox;
-	ByteBuffer mOutbox;
-
 	ByteBuffer mInputBody;
 	bool mReset = false;
 	int mSeq = -1;
 
 	map<int, Bundle> mWaitAckItems;
+private:
+	ByteBuffer mInbox;
+	ByteBuffer mOutbox;
+
 };
 
 }

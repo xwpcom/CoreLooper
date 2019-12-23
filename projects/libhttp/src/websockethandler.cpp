@@ -53,7 +53,7 @@ void WebSocketHandler::Send(Handler*, ByteBuffer& box)
 		mOutbox.MoveToHead();
 
 		auto bytes = box.length();
-		auto maxEatBytes = mOutbox.GetTailFreeSize();
+		auto maxEatBytes = mOutbox.GetMaxWritableBytes();
 		auto eatBytes = MIN(bytes, maxEatBytes);
 		if (eatBytes > 0)
 		{
@@ -91,8 +91,8 @@ void WebSocketHandler::onWebSocketEncodeData(const uint8_t* ptr, uint64_t len)
 void WebSocketHandler::CheckSend()
 {
 	{
-		LPBYTE pData = mOutbox.GetDataPointer();
-		int len = mOutbox.GetActualDataLength();
+		LPBYTE pData = mOutbox.data();
+		int len = mOutbox.length();
 		if (len > 0)
 		{
 			WebSocketHeader header;

@@ -54,6 +54,7 @@ public:
      * @return 公钥证书
      */
     static shared_ptr<X509> loadPublicKey(const string &file_path_or_data,const string &passwd = "",bool isFile = true);
+	static string gP12FilePath;//XiongWanPing 2019.11.28
 
     /**
      * 加载私钥证书，支持pem,p12后缀
@@ -72,7 +73,7 @@ public:
      * @return SSL_CTX对象
      */
     static shared_ptr<SSL_CTX> makeSSLContext(X509 *cer, EVP_PKEY *key, bool serverMode = true);
-
+	
     /**
      * 创建ssl对象
      * @param ctx SSL_CTX对象

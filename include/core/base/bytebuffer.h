@@ -221,38 +221,7 @@ public:
 
 	//写一个字节到缓存
 	int WriteByte(BYTE data);
-
-	// **************************************************************
-	// Description: 消耗指定字节的数据
-	// Parameters : 
-	// Return	  : 成功返回0
-	// Author	  : XiongWanPing
-	// Date		  : 2011-01-17
-	// Notice	  : 
-	// **************************************************************
-	int Eat(int cbEat)
-	{
-		ASSERT(m_pBuf);
-
-		if (cbEat > m_nData)
-		{
-			ASSERT(FALSE);
-			return -1;
-		}
-
-		m_nDataOff += cbEat;
-		m_nData -= cbEat;
-
-		if (m_nData == 0)
-		{
-			//消耗完所有数据时，转到首地址
-			m_nDataOff = 0;
-			m_pBuf[0] = 0;//清除，可避免解析旧字符串
-		}
-
-		return 0;
-	}
-
+	int Eat(int cbEat);
 
 	// **************************************************************
 	// Description: 从尾部开始消耗指定字节的数据

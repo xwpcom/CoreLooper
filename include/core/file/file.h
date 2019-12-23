@@ -24,6 +24,36 @@ using namespace std;
 class CORE_EXPORT File
 {
 public:
+	File();
+	virtual ~File();
+
+	int Open(const string& filePath, bool createIfNecessary = true);
+	int Read(LPBYTE data, int bytes);
+	int Write(LPBYTE data, int bytes);
+
+	int Write(const string& text)
+	{
+		return Write((LPBYTE)text.c_str(), (int)text.length());
+	}
+
+	int Flush();
+
+	UINT GetFileSize();
+	void Close();
+
+	int Seek(int offset, int from);
+	ULONG ftell();
+	bool IsEOF();
+	int ftruncate(ULONG length);
+
+	bool IsOpen()const
+	{
+		return !!mFileHandle;
+	}
+protected:
+	FILE* mFileHandle = nullptr;
+
+public:
 	class CAutoClose
 	{
 	public:

@@ -20,19 +20,19 @@ struct tagIniKey
 	}
 
 	int			m_nKeyType;
-	std::string	m_szKeyName;
-	std::string	m_szKeyValue;
+	string	m_szKeyName;
+	string	m_szKeyValue;
 };
 
 struct tagIniSection
 {
-	std::string mSectionName;
+	string mSectionName;
 
 	virtual ~tagIniSection()
 	{
 	}
 
-	std::list<std::shared_ptr<tagIniKey>> mKeys;
+	list<shared_ptr<tagIniKey>> mKeys;
 };
 
 #include "core/thread/criticalsection.h"
@@ -55,10 +55,10 @@ public:
 
 	virtual int Load(ByteBuffer& box);
 	virtual int Dump(ByteBuffer& box);
-	virtual int Dump(const std::string& filePath);
+	virtual int Dump(const string& filePath);
 
 	void Empty();
-	std::string GetFilePath()
+	string GetFilePath()
 	{
 		return mFilePath;
 	}
@@ -88,7 +88,7 @@ public:
 		return SetInt(pszSection, pszName, nValue);
 	}
 	int GetInt(const char *pszSection, const char *pszName, int nDefaultValue = 0);
-	int GetInt(std::string pszSection, const char *pszName, int nDefaultValue = 0)
+	int GetInt(string pszSection, const char *pszName, int nDefaultValue = 0)
 	{
 		return GetInt(pszSection.c_str(), pszName, nDefaultValue);
 	}
@@ -97,8 +97,8 @@ public:
 	{
 		return SetInt(section.c_str(), pszName, nValue);
 	}
-	std::string GetString(const char *pszSection, const char *pszKey, const char *pszDefault = "");
-	std::string GetString(std::string section, const char *pszKey, const char *pszDefault = "")
+	string GetString(const char *pszSection, const char *pszKey, const char *pszDefault = "");
+	string GetString(string section, const char *pszKey, const char *pszDefault = "")
 	{
 		return GetString(section.c_str(), pszKey, pszDefault);
 	}
@@ -146,26 +146,34 @@ public:
 	}
 #endif
 	int SetString(const char *pszSection, const char *pszName, const char *pszValue);
-	int SetString(std::string section, const char *pszName, const char *pszValue)
+	int SetString(string section, const char *pszName, const char *pszValue)
 	{
 		return SetString(section.c_str(), pszName, pszValue);
 	}
-	int SetString(std::string section, const char* pszName, const string& pszValue)
+	int SetString(string section, const char* pszName, const string& pszValue)
 	{
 		return SetString(section.c_str(), pszName, pszValue.c_str());
 	}
-	std::vector<std::string> GetSectionKeys(const char *pszSection);
+	vector<string> GetSectionKeys(const char *pszSection);
+
+	//not thread safe
+	list<shared_ptr<tagIniSection>>& Sections()
+	{
+		return mSections;
+	}
+
+	void RemoveSection(const string& section);
 
 protected:
-	std::shared_ptr<tagIniSection> FindSection(const char *pszSection, BOOL bCreateIfNoFind = TRUE);
-	std::shared_ptr<tagIniKey> FindKey(const char *pszSection, const char *pszKey, BOOL bCreateIfNoFind = TRUE);
+	shared_ptr<tagIniSection> FindSection(const char *pszSection, BOOL bCreateIfNoFind = TRUE);
+	shared_ptr<tagIniKey> FindKey(const char *pszSection, const char *pszKey, BOOL bCreateIfNoFind = TRUE);
 	void UpdateLastModifyTick();
 
 	CriticalSection	mCS;
-	std::string			mFilePath;
+	string			mFilePath;
 	ULONGLONG			mTickChanged;//最后修改时间
 	DWORD				mVersion;//每次数据有变化都增加版本号
-	std::list<std::shared_ptr<tagIniSection>> mSections;
+	list<shared_ptr<tagIniSection>> mSections;
 };
 }
 }}

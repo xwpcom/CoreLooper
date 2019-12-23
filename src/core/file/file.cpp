@@ -57,9 +57,9 @@ size_t File::GetFileLength(FILE *hFile)
 	}
 
 	size_t nFileSize = 0;
-	long pos = ftell(hFile);
+	long pos = ::ftell(hFile);
 	fseek(hFile, 0, SEEK_END);
-	nFileSize = ftell(hFile);
+	nFileSize = ::ftell(hFile);
 	fseek(hFile, pos, SEEK_SET);
 	return nFileSize;
 }
@@ -990,6 +990,136 @@ int File::CompareFileContent(const string& filePath1, const string& filePath2)
 
 	return memcmp(box1.data(),box2.data(),box1.length());
 }
+
+File::File()
+{
+
+}
+
+File::~File()
+{
+	Close();
+}
+
+int File::Open(const string& filePath, bool createIfNecessary)
+{
+	if (IsOpen())
+	{
+		Close();
+	}
+
+	auto fd = fopen(filePath.c_str(), "r+b");
+	if (!fd)
+	{
+		if (createIfNecessary)
+		{
+			fd = fopen(filePath.c_str(), "w+b");
+		}
+	}
+
+	if (fd)
+	{
+		mFileHandle = fd;
+		return 0;
+	}
+
+	return -1;
+}
+
+int File::Read(LPBYTE data, int bytes)
+{
+	if (IsOpen())
+	{
+		int ret = (int)fread(data, 1, bytes, mFileHandle);
+		return ret;
+	}
+
+	return 0;
+}
+
+int File::Write(LPBYTE data, int bytes)
+{
+	int ret = 0;
+	if (IsOpen() && data && bytes > 0)
+	{
+		ret = (int)fwrite(data, 1, bytes, mFileHandle);
+	}
+
+	return ret;
+}
+
+int File::Flush()
+{
+	if (IsOpen())
+	{
+		return fflush(mFileHandle);
+	}
+
+	return -1;
+}
+
+UINT File::GetFileSize()
+{
+	if (IsOpen())
+	{
+		int pos = ftell();
+		Seek(0, SEEK_END);
+		auto len = ftell();
+		Seek(pos, SEEK_SET);
+		return len;
+	}
+
+	return 0;
+}
+
+void File::Close()
+{
+	if (mFileHandle)
+	{
+		fclose(mFileHandle);
+		mFileHandle = nullptr;
+	}
+}
+
+int File::Seek(int offset, int from)
+{
+	if (IsOpen())
+	{
+		return fseek(mFileHandle, offset, from);
+	}
+
+	return -1;
+}
+
+ULONG File::ftell()
+{
+	if (IsOpen())
+	{
+		return ::ftell(mFileHandle);
+	}
+
+	return 0;
+}
+
+bool File::IsEOF()
+{
+	if (IsOpen())
+	{
+		return feof(mFileHandle);
+	}
+
+	return false;
+}
+
+int File::ftruncate(ULONG length)
+{
+#ifdef _MSC_VER
+	return _chsize(_fileno(mFileHandle), length);
+#else
+	return ::ftruncate(mFileHandle, length);
+#endif
+}
+
 
 }
 }

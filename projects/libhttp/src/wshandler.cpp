@@ -116,7 +116,7 @@ void WSHandler::UpdateTickAlive()
 	mTickAlive = ShellTool::GetTickCount64();
 }
 
-void WSHandler::OnTimer(UINT id)
+void WSHandler::OnTimer(long id)
 {
 	if(id == mTimer_CheckAlive)
 	{

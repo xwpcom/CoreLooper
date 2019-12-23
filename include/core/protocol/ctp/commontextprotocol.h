@@ -67,7 +67,7 @@ public:
 	virtual int AddNotify(const string&cmd) = 0;
 	virtual int AddNotify(const string&cmd, const Bundle& bundle) = 0;
 	virtual int AddNotify(const string&cmd, const Bundle& bundle, const ByteBuffer& body) = 0;
-	virtual void Reset() = 0;
+	virtual void ResetX() = 0;
 };
 
 class CORE_EXPORT CommonTextProtocolFactory

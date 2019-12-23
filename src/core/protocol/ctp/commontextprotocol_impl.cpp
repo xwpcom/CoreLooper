@@ -11,8 +11,8 @@ CommonTextProtocol_Impl::CommonTextProtocol_Impl()
 {
 	//mInbox.SetBufferSize(64, 64);
 	mInbox.PrepareBuf(
-		16//测试超大req时的处理
-		//16 * 1024
+		//16//测试超大req时的处理
+		16 * 1024
 	);
 
 	mOutbox.PrepareBuf(4 * 1024);
@@ -192,7 +192,11 @@ int CommonTextProtocol_Impl::ParseInbox()
 
 	int eat = dataLen - cbLeft;
 	ASSERT(eat >= 0);
-	if (eat > 0)
+	if (mReset)
+	{
+		mInbox.clear();
+	}
+	else if (eat > 0)
 	{
 		mInbox.Eat(eat);
 	}
@@ -443,7 +447,7 @@ void CommonTextProtocol_Impl::OnCommand(const string&cmd, const Bundle& inputBun
 	mOutbox.clear();
 }
 
-void CommonTextProtocol_Impl::Reset()
+void CommonTextProtocol_Impl::ResetX()
 {
 	mInbox.clear();
 	mInputBody.clear();

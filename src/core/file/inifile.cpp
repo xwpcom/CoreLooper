@@ -352,6 +352,23 @@ vector<string> IniFile::GetSectionKeys(const char *pszSection)
 	return vec;
 }
 
+void IniFile::RemoveSection(const string& section)
+{
+	AutoLock ac(&mCS);
+
+	string szSection = "[" + section + "]";
+
+	for (auto iter = mSections.begin(); iter != mSections.end(); ++iter)
+	{
+		if (StringTool::CompareNoCase((*iter)->mSectionName,szSection) == 0)
+		{
+			mSections.erase(iter);
+			UpdateLastModifyTick();
+			return;
+		}
+	}
+}
+
 #ifdef _DEBUG
 int IniFile::Test()
 {

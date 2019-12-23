@@ -1027,7 +1027,7 @@ shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri)
 		}
 		else if (ext == ".json")
 		{
-			handler = make_shared<HttpRequestHandler_Json>();
+			//handler = make_shared<HttpRequestHandler_Json>();
 		}
 		else if (StringTool::CompareNoCase(ext, ".cgi") == 0)
 		{

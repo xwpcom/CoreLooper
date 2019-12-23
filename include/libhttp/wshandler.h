@@ -22,7 +22,7 @@ public:
 	virtual void OnWebSocketClosed(Handler*);
 protected:
 	void OnCreate();
-	void OnTimer(UINT id);
+	void OnTimer(long id);
 
 	//CommonTextProtocolCB#begin
 	virtual void OnCommand(CommonTextProtocol* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody, Bundle& ackBundle, ByteBuffer& ackBody);
