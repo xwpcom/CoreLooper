@@ -78,14 +78,16 @@ const char *CommonTextProtocol_Impl::stristr(const char *psz0, const char *psz1)
 
 int CommonTextProtocol_Impl::ParseInbox()
 {
-	const LPBYTE data = mInbox.GetDataPointer();
-	const int dataLen = mInbox.GetActualDataLength();
+	const LPBYTE data = mInbox.data();
+	const int dataLen = mInbox.length();
 
 	if (!data || dataLen <= 0)
 	{
 		//ASSERT(FALSE);
 		return -1;
 	}
+
+	mInbox.Lock();
 
 	LPBYTE ps = data;
 	int cbLeft = dataLen;
@@ -189,6 +191,8 @@ int CommonTextProtocol_Impl::ParseInbox()
 			//继续解析剩下的数据
 		}
 	}
+
+	mInbox.Unlock();
 
 	int eat = dataLen - cbLeft;
 	ASSERT(eat >= 0);

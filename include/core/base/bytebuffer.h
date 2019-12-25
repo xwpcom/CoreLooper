@@ -13,9 +13,32 @@ class CORE_EXPORT ByteBuffer
 public:
 	ByteBuffer(void);
 	virtual ~ByteBuffer(void);
+	
 	void SetName(const char *name)
 	{
 		mName = name;
+	}
+
+	void Lock()
+	{
+		mLocked = true;
+	}
+
+	void Unlock()
+	{
+		mLocked = false;
+	}
+
+	bool IsLocked()const
+	{
+		return mLocked;
+	}
+
+	void AssertNotLocked()const
+	{
+#ifdef _DEBUG
+		ASSERT(!IsLocked());
+#endif
 	}
 
 	int Append(const ByteBuffer& src, bool makeSureEndNull = true);
@@ -47,6 +70,8 @@ public:
 	// **************************************************************
 	void MoveToHead()
 	{
+		AssertNotLocked();
+
 		if (m_pBuf && m_nDataOff > 0)
 		{
 			if (m_nData > 0)
@@ -152,6 +177,8 @@ public:
 	// **************************************************************
 	int WriteDirect(int nInc)
 	{
+		AssertNotLocked();
+
 		if (m_nDataOff + m_nData + nInc <= m_cbBuf)
 		{
 			m_nData += nInc;
@@ -176,6 +203,8 @@ public:
 	//清除有效数据
 	virtual void clear()
 	{
+		AssertNotLocked();
+
 		m_nDataOff = 0;
 		m_nData = 0;
 	}
@@ -187,6 +216,8 @@ public:
 
 	void EmptyEx()
 	{
+		AssertNotLocked();
+
 		if (m_pBuf)
 		{
 			delete[]m_pBuf;
@@ -200,6 +231,8 @@ public:
 
 	int Write(const std::string& str)
 	{
+		AssertNotLocked();
+
 		int ret = Write((LPVOID)str.c_str(), (int)str.length());
 		//MakeSureEndWithNull();
 		return ret;
@@ -207,6 +240,8 @@ public:
 
 	int Write(const char* str)
 	{
+		AssertNotLocked();
+
 		if (!str || str[0] == 0)
 		{
 			return 0;
@@ -233,6 +268,8 @@ public:
 	// **************************************************************
 	int ReverseEat(int cbEat)
 	{
+		AssertNotLocked();
+
 		if (cbEat < 0)
 		{
 			ASSERT(FALSE);
@@ -256,7 +293,6 @@ public:
 		return -1;
 	}
 
-
 protected:
 	LPBYTE	m_pBuf;		//buffer首地址
 	int		m_cbBuf;	//当前m_pBuf指向的buffer总字节数
@@ -264,7 +300,7 @@ protected:
 
 	int		m_nDataOff;	//有效数据起始偏移
 	int		m_nData;	//有效数据字节数
-
+	bool	mLocked = false;//加锁后为只读，不允许改动，可用来调试
 	ULONGLONG	mUserData=0;//用户自定义数据，ByteBuffer不会对其做任何操作
 
 	std::string	mName;//给ByteBuffer加个标记，方便诊断问题

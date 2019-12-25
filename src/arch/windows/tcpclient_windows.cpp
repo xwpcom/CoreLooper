@@ -707,7 +707,7 @@ void TcpClient_Windows::CheckInitTls(bool serverMode)
 			//public_onRecv(pBuf);
 			auto data = buffer->data();
 			auto bytes = buffer->size();
-			DV("setOnDecData,bytes=%d", bytes);
+			//DV("setOnDecData,bytes=%d", bytes);
 			int ret = mInbox.Write(data, bytes);
 			ASSERT(ret == bytes);
 			mInbox.MakeSureEndWithNull();

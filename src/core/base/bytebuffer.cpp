@@ -31,6 +31,8 @@ ByteBuffer::~ByteBuffer(void)
 // **************************************************************
 int ByteBuffer::SetBufferSize(UINT nInitSize,UINT nMaxSize)
 {
+	AssertNotLocked();
+
 	if(m_pBuf)
 	{
 		ASSERT(FALSE);
@@ -71,6 +73,8 @@ int ByteBuffer::SetBufferSize(UINT nInitSize,UINT nMaxSize)
 // **************************************************************
 int ByteBuffer::Write(const LPVOID data,int dataLen)
 {
+	AssertNotLocked();
+
 	LPBYTE pData = (LPBYTE)data;
 	int cbData = dataLen;
 	if(!pData || cbData<=0)
@@ -146,6 +150,7 @@ int ByteBuffer::Write(const LPVOID data,int dataLen)
 int ByteBuffer::Eat(int cbEat)
 {
 	ASSERT(m_pBuf);
+	AssertNotLocked();
 
 	if (cbEat > m_nData)
 	{
@@ -175,6 +180,8 @@ int ByteBuffer::Eat(int cbEat)
 // **************************************************************
 int ByteBuffer::WriteByte(BYTE data)
 {
+	AssertNotLocked();
+
 	if (!m_pBuf)
 	{
 		SetBufferSize();
@@ -202,6 +209,8 @@ int ByteBuffer::WriteByte(BYTE data)
 //成功时返回0,否则返回-1
 int ByteBuffer::PrepareBuf(UINT minSize,bool zero)
 {
+	AssertNotLocked();
+
 	clear();
 	int ret=0;
 	int cbFree=GetFreeSize();
@@ -236,6 +245,8 @@ bool ByteBuffer::IsEndWithNull()
 //为方便解析字符串，确保以'\0'结尾
 int ByteBuffer::MakeSureEndWithNull()
 {
+	AssertNotLocked();
+
 	if(!m_pBuf)
 	{
 		return 0;
@@ -265,6 +276,8 @@ int ByteBuffer::MakeSureEndWithNull()
 
 int ByteBuffer::Append(const ByteBuffer& src, bool makeSureEndNull)
 {
+	AssertNotLocked();
+
 	int ret = 0;
 	int bytes = src.GetActualDataLength();
 	if (bytes>0)
