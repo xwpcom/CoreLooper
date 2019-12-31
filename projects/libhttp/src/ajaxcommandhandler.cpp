@@ -97,7 +97,7 @@ string  AjaxCommandHandler::Process(string  url)
 			StringTool::xml(uri).c_str());
 	}
 
-	DV("len=%d,%s", ack.length(),ack.c_str());
+	//DV("len=%d,%s", ack.length(),ack.c_str());
 	return ack;
 }
 

@@ -88,6 +88,7 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 		}
 		else
 		{
+			DW("fail write,ret=%d,bytes=%d", ret, bytes);
 			ASSERT(FALSE);//todo
 		}
 	}
@@ -96,7 +97,13 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 		Close();
 	}
 
-	OnReceive();
+	if (!mReceiveBusying)
+	{
+		//避免重入问题
+		mReceiveBusying = true;
+		OnReceive();
+		mReceiveBusying = false;
+	}
 
 	return 0;
 }

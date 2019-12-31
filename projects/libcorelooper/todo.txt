@@ -1,4 +1,20 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////
+2019.12.25//////////////////////////////////////////////////////////////////////////////////
+bug:
+.发现Channel OnReceive有重入现象,即在处理inbox数据的过程中又进入OnReceive,会导致解析异常
+ 通过ByteBuffer::AssertNotLocked()检查到此现象
+//已在TcpClient_Windows::OnRecv采用bool避免重入问题
+//其他类，比如串口等也可能有类似问题,有待想办法彻底解决
+此问题本质是在处理GetMessage的过程中又调用了GetMessage,导致inbox接收数据嵌套
+
+想法:
+.升级ByteBuffer,每次OnRecv到新的ByteBuffer,而不是像现在这样recv用同一个ByteBuffer inbox接收
+ 可避免上面的bug
+.ByteBuffer支持子ByteBuffer,接口支持聚合
+.支持pool重用,ByteBuffer内部采用shared_ptr引用真正的buffer
+ ByteBuffer析构时把buffer返还给pool
+
+////////////////////////////////////////////////////////////////////////////////////////////
 2019.12.17//////////////////////////////////////////////////////////////////////////////////
 changes:
 .采用SSL_CTX_load_verify_locations加载ssl中间证书

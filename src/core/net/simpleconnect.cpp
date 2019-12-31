@@ -3,8 +3,7 @@
 #include "net/tcpclient.h"
 
 namespace Bear {
-namespace Core
-{
+namespace Core{
 namespace Net {
 
 SimpleConnect::SimpleConnect()

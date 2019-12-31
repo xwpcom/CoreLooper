@@ -119,7 +119,8 @@ private:
 	LPFN_CONNECTEX	m_lpfnConnectEx=nullptr;
 	bool		mSingalClosePending = false;
 	bool		mSignalCloseHasFired = false;
-	std::string		mAddress;
+	string		mAddress;
+	bool		mReceiveBusying=false;
 
 #ifdef _CONFIG_OPENSSL
 	struct tagTlsInfo

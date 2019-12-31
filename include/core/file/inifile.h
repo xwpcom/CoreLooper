@@ -103,33 +103,43 @@ public:
 		return GetString(section.c_str(), pszKey, pszDefault);
 	}
 
+	int SetString(const string& section, const string& name, const string& value)
+	{
+		return SetString(section.c_str(), name.c_str(), value.c_str());
+	}
+
+	string GetString(const string& section, const string& key, const string& defaultValue = "")
+	{
+		return GetString(section.c_str(), key.c_str(), defaultValue.c_str());
+	}
+
 #ifdef _MSC_VER
-	CString GetString(const string& section, const string& pszKey, const string& pszDefault = "")
+	CString GetStringMFC(const string& section, const string& pszKey, const string& pszDefault = "")
 	{
 		USES_CONVERSION;
 		return A2T(GetString(section.c_str(), pszKey.c_str(), pszDefault.c_str()).c_str());
 	}
-	CString GetString(CString section, CString pszKey, CString pszDefault = _T(""))
+	CString GetStringMFC(CString section, CString pszKey, CString pszDefault = _T(""))
 	{
 		USES_CONVERSION;
 		return A2T(GetString(T2A(section), T2A(pszKey), T2A(pszDefault)).c_str());
 	}
-	CString GetString(const string& section, CString pszKey, CString pszDefault = _T(""))
+	CString GetStringMFC(const string& section, CString pszKey, CString pszDefault = _T(""))
 	{
 		USES_CONVERSION;
 		return A2T(GetString(section.c_str(), T2A(pszKey), T2A(pszDefault)).c_str());
 	}
-	int SetString(CString section, CString name, CString value)
+	int SetStringMFC(CString section, CString name, CString value)
 	{
 		USES_CONVERSION;
 		return SetString(T2A(section), T2A(name), T2A(value));
 	}
-	int SetString(const string& section, const string& name, CString value)
+	int SetStringMFC(const string& section, const string& name, CString value)
 	{
 		USES_CONVERSION;
 		return SetString(section.c_str(), name.c_str(), T2A(value));
 	}
-	int SetString(const string& section, CString name, CString value)
+	int SetStringMFC(const string& section, CString name, CString value)
 	{
 		USES_CONVERSION;
 		return SetString(section, T2A(name), T2A(value));

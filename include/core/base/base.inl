@@ -165,6 +165,9 @@ typedef struct _WSABUF {
 #include <queue>
 #include <string>
 #include <memory>
+#include <chrono>  
+#include <thread> 
+#include <mutex>
 
 //disable copy
 #define DISABLE_COPY_CLASS(cls)		\

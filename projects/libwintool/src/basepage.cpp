@@ -201,7 +201,7 @@ void BasePage::SaveDlgItemString(UINT id, CString name)
 {
 	CString value;
 	GetDlgItemText(id, value);
-	mIni->SetString(mSection, name, value);
+	mIni->SetStringMFC(mSection, name, value);
 }
 
 void BasePage::SaveDlgItemInt(UINT id, CString name)
@@ -213,7 +213,7 @@ void BasePage::SaveDlgItemInt(UINT id, CString name)
 void BasePage::LoadDlgItemString(UINT id, CString name, CString defaultValue)
 {
 	USES_CONVERSION;
-	CString value = mIni->GetString(mSection, name, defaultValue);
+	CString value = mIni->GetStringMFC(mSection, name, defaultValue);
 	SetDlgItemText(id, value);
 }
 
@@ -222,7 +222,7 @@ void BasePage::LoadCombo(UINT id, CString name, CString defaultValue)
 	auto item = (CComboBox*)GetDlgItem(id);
 	ASSERT(item);
 
-	auto value = mIni->GetString(mSection, name, defaultValue);
+	auto value = mIni->GetStringMFC(mSection, name, defaultValue);
 	item->SelectString(-1, value);
 }
 
@@ -236,7 +236,7 @@ void BasePage::SaveCombo(UINT id, CString name)
 	{
 		CString value;
 		item->GetLBText(sel, value);
-		mIni->SetString(mSection, name, value);
+		mIni->SetStringMFC(mSection, name, value);
 	}
 }
 
@@ -265,7 +265,7 @@ void BasePage::SetInt(CString name, int value)
 
 void BasePage::SetString(CString name, CString value)
 {
-	mIni->SetString(mSection, name, value);
+	mIni->SetStringMFC(mSection, name, value);
 }
 
 int BasePage::GetInt(CString name, int defaultValue)
