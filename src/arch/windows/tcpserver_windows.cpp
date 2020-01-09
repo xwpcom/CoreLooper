@@ -295,6 +295,15 @@ LRESULT TcpServer_Windows::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 }
 
 #ifdef _CONFIG_OPENSSL
+/*
+中间证书检测地址：https ://www.myssl.cn/tools/check-server-cert.html
+通过此链接可以检测是否缺失中间证书；
+
+https ://www.myssl.cn/tools/check-server-cert.html
+证书来源：	缺失证书
+状态：	错误： 服务器缺少中间证书
+*/
+
 int TcpServer_Windows::InitSSL(const string& filePath)
 {
 	Logger::Instance().add(std::make_shared<ConsoleChannel>());

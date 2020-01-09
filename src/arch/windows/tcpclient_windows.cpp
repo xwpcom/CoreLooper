@@ -602,7 +602,13 @@ void TcpClient_Windows::OnConnectAck()
 void TcpClient_Windows::ConfigCacheBox()
 {
 	{
-		mOutbox.SetBufferSize(4 * 1024, 16 * 1024);
+		//todo:
+		//2020.01.07
+		//mSslBox->setOnEncData目前没做渐进处理，
+		//libiot做的微信小程序查询历史记录可能比较大,outbox要足够大能容纳下
+		//后续改进
+		mOutbox.SetBufferSize(4 * 1024, 16*1024 * 1024);
+
 		mOutbox.PrepareBuf(4 * 1024);
 
 		IoContext& context = mIoContextSend;

@@ -161,6 +161,19 @@ public:
 						int port = i == 0 ? 443 : 8443;
 						int ret = svr->StartServer(port);
 					}
+					
+					{
+						auto svr(make_shared<HttpServer>());
+						svr->SetConfig(config);
+
+						//svr->EnableTls();
+
+						AddChild(svr);
+
+						int port = 80;
+						int ret = svr->StartServer(port);
+					}
+
 				}
 
 				{

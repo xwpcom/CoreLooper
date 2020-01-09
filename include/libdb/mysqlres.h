@@ -25,7 +25,7 @@ public:
 
 	// 是否结果集末尾
 	bool IsEOF()const;
-
+										   
 	// 移动到第一行
 	bool MoveFirst();
 
