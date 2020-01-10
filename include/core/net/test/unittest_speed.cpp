@@ -13,6 +13,15 @@ namespace Speed_Test {
 TEST_CLASS(Speed_)
 {
 public:
+	TEST_METHOD(Speed_2G)
+	{
+		//计算gprs传大文件的时长
+		int bytesPerSecond = 2 * 1024;// 115200;
+		int bytes = 1024 * 1024;
+		int seconds = bytes / bytesPerSecond;
+		DV("seconds=%d", seconds);
+
+	}
 	TEST_METHOD(TestSpeed)
 	{
 		class MainLooper :public Looper

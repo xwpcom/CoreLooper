@@ -6,7 +6,7 @@
 namespace Bear {
 namespace Core
 {
-
+using namespace std;
 template<typename ... Args>
 std::string StringFormat(const char* format, Args ... args)
 {
@@ -38,6 +38,10 @@ public:
 	static bool IsHexChar(char ch);
 	static bool IsHexString(const char *sz);
 
+	static int ExtractSubString(const std::string& src, char chSep, std::vector<std::string>& arrString)
+	{
+		return ExtractSubString(src.c_str(),chSep, arrString);
+	}
 	static int ExtractSubString(const char *pszSource, char chSep, std::vector<std::string>& arrString);
 	static const char *stristr(const char *psz0, const char *psz1);
 	static const char *stristr(const std::string& sz0, const std::string& sz1)
