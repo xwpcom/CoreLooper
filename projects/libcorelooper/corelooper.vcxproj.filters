@@ -313,6 +313,9 @@
     <ClCompile Include="..\..\src\core\zltoolkit\Network\TcpServer_zl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\string\stringparam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -757,6 +760,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\json\ArduinoJson\version.hpp">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\string\stringparam.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

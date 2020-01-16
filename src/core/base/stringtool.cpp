@@ -83,6 +83,22 @@ int StringTool::CompareNoCase(const string&obj1, const string& obj2)
 
 #ifdef _MSC_VER
 	int ret = ::_stricmp(obj1.c_str(), obj2.c_str());
+#elif defined _CONFIG_SIM_CHIP
+	//sim没有stricmp和strcasecmp
+	{
+		/*
+		XiongWanPing 2020.01.15,发现sim868环境下有个奇怪的现象
+		当下面采用s1 = obj1;s2=obj2时,MakeUpper会把obj1和obj2变成大写
+		应该是s1直接使用了obj1的buffer并在上面做了修改
+		*/
+
+		string s1 = obj1.c_str();
+		string s2 = obj2.c_str();
+
+		MakeUpper(s1);
+		MakeUpper(s2);
+		ret = s1.compare(s2);
+	}
 #else
 	int ret = strcasecmp(obj1.c_str(), obj2.c_str());
 #endif

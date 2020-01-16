@@ -357,6 +357,7 @@
     <ClCompile Include="..\..\src\core\net\urltool.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.cpp" />
+    <ClCompile Include="..\..\src\core\string\stringparam.cpp" />
     <ClCompile Include="..\..\src\core\string\textprotocol.cpp" />
     <ClCompile Include="..\..\src\core\string\textseparator.cpp" />
     <ClCompile Include="..\..\src\core\string\utf8tool.cpp" />
@@ -490,6 +491,7 @@
     <ClInclude Include="..\..\include\core\net\urltool.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\commontextprotocol.h" />
     <ClInclude Include="..\..\include\core\string\stringcasemap.h" />
+    <ClInclude Include="..\..\include\core\string\stringparam.h" />
     <ClInclude Include="..\..\include\core\string\textprotocol.h" />
     <ClInclude Include="..\..\include\core\string\textseparator.h" />
     <ClInclude Include="..\..\include\core\string\utf8tool.h" />
