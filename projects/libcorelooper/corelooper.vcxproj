@@ -31,13 +31,13 @@
     <ProjectGuid>{FD47E92B-7702-459F-BFB7-81C2D64C61B9}</ProjectGuid>
     <Keyword>MFCDLLProj</Keyword>
     <RootNamespace>corelooper</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
@@ -51,7 +51,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -139,13 +139,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -164,13 +165,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -189,13 +191,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -214,13 +216,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;_WINDOWS;_DEBUG;_DEBUG_APP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -241,7 +243,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -249,7 +251,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -270,7 +273,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;D:\Tools\Java\jdk1.8.0_72\include;D:\Tools\Java\jdk1.8.0_72\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -278,7 +281,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
