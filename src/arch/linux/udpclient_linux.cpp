@@ -118,6 +118,7 @@ void UdpClient_Linux::OnEvent(DWORD events)
 #endif
 
 	//注意hup可能和in事件一起返回，所以要先处理in事件才能确保接收完整的数据
+	
 	if (events & EPOLLIN)
 	{
 		OnReceive();
@@ -126,6 +127,7 @@ void UdpClient_Linux::OnEvent(DWORD events)
 	if (events & EPOLLOUT)
 	{
 		//DV("EPOLLOUT,this=%p",this);
+		
 		if (mListenWritable)
 		{
 			DisableListenWritable();

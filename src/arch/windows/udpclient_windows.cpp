@@ -29,7 +29,6 @@ int UdpClient_Windows::Connect(Bundle& info)
 }
 
 void UdpClient_Windows::Close()
-
 {
 	DV("%s", __func__);
 }
@@ -56,20 +55,17 @@ void UdpClient_Windows::OnTimer(long timerId)
 	DV("%s", __func__);
 }
 
-//连接成功或失败会调用本接口
 int UdpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 {
 	DV("%s", __func__);
 	return -1;
 }
 
-//有数据可读时会调用本接口
 void UdpClient_Windows::OnReceive()
 {
 	DV("%s", __func__);
 }
 
-//可写时会调用本接口
 void UdpClient_Windows::OnSend()
 {
 	DV("%s", __func__);

@@ -60,10 +60,12 @@ LRESULT AsyncTaskLooper::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 	{
 		//DoTask中sendMessage时可能导致AsyncTaskLooper再次收到BM_ADD_TASK,从而导致多个task嵌套执行
 		//所以采用mBusying+缓存来保证串行执行
+		
 		tagAddTaskInfo *info = (tagAddTaskInfo*)wp;
 		if (mBusying)
 		{
 			//当前忙，加入缓存
+
 			mTasks.push_back(info->mSelf);
 
 			if (mTasks.size() >= 3)

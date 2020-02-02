@@ -35,6 +35,7 @@ int LinuxSignal::InitEx()
 }
 
 //把所有信号都重置为default状态
+
 int LinuxSignal::ResetAll()
 {
 #ifndef _MSC_VER

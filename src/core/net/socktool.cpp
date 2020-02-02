@@ -538,6 +538,7 @@ string SockTool::Int2IP(unsigned int v)
 }
 
 //设置socket读写超时,单位:秒
+
 BOOL SockTool::SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut)
 {
 	if (s <= 0)

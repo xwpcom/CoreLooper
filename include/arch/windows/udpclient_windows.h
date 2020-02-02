@@ -15,7 +15,7 @@ public:
 	int AttachSocket(SOCKET s);
 
 protected:
-	virtual int Connect(Bundle& info);//bundle中传送连接所需的信息，比如ip,port,p2p id等
+	virtual int Connect(Bundle& info);
 	virtual void Close();
 
 	virtual int Send(LPVOID data, int dataLen);
@@ -25,16 +25,11 @@ protected:
 	void OnCreate();
 	void OnTimer(long timerId);
 
-	//连接成功或失败会调用本接口
 	virtual int OnConnect(long handle, Bundle* extraInfo);
 
-	//有数据可读时会调用本接口
 	virtual void OnReceive();
 
-	//可写时会调用本接口
 	virtual void OnSend();
-
-	//Close()会调用本接口
 	virtual void OnClose();
 
 	SOCKET mSock = INVALID_SOCKET;

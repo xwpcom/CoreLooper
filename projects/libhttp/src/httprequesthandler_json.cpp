@@ -85,7 +85,7 @@ int HttpRequestHandler_Json::Start(tagHttpHeaderInfo* headerInfo)
 	{
 		static int idx = -1;
 		++idx;
-		string filePath=StringTool::Format("g:/test/device/%04d_ack.json", idx);
+		string filePath=StringTool::Format("d:/test/device/%04d_ack.json", idx);
 
 		File::Dump(ack + xml, filePath.c_str());
 	}

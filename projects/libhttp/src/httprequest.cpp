@@ -46,6 +46,7 @@ void HttpRequest::Reset()
 
 //由于需要支持超大文件上传、下载，所以需要由HttpRequest来负责解析完整的request body
 //并且需要渐进处理机制
+
 int HttpRequest::Input(ByteBuffer& inbox)
 {
 	if (mHttpPostHandler)
@@ -267,7 +268,7 @@ int HttpRequest::OnHeaderContentReady()
 		static int idx = 0;
 		string  filepath;
 #ifdef _DEBUG
-		filepath = StringTool::Format("g:/test/device/%04d_req.bin", idx++);
+		filepath = StringTool::Format("d:/test/device/%04d_req.bin", idx++);
 #else
 		filepath.Format("%s/http/%04d_req.bin", ShellTool::GetAppPath().c_str(), idx++);
 #endif

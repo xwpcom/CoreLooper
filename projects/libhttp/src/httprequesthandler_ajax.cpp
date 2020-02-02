@@ -19,7 +19,6 @@ HttpRequestHandler_Ajax::~HttpRequestHandler_Ajax()
 
 int HttpRequestHandler_Ajax::Process()
 {
-	//ajax命令总是一次性解决的
 	ASSERT(FALSE);
 	return 0;
 }
@@ -105,7 +104,7 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 	{
 		static int idx = -1;
 		++idx;
-		string  filePath = StringTool::Format("g:/test/device/%04d_ack.bin", idx);
+		string  filePath = StringTool::Format("d:/test/device/%04d_ack.bin", idx);
 
 		File::Dump(ack + xml, filePath.c_str());
 	}
