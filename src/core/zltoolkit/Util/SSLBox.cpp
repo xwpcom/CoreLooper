@@ -471,6 +471,6 @@ bool SSL_Box::setHost(const char *host) {
 
 } /* namespace toolkit */
 
-
-//FILE _iob[] = { *stdin, *stdout, *stderr };
-//extern "C" FILE * __cdecl __iob_func(void) { return _iob; }
+//XiongWanPing 2020.02.01,解决在家里电脑编译时报错 ___iob_func没有定义
+FILE _iob[] = { *stdin, *stdout, *stderr };
+extern "C" FILE * __cdecl __iob_func(void) { return _iob; }

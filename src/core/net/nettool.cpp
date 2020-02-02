@@ -300,7 +300,8 @@ bool NetTool::MacExists(const string& mac)
 	auto items = GetMacs();
 	for (auto iter = items.begin(); iter != items.end(); ++iter)
 	{
-		if (Core::StringTool::CompareNoCase(mac, *iter) == 0)
+		auto& item = *iter;
+		if (Core::StringTool::CompareNoCase(mac, item) == 0)
 		{
 			return true;
 		}
