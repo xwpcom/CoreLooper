@@ -139,7 +139,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -165,7 +165,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -243,7 +243,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;C:\Program Files\Android\Android Studio\jre\include;C:\Program Files\Android\Android Studio\jre\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
