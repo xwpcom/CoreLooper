@@ -2,6 +2,7 @@
 #include "core/base/shelltool.h"
 #include "core/base/dt.h"
 #include "core/file/file.h"
+#include "bytebuffer.h"
 
 using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;
@@ -36,6 +37,26 @@ extern "C"
 #define new DEBUG_NEW
 #endif
 
+#define _CONFIG_DT_2020 //2020 year new dt
+
+#ifdef _CONFIG_DT_2020
+enum eType
+{
+	//有些项目是固定长度，所以不需要用TLV表示
+	//eLevel//固定1 bytes
+	//ePid,	//固定4 bytes
+	//eTid,	//固定4 bytes
+	//eLine,//固定4 bytes
+	eAppName=1,
+	eTag=2,
+	eMsg=3,
+	eFile=4,
+};
+
+static char gAppName[64];
+static WORD gAppNameBytes;
+#endif
+
 #ifdef _MSC_VER
 int CDT::operator()( const char* lpszFormat, ... )
 {
@@ -43,46 +64,139 @@ int CDT::operator()( const char* lpszFormat, ... )
 	{
 		return 0;
 	}
-//*
-	char szFormat[1024*sizeof(char)];
-	char szMsg[1024*64*sizeof(char)];
-	memset(szMsg,0,sizeof(szMsg));
 
-	const char *tFile=m_lpszFile;
-	//_sntprintf_s
-	_snprintf(szFormat, sizeof(szFormat) - 1,"$$@@%s(%d)$$@@%d$$@@%s$$@@%5d(%5d)",
-		tFile,m_nLine,m_nLevel,lpszFormat,
-		ShellTool::GetCurrentProcessId(),
-		ShellTool::GetCurrentThreadId()
-		);
-
-	lpszFormat = szFormat;
-
-	va_list argList;
-	va_start(argList, lpszFormat);
-	vsprintf_s(szMsg,sizeof(szMsg)-1,(char*)lpszFormat, argList);
-	va_end(argList);
-
-	//send message to dt.exe
+#ifdef _CONFIG_DT_2020
+	//send message to new dt (2020.02.04)
 	{
-		static HWND hwnd = ::FindWindowEx(NULL,NULL,NULL,_T("DT "));
-		if(!IsWindow(hwnd))
+		const auto title = _T("DT2020 ");
+		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
+		if (!IsWindow(hwnd))
 		{
-			hwnd = ::FindWindowEx(NULL,NULL,NULL,_T("DT "));
+			hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
 		}
 
-		if(hwnd)
+		if (hwnd)
 		{
+
+			char szMsg[1024 * 64 * sizeof(char)];
+
+			va_list argList;
+			va_start(argList, lpszFormat);
+			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+			va_end(argList);
+
+			if (!gAppName[0])
+			{
+				char buf[MAX_PATH];
+				::GetModuleFileNameA(nullptr, buf, sizeof(buf));
+				auto pos = strrchr(buf, '\\');
+				if (pos)
+				{
+					++pos;
+					strncpy(gAppName, pos, sizeof(gAppName) - 1);
+					gAppNameBytes = (WORD)strlen(gAppName);
+				}
+			}
+
+			auto pid = ShellTool::GetCurrentProcessId();
+			auto tid = ShellTool::GetCurrentThreadId();
+
+			ByteBuffer box;
+
+			//static length fields
+			box.WriteByte((BYTE)m_nLevel);
+			box.Write(&pid, sizeof(pid));
+			box.Write(&tid, sizeof(tid));
+			box.Write(&m_nLine, sizeof(m_nLine));
+
+			//TLV fields
+			//T:1 bytes
+			//L:2 bytes
+			{
+				box.WriteByte((BYTE)eAppName);
+				box.Write((int)gAppNameBytes);
+				box.Write(gAppName, gAppNameBytes);
+			}
+
+			{
+				box.WriteByte((BYTE)eTag);
+
+				char* tag = "bear";
+				box.Write((int)strlen(tag));
+				box.Write(tag);
+			}
+
+			{
+				box.WriteByte((BYTE)eMsg);
+				const char* msg = szMsg;
+				int len = (int)strlen(msg);
+				box.Write(len);
+				box.Write(szMsg);
+			}
+
+			{
+				box.WriteByte((BYTE)eFile);
+				box.Write((int)strlen(m_lpszFile));
+				box.Write(m_lpszFile);
+			}
+
 			DWORD_PTR dwRet = 0;
 
-			const char *msg=szMsg;
-			const int len=(int)strlen(msg);
+			const char* msg = szMsg;
+			const int len = (int)strlen(msg);
 
 			COPYDATASTRUCT cs;
-			cs.dwData=0;
-			cs.cbData=len+1;//_tcslen(szMsg)*sizeof(char)+1;
-			cs.lpData=(LPVOID)msg;//szMsg;
-			::SendMessageTimeout(hwnd,WM_COPYDATA,0,(LPARAM)&cs,SMTO_BLOCK,10*1000,(PDWORD_PTR)&dwRet);
+			cs.dwData = 0;
+			cs.cbData = box.length();
+			cs.lpData = box.data();
+			::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
+		}
+	}
+#endif
+	
+	//*
+	{
+		char szFormat[1024 * sizeof(char)];
+		char szMsg[1024 * 64 * sizeof(char)];
+		memset(szMsg, 0, sizeof(szMsg));
+
+		const char* tFile = m_lpszFile;
+		//_sntprintf_s
+		_snprintf(szFormat, sizeof(szFormat) - 1, "$$@@%s(%d)$$@@%d$$@@%s$$@@%5d(%5d)",
+			tFile, m_nLine, m_nLevel, lpszFormat,
+			ShellTool::GetCurrentProcessId(),
+			ShellTool::GetCurrentThreadId()
+		);
+
+		lpszFormat = szFormat;
+
+		va_list argList;
+		va_start(argList, lpszFormat);
+		vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+		va_end(argList);
+
+		//send message to dt.exe
+		{
+			const auto title = _T("DT ");
+			static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
+			if (!IsWindow(hwnd))
+			{
+				hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
+			}
+
+			if (hwnd)
+			{
+				DWORD_PTR dwRet = 0;
+
+				const char* msg = szMsg;
+				const int len = (int)strlen(msg);
+
+				COPYDATASTRUCT cs;
+				cs.dwData = 0;
+				cs.cbData = len + 1;//_tcslen(szMsg)*sizeof(char)+1;
+				cs.lpData = (LPVOID)msg;//szMsg;
+				::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
+			}
 		}
 	}
 	//*/

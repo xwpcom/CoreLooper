@@ -256,6 +256,14 @@ public:
 
 	//写一个字节到缓存
 	int WriteByte(BYTE data);
+	int Write(WORD data)
+	{
+		return Write(&data, sizeof(data));
+	}
+	int Write(int data)
+	{
+		return Write(&data, sizeof(data));
+	}
 	int Eat(int cbEat);
 
 	// **************************************************************

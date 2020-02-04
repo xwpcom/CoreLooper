@@ -293,7 +293,6 @@ void CMainFrame::OnMin()
 BOOL CMainFrame::OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct) 
 {
 	COPYDATASTRUCT *pCS = pCopyDataStruct;
-	TRACE("here\n");
 
 	return CFrameWnd::OnCopyData(pWnd, pCopyDataStruct);
 }
