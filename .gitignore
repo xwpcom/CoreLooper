@@ -27,3 +27,4 @@ app-debug.apk
 app-*.apk
 *.pdb
 *.user
+/projects/dt/*.aps
