@@ -47,6 +47,7 @@ enum eType
 	//ePid,	//固定4 bytes
 	//eTid,	//固定4 bytes
 	//eLine,//固定4 bytes
+	//eEncode,//目前还没用到,todo:字符编码，比如utf8,gb2312
 	eAppName=1,
 	eTag=2,
 	eMsg=3,
