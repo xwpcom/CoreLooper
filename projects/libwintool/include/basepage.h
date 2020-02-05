@@ -14,6 +14,11 @@ public:
 		mEnableCancel = false;
 	}
 
+	void SetIniSection(const string& section)
+	{
+		mSection = section;
+	}
+
 	virtual void PreClose();
 	static void SetIni(IniFile *ini)
 	{

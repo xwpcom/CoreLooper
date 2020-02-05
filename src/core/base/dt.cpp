@@ -95,6 +95,28 @@ int CDT::operator()( const char* lpszFormat, ... )
 				{
 					++pos;
 					strncpy(gAppName, pos, sizeof(gAppName) - 1);
+					{
+						auto pos = strchr(gAppName, '.');
+						if (pos)
+						{
+							//sometimes append a 'D' in debug version app name
+							//for example: release version is BearStudio.exe
+							//debug version is BearStudioD.exe
+							//for simplify remove 'D' now
+							{
+								if (pos > gAppName + 1)
+								{
+									if (pos[-1] == 'D' && islower(pos[-2]))
+									{
+										pos[-1] = 0;
+									}
+								}
+							}
+
+							*pos = 0;
+						}
+					}
+
 					gAppNameBytes = (WORD)strlen(gAppName);
 				}
 			}
