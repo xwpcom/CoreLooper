@@ -3266,6 +3266,15 @@ TEST_CLASS(StringTool_UnitTest)
 
 TEST_CLASS(Log)
 {
+	TEST_METHOD(TestDT)
+	{
+		DV("DV");
+		DT("DT");
+		DG("DG");
+		DW("DW");
+		DE("DE");
+	}
+	
 	TEST_METHOD(SharedMemory_Writer)
 	{
 		ULONGLONG bytes = 1024 * 4*1024;

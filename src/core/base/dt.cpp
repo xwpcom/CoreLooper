@@ -43,10 +43,14 @@ extern "C"
 enum eType
 {
 	//有些项目是固定长度，所以不需要用TLV表示
+	//version,版本号,每次修改WM_COPYDATA数据格式后增加版本号
 	//eLevel//固定1 bytes
 	//ePid,	//固定4 bytes
 	//eTid,	//固定4 bytes
 	//eLine,//固定4 bytes
+	//date:DWORD,20200205
+	//time:DWORD,hhmmssMMM
+
 	//eEncode,//目前还没用到,todo:字符编码，比如utf8,gb2312
 	eAppName=1,
 	eTag=2,
@@ -124,13 +128,21 @@ int CDT::operator()( const char* lpszFormat, ... )
 			auto pid = ShellTool::GetCurrentProcessId();
 			auto tid = ShellTool::GetCurrentThreadId();
 
+			auto t = ShellTool::GetCurrentTimeMs();
+			DWORD date = t.date();
+			DWORD time = t.time() * 1000 + t.ms;
+
 			ByteBuffer box;
 
 			//static length fields
+			BYTE version = 1;
+			box.WriteByte(version);
 			box.WriteByte((BYTE)m_nLevel);
 			box.Write(&pid, sizeof(pid));
 			box.Write(&tid, sizeof(tid));
 			box.Write(&m_nLine, sizeof(m_nLine));
+			box.Write(&date, sizeof(date));
+			box.Write(&time, sizeof(time));
 
 			//TLV fields
 			//T:1 bytes
@@ -144,7 +156,8 @@ int CDT::operator()( const char* lpszFormat, ... )
 			{
 				box.WriteByte((BYTE)eTag);
 
-				char* tag = "bear";
+				char tag[100];
+				_snprintf(tag, sizeof(tag), "bear.%d", rand() % 10);
 				box.Write((int)strlen(tag));
 				box.Write(tag);
 			}

@@ -83,7 +83,14 @@ public:
 	void ShowItem(UINT id);
 	void HideItem(UINT id);
 
-	void OnOK(){}
+	void OnOK()
+	{
+		if (mEnableOK)
+		{
+			__super::OnOK();
+		}
+	
+	}
 	void OnCancel()
 	{
 		if (mEnableCancel)
@@ -112,6 +119,7 @@ protected:
 	virtual void SaveConfig();
 
 	string mSection;
+	bool mEnableOK=false;
 	bool mEnableCancel;
 	bool	mSaveAndStoreWindowsPosition = false;
 	bool	mWaitFirstShow = true;
