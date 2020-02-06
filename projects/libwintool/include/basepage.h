@@ -19,6 +19,21 @@ public:
 		mSection = section;
 	}
 
+	const string& GetIniSection()const
+	{
+		return mSection;
+	}
+
+	void EnableAutoSaveConfig()
+	{
+		mAutoSaveConfig = true;
+	}
+
+	void DisableAutoSaveConfig()
+	{
+		mAutoSaveConfig = false;
+	}
+
 	virtual void PreClose();
 	static void SetIni(IniFile *ini)
 	{
@@ -121,6 +136,7 @@ protected:
 	string mSection;
 	bool mEnableOK=false;
 	bool mEnableCancel;
+	bool	mAutoSaveConfig = true;
 	bool	mSaveAndStoreWindowsPosition = false;
 	bool	mWaitFirstShow = true;
 	bool	mDisableIfNoHndler = true;

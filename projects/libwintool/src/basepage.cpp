@@ -161,12 +161,16 @@ void BasePage::OnDestroy()
 {
 	CDialogEx::OnDestroy();
 
-	SaveConfig();
-
-	if (mSaveAndStoreWindowsPosition)
+	if (mAutoSaveConfig)
 	{
-		USES_CONVERSION;
-		ShellTool::SaveWindowPos(m_hWnd, A2T(mSection.c_str()));
+		SaveConfig();
+
+		if (mSaveAndStoreWindowsPosition)
+		{
+			USES_CONVERSION;
+			ShellTool::SaveWindowPos(m_hWnd, A2T(mSection.c_str()));
+		}
+
 	}
 
 	if (mToast)
