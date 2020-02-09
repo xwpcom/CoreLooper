@@ -98,7 +98,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRYPT_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\os\openssl.source\lib\include;src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,7 +146,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRYPT_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\os\openssl.source\lib\include;src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
