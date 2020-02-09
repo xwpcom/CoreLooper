@@ -90,23 +90,6 @@ typedef long* LONG_PTR;
 
 //#define CriticalSection	CriticalSection
 
-/*
-#ifndef DT_MIN
-#define DT_MIN	0
-enum eDTLevel
-{
-	DT_DISABLE	=0,
-	DT_FATAL,
-	DT_ERROR,
-	DT_WARNING,
-	DT_NOTICE,
-	DT_TRACE,
-	DT_VERBOSE,
-	DT_MAX,
-};
-#endif
-//*/
-
 #if defined _MSC_VER && defined _DEBUG
 #define _MSC_VER_DEBUG
 //#define new DEBUG_NEW

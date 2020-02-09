@@ -1141,6 +1141,48 @@ int ShellTool::KillProcessByName(const char *szToTerminate)
 	return 0;
 }
 
+BOOL ShellTool::CopyTextToClipboard(HWND hWnd, const std::string& text)
+{
+	USES_CONVERSION;
+	CString t = A2T(text.c_str());
+	return CopyTextToClipboard(hWnd, t);
+}
+
+BOOL ShellTool::CopyTextToClipboard(HWND hWnd, CString text)
+{
+	if (!::OpenClipboard(hWnd))
+	{
+		return FALSE;
+	}
+
+	EmptyClipboard();
+
+	int cch = text.GetLength();
+	HGLOBAL hglbCopy = GlobalAlloc(GMEM_MOVEABLE, (cch + 1) * sizeof(TCHAR));
+	if (hglbCopy == NULL)
+	{
+		CloseClipboard();
+		return FALSE;
+	}
+
+	// Lock the handle and copy the text to the buffer. 
+
+	LPTSTR lptstrCopy = (LPTSTR)GlobalLock(hglbCopy);
+	memcpy(lptstrCopy, text, cch * sizeof(TCHAR));
+	lptstrCopy[cch] = (TCHAR)0;    // null character 
+	GlobalUnlock(hglbCopy);
+
+	// Place the handle on the clipboard. 
+	auto uFormat = CF_UNICODETEXT;
+#ifndef _UNICODE
+	uFormat = CF_TEXT;
+#endif
+	SetClipboardData(uFormat, hglbCopy);
+	CloseClipboard();
+
+	return TRUE;
+}
+
 int ShellTool::ShowInFolder(const string& filePath)
 {
 	int ret = -1;

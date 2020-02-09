@@ -206,6 +206,20 @@ bool StringTool::IsHexString(const char *sz)
 	return true;
 }
 
+int StringTool::ExtractInts(const string& src, char chSep, std::vector<int>& items)
+{
+	items.clear();
+
+	vector<string> texts;
+	ExtractSubString(src, chSep, texts);
+	for (auto& item : texts)
+	{
+		items.push_back(atoi(item.c_str()));
+	}
+
+	return 0;
+}
+
 int StringTool::ExtractSubString(const char *pszSource, char chSep, vector<string>& arrString)
 {
 	if (!pszSource || pszSource[0] == 0)

@@ -43,6 +43,7 @@ public:
 		return ExtractSubString(src.c_str(),chSep, arrString);
 	}
 	static int ExtractSubString(const char *pszSource, char chSep, std::vector<std::string>& arrString);
+	static int ExtractInts(const string& src, char chSep, std::vector<int>& items);
 	static const char *stristr(const char *psz0, const char *psz1);
 	static const char *stristr(const std::string& sz0, const std::string& sz1)
 	{

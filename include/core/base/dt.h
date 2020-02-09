@@ -14,15 +14,11 @@ namespace Core
 
 enum eDTLevel
 {
-	DT_MIN = 0,
-	DT_DISABLE = 0,
-	DT_FATAL,
-	DT_ERROR,
-	DT_WARNING,
-	DT_NOTICE,
-	DT_TRACE,
+	DT_ERROR=0,
+	DT_WARN,
+	DT_INFO,
+	DT_DEBUG,
 	DT_VERBOSE,
-	DT_MAX,
 };
 
 class CORE_EXPORT CDT
@@ -33,6 +29,7 @@ public:
 	{
 	}
 
+	int operator()(const char* tag, const char* lpszFormat, ...);
 	int operator()(const char* lpszFormat, ...);
 	static void enableDT(bool enable);
 	static bool isDTEnabled()
@@ -40,6 +37,9 @@ public:
 		return mEnabled;
 	}
 protected:
+	void send(HWND hwnd, char* msg);
+
+	const char* mTag="";
 	const char* m_lpszFile;
 	int m_nLine;
 	int m_nLevel;
@@ -57,13 +57,20 @@ protected:
 //在windows下用DT.exe接收,其源码在projects\dt\DebugHelper.sln
 //在linux下输出在Terminal或SecureCRT
 //在xcode中输出到output中
+//2020版支持tag
 #define DV	(CDT( __FILE__, __LINE__,DT_VERBOSE))
-#define DT	(CDT( __FILE__, __LINE__,DT_TRACE))
-#define DG	(CDT( __FILE__, __LINE__,DT_NOTICE))
-#define DW	(CDT( __FILE__, __LINE__,DT_WARNING))
+#define DT	(CDT( __FILE__, __LINE__,DT_DEBUG))
+#define DG	(CDT( __FILE__, __LINE__,DT_INFO))
+#define DW	(CDT( __FILE__, __LINE__,DT_WARN))
 #define DE	(CDT( __FILE__, __LINE__,DT_ERROR))
-#define DF	(CDT( __FILE__, __LINE__,DT_FATAL))
+
 #endif
+
+#define LogV	DV
+#define LogD	DT
+#define LogI	DG
+#define LogW	DW
+#define LogE	DE
 
 #define ONLY_ONCE(x)	\
 	do{						\

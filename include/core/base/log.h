@@ -1,7 +1,11 @@
 ﻿#pragma once
+
+#ifdef _CONFIG_HANDLER_LOG
+
 namespace Bear {
 namespace Core
 {
+
 class CORE_EXPORT Log
 {
 public:
@@ -13,3 +17,4 @@ public:
 };
 }
 }
+#endif

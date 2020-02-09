@@ -359,6 +359,7 @@ public:
 	virtual int Test();
 	virtual void DumpProcData(std::string& xml, DWORD flags = 0);
 
+#ifdef _CONFIG_HANDLER_LOG
 	virtual void LogV(const char* pszFormat, ...);
 	virtual void LogD(const char* pszFormat, ...);
 	virtual void LogI(const char* pszFormat, ...);
@@ -367,6 +368,7 @@ public:
 	static  void Log(const std::string&tag, int level, tagObjectLogConfig& cfg, const char* text);
 
 	static void GetLogConfig(const std::string& objName, tagObjectLogConfig& cfg);
+#endif
 
 #endif
 

@@ -4,6 +4,8 @@
 
 using namespace Bear::Core;
 
+#ifdef _CONFIG_HANDLER_LOG
+
 void Log::v(const char *tag, const char*pszFormat, ...)
 {
 	unused(tag);
@@ -38,3 +40,5 @@ void Log::e(const char *tag, const char*pszFormat, ...)
 
 	LOG_IMPL(tag, eLogE);
 }
+
+#endif

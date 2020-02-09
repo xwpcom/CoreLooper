@@ -1071,6 +1071,8 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 	}
 }
 
+#ifdef _CONFIG_HANDLER_LOG
+
 void Handler::LogV(const char* pszFormat, ...)
 {
 	LOG_IMPL(GetObjectName(), eLogV);
@@ -1301,6 +1303,7 @@ void Handler::SaveLogConfig(IniFile *ini, const string& section)
 	}
 }
 
+#endif
 #endif
 
 

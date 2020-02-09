@@ -63,21 +63,149 @@ static WORD gAppNameBytes;
 #endif
 
 #ifdef _MSC_VER
+static const auto* gTitle = _T("DT2020 ");
+
+int CDT::operator()(const char* tag,const char* lpszFormat, ...)
+{
+	if (!mEnabled)
+	{
+		return -1;
+	}
+
+	mTag = tag;
+#ifdef _CONFIG_DT_2020
+	//send message to new dt (2020.02.04)
+	{
+		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+		if (!IsWindow(hwnd))
+		{
+			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+		}
+
+		if (hwnd)
+		{
+
+			char szMsg[1024 * 64 * sizeof(char)];
+
+			va_list argList;
+			va_start(argList, lpszFormat);
+			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+			va_end(argList);
+			send(hwnd, szMsg);
+		}
+	}
+#endif
+	return 0;
+}
+
+void CDT::send(HWND hwnd,char *msg)
+{
+	if (!gAppName[0])
+	{
+		char buf[MAX_PATH];
+		::GetModuleFileNameA(nullptr, buf, sizeof(buf));
+		auto pos = strrchr(buf, '\\');
+		if (pos)
+		{
+			++pos;
+			strncpy_s(gAppName, pos, sizeof(gAppName) - 1);
+			{
+				auto pos = strchr(gAppName, '.');
+				if (pos)
+				{
+					//sometimes append a 'D' in debug version app name
+					//for example: release version is BearStudio.exe
+					//debug version is BearStudioD.exe
+					//for simplify remove 'D' now
+					{
+						if (pos > gAppName + 1)
+						{
+							if (pos[-1] == 'D' && islower(pos[-2]))
+							{
+								pos[-1] = 0;
+							}
+						}
+					}
+
+					*pos = 0;
+				}
+			}
+
+			gAppNameBytes = (WORD)strlen(gAppName);
+		}
+	}
+
+	auto pid = ShellTool::GetCurrentProcessId();
+	auto tid = ShellTool::GetCurrentThreadId();
+
+	auto t = ShellTool::GetCurrentTimeMs();
+	DWORD date = t.date();
+	DWORD time = t.time() * 1000 + t.ms;
+
+	ByteBuffer box;
+
+	//static length fields
+	BYTE version = 1;
+	box.WriteByte(version);
+	box.WriteByte((BYTE)m_nLevel);
+	box.Write(&pid, sizeof(pid));
+	box.Write(&tid, sizeof(tid));
+	box.Write(&m_nLine, sizeof(m_nLine));
+	box.Write(&date, sizeof(date));
+	box.Write(&time, sizeof(time));
+
+	//TLV fields
+	//T:1 bytes
+	//L:2 bytes
+	{
+		box.WriteByte((BYTE)eAppName);
+		box.Write((int)gAppNameBytes);
+		box.Write(gAppName, gAppNameBytes);
+	}
+
+	{
+		box.WriteByte((BYTE)eTag);
+
+		box.Write((int)strlen(mTag));
+		box.Write(mTag);
+	}
+
+	{
+		box.WriteByte((BYTE)eMsg);
+		int len = (int)strlen(msg);
+		box.Write(len);
+		box.Write(msg);
+	}
+
+	{
+		box.WriteByte((BYTE)eFile);
+		box.Write((int)strlen(m_lpszFile));
+		box.Write(m_lpszFile);
+	}
+
+	DWORD_PTR dwRet = 0;
+
+	COPYDATASTRUCT cs;
+	cs.dwData = 0;
+	cs.cbData = box.length();
+	cs.lpData = box.data();
+	::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
+}
+
 int CDT::operator()( const char* lpszFormat, ... )
 {
-	if(!mEnabled)
+	if (!mEnabled)
 	{
-		return 0;
+		return -1;
 	}
 
 #ifdef _CONFIG_DT_2020
 	//send message to new dt (2020.02.04)
 	{
-		const auto title = _T("DT2020 ");
-		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
+		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
 		if (!IsWindow(hwnd))
 		{
-			hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
+			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
 		}
 
 		if (hwnd)
@@ -90,152 +218,10 @@ int CDT::operator()( const char* lpszFormat, ... )
 			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
 			va_end(argList);
 
-			if (!gAppName[0])
-			{
-				char buf[MAX_PATH];
-				::GetModuleFileNameA(nullptr, buf, sizeof(buf));
-				auto pos = strrchr(buf, '\\');
-				if (pos)
-				{
-					++pos;
-					strncpy(gAppName, pos, sizeof(gAppName) - 1);
-					{
-						auto pos = strchr(gAppName, '.');
-						if (pos)
-						{
-							//sometimes append a 'D' in debug version app name
-							//for example: release version is BearStudio.exe
-							//debug version is BearStudioD.exe
-							//for simplify remove 'D' now
-							{
-								if (pos > gAppName + 1)
-								{
-									if (pos[-1] == 'D' && islower(pos[-2]))
-									{
-										pos[-1] = 0;
-									}
-								}
-							}
-
-							*pos = 0;
-						}
-					}
-
-					gAppNameBytes = (WORD)strlen(gAppName);
-				}
-			}
-
-			auto pid = ShellTool::GetCurrentProcessId();
-			auto tid = ShellTool::GetCurrentThreadId();
-
-			auto t = ShellTool::GetCurrentTimeMs();
-			DWORD date = t.date();
-			DWORD time = t.time() * 1000 + t.ms;
-
-			ByteBuffer box;
-
-			//static length fields
-			BYTE version = 1;
-			box.WriteByte(version);
-			box.WriteByte((BYTE)m_nLevel);
-			box.Write(&pid, sizeof(pid));
-			box.Write(&tid, sizeof(tid));
-			box.Write(&m_nLine, sizeof(m_nLine));
-			box.Write(&date, sizeof(date));
-			box.Write(&time, sizeof(time));
-
-			//TLV fields
-			//T:1 bytes
-			//L:2 bytes
-			{
-				box.WriteByte((BYTE)eAppName);
-				box.Write((int)gAppNameBytes);
-				box.Write(gAppName, gAppNameBytes);
-			}
-
-			{
-				box.WriteByte((BYTE)eTag);
-
-				char tag[100];
-				_snprintf(tag, sizeof(tag), "bear.%d", rand() % 10);
-				box.Write((int)strlen(tag));
-				box.Write(tag);
-			}
-
-			{
-				box.WriteByte((BYTE)eMsg);
-				const char* msg = szMsg;
-				int len = (int)strlen(msg);
-				box.Write(len);
-				box.Write(szMsg);
-			}
-
-			{
-				box.WriteByte((BYTE)eFile);
-				box.Write((int)strlen(m_lpszFile));
-				box.Write(m_lpszFile);
-			}
-
-			DWORD_PTR dwRet = 0;
-
-			const char* msg = szMsg;
-			const int len = (int)strlen(msg);
-
-			COPYDATASTRUCT cs;
-			cs.dwData = 0;
-			cs.cbData = box.length();
-			cs.lpData = box.data();
-			::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
+			send(hwnd,szMsg);
 		}
 	}
 #endif
-	
-	//*
-	{
-		char szFormat[1024 * sizeof(char)];
-		char szMsg[1024 * 64 * sizeof(char)];
-		memset(szMsg, 0, sizeof(szMsg));
-
-		const char* tFile = m_lpszFile;
-		//_sntprintf_s
-		_snprintf(szFormat, sizeof(szFormat) - 1, "$$@@%s(%d)$$@@%d$$@@%s$$@@%5d(%5d)",
-			tFile, m_nLine, m_nLevel, lpszFormat,
-			ShellTool::GetCurrentProcessId(),
-			ShellTool::GetCurrentThreadId()
-		);
-
-		lpszFormat = szFormat;
-
-		va_list argList;
-		va_start(argList, lpszFormat);
-		vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
-		va_end(argList);
-
-		//send message to dt.exe
-		{
-			const auto title = _T("DT ");
-			static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
-			if (!IsWindow(hwnd))
-			{
-				hwnd = ::FindWindowEx(NULL, NULL, NULL, title);
-			}
-
-			if (hwnd)
-			{
-				DWORD_PTR dwRet = 0;
-
-				const char* msg = szMsg;
-				const int len = (int)strlen(msg);
-
-				COPYDATASTRUCT cs;
-				cs.dwData = 0;
-				cs.cbData = len + 1;//_tcslen(szMsg)*sizeof(char)+1;
-				cs.lpData = (LPVOID)msg;//szMsg;
-				::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
-			}
-		}
-	}
-	//*/
 	return 0;
 }
 #else
@@ -293,7 +279,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 
 	char header[100];
 	header[0]=0;
-	if(nLevel == DT_WARNING)
+	if(nLevel == DT_WARN)
 	{
 		strcat(header,"###Warning");
 	}
@@ -394,7 +380,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 		android_LogPriority p=ANDROID_LOG_INFO;
 		if(nLevel == DT_VERBOSE)
 			p=ANDROID_LOG_INFO;
-		if(nLevel == DT_WARNING )
+		if(nLevel == DT_WARN)
 			p=ANDROID_LOG_WARN;
 		else if (nLevel == DT_ERROR || nLevel == DT_FATAL)
 		{
