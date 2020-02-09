@@ -48,6 +48,10 @@ protected:  // control bar embedded members
 	CMFCToolBarImages m_PanelImages;
 	CMFCRibbonStatusBar  m_wndStatusBar;
 	ChildView    m_wndView;
+	string mSection="mainFrame";
+	bool mKeepTop = true;
+	void ApplyKeepTop();
+	void OnUpdateKeepTop(CCmdUI* pCmdUI);
 
 // Generated message map functions
 protected:
@@ -55,6 +59,7 @@ protected:
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
 	afx_msg void OnApplicationLook(UINT id);
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
+	void OnKeepTop();
 	DECLARE_MESSAGE_MAP()
 
 public:

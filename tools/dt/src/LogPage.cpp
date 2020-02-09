@@ -289,8 +289,11 @@ void LogPage::OnRelayout(const CRect& rc)
 	rcItem.bottom = rcItem.top + 32;
 	mFilterPage->MoveWindow(rcItem);
 
+	int itemHeight = rc.Height() / 5;
+	itemHeight = MIN(itemHeight, 160);
+
 	rcItem.top = rcItem.bottom + 1;
-	rcItem.bottom = rc.bottom - 200;
+	rcItem.bottom = rc.bottom - itemHeight;
 	if (rcItem.bottom < rcItem.top)
 	{
 		rcItem.bottom = rcItem.top;

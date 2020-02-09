@@ -72,7 +72,7 @@ int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 		BOOL CanConfig = IsAuthAction("devcfg");
 		if (CanConfig)
 		{
-			DF("reboot.cgi reboot");
+			DW("reboot.cgi reboot");
 			ASSERT(FALSE);
 			//g_pApp->SetDelayReboot();
 			ack = "[ok]\r\n";
@@ -83,7 +83,7 @@ int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 		BOOL CanConfig = IsAuthAction("devcfg");
 		if (CanConfig)
 		{
-			DF("restore_factory.cgi reboot");
+			DW("restore_factory.cgi reboot");
 			//g_pApp->m_ini.SetInt(IDS_APP,"reset",1);
 			//g_pApp->RestoreFactoryConfig();
 			//g_pApp->SetDelayReboot();

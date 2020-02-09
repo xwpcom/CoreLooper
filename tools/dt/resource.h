@@ -89,13 +89,15 @@
 #define ID_COPY_ALL                     34021
 #define ID_COPY                         34022
 #define ID_CLEAR                        34023
+#define ID_TOP                          34024
+#define ID_KEEP_TOP                     34024
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319
-#define _APS_NEXT_COMMAND_VALUE         34024
+#define _APS_NEXT_COMMAND_VALUE         34025
 #define _APS_NEXT_CONTROL_VALUE         1016
 #define _APS_NEXT_SYMED_VALUE           318
 #endif

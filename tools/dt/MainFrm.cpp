@@ -20,6 +20,8 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
 	ON_WM_SETFOCUS()
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &MainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &MainFrame::OnUpdateApplicationLook)
+	ON_COMMAND(ID_KEEP_TOP,OnKeepTop)
+	ON_UPDATE_COMMAND_UI(ID_KEEP_TOP,OnUpdateKeepTop)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -80,6 +82,14 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableAutoHidePanes(CBRS_ALIGN_ANY);
 	// set the visual manager and style based on persisted value
 	OnApplicationLook(theApp.m_nAppLook);
+
+	{
+		auto app = (App*)AfxGetApp();
+		auto& ini = app->mIni;
+		mKeepTop=ini.GetBool(mSection.c_str(), "keepTop", true);
+
+		ApplyKeepTop();
+	}
 
 	return 0;
 }
@@ -232,4 +242,32 @@ void MainFrame::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CFrameWndEx::OnTimer(nIDEvent);
+}
+
+void MainFrame::OnKeepTop()
+{
+	mKeepTop = !mKeepTop;
+
+	auto app = (App*)AfxGetApp();
+	auto& ini = app->mIni;
+	ini.SetBool(mSection.c_str(), "keepTop", mKeepTop);
+
+	ApplyKeepTop();
+}
+
+void MainFrame::ApplyKeepTop()
+{
+	if (mKeepTop)
+	{
+		SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	}
+	else
+	{
+		SetWindowPos(&wndNoTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	}
+}
+
+void MainFrame::OnUpdateKeepTop(CCmdUI *pCmdUI)
+{
+	pCmdUI->SetCheck(mKeepTop);
 }
