@@ -175,6 +175,8 @@ int LogPage::Init()
 static const char* TAG = "LogPage";
 void test()
 {
+	return;
+
 	DV("DV");
 	DT("DT\r\nline2\r\nline3");
 	DG("DG\r\nline2\r\nline3");
@@ -383,7 +385,7 @@ void LogPage::RemoveSection()
 
 void LogPage::OnNMRClickList(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	DV("%s", __func__);
+	//DV("%s", __func__);
 
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO: Add your control notification handler code here
@@ -436,7 +438,7 @@ void LogPage::OnOpenFileGotoLine()
 	);
 
 	auto ret=WinExec(cmd.c_str(), SW_SHOW);
-	DV("ret=%d,%s(%d)", ret,item->file.c_str(), item->line);
+	//DV("ret=%d,%s(%d)", ret,item->file.c_str(), item->line);
 
 }
 

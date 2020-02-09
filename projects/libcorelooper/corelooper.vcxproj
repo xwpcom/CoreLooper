@@ -139,13 +139,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;../../depends/jdk/include;../../depends/jdk/include/win32;../../depends/openssl/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
       <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
@@ -165,13 +165,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;../../depends/jdk/include;../../depends/jdk/include/win32;../../depends/openssl/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
       <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
@@ -243,7 +243,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;$(JDK)\include;$(JDK)\include\win32;$(OPENSSL)\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;../../depends/jdk/include;../../depends/jdk/include/win32;../../depends/openssl/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -251,7 +251,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
-      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;E:\tools\OpenSSL-Win32\lib\VC\static;;$(OPENSSL)\lib\VC\static</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
       <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>

@@ -9,6 +9,6 @@ XiongWanPing 2020.02.09
 - 支持多tab
 - tab title可修改
 - 可修改log级别，支持app和tag过滤
-- 双击日志可在vs中定位到代码行(需要OpenFileGotoLine.exe配合)
+- 双击日志可在vs中定位到代码行(需要OpenFileGotoLine.exe配合,并且vs已运行)
 - 支持缓存条数设置
 
