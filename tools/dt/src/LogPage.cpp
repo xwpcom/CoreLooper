@@ -166,7 +166,7 @@ int LogPage::Init()
 		}
 	}
 
-	test();
+	//test();
 
 	return ret;
 }

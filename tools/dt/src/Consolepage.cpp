@@ -84,7 +84,7 @@ protected:
 int ConsolePage::Init()
 {
 	{
-		mMaxLogCount = mIni->GetInt(mSection, "maxLogCount", 1000 * 1000);
+		mMaxLogCount = mIni->GetInt(mSection, "maxLogCount", 1000 * 100);
 		if (mMaxLogCount <= 1000)
 		{
 			mMaxLogCount = 1000;
@@ -390,6 +390,8 @@ void ConsolePage::SaveConfig()
 
 	auto activeTab = mTab.GetActiveTab();
 	mIni->SetInt(mSection, "activeTab", activeTab);
+
+	mIni->SetInt(mSection, "maxLogCount", mMaxLogCount);
 }
 
 int ConsolePage::GetFreePageId()
