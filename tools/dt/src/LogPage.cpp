@@ -166,7 +166,7 @@ int LogPage::Init()
 		}
 	}
 
-	//test();
+	test();
 
 	return ret;
 }
@@ -415,9 +415,22 @@ void LogPage::OnOpenFileGotoLine()
 		return;
 	}
 
-	string cmd = StringTool::Format(
-		"%s/OpenFileGotoLine.exe \"%s\" %d"
+	string exe = StringTool::Format("%s/%s"
 		, ShellTool::GetAppPath().c_str()
+		,"OpenFileGotoLine.exe"
+	);
+
+	if (!File::FileExists(exe))
+	{
+		USES_CONVERSION;
+		CString text = _T("no found OpenFileGotoLine.exe");
+		ShowToast(text);
+		return;
+	}
+
+	string cmd = StringTool::Format(
+		"%s \"%s\" %d"
+		,exe.c_str()
 		,item->file.c_str()
 		,item->line
 	);
