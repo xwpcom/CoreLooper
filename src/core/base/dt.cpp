@@ -65,14 +65,8 @@ static WORD gAppNameBytes;
 #ifdef _MSC_VER
 static const auto* gTitle = _T("DT2020 ");
 
-int CDT::operator()(const char* tag,const char* lpszFormat, ...)
+int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 {
-	if (!mEnabled)
-	{
-		return -1;
-	}
-
-	mTag = tag;
 #ifdef _CONFIG_DT_2020
 	//send message to new dt (2020.02.04)
 	{
@@ -91,15 +85,27 @@ int CDT::operator()(const char* tag,const char* lpszFormat, ...)
 			va_start(argList, lpszFormat);
 			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
 			va_end(argList);
-			send(hwnd, szMsg);
+			
+			tagLogInfo info;
+			info.hwnd = hwnd;
+			info.msg = szMsg;
+			info.mFile = m_lpszFile;
+			info.mLevel = m_nLevel;
+			info.mLine = m_nLine;
+			info.mTag = tag;
+
+			CDT::send(info);
 		}
 	}
 #endif
 	return 0;
 }
 
-void CDT::send(HWND hwnd,char *msg)
+void CDT::send(tagLogInfo& info)
 {
+	HWND hwnd = info.hwnd;
+	const char* msg=info.msg;
+
 	if (!gAppName[0])
 	{
 		char buf[MAX_PATH];
@@ -147,10 +153,10 @@ void CDT::send(HWND hwnd,char *msg)
 	//static length fields
 	BYTE version = 1;
 	box.WriteByte(version);
-	box.WriteByte((BYTE)m_nLevel);
+	box.WriteByte((BYTE)info.mLevel);
 	box.Write(&pid, sizeof(pid));
 	box.Write(&tid, sizeof(tid));
-	box.Write(&m_nLine, sizeof(m_nLine));
+	box.Write(&info.mLine, sizeof(info.mLine));
 	box.Write(&date, sizeof(date));
 	box.Write(&time, sizeof(time));
 
@@ -163,11 +169,12 @@ void CDT::send(HWND hwnd,char *msg)
 		box.Write(gAppName, gAppNameBytes);
 	}
 
+	if(info.mTag)
 	{
 		box.WriteByte((BYTE)eTag);
 
-		box.Write((int)strlen(mTag));
-		box.Write(mTag);
+		box.Write((int)strlen(info.mTag));
+		box.Write(info.mTag);
 	}
 
 	{
@@ -179,8 +186,8 @@ void CDT::send(HWND hwnd,char *msg)
 
 	{
 		box.WriteByte((BYTE)eFile);
-		box.Write((int)strlen(m_lpszFile));
-		box.Write(m_lpszFile);
+		box.Write((int)strlen(info.mFile));
+		box.Write(info.mFile);
 	}
 
 	DWORD_PTR dwRet = 0;
@@ -218,7 +225,14 @@ int CDT::operator()( const char* lpszFormat, ... )
 			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
 			va_end(argList);
 
-			send(hwnd,szMsg);
+			tagLogInfo info;
+			info.hwnd = hwnd;
+			info.msg = szMsg;
+			info.mFile = m_lpszFile;
+			info.mLevel = m_nLevel;
+			info.mLine = m_nLine;
+
+			send(info);
 		}
 	}
 #endif
