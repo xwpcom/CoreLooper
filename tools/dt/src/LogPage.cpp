@@ -565,6 +565,7 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 void LogPage::OnClear()
 {
 	OnClearLog();
+	mItemPage->clear();
 }
 
 void LogPage::OnCopy()

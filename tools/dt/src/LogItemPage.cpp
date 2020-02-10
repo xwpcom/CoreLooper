@@ -64,6 +64,11 @@ void LogItemPage::OnRelayout(const CRect& rc)
 	}
 }
 
+void LogItemPage::clear()
+{
+	SetLogItem(nullptr);
+}
+
 extern COLORREF gColors[];
 
 void LogItemPage::SetLogItem(LogItem* item)

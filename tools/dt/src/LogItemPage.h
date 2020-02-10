@@ -11,6 +11,7 @@ public:
 	virtual ~LogItemPage();
 	
 	void SetLogItem(LogItem*);
+	void clear();
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
