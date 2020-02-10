@@ -28,3 +28,4 @@ app-*.apk
 *.pdb
 *.user
 /projects/dt/*.aps
+/tools/dt/*.aps
