@@ -3266,6 +3266,97 @@ TEST_CLASS(StringTool_UnitTest)
 
 TEST_CLASS(Log)
 {
+	TEST_METHOD(SharedMemory)
+	{
+		int nc = 1000 * 1000;
+		char buf[200];
+		buf[0] = 1;
+		buf[1] = 0;
+
+		auto tick = ShellTool::GetTickCount64();
+		for (int i = 0; i < nc; ++i)
+		{
+			_snprintf(buf, sizeof(buf), "hello,%d,this is a very long log for test,d=%d", i,i);
+		}
+
+		tick = ShellTool::GetTickCount64() - tick;
+		LogV("Log", "SharedMemory tick=%lld,nc=%d", tick, nc);//WM_COPYDATA tick=2250,nc=100000,注意只测试了10万次，比mutex慢了约20倍
+	}
+
+	TEST_METHOD(WM_COPYDATA_)
+	{
+		auto tick = ShellTool::GetTickCount64();
+
+		static const auto* gTitle = _T("DT2020 ");
+		int nc = 1000 * 100;
+		BYTE buf[2];
+		buf[0]=1;
+		buf[1] = 0;
+
+		for (int i = 0; i < nc; ++i)
+		{
+			static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+			if (!IsWindow(hwnd))
+			{
+				hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+			}
+
+			COPYDATASTRUCT cs;
+			cs.dwData = 0;
+			cs.cbData = sizeof(buf);
+			cs.lpData = buf;
+
+			DWORD ret = 0;
+			::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&ret);
+		}
+
+		tick = ShellTool::GetTickCount64() - tick;
+		LogV("Log", "WM_COPYDATA tick=%lld,nc=%d", tick, nc);//WM_COPYDATA tick=2250,nc=100000,注意只测试了10万次，比mutex慢了约20倍
+	}
+
+	TEST_METHOD(CriticalSection)
+	{
+		CRITICAL_SECTION obj = {0};
+		InitializeCriticalSection(&obj);
+
+		auto tick = ShellTool::GetTickCount64();
+
+		int nc = 1000 * 1000;
+		for (int i = 0; i < nc; ++i)
+		{
+			EnterCriticalSection(&obj);
+			LeaveCriticalSection(&obj);
+		}
+
+		tick = ShellTool::GetTickCount64() - tick;
+		LogV("Log", "CS tick=%lld,nc=%d", tick, nc);//CS tick=16,nc=1000000,可以看到cs比mutex快很多
+	}
+
+	TEST_METHOD(Mutex)
+	{
+
+		auto mutex = CreateMutex(
+			NULL,              // default security attributes
+			FALSE,             // initially not owned
+			NULL);             // unnamed mutex
+		
+		auto tick = ShellTool::GetTickCount64();
+
+		int nc = 1000 * 1000;
+		for (int i = 0; i < nc; ++i)
+		{
+			auto ret = WaitForSingleObject(mutex, INFINITE);
+			if (ret == WAIT_OBJECT_0)
+			{
+				ReleaseMutex(mutex);
+			}
+		}
+
+		tick = ShellTool::GetTickCount64()-tick;
+		LogV("Log", "Mutex,tick=%lld,nc=%d", tick, nc);//Mutex,tick=1359,nc=1000000
+
+	}
+
 	TEST_METHOD(TestDT)
 	{
 		DV("DV");
@@ -3303,7 +3394,7 @@ TEST_CLASS(Log)
 		{
 			speed = (double)(totalBytes * 1000 / tick/1024/1024);
 		}
-		DV("tick=%lld,totalBytes =%lld(%.1f MB/S)", tick, totalBytes,speed);
+		LogV("Log","tick=%lld,totalBytes =%lld(%.1f MB/S)", tick, totalBytes,speed);
 		int x = 0;
 
 	}

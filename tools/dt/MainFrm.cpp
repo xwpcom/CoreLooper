@@ -23,6 +23,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
 	ON_COMMAND(ID_KEEP_TOP,OnKeepTop)
 	ON_UPDATE_COMMAND_UI(ID_KEEP_TOP,OnUpdateKeepTop)
 	ON_WM_TIMER()
+	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 // MainFrame construction/destruction
@@ -270,4 +271,24 @@ void MainFrame::ApplyKeepTop()
 void MainFrame::OnUpdateKeepTop(CCmdUI *pCmdUI)
 {
 	pCmdUI->SetCheck(mKeepTop);
+}
+
+
+void MainFrame::OnKillFocus(CWnd* pNewWnd)
+{
+	CFrameWndEx::OnKillFocus(pNewWnd);
+
+	if (mKeepTop)
+	{
+		//https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
+		//有时SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);没有起作用
+		//在此重设一下
+
+		auto v = GetWindowLong(GetSafeHwnd(), GWL_EXSTYLE);
+		if (!(v & WS_EX_TOPMOST))
+		{
+			ApplyKeepTop();
+		}
+	}
+
 }

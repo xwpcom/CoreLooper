@@ -36,7 +36,7 @@ shared_ptr<LogItem> LogParser::Input(const LPBYTE data, int bytes)
 	const int minBytes = sizeof(tagStaticHeader);
 	if (bytes < minBytes)
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 		return nullptr;
 	}
 
@@ -58,7 +58,7 @@ shared_ptr<LogItem> LogParser::Input(const LPBYTE data, int bytes)
 	if (header->version != 1)
 	{
 		//unmatch version
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 		return nullptr;
 	}
 

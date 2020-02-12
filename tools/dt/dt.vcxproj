@@ -244,6 +244,7 @@
     <Image Include="res\writesmall.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="doc\memoryLog设计.md" />
     <None Include="doc\todo.md" />
     <None Include="res\dt.rc2" />
     <None Include="res\ribbon.mfcribbon-ms" />
