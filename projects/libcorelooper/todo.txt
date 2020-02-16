@@ -251,9 +251,44 @@ LogStudio可合并同一pid,同一threadId的log
 每条log的time精确到us或更高
 
 想设计一个日志类,卡在下面的问题上了：
-.要支持在全局变量的构造和析构函数中打印日志（要用自己的class实现Log，不能用printf之类的）
+.要支持在全局变量的构造和析构函数中打印日志（要用自己的class实现Log，不能用printf之类的） 
 .不能有内存泄漏
 由于全局变量析构顺序不确定，所以还没找到办法
+//想到办法了,方法如下如下
+class MemoryLog
+{
+public:
+	MemoryLog()
+	{
+	}
+	virtual ~MemoryLog()
+	{
+	}
+
+	int mValue = 0x12345678;
+};
+
+BYTE gMemoryLogBuf[sizeof(MemoryLog)];
+MemoryLog* gMemoryLog;
+class MemoryLogFactory
+{
+public:
+	MemoryLogFactory()
+	{
+		//在gMemoryLogBuf上主动调用MemoryLog构造函数
+		void* p = (MemoryLog*)gMemoryLogBuf;
+		gMemoryLog = new(p) MemoryLog();
+	}
+};
+MemoryLogFactory gMemoryLogFactory;//确保单线程中初始化，避免竞争
+
+//注意在visual studio中上述代码要放在如下代码之前，否则vs编译时报错
+//看来是MFC内存泄漏代码不兼容c++ placement new
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
+
+
 
 熊子良说shared_ptr<Log>可解决此问题
 我觉得主要缺点是要在全局变量类构造中引用shared_ptr<Log>,否则调用到析构函数时没用安全的保证Log对象的有效性,局限性比较大
