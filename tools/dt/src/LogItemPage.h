@@ -28,5 +28,5 @@ protected:
 	shared_ptr<LogWnd> mEdit;
 
 public:
-	afx_msg void OnBnClickedCopy();
+	//afx_msg void OnBnClickedCopy();
 };

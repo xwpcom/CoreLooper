@@ -23,7 +23,6 @@ void LogItemPage::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(LogItemPage, BasePage)
-	ON_BN_CLICKED(IDC_COPY, &LogItemPage::OnBnClickedCopy)
 END_MESSAGE_MAP()
 
 
@@ -59,7 +58,7 @@ void LogItemPage::OnRelayout(const CRect& rc)
 	}
 	else
 	{
-		GetDlgItem(IDC_COPY)->ShowWindow(SW_HIDE);
+		//GetDlgItem(IDC_COPY)->ShowWindow(SW_HIDE);
 		mEdit->MoveWindow(rc);
 	}
 }
@@ -110,7 +109,9 @@ void LogItemPage::SetLogItem(LogItem* item)
 }
 
 
+/*
 void LogItemPage::OnBnClickedCopy()
 {
 	mEdit->CopyAll();
 }
+*/
