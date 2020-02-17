@@ -12,5 +12,5 @@
 #endif
 #endif
 
-//#include "xmlackbase.h"
-//#include "xmlparser.h"
+#include "xmlackbase.h"
+#include "xmlparser.h"

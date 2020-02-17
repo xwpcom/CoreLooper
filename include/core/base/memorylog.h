@@ -10,25 +10,11 @@ public:
 	MemoryLog();
 	virtual ~MemoryLog();
 
-	void AddLog(const char *msg);
+	void AddLog(const char* msg);
+protected:
+	int mValue = 0x12345678;
 };
 
-class CORE_EXPORT MemoryLogD :public MemoryLog
-{
-public:
-	static MemoryLog* GetInstance();
-
-};
-
-class CORE_EXPORT MemoryLogEx :public MemoryLog
-{
-public:
-	MemoryLogEx();
-	~MemoryLogEx();
-
-	static MemoryLog* GetInstance();
-
-};
 
 }
 }

@@ -3266,7 +3266,7 @@ TEST_CLASS(StringTool_UnitTest)
 
 TEST_CLASS(Log)
 {
-	TEST_METHOD(SharedMemory)
+	TEST_METHOD(snprintf_)
 	{
 		int nc = 1000 * 1000;
 		char buf[200];
@@ -3280,7 +3280,7 @@ TEST_CLASS(Log)
 		}
 
 		tick = ShellTool::GetTickCount64() - tick;
-		LogV("Log", "SharedMemory tick=%lld,nc=%d", tick, nc);//WM_COPYDATA tick=2250,nc=100000,注意只测试了10万次，比mutex慢了约20倍
+		LogV("Log", "snprintf tick=%lld,nc=%d", tick, nc);//snprintf tick=1735,nc=1000000
 	}
 
 	TEST_METHOD(WM_COPYDATA_)

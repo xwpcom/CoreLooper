@@ -254,7 +254,7 @@ LogStudio可合并同一pid,同一threadId的log
 .要支持在全局变量的构造和析构函数中打印日志（要用自己的class实现Log，不能用printf之类的） 
 .不能有内存泄漏
 由于全局变量析构顺序不确定，所以还没找到办法
-//想到办法了,方法如下如下
+//想到办法了,方法如下
 class MemoryLog
 {
 public:

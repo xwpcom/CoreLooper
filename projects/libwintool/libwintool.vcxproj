@@ -99,7 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -147,7 +147,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,6 +195,9 @@
   <ItemGroup>
     <ClCompile Include="libwintool.cpp" />
     <ClCompile Include="src\basepage.cpp" />
+    <ClCompile Include="src\CategoryPage.cpp" />
+    <ClCompile Include="src\logwnd.cpp" />
+    <ClCompile Include="src\ScintillaWnd.cpp" />
     <ClCompile Include="src\ToastWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -210,6 +213,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\basepage.h" />
+    <ClInclude Include="include\CategoryPage.h" />
+    <ClInclude Include="include\logwnd.h" />
+    <ClInclude Include="include\ScintillaWnd.h" />
     <ClInclude Include="include\ToastWnd.h" />
     <ClInclude Include="libwintool.h" />
     <ClInclude Include="Resource.h" />
@@ -220,6 +226,9 @@
     <ResourceCompile Include="libwintool.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\depends\scintilla420\scintilla\win32\SciLexer.vcxproj">
+      <Project>{fbe04237-9c7b-4973-9c60-505975998b39}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\libcorelooper\corelooper.vcxproj">
       <Project>{fd47e92b-7702-459f-bfb7-81c2d64c61b9}</Project>
     </ProjectReference>

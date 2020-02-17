@@ -13,4 +13,6 @@
 #include "libcorelooper.inl"
 #include "basepage.h"
 #include "ToastWnd.h"
+#include "CategoryPage.h"
+
 
