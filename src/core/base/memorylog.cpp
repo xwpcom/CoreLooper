@@ -88,15 +88,25 @@ void Privilege(TCHAR* pszPrivilege, BOOL bEnable)
 MemoryLog::MemoryLog()
 {
 
+    /*
+    https://github.com/mutouyun/cpp-ipc/wiki/ipc::spin_lock
+ipc::spin_lock
+木头云 edited this page on Apr 3, 2019 · 2 revisions
+简单的自旋锁实现。其实例可以放入共享内存中作为进程间的互斥锁。
+    
+    https://github.com/LiveAsynchronousVisualizedArchitecture/simdb
+    A high performance, shared memory, lock free, cross platform, single file, no dependencies, C++11 key-value store
+
+    */
+
 
     //Privilege(TEXT("SeLockMemoryPrivilege"), TRUE);
 	//LogV(TAG,"%s,this=%p", __func__, this);
 
 #define BUF_SIZE 256
-    TCHAR szName[] = TEXT("Global\\CoreLooperMemoryLog");
+    TCHAR szName[] = TEXT("CoreLooperMemoryLog");
     TCHAR szMsg[] = TEXT("Message from first process.");
 
-    //vs要以管理员运行，才能成功调用CreateFileMapping,否则报没有权限
     auto hMapFile = CreateFileMapping(
         INVALID_HANDLE_VALUE,    // use paging file
         NULL,                    // default security
@@ -107,11 +117,18 @@ MemoryLog::MemoryLog()
 
     if (hMapFile)
     {
-        auto pBuf = (LPTSTR)MapViewOfFile(hMapFile,   // handle to map object
+        auto p = (LPBYTE)MapViewOfFile(hMapFile,   // handle to map object
             FILE_MAP_ALL_ACCESS, // read/write permission
             0,
             0,
             BUF_SIZE);
+
+        if (p)
+        {
+            p[1] = 0x01;
+            p[2] = 0x02;
+            p[3] = 0x03;
+        }
     }
 
 }

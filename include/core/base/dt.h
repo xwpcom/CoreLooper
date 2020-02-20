@@ -8,10 +8,6 @@ namespace Bear {
 namespace Core
 {
 
-#ifndef _FILE_DT_TAG
-#define _FILE_DT_TAG	__FILE__
-#endif
-
 enum eDTLevel
 {
 	DT_ERROR=0,
@@ -42,7 +38,6 @@ public:
 
 	int operator()(const char* tag, const char* lpszFormat, ...);
 protected:
-	void send(HWND hwnd, char* msg);
 
 	const char* m_lpszFile;
 	int m_nLine;
