@@ -10,9 +10,9 @@ public:
 	void AddLog(const string& line);
 	void clear();
 	void CopyAll();
+	void CheckUpdateMarginWidth();
 protected:
 	DECLARE_MESSAGE_MAP()
-	void CheckUpdateMarginWidth();
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);

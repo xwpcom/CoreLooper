@@ -220,7 +220,7 @@ void LogWnd::CheckUpdateMarginWidth()
 {
 	int lineNumbersWidth = 2;
 	auto lineCount = SendMessage(SCI_GETLINECOUNT);
-	lineCount = MIN(lineCount, 100);
+	lineCount = MAX(lineCount, 100);
 	int lineNumWidth = 1;
 	while (lineCount >= 10) {
 		lineCount /= 10;
