@@ -334,7 +334,9 @@
     <ClCompile Include="..\..\src\core\file\dumpfile.cpp" />
     <ClCompile Include="..\..\src\core\file\file.cpp" />
     <ClCompile Include="..\..\src\core\file\filefinder.cpp" />
+    <ClCompile Include="..\..\src\core\file\ini.cpp" />
     <ClCompile Include="..\..\src\core\file\inifile.cpp" />
+    <ClCompile Include="..\..\src\core\file\tests\ini.tests.cpp" />
     <ClCompile Include="..\..\src\core\file\virtualfolder.cpp" />
     <ClCompile Include="..\..\src\core\looper\asynctask.cpp" />
     <ClCompile Include="..\..\src\core\looper\asynctasklooper.cpp" />
@@ -466,6 +468,7 @@
     <ClInclude Include="..\..\include\core\file\dumpfile.h" />
     <ClInclude Include="..\..\include\core\file\file.h" />
     <ClInclude Include="..\..\include\core\file\filefinder.h" />
+    <ClInclude Include="..\..\include\core\file\ini.h" />
     <ClInclude Include="..\..\include\core\file\inifile.h" />
     <ClInclude Include="..\..\include\core\file\transferfileinfo.h" />
     <ClInclude Include="..\..\include\core\file\virtualfolder.h" />
