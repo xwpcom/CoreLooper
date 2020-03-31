@@ -239,6 +239,10 @@ int CDT::operator()( const char* lpszFormat, ... )
 	return 0;
 }
 #else
+int CLog::operator()(const char* tag, const char* lpszFormat, ...)
+{
+	return 0;
+}
 
 int AppendLogToFile(const char *pszLogFile,const char *msg)
 {
@@ -300,10 +304,6 @@ int CDT::operator()( const char* lpszFormat, ... )
 	else if(nLevel == DT_ERROR)
 	{
 		strcat(header,"###Error  ");
-	}
-	else if(nLevel == DT_FATAL)
-	{
-		strcat(header,"###LOG    ");
 	}
 
 #ifdef _MSC_VER
@@ -396,11 +396,11 @@ int CDT::operator()( const char* lpszFormat, ... )
 			p=ANDROID_LOG_INFO;
 		if(nLevel == DT_WARN)
 			p=ANDROID_LOG_WARN;
-		else if (nLevel == DT_ERROR || nLevel == DT_FATAL)
+		else if (nLevel == DT_ERROR)
 		{
 			p = ANDROID_LOG_ERROR;
 
-			Log::e("Bear/jni", "%s", szMsg);
+			LogE("Bear/jni", "%s", szMsg);
 		}
 
 		{

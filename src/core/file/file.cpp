@@ -906,7 +906,7 @@ ULONGLONG File::CalcFolderContentBytes(string folder)
 	return bytes;
 }
 
-int File::ftruncate(int fd, off_t length)
+int File::ftruncateEx(int fd, off_t length)
 {
 #ifdef _MSC_VER
 	return _chsize(fd, length);
@@ -1111,12 +1111,12 @@ bool File::IsEOF()
 	return false;
 }
 
-int File::ftruncate(ULONG length)
+int File::ftruncateEx(ULONG length)
 {
 #ifdef _MSC_VER
 	return _chsize(_fileno(mFileHandle), length);
 #else
-	return ::ftruncate(mFileHandle, length);
+	return ::ftruncate(fileno(mFileHandle), length);
 #endif
 }
 

@@ -44,7 +44,7 @@ public:
 	int Seek(int offset, int from);
 	ULONG ftell();
 	bool IsEOF();
-	int ftruncate(ULONG length);
+	int ftruncateEx(ULONG length);
 
 	bool IsOpen()const
 	{
@@ -105,7 +105,7 @@ public:
 	};
 
 	static int CopyFile(const string& sourceFilePath, const string& destFilePath);
-	static int ftruncate(int fd, off_t length);
+	static int ftruncateEx(int fd, off_t length);
 
 	static void RemoveInvalidFileNameChar(std::string& fileName);
 	static int GetFileSystemInfo(const char *path, DWORD& totalKB, DWORD& freeKB);

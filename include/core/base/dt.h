@@ -17,6 +17,10 @@ enum eDTLevel
 	DT_VERBOSE,
 };
 
+#ifndef _MSC_VER
+typedef long HWND;
+#endif
+
 struct tagLogInfo
 {
 	const char* mTag = nullptr;
