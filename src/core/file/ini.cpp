@@ -132,6 +132,7 @@ void Ini::Load(ByteBuffer& box)
 	{
 		//跳过utf-8格式BOM
 		//utf-8文件以0xEF,0xBB,0xBF开头
+
 		LPBYTE d = (LPBYTE)sz;
 		if (d[0] == 0xEF && d[1] == 0xBB && d[2] == 0xBF)
 		{

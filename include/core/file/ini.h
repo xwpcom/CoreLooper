@@ -81,8 +81,8 @@ protected:
 	void SetModified();
 	bool mModified = false;
 
-	long mVersion = 0;//每次修改时版本号递增
-	ULONGLONG			mTickModified=0;//最后修改时间
+	long mVersion = 0;
+	ULONGLONG			mTickModified=0;
 };
 
 }
