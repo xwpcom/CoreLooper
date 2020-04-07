@@ -2,6 +2,8 @@
 #include "CppUnitTest.h"
 #include "libcrypt.inl"
 #include "libcrypt/tea.h"
+#include "libcrypt/base64ex.h"
+
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -19,7 +21,17 @@ namespace Crypt
 TEST_CLASS(Tea_UnitTest)
 {
 public:
-	TEST_METHOD(Test)
+	TEST_METHOD(Base64_Test)
+	{
+		auto enc = "4bP0vuLHTko=";
+		
+		ByteBuffer box;
+		Base64::Decode(enc, box);
+		auto data = box.data();
+		auto bytes = box.length();
+		int x = 0;
+	}
+	TEST_METHOD(Tea_Test)
 	{
 		const char *key= "1234567890123456";
 		auto val = "hello";
