@@ -63,6 +63,7 @@
 #define IDC_COPY                        1013
 #define IDC_CMB_LEVEL                   1014
 #define IDC_EDIT_COMMENT                1015
+#define ID_REFRESH_TASK_ICON			4000
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_APP_FIRST                    33000
 #define ID_TAB_NEW                      34000

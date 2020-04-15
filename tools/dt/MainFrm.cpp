@@ -22,6 +22,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &MainFrame::OnUpdateApplicationLook)
 	ON_COMMAND(ID_KEEP_TOP,OnKeepTop)
 	ON_UPDATE_COMMAND_UI(ID_KEEP_TOP,OnUpdateKeepTop)
+	ON_COMMAND(ID_REFRESH_TASK_ICON,OnRefreshTaskIcon)
 	ON_WM_TIMER()
 	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
@@ -291,4 +292,14 @@ void MainFrame::OnKillFocus(CWnd* pNewWnd)
 		}
 	}
 
+}
+
+//XiongWanPing 2019.11.07
+//https://blog.csdn.net/mfcing/article/details/50345193
+//有些固定在任务栏的app是安装在bitlocker加密盘里面，当开机时windows无法获取app图标
+//导致任务栏上app图标为空白,不方便使用
+//所以在DT上增加刷新图标的功能
+void MainFrame::OnRefreshTaskIcon()
+{
+	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);//刷新任务栏icon,test ok
 }

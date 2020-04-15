@@ -61,7 +61,7 @@ protected:
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	void OnKeepTop();
 	DECLARE_MESSAGE_MAP()
-
+	void OnRefreshTaskIcon();
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
