@@ -78,6 +78,9 @@
     <ClCompile Include="src\tests\crypt.unittest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\xxtea.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libcrypt.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\openssl\test_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\xxtea.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

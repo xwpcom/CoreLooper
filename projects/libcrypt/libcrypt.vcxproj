@@ -215,6 +215,7 @@
     <ClCompile Include="src\ssl\x509parse.cpp" />
     <ClCompile Include="src\tea.cpp" />
     <ClCompile Include="src\tests\crypt.unittest.cpp" />
+    <ClCompile Include="src\tests\xxtea.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -237,6 +238,7 @@
     <ClInclude Include="src\openssl\async_bio.h" />
     <ClInclude Include="src\openssl\packeted_bio.h" />
     <ClInclude Include="src\openssl\test_config.h" />
+    <ClInclude Include="src\tests\xxtea.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
