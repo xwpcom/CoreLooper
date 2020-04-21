@@ -32,6 +32,9 @@ namespace Bear {
 namespace Core
 {
 namespace FileSystem {
+
+#define TAG "File"
+
 FILE* File::fopen(const char *pszFile, const char *pszMode)
 {
 	if (!pszFile)
@@ -41,7 +44,7 @@ FILE* File::fopen(const char *pszFile, const char *pszMode)
 	if (!hFile)
 	{
 #ifdef _MSC_VER
-		DW("Fail to open[%s],err=%d(%s)", pszFile, errno, strerror(errno));
+		LogV(TAG,"Fail to open[%s],err=%d(%s)", pszFile, errno, strerror(errno));
 #endif
 	}
 

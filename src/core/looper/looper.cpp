@@ -8,6 +8,8 @@ using namespace std;
 namespace Bear {
 namespace Core
 {
+#define TAG "Looper"
+
 static Looper *gMainLooper = nullptr;
 
 Looper::~Looper()
@@ -52,7 +54,7 @@ int Looper::SetMainLooper(Looper* looper)
 {
 	if (looper)
 	{
-		DV("%s,name=%s", __func__, looper->mThreadName.c_str());
+		LogV(TAG,"%s,name=%s", __func__, looper->mThreadName.c_str());
 
 		if (gMainLooper)
 		{

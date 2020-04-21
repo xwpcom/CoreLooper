@@ -43,6 +43,8 @@ namespace Core
 {
 using namespace FileSystem;
 
+#define TAG "Handler"
+
 struct tagFindObjectInfo
 {
 	shared_ptr<Handler> mHandler;
@@ -92,7 +94,7 @@ Handler::~Handler()
 		auto tick = ShellTool::GetTickCount64() - mInternalData->mTickDestroy;
 		if (tick > 50)
 		{
-			DV("%s(%s),this=%p,destroy tick=%lld", __func__, GetObjectName().c_str(), this, tick);
+			LogV(TAG,"%s(%s),this=%p,destroy tick=%lld", __func__, GetObjectName().c_str(), this, tick);
 		}
 	}
 

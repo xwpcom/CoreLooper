@@ -18,7 +18,7 @@ using namespace std;
 namespace Bear {
 namespace Core
 {
-
+#define TAG "LooperImpl"
 #ifdef _MSC_VER
 static __declspec(thread) LooperImpl *gBaseLooper = NULL;
 #else
@@ -165,7 +165,7 @@ LRESULT LooperImpl::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		auto count = mLooperInternalData->mDestroyedHandlers.size();
 		if (count > 10)
 		{
-			DV("this=%p,gc size=%d", this, count);
+			LogV(TAG,"this=%p,gc size=%d", this, count);
 		}
 
 		return 0;

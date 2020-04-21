@@ -10,6 +10,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+#define TAG "WSHandler"
+
 class Ajax_TestWS2 :public AjaxHandler
 {
 	DECLARE_AJAX_CLASS(Ajax_TestWS2)
@@ -45,13 +47,13 @@ enum
 WSHandler::WSHandler()
 {
 	SetObjectName("WSHandler");
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 }
 
 WSHandler::~WSHandler()
 {
 	CommonTextProtocolFactory::Destroy(mProtocol);
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG, "%s,this=%p", __func__, this);
 }
 
 void WSHandler::OnCreate()

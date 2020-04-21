@@ -6,15 +6,17 @@ namespace Bear {
 namespace Core{
 namespace Net {
 
+#define TAG "SimpleConnect"
+
 SimpleConnect::SimpleConnect()
 {
 	mTimeOutSecond = 90;
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG, "%s,this=%p", __func__, this);
 }
 
 SimpleConnect::~SimpleConnect()
 {
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 }
 
 int SimpleConnect::StartConnect(Bundle& bundle)

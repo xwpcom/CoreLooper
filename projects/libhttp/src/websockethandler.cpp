@@ -7,15 +7,17 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+#define TAG "WebSocketHandler"
+
 WebSocketHandler::WebSocketHandler()
 {
 	SetObjectName("WebSocketHandler");
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG, "%s,this=%p", __func__, this);
 }
 
 WebSocketHandler::~WebSocketHandler()
 {
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 }
 
 void WebSocketHandler::Attach(shared_ptr<Channel> channel)

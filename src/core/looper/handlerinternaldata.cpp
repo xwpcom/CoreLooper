@@ -11,6 +11,7 @@ using namespace std;
 namespace Bear {
 namespace Core
 {
+#define TAG "tagHandlerInternalData"
 
 #ifdef _MSC_VER_DEBUG
 //#define _TEST_TIMER_ID_REWIND	//测试timerId回绕
@@ -369,7 +370,7 @@ shared_ptr<Handler> tagHandlerInternalData::FindObject_Impl(const string& url)
 		auto child = obj->GetChild(item.c_str(), nullptr);
 		if (!child)
 		{
-			DW("no find [%s]", item.c_str());
+			LogV(TAG,"no find [%s]", item.c_str());
 			return nullptr;
 		}
 
