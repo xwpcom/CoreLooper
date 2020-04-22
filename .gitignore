@@ -29,3 +29,6 @@ app-*.apk
 *.user
 /projects/dt/*.aps
 /tools/dt/*.aps
+/projects/libcrypt.as/libcorelooper/*.aar
+/projects/libhttp.as/libcorelooper/*.aar
+/projects/libhttp.as/libcrypt/*.aar
