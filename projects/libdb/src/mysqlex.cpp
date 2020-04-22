@@ -138,7 +138,7 @@ void MySql::SetUtf8()
 	
 	if (m_pMySql)
 	{
-		mysql_query(m_pMySql, "SET NAMES UTF8");
+		mysql_query(m_pMySql, "SET NAMES UTF8;");
 	}
 }
 //调用者负责释放返回的数据
