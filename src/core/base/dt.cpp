@@ -222,7 +222,13 @@ int CDT::operator()( const char* lpszFormat, ... )
 
 			va_list argList;
 			va_start(argList, lpszFormat);
-			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+			try {
+				vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+			}
+			catch (...)
+			{
+				szMsg[0] = 0;
+			}
 			va_end(argList);
 
 			tagLogInfo info;

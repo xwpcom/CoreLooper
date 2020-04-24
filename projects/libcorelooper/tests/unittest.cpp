@@ -3357,6 +3357,35 @@ TEST_CLASS(Log)
 
 	}
 
+	TEST_METHOD(format)
+	{
+		class Test
+		{
+		public:
+			static int fn(const char* lpszFormat, ...)
+			{
+				char szMsg[5] = {0};
+
+				va_list argList;
+				va_start(argList, lpszFormat);
+				try {
+					vsnprintf(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+				}
+				catch (...)
+				{
+					szMsg[0] = 0;
+				}
+				va_end(argList);
+
+				return 0;
+			}
+
+		};
+
+		Test::fn("he,%d", 12345);
+
+	}
+
 	TEST_METHOD(TestDT)
 	{
 		DV("DV");
