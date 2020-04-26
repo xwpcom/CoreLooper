@@ -322,7 +322,10 @@ int TcpClient_Windows::SendOutBox()
 {
 	ASSERT(!mIoContextSend.mBusying);
 	ASSERT(mIoContextSend.mByteBuffer.IsEmpty());
-	ASSERT(!mOutbox.IsEmpty());
+	if (mOutbox.IsEmpty())
+	{
+		return -1;
+	}
 
 	int ret = mIoContextSend.mByteBuffer.Write(mOutbox.GetDataPointer(), mOutbox.GetActualDataLength());
 	if (ret > 0)
