@@ -73,6 +73,10 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg void OnNMRClickList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnOpenFileGotoLine();
+	void OnCodePageUtf8();
+	void OnCodePageChinese();
+	void OnUpdateCodePageUtf8(CCmdUI* pCmdUI);
+	void OnUpdateCodePageChinese(CCmdUI* pCmdUI);
 	afx_msg void OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCopyFullPath();
 	afx_msg void OnOpenFolder();

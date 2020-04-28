@@ -63,7 +63,7 @@
 #define IDC_COPY                        1013
 #define IDC_CMB_LEVEL                   1014
 #define IDC_EDIT_COMMENT                1015
-#define ID_REFRESH_TASK_ICON			4000
+#define ID_REFRESH_TASK_ICON            4000
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_APP_FIRST                    33000
 #define ID_TAB_NEW                      34000
@@ -92,13 +92,16 @@
 #define ID_CLEAR                        34023
 #define ID_TOP                          34024
 #define ID_KEEP_TOP                     34024
+#define ID_LOGLISTCONTEXTMENU_CODEPAGE  34025
+#define ID_CODEPAGE_UTF8                34026
+#define ID_CODEPAGE_CHINESE             34027
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319
-#define _APS_NEXT_COMMAND_VALUE         34025
+#define _APS_NEXT_COMMAND_VALUE         35028
 #define _APS_NEXT_CONTROL_VALUE         1016
 #define _APS_NEXT_SYMED_VALUE           318
 #endif

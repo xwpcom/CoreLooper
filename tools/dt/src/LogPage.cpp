@@ -5,6 +5,8 @@
 #include "LogFilterPage.h"
 #include "LogItemPage.h"
 #include "logmanager.h"
+#include "logwnd.h"
+
 IMPLEMENT_DYNAMIC(LogPage, BasePage)
 
 enum
@@ -27,6 +29,8 @@ LogPage::LogPage(CWnd* pParent /*=nullptr*/)
 	: BasePage(IDD_LogPage, pParent)
 {
 	bzero(mArrIdx, sizeof(mArrIdx));
+
+	mSection = "LogPage";
 }
 
 LogPage::~LogPage()
@@ -43,6 +47,12 @@ BEGIN_MESSAGE_MAP(LogPage, BasePage)
 	ON_WM_DESTROY()
 	ON_NOTIFY(NM_RCLICK, IDC_LIST, &LogPage::OnNMRClickList)
 	ON_COMMAND(ID_OPEN_FILE_GOTO_LINE, &LogPage::OnOpenFileGotoLine)
+	ON_COMMAND(ID_CODEPAGE_UTF8, &LogPage::OnCodePageUtf8)
+	ON_COMMAND(ID_CODEPAGE_CHINESE, &LogPage::OnCodePageChinese)
+	//ON_UPDATE_COMMAND_UI_RANGE(ID_CODEPAGE_UTF8, ID_CODEPAGE_UTF8+100, &LogPage::OnCodePageChinese)
+	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_UTF8, &LogPage::OnUpdateCodePageUtf8)
+	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_CHINESE, &LogPage::OnUpdateCodePageChinese)
+	
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST, &LogPage::OnNMDblclkList)
 	ON_COMMAND(ID_COPY_FULL_PATH, &LogPage::OnCopyFullPath)
 	ON_COMMAND(ID_OPEN_FOLDER, &LogPage::OnOpenFolder)
@@ -164,6 +174,12 @@ int LogPage::Init()
 				list.SetColumnWidth(i, nItems[i]);
 			}
 		}
+	}
+
+	{
+		auto code=mIni->GetInt(mSection, "codepage", SC_CP_UTF8);
+		auto edit = mItemPage->GetEdit();
+		edit->SetCodePage(code);
 	}
 
 	test();
@@ -591,4 +607,35 @@ void LogPage::OnCopyAll()
 	}
 
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
+}
+
+void LogPage::OnCodePageUtf8()
+{
+	int code = SC_CP_UTF8;
+	mIni->SetInt(mSection, "codepage", code);
+
+	auto edit = mItemPage->GetEdit();
+	edit->SetCodePage(code);
+}
+
+void LogPage::OnCodePageChinese()
+{
+	//936 (Simplified Chinese GBK), 
+	//解决app为unicode版时中文乱码问题
+
+	int code = 936;
+	mIni->SetInt(mSection, "codepage", code);
+
+	auto edit = mItemPage->GetEdit();
+	edit->SetCodePage(code);
+}
+
+void LogPage::OnUpdateCodePageUtf8(CCmdUI* pCmdUI)
+{
+	//pCmdUI->SetCheck(true);
+}
+
+void LogPage::OnUpdateCodePageChinese(CCmdUI* pCmdUI)
+{
+
 }

@@ -18,8 +18,15 @@ public:
 	{
 		SendMessage(SCI_SETREADONLY, readOnly);
 	}
+
+	void SetCodePage(int code);
+	int GetCodePage()const
+	{
+		return mCodePage;
+	}
 protected:
 	DECLARE_MESSAGE_MAP()
+	int mCodePage=SC_CP_UTF8;
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);

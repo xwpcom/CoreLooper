@@ -9,6 +9,11 @@ class LogItemPage : public BasePage
 public:
 	LogItemPage(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~LogItemPage();
+
+	shared_ptr<LogWnd> GetEdit()
+	{
+		return mEdit;
+	}
 	
 	void SetLogItem(LogItem*);
 	void clear();

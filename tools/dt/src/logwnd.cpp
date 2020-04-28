@@ -54,8 +54,8 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//949 (Korean Unified Hangul Code), 
 	//950 (Traditional Chinese Big5),
 	//1361 (Korean Johab).
-	//SendMessage(SCI_SETCODEPAGE,SC_CP_UTF8);
-	SendMessage(SCI_SETCODEPAGE,936);//解决app为unicode版时中文乱码问题
+	//SendMessage(SCI_SETCODEPAGE,mCodePage);
+	//SendMessage(SCI_SETCODEPAGE,936);//解决app为unicode版时中文乱码问题
 
 	/*
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_DEFAULT, SC_CHARSET_GB2312);
