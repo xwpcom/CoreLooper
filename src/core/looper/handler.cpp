@@ -548,6 +548,15 @@ void Handler::OnCreate()
 {
 	//LogV("%s::OnCreate",GetObjectName().c_str());
 	mInternalData->mOnCreateCalled = true;
+
+#ifdef _DEBUGx
+	auto& name = mInternalData->GetName();
+	if (name.empty())
+	{
+
+	}
+#endif
+
 }
 
 Loop *Handler::GetCurrentLooper()
