@@ -368,8 +368,8 @@ int TcpClient_Windows::ConnectHelper(string ip)
 	{
 		DWORD ulBytesReturn = 0;
 		struct tcp_keepalive stKeepIn = { 0 }, stKeepOut = { 0 };
-		stKeepIn.keepalivetime = 1000 * 10;		// 超过20秒没接收数据就发送探测包
-		stKeepIn.keepaliveinterval = 1000 * 2;	// 探测包ack超时后每隔2秒发送一次探测包
+		stKeepIn.keepalivetime = 1000 * 60*5;		// 超过20秒没接收数据就发送探测包
+		stKeepIn.keepaliveinterval = 1000 * 20;	// 探测包ack超时后每隔2秒发送一次探测包
 		stKeepIn.onoff = 1;						// 启用KEEPALIVE
 		int ret = WSAIoctl(mSock, SIO_KEEPALIVE_VALS, (LPVOID)&stKeepIn, sizeof(tcp_keepalive), (LPVOID)&stKeepOut,
 			sizeof(tcp_keepalive), &ulBytesReturn, NULL, NULL);
@@ -513,8 +513,8 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 			// 设置连接的KEEPALIVE参数
 			DWORD ulBytesReturn = 0;
 			struct tcp_keepalive stKeepIn = { 0 }, stKeepOut = { 0 };
-			stKeepIn.keepalivetime = 60 * 1000;		// 超过此秒数没接收数据就发送探测包
-			stKeepIn.keepaliveinterval = 10 * 1000;	// 每隔几秒发送一次探测包
+			stKeepIn.keepalivetime = 5*60 * 1000;		// 超过此秒数没接收数据就发送探测包
+			stKeepIn.keepaliveinterval = 20 * 1000;	// 每隔几秒发送一次探测包
 			stKeepIn.onoff = 1;						// 启用KEEPALIVE
 			int ret = WSAIoctl(s, SIO_KEEPALIVE_VALS, (LPVOID)&stKeepIn, sizeof(tcp_keepalive), (LPVOID)&stKeepOut,
 				sizeof(tcp_keepalive), &ulBytesReturn, NULL, NULL);
