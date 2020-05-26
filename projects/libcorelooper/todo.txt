@@ -1,4 +1,46 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////
+2020.05.26//////////////////////////////////////////////////////////////////////////////////
+https://github.com/google/sanitizers/wiki/AddressSanitizer
+在linux下检查内存bug可在编译时加上-fsanitize=address -g  
+测试
+bear@bear-win10:~$ vi ./t.cpp
+#include <stdio.h>
+
+int main()
+{
+        int *p=new int;
+        delete p;
+        delete p;
+
+        printf("hello\r\n");
+        return 0;
+}
+
+bear@bear-win10:~$ g++ -fsanitize=address -g   t.cpp -o ./t
+bear@bear-win10:~$ ./t
+=================================================================
+==4236==ERROR: AddressSanitizer: attempting double-free on 0x602000000010 in thread T0:
+    #0 0x7f43a8701025 in operator delete(void*, unsigned long) (/lib/x86_64-linux-gnu/libasan.so.5+0x111025)
+    #1 0x7f43a907924e in main /home/bear/t.cpp:7
+    #2 0x7f43a84170b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #3 0x7f43a907914d in _start (/home/bear/t+0x114d)
+
+0x602000000010 is located 0 bytes inside of 4-byte region [0x602000000010,0x602000000014)
+freed by thread T0 here:
+    #0 0x7f43a8701025 in operator delete(void*, unsigned long) (/lib/x86_64-linux-gnu/libasan.so.5+0x111025)
+    #1 0x7f43a9079238 in main /home/bear/t.cpp:6
+    #2 0x7f43a84170b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+
+previously allocated by thread T0 here:
+    #0 0x7f43a86ff947 in operator new(unsigned long) (/lib/x86_64-linux-gnu/libasan.so.5+0x10f947)
+    #1 0x7f43a907921e in main /home/bear/t.cpp:5
+    #2 0x7f43a84170b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+
+SUMMARY: AddressSanitizer: double-free (/lib/x86_64-linux-gnu/libasan.so.5+0x111025) in operator delete(void*, unsigned long)
+==4236==ABORTING
+bear@bear-win10:~$
+
+////////////////////////////////////////////////////////////////////////////////////////////
 2020.05.25//////////////////////////////////////////////////////////////////////////////////
 .为支持iot低功耗,TcpClient_Windows::OnConnect中SIO_KEEPALIVE_VALS间隔时间加大
 
