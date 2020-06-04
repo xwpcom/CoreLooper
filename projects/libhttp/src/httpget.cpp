@@ -352,6 +352,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 	else
 	{
 		mAckInfo.mAckBody.Write(data, dataLen);
+		mAckInfo.mAckBody.MakeSureEndWithNull();
 
 		if (!mAckInfo.mChunked && mAckInfo.mAckBody.length() == mAckInfo.mContentLength)
 		{
