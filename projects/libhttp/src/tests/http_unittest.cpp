@@ -82,6 +82,7 @@ protected:
 
 IMPLEMENT_AJAX_CLASS(Ajax_Info, "Info", "")
 
+static const char* TAG = "Http";
 
 TEST_CLASS(Http)
 {
@@ -309,6 +310,37 @@ public:
 		};
 
 		make_shared<MainLooper>()->StartRun();
+	}
+
+	TEST_METHOD(HttpsGet2)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto obj = make_shared<HttpGet>();
+				AddChild(obj);
+				obj->EnableTls();
+
+				auto url = "taobao.com:443/favicon.ico";
+				obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
+				obj->Execute(url);
+
+			}
+
+			void OnHttpGetAck(HttpGet*, string& url, int error, ByteBuffer& box)
+			{
+				box.MakeSureEndWithNull();
+				LogV(TAG, "%s",box.data());
+				int x = 0;
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
 	}
 
 	TEST_METHOD(HttpsGet)
