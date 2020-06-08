@@ -1,0 +1,6 @@
+XiongWanPing 2020.06.08
+
+http://slproweb.com/products/Win32OpenSSL.html
+Win32 OpenSSL v1.1.1g
+54MB Installer
+支持wireshark抓包https并解密

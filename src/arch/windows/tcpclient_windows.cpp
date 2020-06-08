@@ -288,10 +288,12 @@ int TcpClient_Windows::Send(LPVOID data, int dataLen)
 #ifdef _CONFIG_OPENSSL
 	if (mTlsInfo)
 	{
-		mTlsInfo->mOutBuffer->assign((char*)data, dataLen);
+		//mTlsInfo->mOutBuffer->assign((char*)data, dataLen);
+		auto outBuffer = make_shared<BufferRaw>();
+		outBuffer->assign((char*)data, dataLen);
 		if (mTlsInfo->mSslBox)
 		{
-			mTlsInfo->mSslBox->onSend(mTlsInfo->mOutBuffer);
+			mTlsInfo->mSslBox->onSend(outBuffer);
 		}
 
 		return dataLen;
@@ -716,7 +718,7 @@ void TcpClient_Windows::CheckInitTls(bool serverMode)
 		obj->mInboxSSL.PrepareBuf(1024 * 16);
 
 		obj->mInBuffer = make_shared<BufferRaw>();
-		obj->mOutBuffer = make_shared<BufferRaw>();
+		//obj->mOutBuffer = make_shared<BufferRaw>();
 
 		obj->mSslBox = make_shared<SSL_Box>(serverMode);
 		obj->mSslBox->setOnDecData([this](const Buffer::Ptr& buffer) {

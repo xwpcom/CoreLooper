@@ -127,7 +127,7 @@ private:
 	{
 		//用ptr是为了避免在.h中引入ssl相关header(否则会导致app也要引用ssl header)
 		shared_ptr<BufferRaw> mInBuffer;
-		shared_ptr<BufferRaw> mOutBuffer;
+		//shared_ptr<BufferRaw> mOutBuffer;
 		shared_ptr<SSL_Box>	  mSslBox;
 		ByteBuffer mInboxSSL;
 		ByteBuffer mOutboxSSL;
