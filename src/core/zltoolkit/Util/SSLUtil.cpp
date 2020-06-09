@@ -126,7 +126,7 @@ shared_ptr<EVP_PKEY> SSLUtil::loadPrivateKey(const string &file_path_or_data, co
 
     pem_password_cb *cb = [](char *buf, int size, int rwflag, void *userdata) -> int{
         const string *passwd = (const string *)userdata;
-        size = size < passwd->size() ? size :  passwd->size();
+        size = size < (int)passwd->size() ? size : (int)passwd->size();
         memcpy(buf,passwd->data(),size);
         return size;
     };
@@ -173,6 +173,24 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
         WarnL << getLastError();
         return nullptr;
     }
+
+#ifdef _CONFIG_DEBUG_WIRESHARK
+    class Helper {
+    public:
+        static void SslKeyLogFunc(const SSL* ssl, const char* line)
+        {
+            auto fd = fopen("c:/test/sslkey.log", "a+b");
+            if (fd)
+            {
+                fwrite(line, 1, strlen(line), fd);
+                fwrite("\r\n", 1, 2, fd);
+                fclose(fd);
+            }
+        }
+    };
+
+    SSL_CTX_set_keylog_callback(ctx, Helper::SslKeyLogFunc);
+#endif
 
     do{
         if (cer && SSL_CTX_use_certificate(ctx,cer) != 1 ) {
