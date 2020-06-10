@@ -51,6 +51,25 @@ string Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString)
 
 #endif
 
+string Utf8Tool::Unicode2Utf8(const void* text)
+{
+	if (!text)
+	{
+		return "";
+	}
+
+	int len;
+	len = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)text, -1, NULL, 0, NULL, NULL);
+	auto szUtf8 = new char[len + 1];
+	memset(szUtf8, 0, len + 1);
+	WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)text, -1, szUtf8, len, NULL, NULL);
+
+	string ack(szUtf8);
+	delete[]szUtf8;
+	szUtf8 = nullptr;
+	return std::move(ack);
+}
+
 //说明:
 //这些代码是从网上下载的，可能有bug
 

@@ -34,9 +34,12 @@ XiongWanPing 2016~
 #include <iostream>
 #include <vector>
 using namespace std;
+static const char* TAG = "Core";
 
 namespace CPP11_Test
 {
+
+
 TEST_CLASS(_TestCPP11)
 	{
 	public:
@@ -3429,8 +3432,10 @@ TEST_CLASS(Log)
 	}
 };
 
+
 TEST_CLASS(STL)
 {
+
 	TEST_METHOD(MultiMap)
 	{
 #define strcasecmp _stricmp
@@ -3459,6 +3464,14 @@ TEST_CLASS(STL)
 		}
 
 	}
+	
+	TEST_METHOD(StdMove)
+	{
+		string text = "hello";
+		string sz = std::move(text);
+		int x = 0;
+	}
+
 };
 
 }
