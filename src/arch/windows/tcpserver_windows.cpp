@@ -27,13 +27,13 @@ TcpServer_Windows::TcpServer_Windows()
 	SetObjectName("TcpServer_Windows");
 
 	mIocp = INVALID_HANDLE_VALUE;
-	mSock = INVALID_SOCKET;
+	mSocket = INVALID_SOCKET;
 	mPort = 0;
 }
 
 TcpServer_Windows::~TcpServer_Windows()
 {
-	SockTool::CLOSE_SOCKET(mSock);
+	SockTool::CLOSE_SOCKET(mSocket);
 
 	//DV("%s", __func__);
 }
@@ -86,9 +86,9 @@ int TcpServer_Windows::StartServer(int port)
 	ASSERT(hIocp);
 	CreateIoCompletionPort((HANDLE)sock, hIocp, (ULONG_PTR)(IocpObject*)this, 0);
 
-	ASSERT(mSock == INVALID_SOCKET);
+	ASSERT(mSocket == INVALID_SOCKET);
 	mIocp = hIocp;
-	mSock = sock;
+	mSocket = sock;
 
 	//BindProcData(mPort, "port");
 
@@ -96,7 +96,7 @@ int TcpServer_Windows::StartServer(int port)
 	{
 		struct sockaddr_in sa;
 		socklen_t saLen = sizeof(sa);
-		if (0 == getsockname(mSock, (struct sockaddr *)&sa, &saLen))
+		if (0 == getsockname(mSocket, (struct sockaddr *)&sa, &saLen))
 		{
 			port = ntohs(sa.sin_port);
 		}
@@ -104,14 +104,14 @@ int TcpServer_Windows::StartServer(int port)
 
 	mPort = port;
 
-	ret = listen(mSock, 200);
+	ret = listen(mSocket, 200);
 	ASSERT(ret == 0);
 
 	{
 		//typedef int socklen_t;
 		struct sockaddr_in ClientAddr;
 		socklen_t ClientAddrLen = sizeof(ClientAddr);
-		if (0 == getsockname(mSock, (struct sockaddr *)&ClientAddr, &ClientAddrLen))
+		if (0 == getsockname(mSocket, (struct sockaddr *)&ClientAddr, &ClientAddrLen))
 		{
 			//DV("port=%d", ntohs(ClientAddr.sin_port));
 			int x = 0;
@@ -126,11 +126,11 @@ int TcpServer_Windows::StartServer(int port)
 		GUID GuidGetAcceptExSockAddrs = WSAID_GETACCEPTEXSOCKADDRS;
 
 		DWORD dwBytes = 0;
-		ret = WSAIoctl(mSock, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidAcceptEx, sizeof(GuidAcceptEx), &mAcceptEx,
+		ret = WSAIoctl(mSocket, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidAcceptEx, sizeof(GuidAcceptEx), &mAcceptEx,
 			sizeof(mAcceptEx), &dwBytes, NULL, NULL);
 		ASSERT(ret == 0);
 
-		ret = WSAIoctl(mSock, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidGetAcceptExSockAddrs,
+		ret = WSAIoctl(mSocket, SIO_GET_EXTENSION_FUNCTION_POINTER, &GuidGetAcceptExSockAddrs,
 			sizeof(GuidGetAcceptExSockAddrs), &mGetAcceptExSockAddrs, sizeof(mGetAcceptExSockAddrs),
 			&dwBytes, NULL, NULL);
 
@@ -163,7 +163,7 @@ int TcpServer_Windows::PostAccept(IoContext *ioContext)
 	ioContext->mType = IoContextType_Accept;
 	ioContext->mSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	BOOL ok = mAcceptEx(
-		mSock,
+		mSocket,
 		ioContext->mSock,
 		ioContext->mByteBuffer.GetNewDataPointer(),
 		0,
@@ -196,7 +196,7 @@ int TcpServer_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 		bool postAgain = false;
 		int ret = OnAccept(context->mSock);
 		//如果socket没有被关闭，则继续侦听
-		if (ret == 0 && mSock != INVALID_SOCKET)
+		if (ret == 0 && mSocket != INVALID_SOCKET)
 		{
 			//重用context
 			context->mSock = INVALID_SOCKET;
@@ -215,7 +215,7 @@ int TcpServer_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 		if (postAgain)
 		{
 			//context保留着对TcpServer_Windows的一个引用
-			//do nothging here
+			//do nothing here
 		}
 		else
 		{
@@ -236,7 +236,7 @@ int TcpServer_Windows::OnAccept(SOCKET s)
 	int ret = -1;
 
 	//有可能mSock已经被关闭
-	ret = setsockopt(s, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&mSock, sizeof(mSock));
+	ret = setsockopt(s, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&mSocket, sizeof(mSocket));
 	if (ret)
 	{
 		return -1;
@@ -272,11 +272,11 @@ shared_ptr<Channel> TcpServer_Windows::CreateChannel()
 
 void TcpServer_Windows::Stop()
 {
-	if (mSock != INVALID_SOCKET)
+	if (mSocket != INVALID_SOCKET)
 	{
-		shutdown(mSock, SD_BOTH);
-		closesocket(mSock);
-		mSock = INVALID_SOCKET;
+		shutdown(mSocket, SD_BOTH);
+		closesocket(mSocket);
+		mSocket = INVALID_SOCKET;
 	}
 }
 

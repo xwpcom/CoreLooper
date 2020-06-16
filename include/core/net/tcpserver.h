@@ -2,6 +2,7 @@
 
 #ifdef _MSC_VER
 #include "arch/windows/tcpserver_windows.h"
+#include "arch/windows/tcpserver2_windows.h"
 #define BASE_TCP_SERVER TcpServer_Windows
 #else
 #include "arch/linux/tcpserver_linux.h"

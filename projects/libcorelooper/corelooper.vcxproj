@@ -314,7 +314,10 @@
     <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp" />
     <ClCompile Include="..\..\src\arch\windows\serialport_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\tcpclient_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\tcplistener_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\tcpserver2_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\tcpserver_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\tests\unittest.win.cpp" />
     <ClCompile Include="..\..\src\arch\windows\udpclient_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\udpserver_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\iocontext.cpp" />
@@ -442,6 +445,7 @@
     <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h" />
     <ClInclude Include="..\..\include\arch\windows\serialport_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\tcpclient_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\tcpserver2_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\tcpserver_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\udpclient_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\udpserver_windows.h" />

@@ -70,7 +70,7 @@ protected:
 
 protected:
 	HANDLE mIocp;
-	SOCKET mSock;
+	SOCKET mSocket;
 	int mPort;
 
 	LPFN_ACCEPTEX mAcceptEx=nullptr;

@@ -322,6 +322,15 @@
     <ClCompile Include="..\..\src\core\file\tests\ini.tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\tcplistener_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\tests\unittest.win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\tcpserver2_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -772,6 +781,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\file\ini.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\tcpserver2_windows.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>
