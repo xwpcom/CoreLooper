@@ -89,6 +89,10 @@ int ConsolePage::Init()
 		{
 			mMaxLogCount = 1000;
 		}
+
+//#ifdef _DEBUG
+		//mMaxLogCount = 10;
+//#endif
 	}
 
 	/*
