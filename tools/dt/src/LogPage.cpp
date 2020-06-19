@@ -308,7 +308,7 @@ void LogPage::OnRelayout(const CRect& rc)
 	mFilterPage->MoveWindow(rcItem);
 
 	int itemHeight = rc.Height() / 5;
-	itemHeight = MIN(itemHeight, 160);
+	itemHeight = MAX(itemHeight, 320);
 
 	rcItem.top = rcItem.bottom + 1;
 	rcItem.bottom = rc.bottom - itemHeight;
