@@ -17,7 +17,7 @@ JNIEnv* tagJniInfo::GetJniEnv()
 		//https://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/invocation.html#attach_current_thread
 		jvm->GetEnv((LPVOID*)&pEnv, JNI_VERSION_1_6);
 		auto env = (JNIEnv *)pEnv;
-		ASSERT(env);
+		ASSERT(env);//如果在这里报错，请注意:只能在JniLooper中调用java api,否则可能死锁
 		return env;
 	}
 
