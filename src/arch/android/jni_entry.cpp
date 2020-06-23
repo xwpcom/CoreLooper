@@ -41,7 +41,7 @@ int av_jni_set_java_vm(void *vm, void *log_ctx)
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-	DV("JNI_OnLoad,compile time=[%s %s],jvm=%p", __DATE__, __TIME__,vm);
+	DV("JNI_OnLoad#bear.2020.06.23,compile time=[%s %s],jvm=%p", __DATE__, __TIME__,vm);
 	//av_jni_set_java_vm(vm, nullptr);
 	//av_log_set_level(AV_LOG_TRACE);
 	//av_log_set_callback(ffmpeg_log);

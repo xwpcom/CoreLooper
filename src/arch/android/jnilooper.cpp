@@ -26,6 +26,8 @@ void JniLooper::OnCreate()
 		DW("jvm is null");
 		ASSERT(FALSE);
 	}
+
+	DV("JniLooper::OnCreate");
 }
 
 void JniLooper::OnDestroy()
