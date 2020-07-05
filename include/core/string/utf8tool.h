@@ -6,7 +6,7 @@ namespace Core {
 class CORE_EXPORT Utf8Tool
 {
 public:
-	static string Utf8Tool::Unicode2Utf8(const void* text);
+	static string Unicode2Utf8(const void* text);
 	static void UTF_8ToUnicode(wchar_t* pOut, const char *pText);  // 把UTF-8转换成Unicode   
 	static void UnicodeToUTF_8(char* pOut, const wchar_t* pText);  //Unicode 转换成UTF-8   
 	static void UnicodeToGB2312(char* pOut, wchar_t uData);  // 把Unicode 转换成 GB2312   

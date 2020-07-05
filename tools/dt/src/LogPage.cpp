@@ -6,6 +6,7 @@
 #include "LogItemPage.h"
 #include "logmanager.h"
 #include "logwnd.h"
+#include "core/string/utf8tool.h"
 
 IMPLEMENT_DYNAMIC(LogPage, BasePage)
 
@@ -272,11 +273,13 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 	
 	{
 		auto data = item->msg;
+
 		StringTool::Replace(data,"\r", "^");
 		StringTool::Replace(data,"\n", "~");
 		StringTool::Replace(data,"\t","`");
 
-		list.SetItemText(nIndex, mArrIdx[eIdxMsg], A2T(data.c_str()));
+		CString text= Utf8Tool::UTF8_to_UNICODE(data.c_str(),data.length());
+		list.SetItemText(nIndex, mArrIdx[eIdxMsg], text);
 
 	}
 
