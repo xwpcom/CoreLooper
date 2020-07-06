@@ -456,7 +456,7 @@ long tagHandlerInternalData::SetTimerEx(UINT interval, shared_ptr<tagTimerExtraI
 		return mLooper->SetTimerEx(mHandler, interval, info);
 	}
 
-	DW("Fail %s due to mLooper is null", __func__);
+	LogW(TAG,"Fail %s due to mLooper is null", __func__);
 	return 0;
 }
 
@@ -479,7 +479,7 @@ long tagHandlerInternalData::SetTimer(UINT interval)
 		return mLooper->SetTimer(mHandler, interval);
 	}
 
-	DW("Fail %s due to mLooper is null", __func__);
+	LogW(TAG,"Fail %s due to mLooper is null", __func__);
 	return 0;
 }
 
@@ -532,7 +532,7 @@ void tagHandlerInternalData::Dump(int level, bool includingChild)
 
 	if (includingChild && mChildren.size()>0)
 	{
-		DV("%s%s#begin", indent.c_str(), mHandler->GetObjectName().c_str());
+		LogV(TAG,"%s%s#begin", indent.c_str(), mHandler->GetObjectName().c_str());
 		{
 			for (auto iter = mChildren.begin(); iter != mChildren.end();)
 			{
@@ -563,7 +563,7 @@ void tagHandlerInternalData::Dump(int level, bool includingChild)
 				}
 			}
 		}
-		DV("%s%s#end", indent.c_str(), mHandler->GetObjectName().c_str());
+		LogV(TAG,"%s%s#end", indent.c_str(), mHandler->GetObjectName().c_str());
 	}
 	else
 	{
@@ -580,7 +580,7 @@ void tagHandlerInternalData::Dump(int level, bool includingChild)
 			}
 		}
 
-		DV("%s%s,this=0x%08x,url=[%s]%s", indent.c_str(), mHandler->GetObjectName().c_str(), this, mHandler->GetUrl().c_str(), extraInfo.c_str());
+		LogV(TAG,"%s%s,this=0x%08x,url=[%s]%s", indent.c_str(), mHandler->GetObjectName().c_str(), this, mHandler->GetUrl().c_str(), extraInfo.c_str());
 	}
 	//#endif
 }
@@ -591,11 +591,11 @@ void tagHandlerInternalData::DumpAll()
 	AutoLock lock(&gCSBaseHandler);
 	if (gHandlers.empty())
 	{
-		DV("%s# is empty", __func__);
+		LogV(TAG,"%s# is empty", __func__);
 	}
 	else
 	{
-		DW("%s#begin,", __func__);
+		LogW(TAG,"%s#begin,", __func__);
 		for (auto& iter :gHandlers)
 		{
 			Handler *obj = (Handler *)iter.second;
@@ -605,7 +605,7 @@ void tagHandlerInternalData::DumpAll()
 				obj->mInternalData->Dump(0,includingChild);
 			}
 		}
-		DW("%s#end", __func__);
+		LogW(TAG, "%s#end", __func__);
 	}
 }
 
@@ -639,7 +639,7 @@ void tagHandlerInternalData::OnPrepareDestructor()
 	auto seconds = (tickNow - mTickDestroy) / 1000;
 	if (seconds >= 10)
 	{
-		DW("%s is still alive for %lld seconds after called Destroy()",GetName().c_str(), seconds);
+		LogW(TAG,"%s is still alive for %lld seconds after called Destroy()",GetName().c_str(), seconds);
 	}
 }
 

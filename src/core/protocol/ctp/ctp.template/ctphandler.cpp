@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "core/protocol/ctp/CtpHandler.h"
 
-
 namespace Bear {
 namespace Core {
 namespace Net {

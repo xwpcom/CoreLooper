@@ -8,6 +8,7 @@
 namespace Bear {
 namespace Core
 {
+static const char* TAG = "IoContext";
 namespace Net {
 #ifdef _DEBUGXX
 static long gIoContextRC = 0;
@@ -47,7 +48,7 @@ int IoContext::PostSend()
 	ASSERT(mType == IoContextType_Send);
 	if (!mBaseClient)
 	{
-		DV("invalid mBaseClient");
+		LogW(TAG,"invalid mBaseClient");
 		mByteBuffer.clear();
 		return -1;
 	}

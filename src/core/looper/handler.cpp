@@ -79,7 +79,7 @@ Handler::Handler()
 		int nc = (int)tagHandlerInternalData::gHandlers.size();
 		if (tagHandlerInternalData::gRationalHandlerUpperLimit && nc > tagHandlerInternalData::gRationalHandlerUpperLimit)
 		{
-			DW("new Handler(0x%p) out of limit,count=%d,limit=%d", this, nc, tagHandlerInternalData::gRationalHandlerUpperLimit);
+			LogW(TAG,"new Handler(0x%p) out of limit,count=%d,limit=%d", this, nc, tagHandlerInternalData::gRationalHandlerUpperLimit);
 		}
 	}
 #endif
@@ -114,13 +114,13 @@ LRESULT Handler::sendMessage(UINT msg, WPARAM wp, LPARAM lp)
 {
 	if (!mInternalData->mCreated && msg!=BM_CREATE)
 	{
-		DW("fail sendMessage,need call Create()");
+		LogW(TAG, "fail sendMessage,need call Create()");
 		return 0;
 	}
 
 	if (!mInternalData->mLooper)
 	{
-		DW("mInternalData->mLooper is null,msg=%d,name=%s", msg,GetObjectName().c_str());
+		LogW(TAG,"mInternalData->mLooper is null,msg=%d,name=%s", msg,GetObjectName().c_str());
 		return 0;
 	}
 
@@ -141,7 +141,7 @@ LRESULT Handler::postMessage(shared_ptr<Message> obj)
 {
 	if (!IsCreated() || !obj)
 	{
-		DW("fail %s,IsCreated()=%d", __func__, IsCreated());
+		LogW(TAG, "fail %s,IsCreated()=%d", __func__, IsCreated());
 		return 0;
 	}
 
@@ -191,13 +191,13 @@ LRESULT Handler::postMessage(UINT msg, WPARAM wp, LPARAM lp)
 {
 	if (!mInternalData->mCreated)
 	{
-		DW("fail sendMessage,need call Create()");
+		LogW(TAG, "fail sendMessage,need call Create()");
 		return 0;
 	}
 
 	if (!mInternalData->mLooper)
 	{
-		DW("mInternalData->mLooper is null");
+		LogW(TAG, "mInternalData->mLooper is null");
 		return 0;
 	}
 
@@ -236,7 +236,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 			OnCreate();
 			if (!mInternalData->mOnCreateCalled)
 			{
-				DW("%s,Handler::OnCreate() is NOT called,make sure __super::OnCreate() is called.", GetObjectName().c_str());
+				LogW(TAG,"%s,Handler::OnCreate() is NOT called,make sure __super::OnCreate() is called.", GetObjectName().c_str());
 				ASSERT(FALSE);
 			}
 		}
@@ -253,7 +253,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 			//当用户忘记调用基类OnDestroy()时给出提醒
 			if (!mInternalData->mOnDestroyCalled)
 			{
-				DW("%s,Handler::OnDestroy() is NOT called,make sure __super::OnDestroy() is called.",GetObjectName().c_str());
+				LogW(TAG,"%s,Handler::OnDestroy() is NOT called,make sure __super::OnDestroy() is called.",GetObjectName().c_str());
 				ASSERT(FALSE);
 			}
 		}
@@ -364,7 +364,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 
 				for (auto iter = timerIds.begin(); iter != timerIds.end(); ++iter)
 				{
-					//DW("cancel runnable,id=%d",*iter);
+					//LogW(TAG,"cancel runnable,id=%d",*iter);
 					KillTimer(*iter);
 				}
 			}
@@ -400,7 +400,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 	{
 		//这里是避免main looper没响应此消息时，用来自动删除item
 		tagLogItem *item = (tagLogItem *)wp;
-		DW("should handle in main looper,tag=[%s],text=[%s]", item->mTag.c_str(), item->mText.c_str());
+		LogW(TAG,"should handle in main looper,tag=[%s],text=[%s]", item->mTag.c_str(), item->mText.c_str());
 		delete item;
 		item = nullptr;
 
@@ -467,7 +467,7 @@ int Handler::PostDisposeHelper(WPARAM wp)
 	}
 	else
 	{
-		DW("fail %s", __func__);
+		LogW(TAG,"fail %s", __func__);
 	}
 
 	return -1;
@@ -714,7 +714,7 @@ LRESULT Handler::postRunnable(shared_ptr<Runnable> obj)
 {
 	if (!IsCreated() || !obj)
 	{
-		DW("fail %s,IsCreated()=%d",__func__, IsCreated());
+		LogW(TAG,"fail %s,IsCreated()=%d",__func__, IsCreated());
 		return -1;
 	}
 
@@ -738,7 +738,7 @@ LRESULT Handler::postDelayedRunnable(shared_ptr<Runnable> obj, UINT ms)
 {
 	if (!IsCreated() || !obj)
 	{
-		DW("%s fail",__func__);
+		LogW(TAG,"%s fail",__func__);
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -754,7 +754,7 @@ LRESULT Handler::postDelayedRunnable(shared_ptr<Runnable> obj, UINT ms)
 	{
 		info->mSelfRef = nullptr;
 
-		DW("%s fail", __func__);
+		LogW(TAG,"%s fail", __func__);
 		ASSERT(FALSE);
 	}
 
@@ -882,7 +882,7 @@ CriticalSection	Handler::mLogConfigCS;
 map<string, tagObjectLogConfig> Handler::sLogMap;
 int Handler::OnProcDataGetter(const string& name, string& desc)
 {
-	DW("请在子类实现 %s.%s%s", GetObjectName().c_str(), name.c_str(), desc.c_str());
+	LogW(TAG,"请在子类实现 %s.%s%s", GetObjectName().c_str(), name.c_str(), desc.c_str());
 	ASSERT(FALSE);
 	return -1;
 }
@@ -905,7 +905,7 @@ int Handler::OnProcDataSetter(string name, int value)
 		}
 		else
 		{
-			DW("invalid value %d for %s", value, "age");
+			LogW(TAG,"invalid value %d for %s", value, "age");
 		}
 	}
 	*/
@@ -927,7 +927,7 @@ int Handler::OnProcDataSetter(string, BYTE)
 
 int Handler::OnProcDataSetter(string name, DWORD value)
 {
-	DW("name=%s,value=%d", name.c_str(), value);
+	LogW(TAG,"name=%s,value=%d", name.c_str(), value);
 	ASSERT(FALSE);
 	return eSetterResult_InvalidName;
 }
@@ -1128,7 +1128,7 @@ void Handler::Log(const string& tag, int level, tagObjectLogConfig& cfg, const c
 			}
 			else if (level == eLogW)
 			{
-				DW("%s", text);
+				LogW(TAG,"%s", text);
 			}
 			else if (level == eLogE)
 			{
@@ -1169,7 +1169,7 @@ void Handler::Log(const string& tag, int level, tagObjectLogConfig& cfg, const c
 		}
 		else
 		{
-			DW("no main looper,skip log(%s)", text);
+			LogW(TAG,"no main looper,skip log(%s)", text);
 		}
 	}
 }

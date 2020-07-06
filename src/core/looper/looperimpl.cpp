@@ -77,7 +77,7 @@ LooperImpl::LooperImpl()
 	mLooperInternalData = make_shared<tagLooperInternalData>(this);
 
 #ifdef _DEBUG
-	DV("%s(%s),this=%p", __func__,mThreadName.c_str(),this);
+	LogV(TAG,"%s(%s),this=%p", __func__,mThreadName.c_str(),this);
 #endif
 	mInternalData->mIsLooper = true;
 	mThreadId = 0;
@@ -102,7 +102,7 @@ LooperImpl::~LooperImpl()
 		tick=ShellTool::GetTickCount64() - mLooperInternalData->mTickStartQuit;
 	}
 
-	DV("%s(%s),this=%p,quit tick=%lld", __func__, mThreadName.c_str(), this,tick);
+	LogV(TAG,"%s(%s),this=%p,quit tick=%lld", __func__, mThreadName.c_str(), this,tick);
 
 	ASSERT(!mLooperInternalData->mLooperRunning);
 	ASSERT(mLooperInternalData->mExitEvents.size() == 0);
@@ -114,7 +114,7 @@ LooperImpl::~LooperImpl()
 	}
 
 #ifdef _CONFIG_CALC_EVER_MAX_SIZE
-	DV("mEverMaxMessages = %d", mEverMaxMessages);
+	LogV(TAG,"mEverMaxMessages = %d", mEverMaxMessages);
 #endif
 
 	auto& msgList = mLooperInternalData->mMessageList;
@@ -136,7 +136,7 @@ LooperImpl::~LooperImpl()
 
 		if (fatalError)
 		{
-			DW("fatal error,message pending in queue,please check app logic,nc=%d", nc);
+			LogW(TAG,"fatal error,message pending in queue,please check app logic,nc=%d", nc);
 			if (!mLooperInternalData->mAttachThread)
 			{
 				ASSERT(FALSE);

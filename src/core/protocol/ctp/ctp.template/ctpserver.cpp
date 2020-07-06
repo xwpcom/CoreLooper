@@ -22,8 +22,9 @@ void CtpServer::OnCreate()
 
 shared_ptr<Channel> CtpServer::CreateChannel()
 {
-	auto client(make_shared<TcpClient>());
-	return client;
+	auto obj(make_shared<TcpClient>());
+	obj->SignalOnConnect.connect(this, &CtpServer::OnConnect);
+	return obj;
 }
 
 shared_ptr<CtpHandler> CtpServer::CreateHandler()
@@ -34,8 +35,6 @@ shared_ptr<CtpHandler> CtpServer::CreateHandler()
 
 void CtpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bundle* extraInfo)
 {
-	//DV("%s", __func__);
-
 	TcpClient* client = (TcpClient*)endPoint;
 	client->SignalOnConnect.disconnect(this);
 

@@ -2723,27 +2723,8 @@ public:
 				{
 					__super::OnCreate();
 
-					class DelayExit :public Runnable
-					{
-					public:
-						DelayExit()
-						{
-							DV("%s", __func__);
-						}
-
-						virtual ~DelayExit()
-						{
-							DV("%s", __func__);
-						}
-
-						void Run()
-						{
-							CurrentLooper()->PostQuitMessage();
-						}
-					};
-
 					DV("postDelayedRunnable");
-					postDelayedRunnable(make_shared<DelayExit>(), 1000);
+					postDelayedRunnable(make_shared<DelayExitRunnable>(), 1000);
 				}
 			};
 			auto looper = make_shared<MainLooper>();

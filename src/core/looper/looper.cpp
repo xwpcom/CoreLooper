@@ -19,7 +19,7 @@ Looper::~Looper()
 		SetMainLooper(nullptr);
 	}
 
-	DV("%s,name=%s", __func__, GetObjectName().c_str());
+	LogV(TAG,"%s,name=%s", __func__, GetObjectName().c_str());
 
 	if (CurrentLooper())
 	{

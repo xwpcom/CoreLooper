@@ -49,15 +49,7 @@ public:
 						obj->SignalAccept.connect(this, &MainLooper::OnAccept);
 					}
 
-					class DelayExit :public Runnable
-					{
-						void Run()
-						{
-							Looper::CurrentLooper()->PostQuitMessage();
-						}
-					};
-
-					postDelayedRunnable(make_shared<DelayExit>(), 5 * 1000);
+					postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
 				}
 			}
 

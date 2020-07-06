@@ -33,15 +33,7 @@ string Ajax_Exit::Process(const NameValue& params)
 
 	if (looper)
 	{
-		class DelayExit :public Runnable
-		{
-			void Run()
-			{
-				Looper::CurrentLooper()->PostQuitMessage();
-			}
-		};
-
-		looper->postDelayedRunnable(make_shared<DelayExit>(), 3 * 1000);
+		looper->postDelayedRunnable(make_shared<DelayExitRunnable>(), 3 * 1000);
 		error = 0;
 	}
 #endif

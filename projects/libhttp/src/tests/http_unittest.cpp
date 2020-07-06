@@ -177,17 +177,7 @@ public:
 
 				}
 
-				{
-					class DelayExit :public Runnable
-					{
-						void Run()
-						{
-							Looper::CurrentLooper()->PostQuitMessage();
-						}
-					};
-
-					//postDelayedRunnable(make_shared<DelayExit>(), 60 * 1000);
-				}
+				//postDelayedRunnable(make_shared<DelayExitRunnable>(), 60 * 1000);
 			}
 		};
 
@@ -217,17 +207,7 @@ public:
 
 				int ret = svr->StartServer(80);
 
-				{
-					class DelayExit :public Runnable
-					{
-						void Run()
-						{
-							Looper::CurrentLooper()->PostQuitMessage();
-						}
-					};
-
-					postDelayedRunnable(make_shared<DelayExit>(), 30 * 1000);
-				}
+				postDelayedRunnable(make_shared<DelayExitRunnable>(), 30 * 1000);
 
 				{
 					class DemoHandler :public Handler
@@ -360,15 +340,7 @@ public:
 				obj->Execute(url);
 
 				{
-					class DelayExit :public Runnable
-					{
-						void Run()
-						{
-							Looper::CurrentLooper()->PostQuitMessage();
-						}
-					};
-
-					postDelayedRunnable(make_shared<DelayExit>(), 5 * 1000);
+					postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
 				}
 			}
 
@@ -409,19 +381,7 @@ public:
 
 				int ret = svr->StartServer(8080);
 
-				/*
-				{
-					class DelayExit :public Runnable
-					{
-						void Run()
-						{
-							Looper::CurrentLooper()->PostQuitMessage();
-						}
-					};
-
-					postDelayedRunnable(make_shared<DelayExit>(), 30 * 1000);
-				}
-				*/
+				postDelayedRunnable(make_shared<DelayExitRunnable>(), 30 * 1000);
 			}
 		};
 

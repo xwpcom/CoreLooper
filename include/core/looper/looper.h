@@ -26,6 +26,14 @@ public:
 	static bool IsMainLooper(LooperImpl *looper);
 };
 
+class DelayExitRunnable :public Runnable
+{
+	void Run()
+	{
+		Looper::GetMainLooper()->PostQuitMessage();
+	}
+};
+
 //main looper helper
 class CORE_EXPORT MainLooper_ :public Looper
 {
@@ -36,6 +44,11 @@ public:
 		SetObjectName(name);
 		mThreadName = name;
 		SetMainLooper(this);
+	}
+
+	void DelayExit(int ms)
+	{
+		postDelayedRunnable(make_shared<DelayExitRunnable>(), ms);
 	}
 };
 
