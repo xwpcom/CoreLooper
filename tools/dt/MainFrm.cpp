@@ -302,4 +302,15 @@ void MainFrame::OnKillFocus(CWnd* pNewWnd)
 void MainFrame::OnRefreshTaskIcon()
 {
 	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);//Ë¢ÐÂÈÎÎñÀ¸icon,test ok
+
+	{
+		//starcraft title
+		auto wnd = ::FindWindow(_T("OsWindow"), nullptr);
+		if (wnd)
+		{
+			::SetWindowText(wnd, _T("c++ test"));
+			int x = 0;
+		}
+	}
+
 }

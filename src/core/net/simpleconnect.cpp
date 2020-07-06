@@ -53,7 +53,8 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 {
 	if (error)
 	{
-		DW("%s,connect fail", __func__);
+		LogW(TAG,"connect fail,error=%d(%s)", error,SockTool::GetErrorDesc(error));
+
 		Destroy();
 	}
 	else

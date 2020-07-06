@@ -7,6 +7,8 @@ namespace Net {
 namespace Protocol {
 namespace CTP {
 
+static const char* TAG = "CommonTextProtocol_Impl";
+
 CommonTextProtocol_Impl::CommonTextProtocol_Impl()
 {
 	//mInbox.SetBufferSize(64, 64);
@@ -292,6 +294,11 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 	if (!mReset && needAck)
 	{
 		mWaitAckItems[seq] = bundle;
+
+		if (mWaitAckItems.size() > 100)
+		{
+			LogW(TAG, "mWaitAckItems.size()=%d", (int)mWaitAckItems.size());
+		}
 	}
 
 	mOutbox.MakeSureEndWithNull();

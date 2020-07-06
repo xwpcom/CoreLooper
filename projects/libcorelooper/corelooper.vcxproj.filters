@@ -331,6 +331,15 @@
     <ClCompile Include="..\..\src\arch\windows\tcpserver2_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctphandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -784,6 +793,15 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\arch\windows\tcpserver2_windows.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctpclient.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctphandler.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

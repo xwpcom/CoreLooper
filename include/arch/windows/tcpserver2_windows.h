@@ -27,7 +27,7 @@ public:
 	static int InitSSL(const string& filePath);
 #endif
 protected:
-	virtual std::shared_ptr<Channel> CreateChannel();
+	virtual shared_ptr<Channel> CreateChannel();
 
 	virtual void OnAccept(Handler*,SOCKET s);
 

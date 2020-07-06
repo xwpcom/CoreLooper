@@ -9,6 +9,7 @@ namespace Core
 {
 namespace Net {
 
+static const char* TAG = "SockTool";
 
 int SockTool::InitSockTool()
 {
@@ -17,7 +18,7 @@ int SockTool::InitSockTool()
 	int nRet = 0;
 	if ((nRet = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
 	{
-		DW("Fail to CSockTool::InitWSASocket");
+		LogW(TAG,"Fail to CSockTool::InitWSASocket");
 		return -1;
 	}
 #endif
@@ -396,7 +397,7 @@ const char * SockTool::GetErrorDesc(int uErrCode)
 		ITEM(WSA_E_NO_MORE),
 		ITEM(WSA_E_CANCELLED),
 		ITEM(WSAEREFUSED),
-
+		ITEM(ERROR_CONNECTION_REFUSED),
 
 	};
 
@@ -406,7 +407,7 @@ const char * SockTool::GetErrorDesc(int uErrCode)
 			return pszErr[i + 1];
 	}
 
-	DT("Unknown WinSock errcode:0x%x(%d)", uErrCode, uErrCode);
+	LogW(TAG,"Unknown WinSock errcode:0x%x(%d)", uErrCode, uErrCode);
 	return "Unknown WinSock errcode";
 #else
 	return strerror(uErrCode);
