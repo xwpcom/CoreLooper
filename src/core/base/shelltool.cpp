@@ -4,7 +4,9 @@
 #include "string/textseparator.h"
 #include "base/stringtool.h"
 #include "file/inifile.h"
+#include "core/net/nettool.h"
 #ifdef _MSC_VER
+using namespace Bear::Core::Net;
 #include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
 #include <Mmsystem.h>
@@ -1543,4 +1545,13 @@ int ShellTool::System(const char *szCmd)
 	return ret;
 }
 
+#endif
+
+#ifdef _MSC_VER
+bool ShellTool::IsDeveloperPC()
+{
+	bool ok = NetTool::MacExists("60-EE-5C-B3-D9-F3") || NetTool::MacExists("9C-5C-8E-98-9D-98");
+	return ok
+		;//bear pc
+}
 #endif
