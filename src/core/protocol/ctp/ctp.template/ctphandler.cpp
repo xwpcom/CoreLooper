@@ -7,6 +7,8 @@ namespace Net {
 namespace Protocol {
 namespace CTP {
 
+static const char* TAG = "CtpHandler";
+
 CtpHandler::CtpHandler()
 {
 	SetObjectName("CtpHandler");
@@ -71,10 +73,7 @@ void CtpHandler::OnConnect(Channel*, long error, Bundle*)
 			mProtocol->SetCB(this);
 		}
 
-		int second = 180;
-#ifdef _DEBUG
-		second = 5;
-#endif
+		int second = 60;
 		SetTimer(mTimer_CheckAlive, second * 1000);
 		UpdateTickAlive();
 	}
@@ -121,7 +120,7 @@ void CtpHandler::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 	int ret = mOutbox.Append(data);
 	if (ret != data.GetActualDataLength())
 	{
-		DW("fail append data");
+		LogW(TAG,"fail append data");
 		if (mDataEndPoint)
 		{
 			mDataEndPoint->Close();
@@ -180,18 +179,17 @@ void CtpHandler::OnTimer(long id)
 	{
 		auto tickNow = ShellTool::GetTickCount64();
 		int second = 180;
-#ifdef _DEBUG
-		second = 5;
-#endif
+
 		if (tickNow > mTickAlive + second * 1000)
 		{
+			LogI(TAG, "timeout,auto close");
 			if (mDataEndPoint)
 			{
 				mDataEndPoint->Close();
 			}
 		}
 
-#ifdef _DEBUG
+#ifdef _DEBUGx
 		{
 			if (mProtocol)
 			{

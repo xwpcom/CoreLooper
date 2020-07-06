@@ -93,7 +93,7 @@ void SimpleConnect::OnReceive(Channel*)
 		auto bytes = mInbox.Write(buf, ret);
 		if (bytes != ret)
 		{
-			DW("mInbox.len=%d overflow,ret=%d,bytes=%d,", mInbox.GetDataLength(), ret, bytes);
+			LogW(TAG,"mInbox.len=%d overflow,ret=%d,bytes=%d,", mInbox.GetDataLength(), ret, bytes);
 			Destroy();
 			return;
 		}
@@ -163,7 +163,7 @@ void SimpleConnect::OnTimer(long id)
 {
 	if (id == mTimer_AutoClose)
 	{
-		DW("timeout auto close,this=%p", this);
+		LogW(TAG,"timeout auto close,this=%p", this);
 		Destroy();
 		return;
 	}

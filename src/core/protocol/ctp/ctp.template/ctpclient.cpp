@@ -84,7 +84,7 @@ void CtpClient::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 
 void CtpClient::OnTimer(long id)
 {
-#ifdef _DEBUG
+#ifdef _DEBUGx
 	if (id == eTimerTest)
 	{
 		if (mProtocol)
