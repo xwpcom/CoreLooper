@@ -21,7 +21,12 @@ SimpleConnect::~SimpleConnect()
 
 int SimpleConnect::StartConnect(Bundle& bundle)
 {
-	if (mDataEndPoint)
+	if (IsDestroyed())
+	{
+		return -1;
+	}
+
+	if (mChannel)
 	{
 		//目前不支持多次调用
 		ASSERT(FALSE);
@@ -40,7 +45,7 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 	obj->SignalOnSend.connect(this, &SimpleConnect::OnSend);
 	obj->SignalOnReceive.connect(this, &SimpleConnect::OnReceive);
 	obj->SignalOnClose.connect(this, &SimpleConnect::OnClose);
-	mDataEndPoint = obj;
+	mChannel = obj;
 	AddChild(obj);
 
 	obj->Connect(bundle);
@@ -79,10 +84,10 @@ void SimpleConnect::OnSend(Channel*)
 
 void SimpleConnect::OnReceive(Channel*)
 {
-	while (mDataEndPoint)
+	while (mChannel)
 	{
 		BYTE buf[1024*4];
-		int ret = mDataEndPoint->Receive(buf, sizeof(buf) - 1);
+		int ret = mChannel->Receive(buf, sizeof(buf) - 1);
 		if (ret <= 0)
 		{
 			break;
@@ -107,10 +112,10 @@ void SimpleConnect::OnDestroy()
 {
 	LogV(TAG,"%s,this=%p", __func__, this);
 
-	if (mDataEndPoint)
+	if (mChannel)
 	{
-		mDataEndPoint->Destroy();
-		PostDispose(mDataEndPoint);
+		mChannel->Destroy();
+		PostDispose(mChannel);
 		mConnected = false;
 	}
 
@@ -121,7 +126,7 @@ void SimpleConnect::OnDestroy()
 
 void SimpleConnect::CheckSend()
 {
-	while (mDataEndPoint)
+	while (mChannel)
 	{
 		if (mOutbox.GetActualDataLength() == 0)
 		{
@@ -131,7 +136,7 @@ void SimpleConnect::CheckSend()
 
 		LPBYTE frame = mOutbox.GetDataPointer();
 		int frameLen = mOutbox.GetActualDataLength();
-		int ret = mDataEndPoint->Send(frame, frameLen);
+		int ret = mChannel->Send(frame, frameLen);
 		if (ret > 0)
 		{
 			SignalSendOut(this, frame, frameLen);
@@ -155,9 +160,9 @@ void SimpleConnect::Close()
 {
 	ASSERT(IsMyselfThread());
 
-	if (mDataEndPoint)
+	if (mChannel)
 	{
-		mDataEndPoint->Close();
+		mChannel->Close();
 	}
 }
 

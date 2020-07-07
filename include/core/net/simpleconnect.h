@@ -61,7 +61,7 @@ protected:
 	void CheckSend();
 	void Close();
 
-	shared_ptr<Channel> mDataEndPoint;
+	shared_ptr<Channel> mChannel;
 	bool mConnected = false;
 	int mTimeOutSecond = 90;
 	ByteBuffer mInbox;

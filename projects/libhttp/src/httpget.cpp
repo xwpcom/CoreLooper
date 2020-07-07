@@ -121,7 +121,7 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 
 		//在android下面，有时网络不正常，但connect返回连接成功，此时send时会以EPIPE失败
 		auto len = req.length();
-		int ret = mDataEndPoint->Send((LPVOID)req.c_str(), (int)len);
+		int ret = mChannel->Send((LPVOID)req.c_str(), (int)len);
 		if (ret == len)
 		{
 			mInbox.PrepareBuf(4 * 1024);

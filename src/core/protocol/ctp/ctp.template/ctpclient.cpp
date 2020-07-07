@@ -76,9 +76,9 @@ void CtpClient::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 	if (ret != data.GetActualDataLength())
 	{
 		LogW(TAG,"fail append data");
-		if (mDataEndPoint)
+		if (mChannel)
 		{
-			mDataEndPoint->Close();
+			mChannel->Close();
 		}
 	}
 	CheckSend();
