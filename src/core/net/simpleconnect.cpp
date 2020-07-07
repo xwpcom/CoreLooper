@@ -53,7 +53,7 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 {
 	if (error)
 	{
-		LogW(TAG,"connect fail,error=%d(%s)", error,SockTool::GetErrorDesc(error));
+		LogW(TAG,"%p connect fail,error=%d(%s)",this, error,SockTool::GetErrorDesc(error));
 
 		Destroy();
 	}
@@ -105,7 +105,7 @@ void SimpleConnect::OnReceive(Channel*)
 
 void SimpleConnect::OnDestroy()
 {
-	//DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 
 	if (mDataEndPoint)
 	{
@@ -113,6 +113,8 @@ void SimpleConnect::OnDestroy()
 		PostDispose(mDataEndPoint);
 		mConnected = false;
 	}
+
+	SignalDestroy(this);
 
 	__super::OnDestroy();
 }

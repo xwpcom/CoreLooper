@@ -12,6 +12,8 @@ enum
 	eTimerTest,
 };
 
+static const char* TAG = "CtpClient";
+
 CtpClient::CtpClient()
 {
 	SetObjectName("CtpClient");
@@ -20,6 +22,7 @@ CtpClient::CtpClient()
 CtpClient::~CtpClient()
 {
 	CommonTextProtocolFactory::Destroy(mProtocol);
+	mProtocol = nullptr;
 }
 
 void CtpClient::OnCreate()
@@ -72,7 +75,7 @@ void CtpClient::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 	int ret = mOutbox.Append(data);
 	if (ret != data.GetActualDataLength())
 	{
-		DW("fail append data");
+		LogW(TAG,"fail append data");
 		if (mDataEndPoint)
 		{
 			mDataEndPoint->Close();

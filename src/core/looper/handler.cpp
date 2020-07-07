@@ -684,10 +684,15 @@ void Handler::Destroy()
 {
 	if (!IsCreated())
 	{
+		int x = 0;
 		return;
 	}
 
-	if (!mInternalData->mDestroy)
+	if (mInternalData->mDestroy)
+	{
+		int x = 0;
+	}
+	else
 	{
 		mInternalData->mDestroy = true;
 		sendMessage(BM_DESTROY);
