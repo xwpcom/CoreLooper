@@ -431,5 +431,7 @@ public:
 };
 #endif
 
+#define SMART_CAST(cls) dynamic_pointer_cast<cls>(shared_from_this())
+
 }
 }

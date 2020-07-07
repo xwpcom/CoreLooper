@@ -237,6 +237,7 @@ void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
 void LogPage::AddItem(shared_ptr<LogItem>& item)
 {
 	auto& list = mListCtrl;
+	auto selSave=list.GetNextItem(-1, LVNI_SELECTED);
 	string time;
 	//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
 	auto hour = item->time / 10000000;
@@ -284,8 +285,17 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 	}
 
 	//仅当选中最后一项时才更新选中Item
-	if (list.GetNextItem(-1, LVNI_SELECTED) == nIndex - 1)
+
+	if (selSave == nIndex - 1)
 	{
+		{
+			static int idx = -1;
+			++idx;
+			auto& list = mListCtrl;
+			int sel = list.GetNextItem(-1, LVNI_SELECTED);
+			TRACE("%s#1,idx=%04d,sel=%04d\r\n", __func__, idx, sel);
+		}
+
 		list.SetItemState(nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 		list.EnsureVisible(nIndex, FALSE);
 	}
@@ -560,7 +570,7 @@ void LogPage::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 
 	//delay refresh to avoid too much unnecessary actions
-	SetTimer(eTimer_DelayRefreshItemPage, 100, nullptr);
+	SetTimer(eTimer_DelayRefreshItemPage, 200, nullptr);
 }
 
 void LogPage::OnTimer(UINT_PTR nIDEvent)
@@ -570,6 +580,13 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 	case eTimer_DelayRefreshItemPage:
 	{
 		KillTimer(nIDEvent);
+		{
+			static int idx = -1;
+			++idx;
+			auto& list = mListCtrl;
+			int sel = list.GetNextItem(-1, LVNI_SELECTED);
+			TRACE("%s,idx=%04d,sel=%04d\r\n", __func__, idx, sel);
+		}
 
 		auto item = GetCurrentLogItem();
 		mItemPage->SetLogItem(item);

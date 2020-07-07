@@ -61,7 +61,7 @@ protected:
 	void CheckSend();
 	void Close();
 
-	shared_ptr<Channel> mChannel;
+	shared_ptr<Channel> mChannel;//todo:采用weak_ptr,或者把channel移到其他节点下,避免强引用child
 	bool mConnected = false;
 	int mTimeOutSecond = 90;
 	ByteBuffer mInbox;

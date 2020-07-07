@@ -1,4 +1,11 @@
 
+# 2020.07.07
+- bug
+LogPage::OnTimer中有不必要的刷新，原因是添加新item时list.GetNextItem(-1, LVNI_SELECTED);返回数值有变化
+
+原因待查
+
+
 # 2020.07.05
 .强制要求text全部采用utf8编码，方便在list中正确解码显示中文
 
