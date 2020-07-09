@@ -327,7 +327,7 @@ int SockTool::GetLastError()
 #endif
 }
 
-const char * SockTool::GetErrorDesc(int uErrCode)
+const char * SockTool::GetErrorDesc(int error)
 {
 #ifdef _MSC_VER
 #define ITEM(x)	(char*)x,#x
@@ -403,11 +403,15 @@ const char * SockTool::GetErrorDesc(int uErrCode)
 
 	for (int i = 0; i < sizeof(pszErr) / sizeof(pszErr[0]); i += 2)
 	{
-		if (uErrCode == (ULONGLONG)pszErr[i])
+		if (error == (ULONGLONG)pszErr[i])
 			return pszErr[i + 1];
 	}
 
-	LogW(TAG,"Unknown WinSock errcode:0x%x(%d)", uErrCode, uErrCode);
+	if (error != -1)
+	{
+		LogW(TAG, "Unknown WinSock errcode:0x%x(%d)", error, error);
+	}
+
 	return "Unknown WinSock errcode";
 #else
 	return strerror(uErrCode);

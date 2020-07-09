@@ -11,12 +11,12 @@ namespace Net {
 SimpleConnect::SimpleConnect()
 {
 	mTimeOutSecond = 90;
-	LogV(TAG, "%s,this=%p", __func__, this);
+	//LogV(TAG, "%s,this=%p", __func__, this);
 }
 
 SimpleConnect::~SimpleConnect()
 {
-	LogV(TAG,"%s,this=%p", __func__, this);
+	//LogV(TAG,"%s,this=%p", __func__, this);
 }
 
 int SimpleConnect::StartConnect(Bundle& bundle)
@@ -110,7 +110,7 @@ void SimpleConnect::OnReceive(Channel*)
 
 void SimpleConnect::OnDestroy()
 {
-	LogV(TAG,"%s,this=%p", __func__, this);
+	//LogV(TAG,"%s,this=%p", __func__, this);
 
 	if (mChannel)
 	{

@@ -385,10 +385,49 @@ string ShellTool::GetAppDisk()
 	return folder.substr(0,2);
 }
 
+#ifdef _MSC_VER
+static void fnAddress()
+{
+}
+#endif
+
 string ShellTool::GetAppPath()
 {
 	string pathname = GetAppPathName();
 	string path = File::GetUpperFolder(pathname.c_str()).c_str();
+
+#ifdef _MSC_VER
+	{
+		//在vs中做unit test时，我们一般希望app path为dll文件夹
+
+		string testPath = path;
+		StringTool::MakeUpper(testPath);
+		if (testPath.find("/TESTPLATFORM") != string::npos)
+		{
+			HMODULE module = nullptr;
+			auto ok = GetModuleHandleExA(
+				GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
+				(LPCSTR)fnAddress,
+				&module
+			);
+
+			//DV("ok=%d,module=%p", module);
+			if (ok)
+			{
+				char buf[MAX_PATH] = { 0 };
+				GetModuleFileNameA(module, buf, sizeof(buf));
+				//DV("buf=%s", buf);
+				string pathname = buf;
+				path = File::GetUpperFolder(pathname.c_str()).c_str();
+
+				FreeLibrary(module);
+				module = nullptr;
+			}
+
+		}
+	}
+#endif
+
 	return path;
 }
 

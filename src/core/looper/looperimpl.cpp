@@ -859,11 +859,13 @@ bool LooperImpl::CanQuitLooperNow()
 		static int dumpTimes = 0;
 		static ULONGLONG tick = ShellTool::GetTickCount64();
 		ULONGLONG tickNow = ShellTool::GetTickCount64();
-		if (tickNow >= tick + 2000)
+		int ms = 3000;
+		if (tickNow >= tick + ms)
 		{
 			++dumpTimes;
 			if (dumpTimes == 1)
 			{
+				LogV(TAG, "after emit quit %d ms,following handlers still alive:", ms);
 				mInternalData->Dump(0);//dump which object are still live
 			}
 			tick = tickNow;
