@@ -5,6 +5,7 @@
 #include "base/stringtool.h"
 #include "file/inifile.h"
 #include "core/net/nettool.h"
+#include "string/utf8tool.h"
 #ifdef _MSC_VER
 using namespace Bear::Core::Net;
 #include <Shlwapi.h>
@@ -1182,10 +1183,16 @@ int ShellTool::KillProcessByName(const char *szToTerminate)
 	return 0;
 }
 
-BOOL ShellTool::CopyTextToClipboard(HWND hWnd, const std::string& text)
+BOOL ShellTool::CopyTextToClipboardGB2312(HWND hWnd, const std::string& text)
 {
 	USES_CONVERSION;
 	CString t = A2T(text.c_str());
+	return CopyTextToClipboard(hWnd, t);
+}
+
+BOOL ShellTool::CopyTextToClipboard(HWND hWnd, const std::string& text)
+{
+	auto t=Utf8Tool::UTF8_to_UNICODE(text.c_str(), text.length());
 	return CopyTextToClipboard(hWnd, t);
 }
 

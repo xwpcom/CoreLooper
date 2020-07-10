@@ -98,8 +98,9 @@ public:
 	static void ParseCommandLine(const char *cmdline, std::vector<std::string>& args);
 
 #ifdef _MSC_VER
-	static BOOL CopyTextToClipboard(HWND hWnd, CString text);
 	static BOOL CopyTextToClipboard(HWND hWnd, const std::string& text);
+	static BOOL CopyTextToClipboard(HWND hWnd, CString text);
+	static BOOL CopyTextToClipboardGB2312(HWND hWnd, const std::string& text);
 	static int ShowInFolder(const std::string& filePath);
 	static int KillProcessByName(const char *szToTerminate);
 	static LPWSTR * CommandLineToArgvW(LPCWSTR lpCmdLine, int *pNumArgs);
