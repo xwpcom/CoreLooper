@@ -6,7 +6,7 @@ namespace Http {
 
 //XiongWanPing 2016.09.03
 //解析http ack header
-class HttpAckParser
+class HTTP_EXPORT HttpAckParser
 {
 public:
 	HttpAckParser(std::string  sz = "");
@@ -24,9 +24,11 @@ public:
 		void Reset()
 		{
 			mAckCode = 0;
+			mBody.clear();
 		}
 
 		int mAckCode;
+		string mBody;
 	};
 
 
@@ -34,6 +36,10 @@ public:
 	{
 		return mInfo;
 	}
+	const string& httpBody() {
+		return mInfo.mBody;
+	}
+
 protected:
 	tagHttpAckInfo mInfo;
 };

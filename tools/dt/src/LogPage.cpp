@@ -502,15 +502,17 @@ void LogPage::OnCopyFullPath()
 		return;
 	}
 
-	if (!File::FileExists(item->file))
+	//if (!File::FileExists(item->file))
 	{
-		ShowToast(_T("file no found"));
-		return;
+		//ShowToast(_T("file no found"));
+		//return;
 	}
 
 	USES_CONVERSION;
 	CString text = A2T(item->file.c_str());
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
+
+	ShowToast(_T("Copy full path OK"));
 }
 
 void LogPage::OnOpenFolder()

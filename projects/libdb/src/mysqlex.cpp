@@ -13,6 +13,7 @@ using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;
 
 namespace Database {
+static const char* TAG = "MySql";
 
 CString	MySql::m_mysqlAppPath;
 
@@ -51,7 +52,6 @@ bool MySql::IsConnect()
 	DWORD dwTick = GetTickCount();
 	if (dwTick >= m_dwTickKeepAlive + nSecond * 1000)
 	{
-		//DV("mysql_ping,this=0x%x",this);
 		int ret = mysql_ping(m_pMySql);
 		m_dwTickKeepAlive = GetTickCount();
 		if (ret)
@@ -83,7 +83,7 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 	m_pMySql = mysql_init(NULL);
 	if (!m_pMySql)
 	{
-		DW("fail mysql_init");
+		LogW(TAG,"fail mysql_init");
 		return -1;
 	}
 
@@ -97,7 +97,7 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 	))
 	{
 		iReValue = mysql_errno(m_pMySql);
-		DW("mysql iReValue=%d(%s)", iReValue, mysql_error(m_pMySql));
+		LogW(TAG,"mysql iReValue=%d(%s)", iReValue, mysql_error(m_pMySql));
 		Disconnect();
 	}
 	else
@@ -161,7 +161,7 @@ MYSQL_RES* MySql::Query(const char* sql)
 		}
 		else
 		{
-			DW("mysql error=[%s],sql=[%s]", mysql_error(m_pMySql), sql);
+			LogW(TAG,"mysql error=[%s],sql=[%s]", mysql_error(m_pMySql), sql);
 		}
 	}
 	catch (...)
@@ -343,7 +343,7 @@ eMySqlError MySql::ImportDatabase(const char* svr, int port, const char* user, c
 	BOOL bCreate = FALSE;
 	BOOL bDrop = MySql::DropDatabase(svr, port, user, password, database);
 	bCreate = MySql::CreateDatabase(svr, port, user, password, database);
-	DT("bDrop=%d,bCreate=%d", bDrop, bCreate);
+	LogV(TAG,"bDrop=%d,bCreate=%d", bDrop, bCreate);
 
 	if (!bDrop && !bCreate)
 	{
@@ -417,7 +417,7 @@ eMySqlError MySql::ImportDatabase(const char* svr, int port, const char* user, c
 
 	CString cmd;
 	cmd.Format(_T("\"%s\" -u %s -p %s %s < \"%s\""), batFile, user, password, database, dbSQLFile);
-	DT("cmd=[%s]", cmd);
+	LogV(TAG,"cmd=[%s]", cmd);
 	//cmd.Format("mysql.bat -u %s -p %s %s < %s",user,password,database,dbSQLFile);
 	//UINT ret = WinExec("mysql.bat -u root -p xxxxxx game < game.sql",SW_HIDE);
 	//经测试，可以成功导入带中文数据的game.sql
@@ -428,7 +428,6 @@ eMySqlError MySql::ImportDatabase(const char* svr, int port, const char* user, c
 	Sleep(2000);
 	DeleteFile(batFile);
 	DeleteFile(dbSQLFile);
-	//DT("WinExec ret=%d",ret);
 	/*
 	return -1;
 	char CommandLine[MAX_PATH];
@@ -463,7 +462,6 @@ eMySqlError MySql::ImportDatabase(const char* svr, int port, const char* user, c
 		CloseHandle(pi.hProcess);
 	}
 
-	DT("bOK=%d",bOK);
 	//*/
 
 	if (TestTable)
@@ -480,7 +478,7 @@ eMySqlError MySql::ImportDatabase(const char* svr, int port, const char* user, c
 		CString sql;
 		sql.Format(_T("SELECT * FROM %s"), TestTable);
 		MySqlRes rs = mysql.Query(T2A(sql));
-		DT("TestTable[%s] rows=%d", TestTable, rs.GetRowNum());
+		LogV(TAG,"TestTable[%s] rows=%d", TestTable, rs.GetRowNum());
 		if (rs.GetRowNum() > 0)
 		{
 			return eMySqlError_OK;
@@ -522,7 +520,7 @@ CString MySql::getMySqlAppPath(CString server, int port, CString user, CString p
 		CString sql = _T("select @@basedir as basePath from dual;");
 		MySqlRes rs = mysql.Query(T2A(sql));
 		CString path = A2T(rs.GetField("basedir"));
-		DT("mysql path=%s", path);
+		LogV(TAG,"mysql path=%s", path);
 		if (!path.IsEmpty())
 		{
 			path += "bin\\";
