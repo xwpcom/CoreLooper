@@ -1,5 +1,7 @@
 ﻿#include "stdafx.h"
 #include "utf8tool.h"
+#include "core/base/bytetool.h"
+
 #ifdef _MSC_VER
 namespace Bear {
 namespace Core {
@@ -199,6 +201,41 @@ void Utf8Tool::GB2312ToUTF_8(string& pOut, const char *pText, int pLen)
 	delete[]rst;
 
 	return;
+}
+
+//把unicode字符串"\\u63A5\\u6536\\u5DF2\\u5904\\u7406"转为utf8
+//json string msg = root["msg"].as<string>();提取出的字符串不是\u,而是u前缀  
+string Utf8Tool::escapeUnicode2Utf8(const string& src)
+{
+	if (src.find("\\u") == string::npos && src.find("u") == string::npos)
+	{
+		//invalid 
+		return src;
+	}
+
+	string sz = src;
+	StringTool::Replace(sz, "\\u", "");
+	StringTool::Replace(sz, "u", "");
+	auto ch = sz.c_str();
+
+	int bytes = (int)sz.length();
+	auto buf = new BYTE[bytes];
+	bzero(buf, bytes);
+	ByteTool::HexCharToByte(sz.c_str(), buf, bytes);
+	{
+		int hexCount = bytes / 2;
+		for (int i = 0; i < hexCount; i += 2)
+		{
+			BYTE d = buf[i];
+			buf[i] = buf[i + 1];
+			buf[i + 1] = d;
+		}
+		int x = 0;
+	}
+	auto text = Utf8Tool::Unicode2Utf8((char*)buf);
+	delete[]buf;
+
+	return text;
 }
 
 string Utf8Tool::UTF_8ToGB2312(const string& text)

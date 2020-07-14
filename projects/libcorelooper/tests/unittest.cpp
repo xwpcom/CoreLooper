@@ -2535,6 +2535,37 @@ public:
 		auto p = new int;
 	}
 
+	TEST_METHOD(string_replace)
+	{
+		{
+			string sz = "ABCDABCD";
+			StringTool::Replace(sz, "AB", "");
+			Assert::IsTrue(sz == "CDCD");
+		}
+
+		{
+			string sz = "ABCDABCD";
+			StringTool::Replace(sz, "AB", "ABC");
+			Assert::IsTrue(sz == "ABCCDABCCD");
+		}
+		{
+			string sz = "AAA";
+			StringTool::Replace(sz, "A", "");
+			Assert::IsTrue(sz.empty());
+		}
+		{
+			string sz = "AAA";
+			StringTool::Replace(sz, "AA", "");
+			Assert::IsTrue(sz=="A");
+		}
+		{
+			string sz = "AAA";
+			StringTool::Replace(sz, "AA", "A");
+			Assert::IsTrue(sz == "AA");
+		}
+
+	}
+
 	TEST_METHOD(Bundle_Test)
 	{
 		int ret = -1;

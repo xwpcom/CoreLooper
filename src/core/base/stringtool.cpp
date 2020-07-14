@@ -130,7 +130,7 @@ string& StringTool::Replace(string&obj, const string& src, const string& dst)
 		}
 
 		obj.replace(pos, srcLen, dst);
-		off = (int)(pos + (dstLen - srcLen) + 1);
+		off = pos + dstLen;
 	}
 
 	return obj;
