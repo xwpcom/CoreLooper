@@ -50,6 +50,7 @@
 #define IDD_EditTextPage                317
 #define IDR_LOG                         318
 #define IDD_StudyListCtrlPage           319
+#define IDD_LogPageEx                   411
 #define IDC_TAB                         1001
 #define IDC_LIST                        1002
 #define IDC_EDIT_APP                    1003
@@ -67,6 +68,7 @@
 #define IDC_ADD                         1016
 #define IDC_ADD_ITEM                    1018
 #define IDC_SEL_0                       1019
+#define IDC_STATIC_VERSION              1019
 #define IDC_SEL_1                       1022
 #define IDC_SEL_2                       1023
 #define ID_REFRESH_TASK_ICON            4000
@@ -106,9 +108,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        320
+#define _APS_NEXT_RESOURCE_VALUE        520
 #define _APS_NEXT_COMMAND_VALUE         35028
-#define _APS_NEXT_CONTROL_VALUE         1019
-#define _APS_NEXT_SYMED_VALUE           320
+#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_SYMED_VALUE           520
 #endif
 #endif

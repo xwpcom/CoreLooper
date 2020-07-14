@@ -5,6 +5,8 @@
 #include "dt.app.h"
 #include "MainFrm.h"
 #include "StudyListCtrlPage.h"
+#include "src/LogPageEx.h"
+#include "src/logmanager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,8 +60,13 @@ BOOL App::InitInstance()
 	mIni.Load(ShellTool::GetAppPath() + "/dt.ini");
 	BasePage::SetIni(&mIni);
 
+	if(0)
 	{
-		StudyListCtrlPage dlg;
+		auto obj = make_shared<LogManager>();
+		LogPageEx dlg;
+		dlg.SetLogManager(obj);
+
+		//StudyListCtrlPage dlg;
 		dlg.DoModal();
 		return FALSE;
 	}
@@ -185,6 +192,11 @@ BOOL CAboutDlg::OnInitDialog()
 		"source code https://github.com/xwpcom/CoreLooper\r\n"
 	);
 	SetDlgItemText(IDC_EDIT_COMMENT, text);
+
+	CString version;
+	USES_CONVERSION;
+	version.Format(_T("DT           Build on %s %s"),A2T(__DATE__),A2T(__TIME__));
+	SetDlgItemText(IDC_STATIC_VERSION, version);
 
 
 	return TRUE;  // return TRUE unless you set the focus to a control

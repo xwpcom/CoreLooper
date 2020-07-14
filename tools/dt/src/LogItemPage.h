@@ -31,6 +31,7 @@ protected:
 	void OnRelayout(const CRect& rc)override;
 
 	shared_ptr<LogWnd> mEdit;
+	LPVOID mCacheItem = nullptr;
 
 public:
 	//afx_msg void OnBnClickedCopy();

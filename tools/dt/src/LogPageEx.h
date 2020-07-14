@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "basepage.h"
 #include "loginfo.h"
@@ -6,13 +6,13 @@
 class LogFilterPage;
 class LogItemPage;
 class LogManager;
-class LogPage : public BasePage, public sigslot::has_slots<>
+class LogPageEx : public BasePage, public sigslot::has_slots<>
 {
-	DECLARE_DYNAMIC(LogPage)
+	DECLARE_DYNAMIC(LogPageEx)
 
 public:
-	LogPage(CWnd* pParent = nullptr);   // standard constructor
-	virtual ~LogPage();
+	LogPageEx(CWnd* pParent = nullptr);   // standard constructor
+	virtual ~LogPageEx();
 	void SetMaxLogCount(int n)
 	{
 		mMaxLogCount = n;
@@ -37,7 +37,7 @@ public:
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_LogPage };
+	enum { IDD = IDD_LogPageEx };
 #endif
 
 protected:
@@ -50,6 +50,7 @@ protected:
 	void AddItem(shared_ptr<LogItem>& item);
 	void OnContextMenu(CWnd*, CPoint);
 	void ClearLogListCtrl();
+	bool mAddItemBusying = false;
 
 	int Init();
 	CFont mFont;
@@ -69,7 +70,6 @@ protected:
 	void SaveConfig()override;
 
 	int mMaxLogCount = 1000 * 1000;
-	int mListSelectIndex = -1;
 public:
 	LogListCtrl mListCtrl;
 	afx_msg void OnDestroy();
@@ -93,4 +93,10 @@ public:
 	afx_msg void OnCopy();
 	afx_msg void OnCopyAll();
 	afx_msg void OnBnClickedAdd();
+	afx_msg void OnBnClickedAddItem();
+	afx_msg void OnBnClickedSel0();
+	afx_msg void OnBnClickedSel1();
+	afx_msg void OnBnClickedSel2();
+
+	void Select(int idx);
 };

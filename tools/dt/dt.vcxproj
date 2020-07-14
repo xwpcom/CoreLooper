@@ -202,6 +202,7 @@
     <ClInclude Include="src\LogListCtrl.h" />
     <ClInclude Include="src\logmanager.h" />
     <ClInclude Include="src\LogPage.h" />
+    <ClInclude Include="src\LogPageEx.h" />
     <ClInclude Include="src\logwnd.h" />
     <ClInclude Include="src\ScintillaWnd.h" />
     <ClInclude Include="src\SelectItemPage.h" />
@@ -226,6 +227,7 @@
     <ClCompile Include="src\LogListCtrl.cpp" />
     <ClCompile Include="src\logmanager.cpp" />
     <ClCompile Include="src\LogPage.cpp" />
+    <ClCompile Include="src\LogPageEx.cpp" />
     <ClCompile Include="src\logwnd.cpp" />
     <ClCompile Include="src\ScintillaWnd.cpp" />
     <ClCompile Include="src\SelectItemPage.cpp" />

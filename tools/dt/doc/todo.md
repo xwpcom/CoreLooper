@@ -1,4 +1,8 @@
 
+# 2020.07.14
+- 采用比较笨的办法回避了LogPage中list.GetNextItem(-1, LVNI_SELECTED);异常问题
+
+
 # 2020.07.07
 - bug
 LogPage::OnTimer中有不必要的刷新，原因是添加新item时list.GetNextItem(-1, LVNI_SELECTED);返回数值有变化

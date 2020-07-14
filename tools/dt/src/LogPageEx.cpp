@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "dt.app.h"
-#include "LogPage.h"
+#include "LogPageEx.h"
 #include "afxdialogex.h"
 #include "LogFilterPage.h"
 #include "LogItemPage.h"
@@ -8,11 +8,14 @@
 #include "logwnd.h"
 #include "core/string/utf8tool.h"
 
-IMPLEMENT_DYNAMIC(LogPage, BasePage)
+IMPLEMENT_DYNAMIC(LogPageEx, BasePage)
+
+static const char* TAG = "LogPageEx";
 
 enum
 {
 	eTimer_DelayRefreshItemPage,
+	eTimer_DelayRelayout,
 };
 
 enum
@@ -26,50 +29,57 @@ enum
 };
 
 
-LogPage::LogPage(CWnd* pParent /*=nullptr*/)
-	: BasePage(IDD_LogPage, pParent)
+LogPageEx::LogPageEx(CWnd* pParent /*=nullptr*/)
+	: BasePage(IDD_LogPageEx, pParent)
 {
 	bzero(mArrIdx, sizeof(mArrIdx));
 
-	mSection = "LogPage";
+	mSection = "LogPageEx";
+	mEnableOK = true;
+	mEnableCancel = true;
+	EnableAutoSavePosition();
 }
 
-LogPage::~LogPage()
+LogPageEx::~LogPageEx()
 {
 }
 
-void LogPage::DoDataExchange(CDataExchange* pDX)
+void LogPageEx::DoDataExchange(CDataExchange* pDX)
 {
 	BasePage::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST, mListCtrl);
 }
 
-BEGIN_MESSAGE_MAP(LogPage, BasePage)
+BEGIN_MESSAGE_MAP(LogPageEx, BasePage)
 	ON_WM_DESTROY()
-	ON_NOTIFY(NM_RCLICK, IDC_LIST, &LogPage::OnNMRClickList)
-	ON_COMMAND(ID_OPEN_FILE_GOTO_LINE, &LogPage::OnOpenFileGotoLine)
-	ON_COMMAND(ID_CODEPAGE_UTF8, &LogPage::OnCodePageUtf8)
-	ON_COMMAND(ID_CODEPAGE_CHINESE, &LogPage::OnCodePageChinese)
-	//ON_UPDATE_COMMAND_UI_RANGE(ID_CODEPAGE_UTF8, ID_CODEPAGE_UTF8+100, &LogPage::OnCodePageChinese)
-	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_UTF8, &LogPage::OnUpdateCodePageUtf8)
-	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_CHINESE, &LogPage::OnUpdateCodePageChinese)
+	ON_NOTIFY(NM_RCLICK, IDC_LIST, &LogPageEx::OnNMRClickList)
+	ON_COMMAND(ID_OPEN_FILE_GOTO_LINE, &LogPageEx::OnOpenFileGotoLine)
+	ON_COMMAND(ID_CODEPAGE_UTF8, &LogPageEx::OnCodePageUtf8)
+	ON_COMMAND(ID_CODEPAGE_CHINESE, &LogPageEx::OnCodePageChinese)
+	//ON_UPDATE_COMMAND_UI_RANGE(ID_CODEPAGE_UTF8, ID_CODEPAGE_UTF8+100, &LogPageEx::OnCodePageChinese)
+	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_UTF8, &LogPageEx::OnUpdateCodePageUtf8)
+	ON_UPDATE_COMMAND_UI(ID_CODEPAGE_CHINESE, &LogPageEx::OnUpdateCodePageChinese)
 	
-	ON_NOTIFY(NM_DBLCLK, IDC_LIST, &LogPage::OnNMDblclkList)
-	ON_COMMAND(ID_COPY_FULL_PATH, &LogPage::OnCopyFullPath)
-	ON_COMMAND(ID_OPEN_FOLDER, &LogPage::OnOpenFolder)
-	ON_COMMAND(ID_APP_DISABLE, &LogPage::OnAppDisable)
-	ON_COMMAND(ID_APP_CLEAR, &LogPage::OnAppClear)
-	ON_COMMAND(ID_TAG_DISABLE, &LogPage::OnTagDisable)
-	ON_COMMAND(ID_TAG_CLEAR, &LogPage::OnTagClear)
-	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, &LogPage::OnLvnItemchangedList)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST, &LogPageEx::OnNMDblclkList)
+	ON_COMMAND(ID_COPY_FULL_PATH, &LogPageEx::OnCopyFullPath)
+	ON_COMMAND(ID_OPEN_FOLDER, &LogPageEx::OnOpenFolder)
+	ON_COMMAND(ID_APP_DISABLE, &LogPageEx::OnAppDisable)
+	ON_COMMAND(ID_APP_CLEAR, &LogPageEx::OnAppClear)
+	ON_COMMAND(ID_TAG_DISABLE, &LogPageEx::OnTagDisable)
+	ON_COMMAND(ID_TAG_CLEAR, &LogPageEx::OnTagClear)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST, &LogPageEx::OnLvnItemchangedList)
 	ON_WM_TIMER()
-	ON_COMMAND(ID_CLEAR, &LogPage::OnClear)
-	ON_COMMAND(ID_COPY, &LogPage::OnCopy)
-	ON_COMMAND(ID_COPY_ALL, &LogPage::OnCopyAll)
-	ON_BN_CLICKED(IDC_ADD, &LogPage::OnBnClickedAdd)
+	ON_COMMAND(ID_CLEAR, &LogPageEx::OnClear)
+	ON_COMMAND(ID_COPY, &LogPageEx::OnCopy)
+	ON_COMMAND(ID_COPY_ALL, &LogPageEx::OnCopyAll)
+	ON_BN_CLICKED(IDC_ADD, &LogPageEx::OnBnClickedAdd)
+	ON_BN_CLICKED(IDC_ADD_ITEM, &LogPageEx::OnBnClickedAddItem)
+	ON_BN_CLICKED(IDC_SEL_0, &LogPageEx::OnBnClickedSel0)
+	ON_BN_CLICKED(IDC_SEL_1, &LogPageEx::OnBnClickedSel1)
+	ON_BN_CLICKED(IDC_SEL_2, &LogPageEx::OnBnClickedSel2)
 END_MESSAGE_MAP()
 
-static COLORREF gColors[] =
+COLORREF gColors[] =
 {
 	RGB(255, 0, 0),//error
 	RGB(255, 0, 255),//warning
@@ -78,7 +88,7 @@ static COLORREF gColors[] =
 	RGB(128, 128, 128),//verbose
 };
 
-int LogPage::Init()
+int LogPageEx::Init()
 {
 	auto ret=__super::Init();
 	ASSERT(mLogManager);
@@ -91,8 +101,8 @@ int LogPage::Init()
 		mFilterPage->Create(IDD_LogFilterPage,this);
 		mFilterPage->ShowWindow(SW_SHOW);
 
-		mFilterPage->SignalClearLog.connect(this, &LogPage::OnClearLog);
-		mFilterPage->SignalFilterChanged.connect(this, &LogPage::OnFilterChanged);
+		mFilterPage->SignalClearLog.connect(this, &LogPageEx::OnClearLog);
+		mFilterPage->SignalFilterChanged.connect(this, &LogPageEx::OnFilterChanged);
 	}
 	{
 		CRect rc(0, 0, 100, 100);
@@ -108,7 +118,7 @@ int LogPage::Init()
 	CListCtrl& list = mListCtrl;
 	list.DeleteAllItems();
 	{
-		mListCtrl.SignalContextMenu.connect(this, &LogPage::OnContextMenu);
+		mListCtrl.SignalContextMenu.connect(this, &LogPageEx::OnContextMenu);
 	}
 
 	list.SetFont(&mFont);
@@ -182,10 +192,11 @@ int LogPage::Init()
 		edit->SetCodePage(code);
 	}
 
+	SetTimer(eTimer_DelayRelayout,10);
 	return ret;
 }
 
-void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
+void LogPageEx::OnLogItemReady(shared_ptr<LogItem> item)
 {
 	mLogItems.push_back(item);
 
@@ -210,8 +221,9 @@ void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
 
 }
 
-void LogPage::AddItem(shared_ptr<LogItem>& item)
+void LogPageEx::AddItem(shared_ptr<LogItem>& item)
 {
+	mAddItemBusying = true;
 	auto& list = mListCtrl;
 	string time;
 	//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
@@ -263,36 +275,39 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 	if (sel == nIndex - 1)
 	{
 		dump("before set select");
+		TRACE("%s#1\r\n", __func__);
 		list.SetItemState(nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		TRACE("%s#2\r\n", __func__);
 		list.EnsureVisible(nIndex, FALSE);
+		TRACE("%s#3\r\n", __func__);
 		dump("after set select");
 	}
+
+	mAddItemBusying = false;
 }
 
-void LogPage::OnDestroy()
+void LogPageEx::OnDestroy()
 {
 	__super::OnDestroy();
 	OnClearLog();
 }
 
-void LogPage::OnRelayout(const CRect& rc)
+void LogPageEx::OnRelayout(const CRect& rc)
 {
 	__super::OnRelayout(rc);
 
-	if (!mListCtrl.GetSafeHwnd())
+	if (!mListCtrl.GetSafeHwnd() || !mFilterPage)
 	{
 		return;
 	}
 
 	int headerHeight = 0;
-	/*
 	{
 		CRect rcItem;
 		GetDlgItem(IDC_ADD)->GetWindowRect(rcItem);
 		ScreenToClient(rcItem);
 		headerHeight = rcItem.Height();
 	}
-	*/
 
 	CRect rcItem = rc;
 	rcItem.OffsetRect(0, headerHeight);
@@ -316,13 +331,13 @@ void LogPage::OnRelayout(const CRect& rc)
 	mItemPage->MoveWindow(rcItem);
 }
 
-void LogPage::OnClearLog()
+void LogPageEx::OnClearLog()
 {
 	ClearLogListCtrl();
 	mLogItems.clear();
 }
 
-void LogPage::ClearLogListCtrl()
+void LogPageEx::ClearLogListCtrl()
 {
 	for(int i=0;i<(int)mListCtrl.GetItemCount();++i)
 	{
@@ -333,7 +348,7 @@ void LogPage::ClearLogListCtrl()
 	mListCtrl.DeleteAllItems();
 }
 
-void LogPage::OnFilterChanged()
+void LogPageEx::OnFilterChanged()
 {
 	//TRACE("%s\r\n", __func__);
 
@@ -348,12 +363,12 @@ void LogPage::OnFilterChanged()
 	}
 }
 
-void LogPage::LoadConfig()
+void LogPageEx::LoadConfig()
 {
 	__super::LoadConfig();
 }
 
-void LogPage::SaveConfig()
+void LogPageEx::SaveConfig()
 {
 	__super::SaveConfig();
 
@@ -379,7 +394,7 @@ void LogPage::SaveConfig()
 	mIni->SetString(mSection, "widths", widths);
 }
 
-void LogPage::RemoveSection()
+void LogPageEx::RemoveSection()
 {
 	DisableAutoSaveConfig();
 	
@@ -393,7 +408,7 @@ void LogPage::RemoveSection()
 }
 
 
-void LogPage::OnNMRClickList(NMHDR* pNMHDR, LRESULT* pResult)
+void LogPageEx::OnNMRClickList(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	//DV("%s", __func__);
 
@@ -402,7 +417,7 @@ void LogPage::OnNMRClickList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
-void LogPage::OnContextMenu(CWnd* pwnd, CPoint point)
+void LogPageEx::OnContextMenu(CWnd* pwnd, CPoint point)
 {
 	if (pwnd == &mListCtrl)
 	{
@@ -413,7 +428,7 @@ void LogPage::OnContextMenu(CWnd* pwnd, CPoint point)
 	}
 }
 
-void LogPage::OnOpenFileGotoLine()
+void LogPageEx::OnOpenFileGotoLine()
 {
 	auto item = GetCurrentLogItem();
 	if (!item)
@@ -453,7 +468,7 @@ void LogPage::OnOpenFileGotoLine()
 }
 
 
-void LogPage::OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
+void LogPageEx::OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	*pResult = 0;
@@ -462,7 +477,7 @@ void LogPage::OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-LogItem* LogPage::GetCurrentLogItem()
+LogItem* LogPageEx::GetCurrentLogItem()
 {
 	auto& list = mListCtrl;
 	int sel = list.GetNextItem(-1, LVNI_SELECTED);
@@ -475,7 +490,7 @@ LogItem* LogPage::GetCurrentLogItem()
 	return item;
 }
 
-void LogPage::OnCopyFullPath()
+void LogPageEx::OnCopyFullPath()
 {
 	auto item = GetCurrentLogItem();
 	if (!item)
@@ -496,7 +511,7 @@ void LogPage::OnCopyFullPath()
 	ShowToast(_T("Copy full path OK"));
 }
 
-void LogPage::OnOpenFolder()
+void LogPageEx::OnOpenFolder()
 {
 	auto item = GetCurrentLogItem();
 	if (!item)
@@ -514,7 +529,7 @@ void LogPage::OnOpenFolder()
 }
 
 
-void LogPage::OnAppDisable()
+void LogPageEx::OnAppDisable()
 {
 	auto item = GetCurrentLogItem();
 	if (!item)
@@ -525,12 +540,12 @@ void LogPage::OnAppDisable()
 	mFilterPage->DisableApp(item->appName);
 }
 
-void LogPage::OnAppClear()
+void LogPageEx::OnAppClear()
 {
 	mFilterPage->ClearApp();
 }
 
-void LogPage::OnTagDisable()
+void LogPageEx::OnTagDisable()
 {
 	auto item = GetCurrentLogItem();
 	if (!item)
@@ -541,12 +556,12 @@ void LogPage::OnTagDisable()
 	mFilterPage->DisableTag(item->tag);
 }
 
-void LogPage::OnTagClear()
+void LogPageEx::OnTagClear()
 {
 	mFilterPage->ClearTag();
 }
 
-void LogPage::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
+void LogPageEx::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 	auto p = pNMLV;
@@ -556,6 +571,7 @@ void LogPage::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 
 	*pResult = 0;
+
 	/*
 	TRACE("iItem=%d,uNewState=%d,uOldState=%d,uChanged=0x%04x\r\n"
 		,p->iItem
@@ -564,39 +580,49 @@ void LogPage::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 		,p->uChanged
 	);
 	*/
-
-	int sel = mListCtrl.GetNextItem(-1, LVNI_SELECTED);
-	if (sel != -1)
-	{
-		mListSelectIndex = sel;
-	}
-
-	KillTimer(eTimer_DelayRefreshItemPage);
 	//delay refresh to avoid too much unnecessary actions
-	SetTimer(eTimer_DelayRefreshItemPage, 10, nullptr);
+	//SetTimer(eTimer_DelayRefreshItemPage, 200, nullptr);
+
+	if (!mAddItemBusying)
+	{
+		auto sel = mListCtrl.GetNextItem(-1, LVNI_SELECTED);
+		if (sel == -1)
+		{
+			return;
+		}
+		
+		static int idx = -1;
+		++idx;
+		TRACE("Itemchanged[%04d].sel=%d\r\n",idx, sel);
+
+		if (sel == -1)
+		{
+			int x = 0;
+		}
+	}
 }
 
-void LogPage::OnTimer(UINT_PTR nIDEvent)
+void LogPageEx::OnTimer(UINT_PTR nIDEvent)
 {
 	switch (nIDEvent)
 	{
 	case eTimer_DelayRefreshItemPage:
 	{
-		int sel = mListCtrl.GetNextItem(-1, LVNI_SELECTED);
-		bool invalid = (mListSelectIndex >= mListCtrl.GetItemCount());
-		if (sel!=-1 && (invalid ||  mListSelectIndex == sel))
+		KillTimer(nIDEvent);
 		{
-			KillTimer(nIDEvent);
-
-			static int idx = -1;
-			++idx;
-			TRACE("SetLogItem[%04d].sel=%d\r\n",idx, sel);
-
-			auto item = (LogItem*)mListCtrl.GetItemData(sel);
-			//auto item = GetCurrentLogItem();
-			mItemPage->SetLogItem(item);
+			dump("in timer");
 		}
 
+		auto item = GetCurrentLogItem();
+		mItemPage->SetLogItem(item);
+		return;
+	}
+	case eTimer_DelayRelayout:
+	{
+		KillTimer(eTimer_DelayRelayout);
+		CRect rc;
+		GetClientRect(rc);
+		OnRelayout(rc);
 		return;
 	}
 	}
@@ -605,13 +631,13 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-void LogPage::OnClear()
+void LogPageEx::OnClear()
 {
 	OnClearLog();
 	mItemPage->clear();
 }
 
-void LogPage::OnCopy()
+void LogPageEx::OnCopy()
 {
 	auto item = GetCurrentLogItem();
 	if (item)
@@ -620,7 +646,7 @@ void LogPage::OnCopy()
 	}
 }
 
-void LogPage::OnCopyAll()
+void LogPageEx::OnCopyAll()
 {
 	string text;
 	auto& list = mListCtrl;
@@ -636,7 +662,7 @@ void LogPage::OnCopyAll()
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
 }
 
-void LogPage::OnCodePageUtf8()
+void LogPageEx::OnCodePageUtf8()
 {
 	int code = SC_CP_UTF8;
 	mIni->SetInt(mSection, "codepage", code);
@@ -645,7 +671,7 @@ void LogPage::OnCodePageUtf8()
 	edit->SetCodePage(code);
 }
 
-void LogPage::OnCodePageChinese()
+void LogPageEx::OnCodePageChinese()
 {
 	//936 (Simplified Chinese GBK), 
 	//解决app为unicode版时中文乱码问题
@@ -657,17 +683,17 @@ void LogPage::OnCodePageChinese()
 	edit->SetCodePage(code);
 }
 
-void LogPage::OnUpdateCodePageUtf8(CCmdUI* pCmdUI)
+void LogPageEx::OnUpdateCodePageUtf8(CCmdUI* pCmdUI)
 {
 	//pCmdUI->SetCheck(true);
 }
 
-void LogPage::OnUpdateCodePageChinese(CCmdUI* pCmdUI)
+void LogPageEx::OnUpdateCodePageChinese(CCmdUI* pCmdUI)
 {
 
 }
 
-void LogPage::dump(string desc)
+void LogPageEx::dump(string desc)
 {
 	auto& list = mListCtrl;
 	const auto sel = list.GetNextItem(-1, LVNI_SELECTED);
@@ -678,9 +704,53 @@ void LogPage::dump(string desc)
 }
 
 
-void LogPage::OnBnClickedAdd()
+void LogPageEx::OnBnClickedAdd()
 {
 	static int idx = -1;
 	++idx;
 	//LogV(TAG, "item %04d", idx);
+}
+
+
+void LogPageEx::OnBnClickedAddItem()
+{
+	auto& list = mListCtrl;
+
+	auto item = make_shared<LogItem>();
+
+	auto nc = list.GetItemCount();
+	//auto idx = list.InsertItem(nc, _T(""));
+
+	item->msg = StringTool::Format("%04d", nc);
+	//CString text;
+	//text.Format(_T("%04d"), nc);
+	//list.SetItemText(idx, 0, text);
+	OnLogItemReady(item);
+}
+
+void LogPageEx::OnBnClickedSel0()
+{
+	Select(0);
+}
+
+
+void LogPageEx::OnBnClickedSel1()
+{
+	Select(1);
+}
+
+
+void LogPageEx::OnBnClickedSel2()
+{
+	Select(2);
+}
+
+void LogPageEx::Select(int idx)
+{
+	auto nc = mListCtrl.GetItemCount();
+	if (idx >= 0 && idx < nc)
+	{
+		mListCtrl.SetItemState(idx, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+
+	}
 }

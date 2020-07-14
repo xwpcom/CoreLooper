@@ -72,6 +72,13 @@ extern COLORREF gColors[];
 
 void LogItemPage::SetLogItem(LogItem* item)
 {
+	if ((LPVOID)item == mCacheItem)
+	{
+		return;
+	}
+
+	mCacheItem = (LPVOID)item;
+
 	mEdit->clear();
 
 	if (!item)
