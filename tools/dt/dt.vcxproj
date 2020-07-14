@@ -205,6 +205,7 @@
     <ClInclude Include="src\logwnd.h" />
     <ClInclude Include="src\ScintillaWnd.h" />
     <ClInclude Include="src\SelectItemPage.h" />
+    <ClInclude Include="StudyListCtrlPage.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +229,7 @@
     <ClCompile Include="src\logwnd.cpp" />
     <ClCompile Include="src\ScintillaWnd.cpp" />
     <ClCompile Include="src\SelectItemPage.cpp" />
+    <ClCompile Include="StudyListCtrlPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="dt.rc" />

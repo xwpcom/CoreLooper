@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(LogPage, BasePage)
 	ON_COMMAND(ID_CLEAR, &LogPage::OnClear)
 	ON_COMMAND(ID_COPY, &LogPage::OnCopy)
 	ON_COMMAND(ID_COPY_ALL, &LogPage::OnCopyAll)
+	ON_BN_CLICKED(IDC_ADD, &LogPage::OnBnClickedAdd)
 END_MESSAGE_MAP()
 
 COLORREF gColors[] =
@@ -76,8 +77,6 @@ COLORREF gColors[] =
 	RGB(0, 0, 0),//trace
 	RGB(128, 128, 128),//verbose
 };
-
-static void test();
 
 int LogPage::Init()
 {
@@ -183,31 +182,8 @@ int LogPage::Init()
 		edit->SetCodePage(code);
 	}
 
-	test();
-
 	return ret;
 }
-
-//*
-static const char* TAG = "LogPage";
-void test()
-{
-	return;
-
-	DV("DV");
-	DT("DT\r\nline2\r\nline3");
-	DG("DG\r\nline2\r\nline3");
-	DW("DW\r\nline2\r\nline3");
-	DE("DE");
-
-	LogV(TAG, "LogV,hello,%d", 2020);
-	LogD(TAG, "LogD\r\nline2\r\nline3"); 
-	LogI(TAG, "LogI\r\nline2\r\nline3");
-	LogW(TAG, "LogW\r\nline2\r\nline3");
-	LogE(TAG,"LogE");
-
-}
-//*/
 
 void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
 {
@@ -237,7 +213,6 @@ void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
 void LogPage::AddItem(shared_ptr<LogItem>& item)
 {
 	auto& list = mListCtrl;
-	auto selSave=list.GetNextItem(-1, LVNI_SELECTED);
 	string time;
 	//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
 	auto hour = item->time / 10000000;
@@ -256,12 +231,11 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		StringTool::AppendFormat(time, "%02d:%02d:%02d.%03d",hour,minute,second,ms);
 	}
 	
-	int nIndex = list.GetItemCount();
+	const int nIndex = list.GetItemCount();
 	{
 		//为简单起见，这里没再严格按date,time排序，绝大部分情况下顺序是正常的
-
 	}
-	auto idx=list.InsertItem(nIndex, _T(""));
+	const auto idx=list.InsertItem(nIndex, _T(""));
 	item->mRefs.push_back(item);//从list删除时要释放
 	list.SetItemData(idx, (DWORD_PTR)item.get());
 
@@ -285,19 +259,13 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 	}
 
 	//仅当选中最后一项时才更新选中Item
-
-	if (selSave == nIndex - 1)
+	const auto sel = list.GetNextItem(-1, LVNI_SELECTED);
+	if (sel == nIndex - 1)
 	{
-		{
-			static int idx = -1;
-			++idx;
-			auto& list = mListCtrl;
-			int sel = list.GetNextItem(-1, LVNI_SELECTED);
-			TRACE("%s#1,idx=%04d,sel=%04d\r\n", __func__, idx, sel);
-		}
-
+		dump("before set select");
 		list.SetItemState(nIndex, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 		list.EnsureVisible(nIndex, FALSE);
+		dump("after set select");
 	}
 }
 
@@ -316,7 +284,16 @@ void LogPage::OnRelayout(const CRect& rc)
 		return;
 	}
 
+	int headerHeight = 0;
+	{
+		CRect rcItem;
+		GetDlgItem(IDC_ADD)->GetWindowRect(rcItem);
+		ScreenToClient(rcItem);
+		headerHeight = rcItem.Height();
+	}
+
 	CRect rcItem = rc;
+	rcItem.OffsetRect(0, headerHeight);
 	rcItem.bottom = rcItem.top + 32;
 	mFilterPage->MoveWindow(rcItem);
 
@@ -356,6 +333,8 @@ void LogPage::ClearLogListCtrl()
 
 void LogPage::OnFilterChanged()
 {
+	//TRACE("%s\r\n", __func__);
+
 	ClearLogListCtrl();
 
 	for (auto& item : mLogItems)
@@ -568,9 +547,19 @@ void LogPage::OnTagClear()
 void LogPage::OnLvnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-	
-	*pResult = 0;
+	auto p = pNMLV;
+	if ((pNMLV->uChanged & LVIF_STATE) && (pNMLV->uNewState & LVIS_SELECTED))
+	{
+		TRACE("select changed###################################\r\n");
+	}
 
+	*pResult = 0;
+	TRACE("iItem=%d,uNewState=%d,uOldState=%d,uChanged=0x%04x\r\n"
+		,p->iItem
+		,p->uNewState
+		,p->uOldState
+		,p->uChanged
+	);
 	//delay refresh to avoid too much unnecessary actions
 	SetTimer(eTimer_DelayRefreshItemPage, 200, nullptr);
 }
@@ -583,11 +572,7 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(nIDEvent);
 		{
-			static int idx = -1;
-			++idx;
-			auto& list = mListCtrl;
-			int sel = list.GetNextItem(-1, LVNI_SELECTED);
-			TRACE("%s,idx=%04d,sel=%04d\r\n", __func__, idx, sel);
+			dump("in timer");
 		}
 
 		auto item = GetCurrentLogItem();
@@ -660,4 +645,22 @@ void LogPage::OnUpdateCodePageUtf8(CCmdUI* pCmdUI)
 void LogPage::OnUpdateCodePageChinese(CCmdUI* pCmdUI)
 {
 
+}
+
+void LogPage::dump(string desc)
+{
+	auto& list = mListCtrl;
+	const auto sel = list.GetNextItem(-1, LVNI_SELECTED);
+
+	static int idx = -1;
+	++idx;
+	TRACE("%s,%s[%04d].sel=%04d,\r\n",desc.c_str(), __func__, idx, sel);
+}
+
+
+void LogPage::OnBnClickedAdd()
+{
+	static int idx = -1;
+	++idx;
+	//LogV(TAG, "item %04d", idx);
 }

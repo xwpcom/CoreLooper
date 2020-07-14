@@ -63,6 +63,7 @@ protected:
 	shared_ptr<LogManager> mLogManager;
 
 	LogItem* GetCurrentLogItem();
+	void dump(string desc);
 
 	void LoadConfig()override;
 	void SaveConfig()override;
@@ -77,6 +78,7 @@ public:
 	void OnCodePageChinese();
 	void OnUpdateCodePageUtf8(CCmdUI* pCmdUI);
 	void OnUpdateCodePageChinese(CCmdUI* pCmdUI);
+
 	afx_msg void OnNMDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCopyFullPath();
 	afx_msg void OnOpenFolder();
@@ -89,4 +91,5 @@ public:
 	afx_msg void OnClear();
 	afx_msg void OnCopy();
 	afx_msg void OnCopyAll();
+	afx_msg void OnBnClickedAdd();
 };

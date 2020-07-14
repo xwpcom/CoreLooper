@@ -1,24 +1,10 @@
-// This MFC Samples source code demonstrates using MFC Microsoft Office Fluent User Interface
-// (the "Fluent UI") and is provided only as referential material to supplement the
-// Microsoft Foundation Classes Reference and related electronic documentation
-// included with the MFC C++ library software.
-// License terms to copy, use or distribute the Fluent UI are available separately.
-// To learn more about our Fluent UI licensing program, please visit
-// https://go.microsoft.com/fwlink/?LinkId=238214.
-//
-// Copyright (C) Microsoft Corporation
-// All rights reserved.
-
-// dt.cpp : Defines the class behaviors for the application.
-//
-
 #include "pch.h"
 #include "framework.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
 #include "dt.app.h"
 #include "MainFrm.h"
-
+#include "StudyListCtrlPage.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -71,6 +57,12 @@ BOOL App::InitInstance()
 
 	mIni.Load(ShellTool::GetAppPath() + "/dt.ini");
 	BasePage::SetIni(&mIni);
+
+	{
+		StudyListCtrlPage dlg;
+		dlg.DoModal();
+		return FALSE;
+	}
 
 
 	InitContextMenuManager();
