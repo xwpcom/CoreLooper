@@ -98,11 +98,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRYPT_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl;../../depends/openssl/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\libcrypt.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -146,13 +148,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRYPT_DLL;WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/openssl;.;../../include;../../include/core/;../../include/libcrypt;../../include/libcrypt/ssl;../../depends/openssl/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\libcrypt.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -202,6 +206,8 @@
     <ClCompile Include="src\crc16.cpp" />
     <ClCompile Include="src\crypthelper.cpp" />
     <ClCompile Include="src\digestaccessauth.cpp" />
+    <ClCompile Include="src\hmac_sha1.cpp" />
+    <ClCompile Include="src\hmac_sha256.cpp" />
     <ClCompile Include="src\md5.cpp" />
     <ClCompile Include="src\md5ex.cpp" />
     <ClCompile Include="src\ssl\arc4.cpp" />
@@ -230,6 +236,8 @@
     <ClInclude Include="..\..\include\libcrypt\crc16.h" />
     <ClInclude Include="..\..\include\libcrypt\crypthelper.h" />
     <ClInclude Include="..\..\include\libcrypt\digestaccessauth.h" />
+    <ClInclude Include="..\..\include\libcrypt\hmac_sha1.h" />
+    <ClInclude Include="..\..\include\libcrypt\hmac_sha256.h" />
     <ClInclude Include="..\..\include\libcrypt\md5.h" />
     <ClInclude Include="..\..\include\libcrypt\md5ex.h" />
     <ClInclude Include="..\..\include\libcrypt\tea.h" />
