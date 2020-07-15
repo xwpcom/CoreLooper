@@ -39,6 +39,10 @@ public:
 	const string& httpBody() {
 		return mInfo.mBody;
 	}
+	const string& body() {
+		return mInfo.mBody;
+	}
+
 
 protected:
 	tagHttpAckInfo mInfo;
