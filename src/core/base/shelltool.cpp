@@ -227,6 +227,25 @@ void ShellTool::Sleep(UINT ms)
 #endif
 }
 
+#ifdef _MSC_VER
+struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
+{
+	CTime t = CTime::GetCurrentTime();
+	t += CTimeSpan(deltaDays, 0, 0, 0);
+
+	tagTimeMs obj;
+	obj.year = t.GetYear();
+	obj.month = t.GetMonth();
+	obj.day = t.GetDay();
+	obj.hour = t.GetHour();
+	obj.minute = t.GetMinute();
+	obj.second = t.GetSecond();
+	obj.ms = 0;
+	return obj;
+}
+#endif
+
+
 struct tagTimeMs ShellTool::GetCurrentTimeMs()
 {
 #ifdef _MSC_VER

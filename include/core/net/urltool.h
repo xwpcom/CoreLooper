@@ -7,6 +7,7 @@ class CORE_EXPORT UrlTool
 {
 public:
 	static std::string GetUriTitle(std::string url);
+	static string PercentHexString(const string& text);
 };
 
 }

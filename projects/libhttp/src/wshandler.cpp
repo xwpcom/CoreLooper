@@ -106,7 +106,7 @@ void WSHandler::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 
 	if (!box.empty())
 	{
-		DW("fail output");
+		LogV(TAG,"fail output");
 		Destroy();
 	}
 }

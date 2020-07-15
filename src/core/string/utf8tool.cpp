@@ -204,38 +204,80 @@ void Utf8Tool::GB2312ToUTF_8(string& pOut, const char *pText, int pLen)
 }
 
 //把unicode字符串"\\u63A5\\u6536\\u5DF2\\u5904\\u7406"转为utf8
+//"-8\u7B2C0\u9879\u7684\u9879\u76EEID\u4E0E\u76D1\u7763\u7F16\u53F7\u4E0D\u5339\u914D"
 //json string msg = root["msg"].as<string>();提取出的字符串不是\u,而是u前缀  
-string Utf8Tool::escapeUnicode2Utf8(const string& src)
+string Utf8Tool::unicodeUnescape(const string& src)
 {
-	if (src.find("\\u") == string::npos && src.find("u") == string::npos)
+#define CP_UTF8                   65001       // UTF-8 translation
+#define CODE_PAGE CP_UTF8 //936
+	string strResult;
+	int nDestStep = 0;
+	auto strSource = src.c_str();
+	int nLength = (int)src.length();
+	if (!nLength || nLength < 6) return strResult;
+	const int resultMaxBytes = nLength * 2 + 2;
+	char* pResult = new char[resultMaxBytes];
+	wchar_t* pWbuufer = nullptr;
+	if (!pResult)
 	{
-		//invalid 
-		return src;
+		pResult = NULL;
+		return strResult;
 	}
-
-	string sz = src;
-	StringTool::Replace(sz, "\\u", "");
-	StringTool::Replace(sz, "u", "");
-	auto ch = sz.c_str();
-
-	int bytes = (int)sz.length();
-	auto buf = new BYTE[bytes];
-	bzero(buf, bytes);
-	ByteTool::HexCharToByte(sz.c_str(), buf, bytes);
+	ZeroMemory(pResult, resultMaxBytes);
+	//"-8\\u7B2C0\\u9879";
+	for (int nPos = 0; nPos < nLength; )
 	{
-		int hexCount = bytes / 2;
-		for (int i = 0; i < hexCount; i += 2)
+		char ch = strSource[nPos];
+		if (ch == '\\' && strSource[nPos + 1] == 'u')
 		{
-			BYTE d = buf[i];
-			buf[i] = buf[i + 1];
-			buf[i + 1] = d;
-		}
-		int x = 0;
-	}
-	auto text = Utf8Tool::Unicode2Utf8((char*)buf);
-	delete[]buf;
+			char szTemp[5];
+			char szSource[5];
+			ZeroMemory(szTemp, 5);
+			ZeroMemory(szSource, 5);
+			CopyMemory(szSource, (char*)strSource + nPos + 2, 4);
+			sscanf_s(szSource, "%04X", szTemp);
+			CopyMemory(pResult + nDestStep, szTemp, 4);
+			nDestStep += 2;
 
-	return text;
+			nPos += 6;
+		}
+		else
+		{
+
+			pResult[nDestStep++]=ch;
+			pResult[nDestStep++] = 0;
+			nPos += 1;
+		}
+	}
+
+	nDestStep += 2;
+	pWbuufer = new wchar_t[nDestStep];
+	if (!pWbuufer)
+	{
+		delete[] pWbuufer;
+		pWbuufer = nullptr;
+		return strResult;
+	}
+	ZeroMemory(pWbuufer, nDestStep);
+	CopyMemory(pWbuufer, pResult, nDestStep);
+	delete[] pResult;
+	pResult = nullptr;
+	CHAR* MultPtr = nullptr;
+	int MultLen = -1;
+	//CODE_PAGE = 936
+	MultLen = ::WideCharToMultiByte(CODE_PAGE, WC_COMPOSITECHECK, pWbuufer, -1, NULL, NULL, NULL, NULL);
+	MultPtr = new CHAR[MultLen + 1];
+	if (MultPtr)
+	{
+		ZeroMemory(MultPtr, MultLen + 1);
+		::WideCharToMultiByte(CODE_PAGE, WC_COMPOSITECHECK, pWbuufer, -1, MultPtr, MultLen, NULL, NULL);
+		strResult = MultPtr;
+		delete[] MultPtr;
+		MultPtr = nullptr;
+	}
+	delete[] pWbuufer;
+	pWbuufer = nullptr;
+	return strResult;
 }
 
 string Utf8Tool::UTF_8ToGB2312(const string& text)

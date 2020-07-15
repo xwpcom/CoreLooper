@@ -40,6 +40,18 @@ string UrlTool::GetUriTitle(string url)
 	return url;
 }
 
+string UrlTool::PercentHexString(const string& text)
+{
+	string ack;
+	auto len = text.length();
+	for (size_t i = 0; i < len; i++)
+	{
+		StringTool::AppendFormat(ack,"%%%02X", (BYTE)text[i]);
+	}
+
+	return ack.c_str();
+}
+
 #if 0
 string UrlTool::GetUriTitle(string url)
 {

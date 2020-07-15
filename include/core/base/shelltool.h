@@ -69,6 +69,10 @@ public:
 	static void Sleep(UINT ms);
 	static struct tagTimeMs GetCurrentTimeMs();
 
+#ifdef _MSC_VER	
+	static struct tagTimeMs GetRelativeTimeMs(int deltaDays);
+#endif
+
 	static DWORD GetCurrentProcessId();
 	static DWORD GetCurrentThreadId();
 	static void SetThreadName(LPCSTR szThreadName, DWORD dwThreadID = GetCurrentThreadId());
