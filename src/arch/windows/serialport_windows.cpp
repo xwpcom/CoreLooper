@@ -7,6 +7,8 @@
 namespace Bear {
 namespace Core {
 using namespace FileSystem;
+static const char* TAG = "SerialPort";
+
 SerialPort_Windows::SerialPort_Windows()
 {
 	SetObjectName("SerialPort_Windows");
@@ -38,7 +40,7 @@ void SerialPort_Windows::OnCreate()
 		0);
 	if (mFile == INVALID_HANDLE_VALUE)
 	{
-		//DW("fail open %s", mDeviceName.c_str());
+		LogW(TAG,"fail open[%s]", mDeviceName.c_str());
 #ifndef _MSC_VER
 		ASSERT(FALSE);
 #endif
@@ -47,7 +49,7 @@ void SerialPort_Windows::OnCreate()
 		return;
 	}
 
-	//DV("open serial ok:%s", mDeviceName.c_str());
+	LogV(TAG,"open serial ok:%s", mDeviceName.c_str());
 
 /*
 	//调试串口的技巧:把正常和不正常的所有配置都dump到文件，进行比较，看哪里有区别

@@ -13,6 +13,8 @@ struct tagSerialPort
 };
 
 //XiongWanPing 2018.03.12
+//有待整理
+
 class CORE_EXPORT SerialPort_Windows :public IocpObject, public Channel
 {
 	SUPER(Channel)

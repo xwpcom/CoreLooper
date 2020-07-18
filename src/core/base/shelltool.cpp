@@ -32,6 +32,8 @@ using namespace Bear::Core::Net;
 #include "arch/android/jnihelper.h"
 #endif
 
+static const char* TAG = "ShellTool";
+
 #ifdef __APPLE__
 #include <time.h>
 #include <sys/time.h>
@@ -111,7 +113,14 @@ void DumpCallStackX()
 
 DWORD ShellTool::GetTickCount()
 {
-	DW("please use GetTickCount64()");
+	{
+		static bool first = true;
+		if (first)
+		{
+			first = false;
+			LogW(TAG, "please use GetTickCount64()");
+		}
+	}
 
 #ifdef _MSC_VER
 	return ::timeGetTime();
