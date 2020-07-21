@@ -126,7 +126,10 @@ int HttpPost::PackData()
 			);
 		}
 
-		if (items.find("Content-Type") == items.end())
+		//todo:find ignore case
+		if (items.find("Content-Type") == items.end()
+			&& items.find("Content-type") == items.end()//dahua ipcam
+			)
 		{
 			header += StringTool::Format(
 				"Content-Type: multipart/form-data; boundary=%s\r\n"
@@ -252,7 +255,9 @@ int HttpPost::PrepareData()
 			);
 		}
 
-		if (items.find("Content-Type") == items.end())
+		if (items.find("Content-Type") == items.end()
+			&& items.find("Content-type") == items.end()
+			)
 		{
 			header += StringTool::Format(
 				"Content-Type: multipart/form-data; boundary=%s\r\n"

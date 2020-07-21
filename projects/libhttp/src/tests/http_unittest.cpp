@@ -387,8 +387,6 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
-
-
 };
 
 

@@ -78,7 +78,16 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 	}
 	else
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
+
+		ack=StringTool::Format(
+			"HTTP/1.1 501\r\n"
+			//"Server: %s\r\n"
+			"Cache-Control: no-cache,no-store,must-revalidate\r\n"
+			"Connection: Close\r\n"
+			"\r\n"
+		);
+		xml.clear();
 	}
 
 	/*

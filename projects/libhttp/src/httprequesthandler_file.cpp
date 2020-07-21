@@ -180,7 +180,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		header.SetContentType(contentType);
 		header.SetConnection("Keep-Alive");
 #ifdef _DEBUG		
-		header.SetCacheControl("max-age=5");
+		header.SetCacheControl("max-age=15");
 #else
 		header.SetCacheControl("max-age=60");
 #endif

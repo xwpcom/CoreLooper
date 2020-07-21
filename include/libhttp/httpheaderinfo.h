@@ -8,7 +8,7 @@
 #include "base/namevalue.h"
 //max-age以秒为单位
 #ifdef _DEBUG
-#define FILE_CACHE_MAX_AGE	"Cache-Control: max-age=5\r\n"		
+#define FILE_CACHE_MAX_AGE	"Cache-Control: max-age=15\r\n"		
 #else
 #define FILE_CACHE_MAX_AGE	"Cache-Control: max-age=60\r\n"
 #endif
