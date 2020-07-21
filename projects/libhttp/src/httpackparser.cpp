@@ -46,6 +46,11 @@ void HttpAckParser::Parse(const string & sz)
 			auto posChunked = sz.find(key);
 			if (posChunked == string::npos || posChunked > pos)
 			{
+				{
+					auto ps = ack.c_str() + pos+strlen(headerTailKey);
+					mInfo.mBody = string(ps);
+				}
+				
 				return ;
 			}
 		}
