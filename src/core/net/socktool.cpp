@@ -414,7 +414,7 @@ const char * SockTool::GetErrorDesc(int error)
 
 	return "Unknown WinSock errcode";
 #else
-	return strerror(uErrCode);
+	return strerror(error);
 #endif
 }
 
