@@ -11,6 +11,7 @@ namespace Http {
 
 HttpGet::HttpGet()
 {
+	mAckInfo.mAckBody.MakeSureEndWithNull();
 }
 
 HttpGet::~HttpGet()
@@ -71,6 +72,7 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 	if (error)
 	{
 		mSignaled = true;
+		mAckInfo.mAckBody.MakeSureEndWithNull();
 		SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 
 		Destroy();
