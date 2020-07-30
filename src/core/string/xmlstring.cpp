@@ -10,10 +10,10 @@ string CreatePropStr(shared_ptr<NameValue> props)
 	string sz;
 	if (props)
 	{
-		auto& items = props->GetItems();
+		auto& items = props->GetItemsX();
 		for (auto iter = items.begin(); iter != items.end(); ++iter)
 		{
-			StringTool::AppendFormat(sz," %s=\"%s\"", iter->name.c_str(), iter->value.c_str());//经测试szValue不需要转为.xml()
+			StringTool::AppendFormat(sz," %s=\"%s\"", iter->first.c_str(), iter->second.c_str());
 		}
 	}
 

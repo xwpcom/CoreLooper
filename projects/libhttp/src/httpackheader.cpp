@@ -42,14 +42,14 @@ string  HttpAckHeader::ack(BOOL addTail)
 		""//hold place
 	);
 
-	auto&  items = m_fields.GetItems();
+	auto&  items = m_fields.GetItemsX();
 	{
 		for (auto iter = items.begin(); iter != items.end(); ++iter)
 		{
 			StringTool::AppendFormat(header,
 				"%s: %s\r\n",
-				iter->name.c_str(),
-				iter->value.c_str()
+				iter->first.c_str(),
+				iter->second.c_str()
 			);
 		}
 	}

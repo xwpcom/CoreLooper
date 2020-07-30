@@ -14,7 +14,7 @@ public:
 	{
 		string ack = mHeader;
 		int idx = -1;
-		auto& items = mParams.GetItems();
+		auto& items = mParams.GetItemsX();
 		for (auto iter = items.begin(); iter != items.end(); ++iter)
 		{
 			++idx;
@@ -23,7 +23,7 @@ public:
 				ack += ",\r\n";
 			}
 
-			ack += Core::StringTool::Format("\"%s\": \"%s\"", iter->name.c_str(), iter->value.c_str());
+			ack += Core::StringTool::Format("\"%s\": \"%s\"", iter->first.c_str(), iter->second.c_str());
 		}
 
 		ack += "\r\n";
@@ -36,7 +36,7 @@ public:
 	{
 		string ack = mHeader;
 		int idx = -1;
-		auto& items = mParams.GetItems();
+		auto& items = mParams.GetItemsX();
 		for (auto iter = items.begin(); iter != items.end(); ++iter)
 		{
 			++idx;
@@ -45,7 +45,7 @@ public:
 				ack += ",";// \r\n";
 			}
 
-			ack += Core::StringTool::Format("\"%s\": \"%s\"", iter->name.c_str(), iter->value.c_str());
+			ack += Core::StringTool::Format("\"%s\": \"%s\"", iter->first.c_str(), iter->second.c_str());
 		}
 
 		//ack += "\r\n";

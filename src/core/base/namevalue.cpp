@@ -4,111 +4,78 @@
 using namespace std;
 using namespace Bear::Core;
 
+static const char* TAG = "NameValue";
+
 NameValue::NameValue()
 {
-	mVersion = 0;
 }
 
 NameValue::~NameValue()
 {
-	Empty();
+	clear();
 }
 
-void NameValue::Empty()
+void NameValue::clear()
 {
-	if(mItems.size()>0)
-	{
-		SetModified();
-	}
-
 	mItems.clear();
 }
 
-void NameValue::SetModified()
+int NameValue::Set(const char* key, const char* value)
 {
-	mVersion++;
-}
-
-int NameValue::Set(const char *key, const char *value)
-{
-	int ret = -1;
-
-	BOOL createAlways = TRUE;
-	tagNameValue* item = GetItemEx(key, createAlways);
-	if (item)
+	if (!key || !key[0] || !value)
 	{
-		if (item->value != value)
-		{
-			item->value = value;
-			SetModified();
-		}
-
-		ret = 0;
+		return -1;
 	}
 
-	return ret;
+	mItems[key] = value;
+	return 0;
 }
 
-int NameValue::Set(const char *key, string value)
+int NameValue::Set(const string& key, int value)
 {
-	return Set(key, value.c_str());
+	auto v = StringTool::Format("%d", value);
+	return Set(key, v);
 }
 
-int NameValue::Set(string key, string value)
+int NameValue::Set(const char* key, const string& value)
 {
-	int ret = -1;
-
-	BOOL createAlways = TRUE;
-	tagNameValue* item = GetItemEx(key, createAlways);
-	if (item)
-	{
-		if (item->value != value)
-		{
-			item->value = value;
-			SetModified();
-		}
-		ret = 0;
-	}
-
-	return ret;
+	mItems[key] = value;
+	return 0;
 }
 
-int NameValue::Set(string key, int value)
+int NameValue::Set(const string& key, const string& value)
 {
-	string szValue=StringTool::Format("%d", value);
+	mItems[key] = value;
+	return 0;
+}
+
+int NameValue::Set(const char* key, int value)
+{
+	auto  szValue = StringTool::Format("%d", value);
 	return Set(key, szValue);
 }
 
-int NameValue::Set(const char *key, int value)
+float NameValue::GetFloat(const string& key, float defaultValue)const
 {
-	string szValue=StringTool::Format("%d", value);
-	return Set(key, szValue);
+	auto it = mItems.find(key.c_str());
+	if (it == mItems.end())
+	{
+		return defaultValue;
+	}
+
+	return (float)atof(it->second.c_str());
 }
 
-float NameValue::GetFloat(string key, float defaultValue)const
+bool NameValue::GetBool(const string& key, bool defaultValue)const
 {
-	if (!IsKeyExists(key))
+	auto it = mItems.find(key.c_str());
+	if (it == mItems.end())
 	{
 		return defaultValue;
 	}
 
-	return (float)atof(GetString(key).c_str());
-}
-
-bool NameValue::GetBool(string key, bool defaultValue)const
-{
-	if (!IsKeyExists(key))
-	{
-		return defaultValue;
-	}
-
-	string value = GetString(key);
-	if (value.empty())
-	{
-		return defaultValue;
-	}
-
-	if (StringTool::CompareNoCase(value,"0")==0 || StringTool::CompareNoCase(value,"false") == 0)
+	auto& v = it->second;
+	if (v == "0" || v == "false")
 	{
 		return false;
 	}
@@ -116,110 +83,62 @@ bool NameValue::GetBool(string key, bool defaultValue)const
 	return true;
 }
 
-string NameValue::GetString(string key, string defaultValue)const
+string NameValue::GetString(const string& key, const string& defaultValue)const
 {
-	if (!IsKeyExists(key))
+	auto it = mItems.find(key.c_str());
+	if (it == mItems.end())
 	{
 		return defaultValue;
 	}
 
-	const tagNameValue* item = GetItem(key);
-	if (item)
-	{
-		return item->value;
-	}
-
-	return defaultValue;
+	return it->second.c_str();
 }
 
-int NameValue::GetInt(string key, int defaultValue)const
+int NameValue::GetInt(const string& key, int defaultValue)const
 {
-	if (!IsKeyExists(key))
+	auto it = mItems.find(key.c_str());
+	if (it == mItems.end())
 	{
 		return defaultValue;
 	}
 
-	const tagNameValue* item = GetItem(key);
-	if (item)
-	{
-		return atoi(item->value.c_str());
-	}
-
-	return defaultValue;
+	return atoi(it->second.c_str());
 }
 
-const tagNameValue* NameValue::GetItem(const char *key)const
+bool NameValue::IsKeyExists(const char* key)const
 {
-	for (auto iter = mItems.begin(); iter != mItems.end(); ++iter)
+	if (!key || !key[0])
 	{
-		if (StringTool::CompareNoCase(iter->name,key) == 0)
-		{
-			return &(*iter);
-		}
+		return false;
 	}
 
-	return nullptr;
+	auto it = mItems.find(key);
+	return it != mItems.end();
 }
 
-const tagNameValue *NameValue::GetExistsItem(const char *key)const
+void NameValue::RemoveKey(const string& key)
 {
-	for (auto iter = mItems.begin(); iter != mItems.end(); ++iter)
+	auto it = mItems.find(key);
+	if (it != mItems.end())
 	{
-		if (StringTool::CompareNoCase(iter->name,key) == 0)
-		{
-			return &(*iter);
-		}
+		mItems.erase(it);
 	}
-
-	return nullptr;
-}
-
-tagNameValue* NameValue::GetItemEx(const char *key, BOOL createAlways)
-{
-	for (int i = 0; i < 2; i++)
-	{
-		for (auto iter = mItems.begin(); iter != mItems.end(); ++iter)
-		{
-			if (StringTool::CompareNoCase(iter->name,key) == 0)
-			{
-				return &(*iter);
-			}
-		}
-
-		//ASSERT(i == 0);
-
-		if (createAlways)
-		{
-			tagNameValue item;
-			item.name = key;
-			mItems.push_back(item);
-			SetModified();
-		}
-	}
-
-	return NULL;
-}
-
-bool NameValue::IsKeyExists(const char *key)const
-{
-	const tagNameValue* item = GetExistsItem(key);
-	return item != NULL;
 }
 
 void NameValue::Append(const NameValue& src)
 {
 	for (auto iter = src.mItems.begin(); iter != src.mItems.end(); ++iter)
 	{
-		Set(iter->name, iter->value);
+		Set(iter->first, iter->second);
 	}
 }
 
-void NameValue::Dump()
+void NameValue::Dump()const
 {
 	int idx = -1;
 	for (auto iter = mItems.begin(); iter != mItems.end(); ++iter)
 	{
 		++idx;
-		DV("%02d: [%s] = [%s]", idx, iter->name.c_str(), iter->value.c_str());
+		LogV(TAG, "%02d: [%s] = [%s]", idx, iter->first.c_str(), iter->second.c_str());
 	}
 }

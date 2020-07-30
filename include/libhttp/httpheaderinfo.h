@@ -47,8 +47,8 @@ struct HTTP_EXPORT tagHttpHeaderInfo
 		m_httpMethod.clear();
 		m_uri.clear();
 		m_szReferer.clear();
-		m_urlParam.Empty();
-		m_cookies.Empty();
+		m_urlParam.clear();
+		m_cookies.clear();
 
 		m_if_modified_since = -1;
 		m_range = 0;
