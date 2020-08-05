@@ -4,6 +4,7 @@
 #include "libcrypt/tea.h"
 #include "libcrypt/base64ex.h"
 #include "xxtea.h"
+#include "picosha2.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -18,7 +19,9 @@ using namespace Bear::Core::Net;
 namespace Crypt
 {
 
-TEST_CLASS(Tea_UnitTest)
+static const char* TAG = "Crypt";
+
+TEST_CLASS(Crypt)
 {
 public:
 	TEST_METHOD(Base64_Test)
