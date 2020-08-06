@@ -6,6 +6,7 @@ namespace Http {
 
 //XiongWanPing 2016.09.03
 //解析http ack header
+//已过时，建议使用HttpAcker
 class HTTP_EXPORT HttpAckParser
 {
 public:

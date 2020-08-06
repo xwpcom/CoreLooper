@@ -3,6 +3,8 @@
 #include "libhttp.inl"
 #include "libhttp/httpget.h"
 #include "parser_unittest.h"
+#include "libhttp/httpacker.h"
+#include "string/stringparam.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -387,6 +389,102 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
+
+	TEST_METHOD(HttpAcker_)
+	{
+		{
+			HttpAcker obj;
+			obj.Parse(
+				"HTTP/1.1 200 OK\r\n"
+				"\r\n"
+			);
+
+			Assert::IsTrue(obj.version() == "HTTP/1.1");
+			Assert::IsTrue(obj.code() == 200);
+		}
+		{
+			HttpAcker obj;
+			obj.Parse(
+				"HTTP/1.1 200 OK\r\n"
+				"Server: webserver\r\n"
+				"Content-Type: application/xml\r\n"
+				"Set-Cookie: WebSession_0eb6f4251b=2a65bbbaeb553b3a01a5e93c783d8fd2c67406a333eb6ffc83269ddd60843b98; path=/;HttpOnly\r\n"
+				"\r\n"
+			);
+
+			Assert::IsTrue(obj.version() == "HTTP/1.1");
+			Assert::IsTrue(obj.code() == 200);
+
+			auto& fields = obj.fields();
+			Assert::IsTrue(fields["Server"] == "webserver");
+			Assert::IsTrue(fields["Content-Type"] == "application/xml");
+
+			auto setCookie = fields["Set-Cookie"];
+			LogV(TAG, "Set-Cookie=[%s]", setCookie.c_str());
+			Assert::IsTrue(setCookie == "WebSession_0eb6f4251b=2a65bbbaeb553b3a01a5e93c783d8fd2c67406a333eb6ffc83269ddd60843b98; path=/;HttpOnly");
+
+			{
+				auto& items = StringParam::ParseItems(setCookie, "; ");
+				for (auto& item : items)
+				{
+					LogV(TAG, "[%s]=[%s]", item.first.c_str(), item.second.c_str());
+				}
+
+				auto key = items["WebSession_0eb6f4251b"];
+				Assert::IsTrue(key == "2a65bbbaeb553b3a01a5e93c783d8fd2c67406a333eb6ffc83269ddd60843b98");
+			}
+		}
+
+		{
+			HttpAcker obj;
+			obj.Parse(
+				"HTTP/1.1 200 OK\r\n"
+				"Content-Length: 5\r\n"
+				"\r\n"
+				"Hello"
+				"extraData"//故意增加其他数据
+			);
+
+			auto& body = obj.body();
+			Assert::IsTrue(body == "Hello");
+		}
+
+		{
+			HttpAcker obj;
+			obj.Parse(
+				"HTTP/1.1 200\r\n"
+				"Transfer-Encoding: chunked\r\n"
+				"\r\n"
+				"74\r\n"
+				"{\"access_token\":\"910c6a99-64bd-4bae-84d6-0eba452e5390\",\"token_type\":\"bearer\",\"expires_in\":6819,\"scope\":\"connon-api\"}\r\n"
+				"0\r\n"
+			);
+
+			auto& body = obj.body();
+			auto sz = body.c_str();
+			Assert::IsTrue(body == "{\"access_token\":\"910c6a99-64bd-4bae-84d6-0eba452e5390\",\"token_type\":\"bearer\",\"expires_in\":6819,\"scope\":\"connon-api\"}");
+			Assert::IsTrue(body.length() == 0x74);
+		}
+		{
+			HttpAcker obj;
+			obj.Parse(
+				"HTTP/1.1 200\r\n"
+				"Transfer-Encoding: chunked\r\n"
+				"\r\n"
+				"74\r\n"
+				"{\"access_token\":\"910c6a99-64bd-4bae-84d6-0eba452e5390\",\"token_type\":\"bearer\",\"expires_in\":6819,\"scope\":\"connon-api\"}\r\n"
+				"5\r\n"
+				"Hello\r\n"
+				"0\r\n"
+			);
+
+			auto& body = obj.body();
+			auto sz = body.c_str();
+			Assert::IsTrue(body == "{\"access_token\":\"910c6a99-64bd-4bae-84d6-0eba452e5390\",\"token_type\":\"bearer\",\"expires_in\":6819,\"scope\":\"connon-api\"}Hello");
+			Assert::IsTrue(body.length() == 0x79);
+		}
+	}
+
 };
 
 

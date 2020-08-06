@@ -138,6 +138,9 @@
     <ClCompile Include="src\httpchunkparser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\httpacker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libhttp.h">
@@ -402,6 +405,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\libhttp\httpchunkparser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\libhttp\httpacker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
