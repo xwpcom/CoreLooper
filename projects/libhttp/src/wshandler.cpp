@@ -126,7 +126,7 @@ void WSHandler::OnTimer(long id)
 		int second = 60 * 15;
 		if (tickNow > mTickAlive + second * 1000)
 		{
-			DV("destroy due to timeout");
+			LogV(TAG,"destroy due to timeout");
 			Destroy();
 		}
 

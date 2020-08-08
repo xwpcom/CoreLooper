@@ -969,34 +969,6 @@ int Handler::OnProcDataSetter(string, string)
 
 int Handler::Test()
 {
-#ifdef _DEBUG
-	//BindProcData(mAge, "age", "baby age", PDF_READ | PDF_SETTER);
-	//BindProcData(mName, "name", "xwp", PDF_READ | PDF_SETTER);
-
-	mProcNode->SetInt("age", 35);
-	int value = mProcNode->GetInt("age");
-	mProcNode->SetInt("age", 123);
-	value = mProcNode->GetInt("age");
-
-	string name = mProcNode->GetString("name");
-	mProcNode->SetString("name", "xxy");
-	name = mProcNode->GetString("name");
-
-	double height = 50.0;
-	BindProcData(height, "height", "height", PDF_READ_WRITE);
-	mProcNode->SetDouble("height", 173.0);
-	double xx = mProcNode->GetDouble("height");
-
-	DWORD money = 123456789;
-	BindProcData(money, "money", "", PDF_READ_WRITE);
-	mProcNode->SetDword("money", 1354417884);
-	DWORD mm = mProcNode->GetDword("money");
-
-	string xml;
-	DumpProcData(xml);
-	DV("xml=[%s]", xml.c_str());
-
-#endif
 	return 0;
 }
 
