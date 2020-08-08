@@ -97,6 +97,8 @@ public:
 #ifdef _MSC_VER
 	static std::string RelativePath2FullPath(std::string relativePath);
 	static bool IsDeveloperPC();
+	static bool IsHongKongServer();
+	static bool IsChinaServer();
 #endif
 
 	static void ParseCommandLine(const char *cmdline, std::vector<std::string>& args);

@@ -1628,4 +1628,17 @@ bool ShellTool::IsDeveloperPC()
 	return ok
 		;//bear pc
 }
+
+bool ShellTool::IsHongKongServer()
+{
+	static auto jjyHongKong = NetTool::MacExists("00-16-3E-01-02-7F");
+	return jjyHongKong;
+}
+
+bool ShellTool::IsChinaServer()
+{
+	static auto v = NetTool::MacExists("00-16-3E-04-CF-74");
+	return v;
+}
+
 #endif
