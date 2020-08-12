@@ -6,6 +6,7 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+static const char* TAG = "Channel";
 
 Channel::Channel()
 {
@@ -57,7 +58,7 @@ void Channel::OnTimer(long timerId)
 			ULONGLONG tickNow = ShellTool::GetTickCount64();
 			if (tickNow >= mTickLastRecv + mDataTimeout && tickNow >= mTickLastSend + mDataTimeout)
 			{
-				DW("%s(0x%08x) timeout,auto close it,mTimeCreate=%d.%02d.%02d %02d:%02d:%02d"
+				LogW(TAG,"%s(0x%08x) timeout,auto close it,mTimeCreate=%d.%02d.%02d %02d:%02d:%02d"
 					, GetObjectName().c_str()
 					, this
 					, mTimeCreate.tm_year + 1900
