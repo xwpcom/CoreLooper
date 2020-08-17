@@ -1624,7 +1624,7 @@ int ShellTool::System(const char *szCmd)
 #ifdef _MSC_VER
 bool ShellTool::IsDeveloperPC()
 {
-	bool ok = NetTool::MacExists("60-EE-5C-B3-D9-F3") || NetTool::MacExists("9C-5C-8E-98-9D-98");
+	bool ok = NetTool::MacExists("60-EE-5C-B3-D9-F3") || NetTool::MacExists("F8-32-E4-9D-00-9D");
 	return ok
 		;//bear pc
 }
