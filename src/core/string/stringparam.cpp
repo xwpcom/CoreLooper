@@ -13,25 +13,28 @@ map<string, string> StringParam::ParseItems(const string& items, const char *ite
 	map<string, string> ack;
 
 	TextSeparator obj2(items.c_str(), itemSeperator);
-	string pair2;
+	string nv;
 	while (1)
 	{
-		int ret = obj2.GetNext(pair2);
+		int ret = obj2.GetNext(nv);
 		if (ret)
 		{
 			break;
 		}
 
+		string name, value;
+		auto pos = nv.find(sign);
+		if(pos!=string::npos)
 		{
-			TextSeparator parse(pair2.c_str(), sign);
-			string name;
-			string value;
-			parse.GetNext(name);
-			parse.GetNext(value);
-
-			//DV("%s=[%s]", name.c_str(), value.c_str());
-			ack[name] = value.c_str();
+			name = nv.substr(0, pos);
+			value= nv.substr(pos+1);
 		}
+		else
+		{
+			name = nv;
+		}
+
+		ack[name] = value;
 	}
 
 	return ack;
