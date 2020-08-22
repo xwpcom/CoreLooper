@@ -173,6 +173,10 @@ public:
 	{
 		return Dump(box, szFile.c_str());
 	}
+	static int Dump(std::string sz, const string& filePath)
+	{
+		return Dump(sz, filePath.c_str());
+	}
 	static int Dump(std::string sz, const char *pszFile);
 	static const char *GetFileExt(const char *filepath);
 	static std::string GetPathFileName(std::string path);

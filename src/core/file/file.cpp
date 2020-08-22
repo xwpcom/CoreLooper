@@ -634,6 +634,7 @@ int File::Dump(const LPVOID pBuf, int nBuf, const char *pszFile)
 	return ret;
 }
 
+//有返回数据时，保证数据以\0结尾,便于字符串解析
 int File::ReadFile(const char *szFile, ByteBuffer& box)
 {
 	box.clear();

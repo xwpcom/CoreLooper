@@ -63,7 +63,12 @@ bool StringTool::EndWith(const string&obj, const string& tail)
 		return false;
 	}
 
-	auto len = tail.length();
+	size_t len = tail.length();
+	if (obj.length() < len)
+	{
+		return false;
+	}
+
 	auto text = obj.substr(obj.length() - len);
 	ASSERT(text.length() == tail.length());
 	return text == tail;
