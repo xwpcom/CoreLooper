@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "base/shelltool.h"
 #include "bytetool.h"
 #include "string/textseparator.h"
@@ -1642,3 +1642,189 @@ bool ShellTool::IsChinaServer()
 }
 
 #endif
+
+//从stcapp c51工程引入
+class DateTime
+{
+public:
+	static time_t time();
+	static time_t mktime(tm* pT);
+	static void localtime(time_t tim, tm* pT);
+	static int spanDays(const tm& tm1, const tm& tm2);
+};
+
+static ULONG gGmtSecondOffset = 8 * 3600;//时区偏移秒数,默认为中国时区GMT+08:00
+static const char mon_list[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+static const char leap_mon_list[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+time_t DateTime::mktime(tm* pT)
+{
+	const char* pDays = NULL;
+	time_t tmp = 0;
+	int16_t i = 0;
+
+	pT->tm_year += 1900;
+	pT->tm_mon += 1;
+
+	//计算总共有多少个闰年
+	tmp = (pT->tm_year / 4 - pT->tm_year / 100 + pT->tm_year / 400) - (1970 / 4 - 1970 / 100 + 1970 / 400);
+
+	//如果当年是闰年，需要减去当年的闰年
+	if ((pT->tm_year % 4 == 0) && ((pT->tm_year % 100 != 0) || (pT->tm_year % 400 == 0)))
+	{
+		tmp = tmp - 1 + (pT->tm_year - 1970) * 365;
+		pDays = leap_mon_list;
+	}
+	else
+	{
+		tmp = tmp + (pT->tm_year - 1970) * 365;
+		pDays = mon_list;
+	}
+
+	for (i = 0; i < pT->tm_mon - 1; i++)
+		tmp += pDays[i];
+
+	tmp = tmp + pT->tm_mday - 1;
+
+	tmp = tmp * 24 + pT->tm_hour;
+
+	tmp = tmp * 60 + pT->tm_min;
+
+	tmp = tmp * 60 + pT->tm_sec;
+	tmp -= gGmtSecondOffset;//减去默认加上的GMT+08:00
+
+	return tmp;
+}
+
+/*
+时间戳转为时间
+tim:当前时间戳
+tm *pT： 输出的时间缓冲区
+*/
+void DateTime::localtime(time_t tim, tm* pT)
+{
+	const char* pDays = NULL;
+
+	uint16_t index = 0;
+
+	//memset(pT, 0, sizeof(*pT));
+
+#if 1
+  //year initialization
+	if (tim > 0x5685C180L)            // 2016-1-1 0:0:0
+	{
+		pT->tm_year = 2016;
+		tim -= 0x5685C180L;
+	}
+	else if (tim > 0x4B3D3B00L)       // 2010-1-1 0:0:0
+	{
+		pT->tm_year = 2010;
+		tim -= 0x4B3D3B00L;
+	}
+	else if (tim > 0x386D4380L)       // 2000-1-1 0:0:0
+	{
+		pT->tm_year = 2000;
+		tim -= 0x386D4380L;
+	}
+	else
+	{
+		pT->tm_year = 1970;
+	}
+
+	//now have year
+	while (tim >= 366L * 24 * 60 * 60)
+	{
+		if ((pT->tm_year % 4 == 0) && ((pT->tm_year % 100 != 0) || (pT->tm_year % 400 == 0)))
+			tim -= 366L * 24 * 60 * 60;
+		else
+			tim -= 365L * 24 * 60 * 60;
+
+		pT->tm_year++;
+	}
+
+	// then 365 * 24 * 60 * 60 < tim < 366 * 24 * 60 * 60
+	if (!(((pT->tm_year % 4 == 0) && ((pT->tm_year % 100 != 0) || (pT->tm_year % 400 == 0))))
+		&& (tim > 365L * 24 * 60 * 60))
+	{
+		tim -= 365L * 24 * 60 * 60;
+		pT->tm_year++;
+	}
+
+	// this year is a leap year?
+	if (((pT->tm_year % 4 == 0) && ((pT->tm_year % 100 != 0) || (pT->tm_year % 400 == 0))))
+		pDays = leap_mon_list;
+	else
+		pDays = mon_list;
+
+	pT->tm_mon = 0;
+	tim += gGmtSecondOffset;
+	// now have mon
+	while (tim > pDays[index] * 24L * 60 * 60)
+	{
+		tim -= pDays[index] * 24L * 60 * 60;
+		index++;
+		pT->tm_mon++;
+	}
+
+	// now have days
+	pT->tm_mday = (int)(tim / (24L * 60 * 60) + 1);
+	tim = tim % (24L * 60 * 60);
+
+	// now have hour
+	pT->tm_hour = (int)(tim / (60 * 60));
+	tim = tim % (60 * 60);
+
+	// now have min
+	pT->tm_min = (int)(tim / 60);
+	tim = tim % 60;
+
+	pT->tm_sec = (int)(tim);
+
+	pT->tm_year -= 1900;//符合linux/windows api标准
+#endif
+}
+
+//返回tm1晚于tm2的天数
+//比如tm1是tm2后一天，则返回1
+//如果tm2晚于tm1,返回天数为负数
+int DateTime::spanDays(const tm& tm1, const tm& tm2)
+{
+	tm tt1 = tm1;
+	tm tt2 = tm2;
+	time_t t1 = DateTime::mktime(&tt1);
+	time_t t2 = DateTime::mktime(&tt2);
+
+	int days = (int)((t1 - t2) / (3600 * 24));
+	return days;
+}
+
+static time_t gBaseTime = 0;//可由外界设定
+
+time_t DateTime::time()
+{
+#ifdef _MSC_VER
+	return ::time(nullptr);
+#else
+	return (ShellTool::GetTickCount() / 1000) + gBaseTime;
+#endif
+}
+//返回晚于obj的天数
+//比如是obj的后一天，则返回1
+//如果obj晚于本对象,返回天数为负数
+int tagTimeMs::laterDays(const tagTimeMs& obj)
+{
+	tm tm1 = { 0 };
+	tm1.tm_year = this->year - 1900;
+	tm1.tm_mon = this->month - 1;
+	tm1.tm_mday = this->day;
+	//time_t t1 = DateTime::mktime(&tm1);
+
+	tm tm2 = { 0 };
+	tm2.tm_year = obj.year - 1900;
+	tm2.tm_mon = obj.month - 1;
+	tm2.tm_mday = obj.day;
+
+	//time_t t2 = DateTime::mktime(&tm2);
+	int days = DateTime::spanDays(tm1, tm2);
+	return days;
+}

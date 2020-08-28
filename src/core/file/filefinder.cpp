@@ -24,7 +24,7 @@ void FileFinder::Close()
 }
 
 //为对file/folder排序，一次性读取所有item
-BOOL FileFinder::FindFile(const char *dir, string ext)
+BOOL FileFinder::FindFile(const string& dir, string ext)
 {
 	Close();
 

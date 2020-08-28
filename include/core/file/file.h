@@ -140,6 +140,12 @@ public:
 	static FILE* fopen(const char *pszFile, const char *pszMode);
 	static size_t GetFileLength(FILE *hFile);
 	static size_t GetFileLength(const char *pszFile);
+	static int Delete(const string& filePath)
+	{
+		if(FileExists(filePath))
+			return DeleteFile(filePath.c_str());
+		return DeleteFolder(filePath.c_str());
+	}
 	static int DeleteFile(const char *pszFile);
 	static int DeleteFolder(const char *pszFile);
 	static BOOL RemoveDirectory(const char *pszDir);

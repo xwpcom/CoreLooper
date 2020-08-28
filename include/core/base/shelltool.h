@@ -29,7 +29,7 @@ typedef struct GUID {
 #define CLAMP(minValue,value,maxValue) do {if(value < minValue) value=minValue;if(value>maxValue) value=maxValue; }while(0)
 
 //time accurate to ms
-struct tagTimeMs
+struct CORE_EXPORT tagTimeMs
 {
 	int year = 0;
 	int month = 0;
@@ -48,6 +48,8 @@ struct tagTimeMs
 	{
 		return hour * 10000 + minute * 100 + second;
 	}
+
+	int laterDays(const tagTimeMs& obj);
 };
 
 class CORE_EXPORT ShellTool

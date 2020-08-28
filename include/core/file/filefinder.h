@@ -40,7 +40,7 @@ public:
 	FileFinder(void);
 	virtual ~FileFinder(void);
 
-	BOOL FindFile(const char *dir, std::string ext = "");
+	BOOL FindFile(const string&dir, std::string ext = "");
 	BOOL FindNextFile();
 	BOOL IsDots();
 	BOOL IsDirectory();
