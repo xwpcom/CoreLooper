@@ -1124,6 +1124,31 @@ int File::ftruncateEx(ULONG length)
 #endif
 }
 
+//return example: ".txt" ".bin"
+string File::GetFileExt(const string& fileName)
+{
+	size_t pos = fileName.find_last_of('.');
+	if (pos != string::npos)
+	{
+		size_t pathSplitter = fileName.find_last_of('\\');
+		if (pathSplitter == string::npos)
+		{
+			pathSplitter = fileName.find_last_of('/');
+		}
+
+		if (pathSplitter != string::npos && pos< pathSplitter)
+		{
+			return "";
+		}
+		
+		//PathFindExtension
+		//_splitpath
+
+		return fileName.substr(pos);
+	}
+
+	return "";
+}
 
 }
 }

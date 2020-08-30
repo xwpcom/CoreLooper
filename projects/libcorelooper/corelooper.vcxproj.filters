@@ -340,6 +340,9 @@
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\file\tests\file.unittest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">

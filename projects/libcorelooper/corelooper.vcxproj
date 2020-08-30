@@ -339,6 +339,7 @@
     <ClCompile Include="..\..\src\core\file\filefinder.cpp" />
     <ClCompile Include="..\..\src\core\file\ini.cpp" />
     <ClCompile Include="..\..\src\core\file\inifile.cpp" />
+    <ClCompile Include="..\..\src\core\file\tests\file.unittest.cpp" />
     <ClCompile Include="..\..\src\core\file\tests\ini.tests.cpp" />
     <ClCompile Include="..\..\src\core\file\virtualfolder.cpp" />
     <ClCompile Include="..\..\src\core\looper\asynctask.cpp" />

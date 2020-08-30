@@ -50,6 +50,8 @@ public:
 	{
 		return !!mFileHandle;
 	}
+
+	static string GetFileExt(const string& fileName);
 protected:
 	FILE* mFileHandle = nullptr;
 
