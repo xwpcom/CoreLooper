@@ -110,6 +110,14 @@ string  HttpTool::GetContentType(string  ext)
 		".cfg",		"application/custom",
 		".avi",		"video/mp4",//"video/x-msvideo";
 		".mp4",		"video/mp4",
+		".xlsx",	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		".xls",		"application/vnd.ms-excel",
+		".pdf",		"application/pdf",
+		".doc",		"application/msword",
+		".docx",	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		".ppt",		"application/vnd.ms-powerpoint",
+		".pptx",	"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
 	};
 
 	for (int i = 0; i < COUNT_OF(arr); i += 2)
