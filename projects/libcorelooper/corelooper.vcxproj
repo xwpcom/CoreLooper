@@ -297,6 +297,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\core\base\crashdump.cpp" />
     <ClCompile Include="..\..\include\core\net\test\speedhandler.cpp" />
     <ClCompile Include="..\..\include\core\net\test\speedserver.cpp" />
     <ClCompile Include="..\..\include\core\net\test\unittest_speed.cpp" />
@@ -466,6 +467,7 @@
     <ClInclude Include="..\..\include\core\base\bundleex.h" />
     <ClInclude Include="..\..\include\core\base\bytebuffer.h" />
     <ClInclude Include="..\..\include\core\base\bytetool.h" />
+    <ClInclude Include="..\..\include\core\base\crashdump.h" />
     <ClInclude Include="..\..\include\core\base\dt.h" />
     <ClInclude Include="..\..\include\core\base\log.h" />
     <ClInclude Include="..\..\include\core\base\memorylog.h" />
