@@ -10,6 +10,7 @@
 char CCrashDump::m_szPrefix[64];
 BOOL CCrashDump::m_bInstalled=FALSE;
 
+//已测试确认，release版不加debug信息，生成的.dmp文件也能定位到bug代码行，前提是生成.exe后代码没修改过
 long CCrashDump::StartAutoDump(struct _EXCEPTION_POINTERS *pep)
 {
 	char	szFileName[_MAX_PATH]	= {0};
