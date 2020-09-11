@@ -2,6 +2,8 @@
 #include "hmac_sha1.h"
 #include <string>
 #include <cmath>
+#include "base64ex.h"
+
 namespace Bear {
 namespace Core {
 using namespace std;
@@ -270,6 +272,23 @@ string Crypt::HmacSha1(const string& text, const string& key)
 	}
 
 	return ack;
+}
+
+string Crypt::HmacSha1_Base64(const string& text, const string& key)
+{
+	long H[5] = { 0 };
+	HMAC(text, key, H);
+
+	{
+		//2020.09.11,为了匹配aliyun sms加密,对H中的long进行字节顺序调整
+		//https://help.aliyun.com/document_detail/101343.html?spm=a2c4g.11186623.6.619.13b47535axh4W1
+		for (int i = 0; i < COUNT_OF(H); i++)
+		{
+			H[i] = htonl(H[i]);
+		}
+	}
+
+	return Base64::Encode((LPBYTE)H, sizeof(H));
 }
 
 }

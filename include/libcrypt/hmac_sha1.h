@@ -11,6 +11,7 @@ class CRYPT_EXT_CLASS Crypt
 {
 public:
 	static string HmacSha1(const string& text, const string& key);
+	static string HmacSha1_Base64(const string& text, const string& key);
 };
 
 
