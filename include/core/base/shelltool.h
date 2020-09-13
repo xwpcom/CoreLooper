@@ -8,6 +8,7 @@ namespace FileSystem
 	class IniFile;
 };
 using namespace FileSystem;
+using namespace std;
 #ifdef _MSC_VER
 #include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
@@ -56,14 +57,14 @@ class CORE_EXPORT ShellTool
 {
 public:
 
-	static void String2IntVector(const std::string& text, std::vector<int>& vec);
-	static void String2Vector(const std::string& text, std::vector<std::string>& vec);
-	static bool IsExists(std::vector<int>& vec, int number);
-	static bool IsExists(std::vector<std::string>& vec, std::string value);
+	static void String2IntVector(const string& text, vector<int>& vec);
+	static void String2Vector(const string& text, vector<string>& vec);
+	static bool IsExists(vector<int>& vec, int number);
+	static bool IsExists(vector<string>& vec, string value);
 
 
-	static std::string GetComputerName();
-	static std::string GetUserName();
+	static string GetComputerName();
+	static string GetUserName();
 
 	static DWORD GetTickCount();
 	static ULONGLONG GetTickCount64();
@@ -73,6 +74,7 @@ public:
 
 #ifdef _MSC_VER	
 	static struct tagTimeMs GetRelativeTimeMs(int deltaDays);
+	static string CreateGuid();
 #endif
 
 	static DWORD GetCurrentProcessId();
@@ -85,31 +87,31 @@ public:
 		ULONG Flags = 0                       // worker options
 	);
 	static void DumpCallStack();
-	static std::string GetAppPathName();
-	static std::string GetAppPath();
-	static std::string GetAppDisk();
-	static GUID UuidFromString(std::string szGuid);
-	static std::string GuidToString(GUID& guid);
+	static string GetAppPathName();
+	static string GetAppPath();
+	static string GetAppDisk();
+	static GUID UuidFromString(string szGuid);
+	static string GuidToString(GUID& guid);
 
 	static struct tm GetLocalTime(int deltaSecond = 0);
-	static std::string Second2Str(int seconds);
-	static std::string Bytes2String(LPBYTE pBuf, int cbBuf);
+	static string Second2Str(int seconds);
+	static string Bytes2String(LPBYTE pBuf, int cbBuf);
 	static int PrintHex(LPBYTE pBuf, int cbBuf, const char *desc);
 
 #ifdef _MSC_VER
-	static std::string RelativePath2FullPath(std::string relativePath);
+	static string RelativePath2FullPath(string relativePath);
 	static bool IsDeveloperPC();
 	static bool IsHongKongServer();
 	static bool IsChinaServer();
 #endif
 
-	static void ParseCommandLine(const char *cmdline, std::vector<std::string>& args);
+	static void ParseCommandLine(const char *cmdline, vector<string>& args);
 
 #ifdef _MSC_VER
-	static BOOL CopyTextToClipboard(HWND hWnd, const std::string& text);
+	static BOOL CopyTextToClipboard(HWND hWnd, const string& text);
 	static BOOL CopyTextToClipboard(HWND hWnd, CString text);
-	static BOOL CopyTextToClipboardGB2312(HWND hWnd, const std::string& text);
-	static int ShowInFolder(const std::string& filePath);
+	static BOOL CopyTextToClipboardGB2312(HWND hWnd, const string& text);
+	static int ShowInFolder(const string& filePath);
 	static int KillProcessByName(const char *szToTerminate);
 	static LPWSTR * CommandLineToArgvW(LPCWSTR lpCmdLine, int *pNumArgs);
 	static void SaveWindowPos(HWND hWnd, CString szWinName);

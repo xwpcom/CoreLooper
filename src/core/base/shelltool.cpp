@@ -10,6 +10,7 @@
 using namespace Bear::Core::Net;
 #include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
+
 #include <Mmsystem.h>
 #pragma comment(lib,"Winmm.lib")
 #pragma comment(lib,"Rpcrt4.lib")
@@ -237,6 +238,20 @@ void ShellTool::Sleep(UINT ms)
 }
 
 #ifdef _MSC_VER
+
+string ShellTool::CreateGuid()
+{
+	RPC_CSTR pszGuid = nullptr;
+	UUID guid = { 0 };
+	auto hr = UuidCreate(&guid);
+	hr = UuidToStringA(&guid, &pszGuid);
+	string szGuid = (char*)pszGuid;
+	RpcStringFreeA(&pszGuid);
+	pszGuid = NULL;
+
+	return szGuid;
+}
+
 struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
 {
 	CTime t = CTime::GetCurrentTime();
