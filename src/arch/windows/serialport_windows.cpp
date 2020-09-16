@@ -40,7 +40,10 @@ void SerialPort_Windows::OnCreate()
 		0);
 	if (mFile == INVALID_HANDLE_VALUE)
 	{
-		LogW(TAG,"fail open[%s]", mDeviceName.c_str());
+		if (mDeviceName != "\\\\.\\")
+		{
+			LogW(TAG, "fail open[%s]", mDeviceName.c_str());
+		}
 #ifndef _MSC_VER
 		ASSERT(FALSE);
 #endif
