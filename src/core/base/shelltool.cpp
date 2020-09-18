@@ -1041,6 +1041,7 @@ string ShellTool::GetUserName()
 #include <tlhelp32.h>
 
 //http://www.neurophys.wisc.edu/ravi/software/killproc/
+//2020.09.18,发现有准确，有时进程明明存在，但本接口搜索不到,但用CreateToolhelp32Snapshot可以获取到
 int ShellTool::KillProcessByName(const char *szToTerminate)
 // Created: 6/23/2000  (RK)
 // Last modified: 3/10/2002  (RK)
@@ -1116,113 +1117,133 @@ int ShellTool::KillProcessByName(const char *szToTerminate)
 		//(osvi.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS))
 		//return 607;
 
-	if (1)//osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
+	// Win/NT or 2000 or XP
+
+	// Load library and get the procedures explicitly. We do
+	// this so that we don't have to worry about modules using
+	// this code failing to load under Windows 9x, because
+	// it can't resolve references to the PSAPI.DLL.
+	class AutoFree
 	{
-		// Win/NT or 2000 or XP
-
-		// Load library and get the procedures explicitly. We do
-		// this so that we don't have to worry about modules using
-		// this code failing to load under Windows 9x, because
-		// it can't resolve references to the PSAPI.DLL.
-		hInstLib = LoadLibraryA("PSAPI.DLL");
-		if (hInstLib == NULL)
-			return 605;
-
-		// Get procedure addresses.
-		lpfEnumProcesses = (BOOL(WINAPI *)(DWORD *, DWORD, DWORD*))
-			GetProcAddress(hInstLib, "EnumProcesses");
-		lpfEnumProcessModules = (BOOL(WINAPI *)(HANDLE, HMODULE *,
-			DWORD, LPDWORD)) GetProcAddress(hInstLib,
-				"EnumProcessModules");
-		lpfGetModuleBaseName = (DWORD(WINAPI *)(HANDLE, HMODULE,LPSTR, DWORD)) GetProcAddress(hInstLib,"GetModuleBaseNameA");
-
-		if (lpfEnumProcesses == NULL ||
-			lpfEnumProcessModules == NULL ||
-			lpfGetModuleBaseName == NULL)
+	public:
+		AutoFree(HINSTANCE& module):mModule(module)
 		{
-			FreeLibrary(hInstLib);
-			return 700;
 		}
 
-		bResult = lpfEnumProcesses(aiPID, iCb, &iCbneeded);
-		if (!bResult)
+		~AutoFree()
 		{
-			// Unable to get process list, EnumProcesses failed
-			FreeLibrary(hInstLib);
-			return 701;
-		}
-
-		// How many processes are there?
-		iNumProc = iCbneeded / sizeof(DWORD);
-
-		// Get and match the name of each process
-		for (i = 0; i<iNumProc; i++)
-		{
-			// Get the (module) name for this process
-
-			strcpy(szName, "Unknown");
-			// First, get a handle to the process
-			hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
-				aiPID[i]);
-			// Now, get the process name
-			if (hProc)
+			if (mModule)
 			{
-				if (lpfEnumProcessModules(hProc, &hMod, sizeof(hMod), &iCbneeded))
-				{
-					iLen = lpfGetModuleBaseName(hProc, hMod, szName, MAX_PATH);
-				}
+				FreeLibrary(mModule);
+				mModule = nullptr;
+			}
+		}
+
+		HMODULE& mModule;
+	};
+	hInstLib = LoadLibraryA("PSAPI.DLL");
+	AutoFree autoFree(hInstLib);
+	if (hInstLib == NULL)
+		return 605;
+
+	// Get procedure addresses.
+	lpfEnumProcesses = (BOOL(WINAPI *)(DWORD *, DWORD, DWORD*))
+		GetProcAddress(hInstLib, "EnumProcesses");
+	lpfEnumProcessModules = (BOOL(WINAPI *)(HANDLE, HMODULE *,
+		DWORD, LPDWORD)) GetProcAddress(hInstLib,
+			"EnumProcessModules");
+	lpfGetModuleBaseName = (DWORD(WINAPI *)(HANDLE, HMODULE,LPSTR, DWORD)) GetProcAddress(hInstLib,"GetModuleBaseNameA");
+
+	if (lpfEnumProcesses == NULL ||
+		lpfEnumProcessModules == NULL ||
+		lpfGetModuleBaseName == NULL)
+	{
+		
+		return 700;
+	}
+
+	bResult = lpfEnumProcesses(aiPID, iCb, &iCbneeded);
+	if (!bResult)
+	{
+		// Unable to get process list, EnumProcesses failed
+		
+		return 701;
+	}
+
+	// How many processes are there?
+	iNumProc = iCbneeded / sizeof(DWORD);
+
+	LogV(TAG, "process count=%d", iNumProc);
+	// Get and match the name of each process
+	map<DWORD, bool> pids;//sort pid for easy debug
+	for (i = 0; i < iNumProc; i++)
+	{
+		// Get the (module) name for this process
+
+		strcpy(szName, "Unknown");
+		const auto pid = aiPID[i];
+		pids[pid] = true;
+	}
+
+	for (auto& item:pids)
+	{
+		strcpy(szName, "Unknown");
+		const auto pid = item.first;
+		hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+		// Now, get the process name
+		if (hProc)
+		{
+			if (lpfEnumProcessModules(hProc, &hMod, sizeof(hMod), &iCbneeded))
+			{
+				iLen = lpfGetModuleBaseName(hProc, hMod, szName, MAX_PATH);
+				//LogI(TAG, "%s,pid=%d", szName,pid);
 			}
 			CloseHandle(hProc);
-			// We will match regardless of lower or upper case
-#ifdef BORLANDC
-			if (strcmp(strupr(szName), szToTermUpper) == 0)
-#else
-			if (strcmp(_strupr(szName), szToTermUpper) == 0)
-#endif
+		}
+		else
+		{
+			//LogV(TAG,"fail open process %d(0x%x)",pid,pid);
+		}
+
+		if (strcmp(_strupr(szName), szToTermUpper) == 0)
+		{
+			// Process found, now terminate it
+			iFound = 1;
+			
+			hProc = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
+			if (hProc)
 			{
-				// Process found, now terminate it
-				iFound = 1;
-				// First open for termination
-				hProc = OpenProcess(PROCESS_TERMINATE, FALSE, aiPID[i]);
-				if (hProc)
+				if (TerminateProcess(hProc, 0))
 				{
-					if (TerminateProcess(hProc, 0))
-					{
-						// process terminated
-						CloseHandle(hProc);
-						FreeLibrary(hInstLib);
-						return 0;
-					}
-					else
-					{
-						// Unable to terminate process
-						CloseHandle(hProc);
-						FreeLibrary(hInstLib);
-						return 602;
-					}
+					// process terminated
+					CloseHandle(hProc);
+					return 0;
 				}
 				else
 				{
-					// Unable to open process for termination
-					FreeLibrary(hInstLib);
-					return 604;
+					// Unable to terminate process
+					CloseHandle(hProc);
+					
+					return 602;
 				}
 			}
+			else
+			{
+				LogW(TAG, "fail OpenProcess(%d),error=%d,app=[%s]", pid, GetLastError(), szToTerminate);
+				// Unable to open process for termination
+				
+				return 604;
+			}
 		}
-	}
-
-	if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-	{
-		//win98,winme
-		ASSERT(FALSE);
 	}
 
 	if (iFound == 0)
 	{
-		FreeLibrary(hInstLib);
+		
 		return 603;
 	}
-	FreeLibrary(hInstLib);
+
+	
 	return 0;
 }
 

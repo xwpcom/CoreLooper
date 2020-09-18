@@ -18,7 +18,7 @@ public:
 
 	//url可以为http url,比如网页或文件
 	virtual int Execute(string url, string saveAsFilePath = "");
-	sigslot::signal4<HttpGet*, string&, int, ByteBuffer&>	SignalHttpGetAck;
+	sigslot::signal4<Handler*, string&, int, ByteBuffer&>	SignalHttpGetAck;
 	
 	//返回下载速度,单位:KB/S,仅在下载成功后有意义
 	double GetSpeed()const

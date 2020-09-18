@@ -8,7 +8,7 @@ namespace Http {
 
 AjaxRuntimeClass AjaxHandler::classAjaxHandler;
 map<string, AjaxRuntimeClass*>* AjaxRuntimeClass::m_mapPackClass = nullptr;
-
+static const char* TAG = "AjaxHandler";
 AjaxClassInit::AjaxClassInit(AjaxRuntimeClass* pData)
 {
 	{
@@ -68,9 +68,10 @@ AjaxHandler* AjaxHandler::CreateInstance(string commandName)
 		return handler;
 	}
 
-	DV("no implement for %s", commandName.c_str());
+	LogV(TAG,"no implement for %s", commandName.c_str());
 	return nullptr;
 }
+
 }
 }
 }

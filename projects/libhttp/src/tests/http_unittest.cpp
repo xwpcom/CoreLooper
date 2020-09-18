@@ -276,8 +276,9 @@ public:
 				obj->Execute(url, saveAsFilePath);
 			}
 
-			void OnHttpAck(HttpGet* obj, string&, int error, ByteBuffer&)
+			void OnHttpAck(Handler* handler, string&, int error, ByteBuffer&)
 			{
+				auto obj = dynamic_cast<HttpGet*>(handler);
 				if (error == 0)
 				{
 					DW("download success,speed=%.1f KB/S", obj->GetSpeed());
@@ -312,8 +313,10 @@ public:
 
 			}
 
-			void OnHttpGetAck(HttpGet*, string& url, int error, ByteBuffer& box)
+			void OnHttpGetAck(Handler* handler, string& url, int error, ByteBuffer& box)
 			{
+				auto obj = dynamic_cast<HttpGet*>(handler);
+
 				box.MakeSureEndWithNull();
 				LogV(TAG, "%s",box.data());
 				int x = 0;
@@ -346,7 +349,7 @@ public:
 				}
 			}
 
-			void OnHttpGetAck(HttpGet*, string& url, int error, ByteBuffer& box)
+			void OnHttpGetAck(Handler*, string& url, int error, ByteBuffer& box)
 			{
 				int x = 0;
 			}
