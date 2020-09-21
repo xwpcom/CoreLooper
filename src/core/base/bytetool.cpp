@@ -78,12 +78,17 @@ int ByteTool::HexCharToByte(const char *pSrc, LPBYTE pDst, int cbDst)
 	return 0;
 }
 
-string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte,const char* fmt)
+string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte,const char* fmt, int newLinePerBytes)
 {
 	string text;
 	for (int i = 0; i < cbByte; i++)
 	{
 		text+=StringTool::Format(fmt, pByte[i]);
+
+		if (newLinePerBytes && ((i + 1) % newLinePerBytes) == 0)
+		{
+			text += "\r\n";
+		}
 	}
 	return text;
 }

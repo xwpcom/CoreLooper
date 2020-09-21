@@ -235,7 +235,7 @@ string Utf8Tool::unicodeUnescape(const string& src)
 			ZeroMemory(szTemp, 5);
 			ZeroMemory(szSource, 5);
 			CopyMemory(szSource, (char*)strSource + nPos + 2, 4);
-			sscanf_s(szSource, "%04X", szTemp);
+			sscanf_s(szSource, "%04X", (unsigned int*)szTemp);
 			CopyMemory(pResult + nDestStep, szTemp, 4);
 			nDestStep += 2;
 
