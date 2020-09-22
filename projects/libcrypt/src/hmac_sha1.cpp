@@ -11,6 +11,26 @@ unsigned long Rol(unsigned long x, int y);
 unsigned long Ror(unsigned long x, int y);
 unsigned long f(unsigned long B, unsigned long C, unsigned long D, int t);
 
+#pragma optimize("",off)
+/*
+XiongWanPing 2020.09.22,发现vs2019版本16.7.4 一个编译器优化bug
+
+TEST_METHOD(crypt)
+{
+	string text = "hello";
+	string secret = "123";
+	auto sha = Crypt::HmacSha1(text, secret);
+	LogV(TAG, "sha=[%s]", sha.c_str());
+}
+
+debug时输出如下正确结果
+sha=[66A71BD37FAB86FDEA1AB80F1B760F0143248F8E]
+
+release下输出哪下错误结果
+sha=[5E49B6B1475223B998BADCFE10325476C3D2E1F0]
+关闭release优化后，release下也能输出正确结果了
+*/
+
 //unsigned long H[5];
 //unsigned long T[512] = { 0 };
 void HMAC(const string& text, const string& key, long H[5]);
@@ -260,6 +280,7 @@ unsigned long Ror(unsigned long x, int y)
 
 //代码来自https://github.com/RickMa1104/Hmac_Sha1_1
 //在网页验证ok https://www.sojson.com/hash.html
+//第2个tab,哈希,勾上HmacSha1,提供text和key
 string Crypt::HmacSha1(const string& text, const string& key)
 {
 	long H[5] = { 0 };
@@ -291,5 +312,6 @@ string Crypt::HmacSha1_Base64(const string& text, const string& key)
 	return Base64::Encode((LPBYTE)H, sizeof(H));
 }
 
+#pragma optimize("",on)
 }
 }
