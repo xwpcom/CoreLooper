@@ -11,7 +11,7 @@ class CORE_EXPORT StringParam
 public:
 	static map<string, string> ParseItems(const string& items, const char *itemSeperator = ",", const char *sign = "=");
 	static string MergeFields(const string& src, const string& fields, const char *itemSeperator = ",", const char *sign = "=");
-
+	static string ToString(const map<string, string>& items, const char* itemSeperator = ",", const char* sign = "=");
 	//value1,value2,value3,no name and "="
 	static string MergeFieldsSimple(const string& src, const string& fields, const char *itemSeperator = ",");
 };

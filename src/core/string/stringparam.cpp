@@ -69,6 +69,16 @@ string StringParam::MergeFieldsSimple(const string& src, const string& fields, c
 	return ack;
 }
 
+string StringParam::ToString(const map<string, string>& items, const char* itemSeperator, const char* sign)
+{
+	string ack;
+	for (auto& item : items)
+	{
+		ack += item.first + sign + item.second + itemSeperator;
+	}
+	return ack;
+}
+
 //合并并清除value为空的field
 string StringParam::MergeFields(const string& src, const string& fields, const char *itemSeperator, const char *sign)
 {
