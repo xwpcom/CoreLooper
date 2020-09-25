@@ -5,6 +5,8 @@
 #include "libcrypt/base64ex.h"
 #include "xxtea.h"
 #include "picosha2.h"
+#include "libcrypt/ssl/sha1.h"
+#include "hmac_sha1.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -21,9 +23,39 @@ namespace Crypt
 
 static const char* TAG = "Crypt";
 
-TEST_CLASS(Crypt)
+TEST_CLASS(Crypt_)
 {
 public:
+	TEST_METHOD(HmacSha1)
+	{
+		
+		BYTE ack[20] = {0};
+		auto data = "hello";
+		auto key = "123";
+		sha1_hmac_EX((LPBYTE)key,strlen(key),
+			(LPBYTE)data,strlen(data),
+			ack);
+		int x = 0;
+
+		{
+			string text = "hello";
+			string key = "123";
+			auto ack=Bear::Core::Crypt::HmacSha1(text, key);
+			LogV(TAG, "HMAC_SHA1(%s,%s)=%s", text.c_str(), key.c_str(), ack.c_str());
+		}
+	}
+	
+	TEST_METHOD(HmacSha1_Base64)
+	{
+		string text = "hello";
+		string key = "123";
+		auto ack1=Bear::Core::Crypt::HmacSha1_Base64(text, key);
+		//auto ack2 = Bear::Core::Crypt::HmacSha1_Base64_(text, key);
+
+		LogV(TAG, "ack1=%s", ack1.c_str());
+		//LogV(TAG, "ack2=%s", ack2.c_str());
+	}
+
 	TEST_METHOD(Base64_Test)
 	{
 		auto enc = "4bP0vuLHTko=";

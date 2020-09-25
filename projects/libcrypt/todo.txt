@@ -22,6 +22,25 @@ sha=[5E49B6B1475223B998BADCFE10325476C3D2E1F0]
 关闭release优化后，release下也能输出正确结果了
 */
 
+在VS中send feekback后，收到如下回复:
+Solution by Bran Hagger [MSFT]
+2020/9/25
+This is not a bug in the C++ compiler. The problem is due to the following function:
+unsigned long Rol(unsigned long x, int y)
+{
+if (y % 32 == 0) { return x; }
+else { return ((x << y) ^ (x >> -y)); }
+}
+
+The behavior of a bitshift operator when the right operand is negative is undefined. 
+For any value of y except 0, y or -y will be negative, so the value ((x << y) ^ (x >> -y)) will be undefined as well.
+There is no guarantee that /O2 will produce the same as value as the debug version when behavior is undefined.
+
+*/
+
+解决办法:
+.已去掉有问题的代码,改用sha1_hmac_EX,没有此问题
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 2020.04.19//////////////////////////////////////////////////////////////////////////////////
