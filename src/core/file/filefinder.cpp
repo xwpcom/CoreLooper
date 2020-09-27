@@ -88,7 +88,7 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 		}
 	}
 #else
-	DIR * pDir = opendir(dir);
+	DIR * pDir = opendir(dir.c_str());
 	//DT("opendir(%s)=0x%x",mDir.c_str(),pDir);
 	if (!pDir)
 	{
@@ -127,7 +127,7 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 			}
 
 			char fullname[MAX_PATH];
-			File::concat_path_file(dir, entry->d_name, fullname, sizeof(fullname) - 1);
+			File::concat_path_file(dir.c_str(), entry->d_name, fullname, sizeof(fullname) - 1);
 			struct stat dstat;
 			int ret = lstat(fullname, &dstat);
 			if (ret == 0)
