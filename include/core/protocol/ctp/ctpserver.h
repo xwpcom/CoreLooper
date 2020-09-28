@@ -15,9 +15,15 @@ class CtpHandler;
 XiongWanPing 2019.04.22
 */
 
-class CORE_EXPORT CtpServer :public TcpServer2_Windows
+#ifdef _MSC_VER
+#define CTPS_BASE TcpServer2_Windows
+#else
+#define CTPS_BASE TcpServer_Linux
+#endif
+
+class CORE_EXPORT CtpServer :public CTPS_BASE
 {
-	SUPER(TcpServer2_Windows)
+	SUPER(CTPS_BASE)
 public:
 	CtpServer();
 

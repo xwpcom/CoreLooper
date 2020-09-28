@@ -79,6 +79,7 @@ ${CORE_DIR}/looper/timermanager.cpp
 ${CORE_DIR}/net/channel.cpp
 ${CORE_DIR}/net/dnslooper.cpp
 ${CORE_DIR}/net/nettool.cpp
+${CORE_DIR}/net/simpleconnect.cpp
 ${CORE_DIR}/net/socktool.cpp
 ${CORE_DIR}/net/speedcounter.cpp
 ${CORE_DIR}/net/tcpclient.cpp
@@ -87,6 +88,9 @@ ${CORE_DIR}/net/udpserver.cpp
 ${CORE_DIR}/net/urltool.cpp
 ${CORE_DIR}/protocol/ctp/commontextprotocol.cpp
 ${CORE_DIR}/protocol/ctp/commontextprotocol_impl.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctpclient.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctphandler.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctpserver.cpp
 ${CORE_DIR}/string/textprotocol.cpp
 ${CORE_DIR}/string/textseparator.cpp
 ${CORE_DIR}/string/xmlstring.cpp
