@@ -2,7 +2,7 @@
 #include <jni.h>
 
 using namespace Bear::Core;
-
+static const char* TAG = "JniEntry";
 #ifdef _CONFIG_JNI
 JavaVM* g_JavaVM = NULL;
 JavaVM* AfxGetJavaVM()
@@ -27,7 +27,7 @@ static void ffmpeg_log(void* contextAVClass, int level, const char* fmt, va_list
 	vsnprintf(buf, sizeof(buf) - 1, fmt, vl2);
 	va_end(vl2);
 
-	DV("###%s", buf);
+	LogV("ffmpeg","%s", buf);
 }
 
 
@@ -41,7 +41,7 @@ int av_jni_set_java_vm(void *vm, void *log_ctx)
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-	DV("JNI_OnLoad#bear.2020.06.23,compile time=[%s %s],jvm=%p", __DATE__, __TIME__,vm);
+	LogV(TAG,"%s,compile time=[%s %s],jvm=%p", __func__,__DATE__, __TIME__, vm);
 	//av_jni_set_java_vm(vm, nullptr);
 	//av_log_set_level(AV_LOG_TRACE);
 	//av_log_set_callback(ffmpeg_log);
