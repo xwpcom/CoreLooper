@@ -116,6 +116,15 @@ void CtpClient::ParseInbox()
 	}
 }
 
+void CtpClient::AddMessage(const string& cmd, const Bundle& bundle)
+{
+	if (mProtocol)
+	{
+		mProtocol->AddNotify(cmd, bundle);
+	}
+}
+
+
 }
 }
 }

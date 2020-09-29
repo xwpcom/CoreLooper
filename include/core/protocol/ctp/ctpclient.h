@@ -39,6 +39,13 @@ protected:
 
 	void ParseInbox();
 	CommonTextProtocol* mProtocol = nullptr;
+
+	virtual void AddMessage(const string& cmd)
+	{
+		Bundle d;
+		AddMessage(cmd, d);
+	}
+	virtual void AddMessage(const string& cmd, const Bundle& bundle);
 };
 
 }
