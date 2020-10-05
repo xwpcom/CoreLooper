@@ -21,6 +21,13 @@ protected:
 	void OnCreate();
 	void OnTimer(long id);
 
+	virtual void AddMessage(const string& cmd)
+	{
+		Bundle d;
+		AddMessage(cmd, d);
+	}
+	virtual void AddMessage(const string& cmd, const Bundle& bundle);
+
 	//CommonTextProtocolCB#begin
 	virtual void OnCommand(CommonTextProtocol* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody, Bundle& ackBundle, ByteBuffer& ackBody);
 

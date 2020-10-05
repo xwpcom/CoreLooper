@@ -206,6 +206,13 @@ void CtpHandler::OnTimer(long id)
 	__super::OnTimer(id);
 }
 
+void CtpHandler::AddMessage(const string& cmd, const Bundle& bundle)
+{
+	if (mProtocol)
+	{
+		mProtocol->AddNotify(cmd, bundle);
+	}
+}
 
 }
 }
