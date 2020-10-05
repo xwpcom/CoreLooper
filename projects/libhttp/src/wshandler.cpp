@@ -76,13 +76,6 @@ void WSHandler::OnCommand(CommonTextProtocol* obj, const string& cmd, const Bund
 	UpdateTickAlive();
 }
 
-//收到对方的回复时调用本接口
-void WSHandler::OnCommandAck(CommonTextProtocol* obj, const string& cmd, const Bundle& reqBundle, const Bundle& ackBundle, const ByteBuffer& ackBody)
-{
-	UpdateTickAlive();
-	int x = 0;
-}
-
 //收到对方的通知时调用本接口
 void WSHandler::OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {

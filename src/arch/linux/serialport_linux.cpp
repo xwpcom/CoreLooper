@@ -16,6 +16,7 @@
 #endif
 namespace Bear {
 namespace Core {
+static const char *TAG="SerialPort_Linux";
 SerialPort_Linux::SerialPort_Linux()
 {
 	SetObjectName("SerialPort");
@@ -43,7 +44,7 @@ int SerialPort_Linux::Send(LPVOID data, int dataLen)
 	int ret = _write(mHandle, data, dataLen);
 	//static int idx = -1;
 	//++idx;
-	//DV("SerialPort_Linux::Write[%04d](dataLen=%d),ret=%d", idx,dataLen,ret);
+	//LogV(TAG,"SerialPort_Linux::Write[%04d](dataLen=%d),ret=%d", idx,dataLen,ret);
 	return ret;
 }
 
@@ -61,7 +62,7 @@ void SerialPort_Linux::OnEvent(DWORD events)
 {
 	auto objThis = shared_from_this();//确保在OnEvent执行期间不被删除
 
-	//DV("SerialPort_Linux::events=0x%02x", events);
+	//LogV(TAG,"SerialPort_Linux::events=0x%02x", events);
 
 	if (events & EPOLLIN)
 	{
@@ -103,7 +104,7 @@ void SerialPort_Linux::OnClose()
 
 int SerialPort_Linux::SetComSpeed(int fd, unsigned int baud_rate)
 {
-	DV("SetComSpeed(fd=%d,rate=%d)", fd, baud_rate);
+	LogV(TAG,"SetComSpeed(fd=%d,rate=%d)", fd, baud_rate);
 
 #ifndef _MSC_VER
 	int databits = 8;
@@ -256,7 +257,7 @@ int SerialPort_Linux::SetComSpeed(int fd, unsigned int baud_rate)
 						   /* TCSANOW--改变立即发生 */
 	if (0 != tcsetattr(fd, TCSANOW, &options))
 	{
-		DW("fail tcsetattr,error=%d(%s)", errno, strerror(errno));
+		LogW(TAG,"fail tcsetattr,error=%d(%s)", errno, strerror(errno));
 		//ASSERT(FALSE);
 		return -1;
 	}
@@ -288,10 +289,10 @@ void SerialPort_Linux::OnCreate()
 	int error = mHandle > 0 ? 0 : -1;
 	SignalSerialOpenAck(this, error);
 
-	DV("mHandle=%d", mHandle);
+	LogV(TAG,"[%s],fd=%d", filePath.c_str(),mHandle);
 	if (mHandle < 0)
 	{
-		DW("fail open %s", filePath.c_str());
+		LogW(TAG,"fail open %s", filePath.c_str());
 		return;
 	}
 
@@ -317,7 +318,7 @@ void SerialPort_Linux::OnCreate()
 	ret = epoll_ctl((int)handle, EPOLL_CTL_ADD, s, &evt);
 #endif
 
-	DV("serial ret=%d", ret);
+	LogV(TAG,"serial ret=%d", ret);
 	ASSERT(ret == 0);
 }
 

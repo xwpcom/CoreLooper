@@ -163,7 +163,8 @@ int CommonTextProtocol_Impl::ParseInbox()
 				{
 					//收到回复包
 					string cmd = item.substr(0, pos);
-					OnCommandAck(cmd, headerItems, mInputBody);
+					//OnCommandAck(cmd, headerItems, mInputBody);
+					OnCommand(cmd, headerItems, mInputBody);
 				}
 				else if ((pos = item.find(".noAck")) != -1)
 				{
@@ -293,6 +294,7 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 
 	if (!mReset && needAck)
 	{
+		/*
 		mWaitAckItems[seq] = bundle;
 
 		if (mWaitAckItems.size() > 100)
@@ -315,6 +317,7 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 			}
 			LogW(TAG, "mWaitAckItems.size()=%d#end", (int)mWaitAckItems.size());
 		}
+		*/
 	}
 
 	mOutbox.MakeSureEndWithNull();
@@ -390,6 +393,7 @@ void CommonTextProtocol_Impl::ParseHeaderItems(const string& sz, Bundle& bundle)
 	}
 }
 
+/*
 void CommonTextProtocol_Impl::OnCommandAck(const string&cmd, const Bundle& ackBundle, const ByteBuffer& ackBody)
 {
 	ASSERT(mCB);
@@ -405,6 +409,7 @@ void CommonTextProtocol_Impl::OnCommandAck(const string&cmd, const Bundle& ackBu
 
 	mCB->OnCommandAck(this, cmd, reqBundle, ackBundle, ackBody);
 }
+*/
 
 void CommonTextProtocol_Impl::OnCommand(const string&cmd, const Bundle& inputBundle, const ByteBuffer& inputBody)
 {
@@ -482,7 +487,7 @@ void CommonTextProtocol_Impl::ResetX()
 
 	mReset = true;
 	mSeq = -1;
-	mWaitAckItems.clear();
+	//mWaitAckItems.clear();
 }
 
 }

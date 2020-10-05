@@ -50,12 +50,6 @@ void CtpClient::OnCommand(CommonTextProtocol* obj, const string& cmd, const Bund
 
 }
 
-//收到对方的回复时调用本接口
-void CtpClient::OnCommandAck(CommonTextProtocol* obj, const string& cmd, const Bundle& reqBundle, const Bundle& ackBundle, const ByteBuffer& ackBody)
-{
-
-}
-
 //收到对方的通知时调用本接口
 void CtpClient::OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {

@@ -93,13 +93,6 @@ void CtpHandler::OnCommand(CommonTextProtocol* obj, const string& cmd, const Bun
 	int x = 0;
 }
 
-//收到对方的回复时调用本接口
-void CtpHandler::OnCommandAck(CommonTextProtocol* obj, const string& cmd, const Bundle& reqBundle, const Bundle& ackBundle, const ByteBuffer& ackBody)
-{
-	UpdateTickAlive();
-	int x = 0;
-}
-
 //收到对方的通知时调用本接口
 void CtpHandler::OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {
