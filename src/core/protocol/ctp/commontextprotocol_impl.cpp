@@ -297,7 +297,23 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 
 		if (mWaitAckItems.size() > 100)
 		{
-			LogW(TAG, "mWaitAckItems.size()=%d", (int)mWaitAckItems.size());
+			LogW(TAG, "mWaitAckItems.size()=%d#begin", (int)mWaitAckItems.size());
+
+			int index = -1;
+			for (auto& item : mWaitAckItems)
+			{
+				if (++index > 10)
+				{
+					break;
+				}
+
+				auto& items = item.second.mItems;
+				for (auto& item : items)
+				{
+					LogV(TAG, "%s=%s", item.first.c_str(),item.second.c_str());
+				}
+			}
+			LogW(TAG, "mWaitAckItems.size()=%d#end", (int)mWaitAckItems.size());
 		}
 	}
 
