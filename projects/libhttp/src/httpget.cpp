@@ -111,13 +111,46 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		}
 
 		string req=StringTool::Format(
-			"GET %s HTTP/1.1\r\n"
-			"Host: %s\r\n"
-			"\r\n"
-			,
-			mReqInfo.mPageUrl.c_str(),
-			mReqInfo.mHost.c_str()
+			"%s %s HTTP/1.1\r\n"
+			, mHttpAction.c_str()
+			,mReqInfo.mPageUrl.c_str()
 		);
+
+		auto& items = mHeaders;
+		for (auto iter = items.begin(); iter != items.end(); ++iter)
+		{
+			auto name = iter->first;
+			auto value = iter->second;
+
+			req += StringTool::Format(
+				"%s: %s\r\n"
+				, name.c_str()
+				, value.c_str()
+			);
+		}
+
+		{
+			auto it = mHeaders.find("Host");
+			if (it == mHeaders.end())
+			{
+				req += StringTool::Format(
+					"Host: %s\r\n"
+					, mReqInfo.mHost.c_str()
+				);
+			}
+		}
+		if (mBodyRawData.length() > 0)
+		{
+			req += StringTool::Format("Content-Length: %d\r\n", (int)mBodyRawData.length());
+		}
+
+
+		req += "\r\n";
+
+		if (mBodyRawData.length() > 0)
+		{
+			req += string((char*)mBodyRawData.data(), mBodyRawData.length());
+		}
 
 		//DV("C=>S %s", req.c_str());
 
@@ -418,6 +451,17 @@ void HttpGet::OnDestroy()
 		mSignaled = true;
 		SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 	}
+}
+
+void HttpGet::AddHeader(const string& name, const string& value)
+{
+	mHeaders[name] = value;
+}
+
+void HttpGet::SetBodyRawData(const ByteBuffer& box)
+{
+	mBodyRawData.clear();
+	mBodyRawData.Append(box);
 }
 
 }

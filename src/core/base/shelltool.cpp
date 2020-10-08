@@ -165,7 +165,7 @@ ULONGLONG ShellTool::GetTickCount64()
 	return (ULONGLONG)GetTickCount_ios();
 #else
 
-#ifdef _CONFIG_ANDROID
+#ifdef _CONFIG_ANDROIDx
 	JavaVM* jvm = AfxGetJavaVM();
 	if(jvm)
 	{

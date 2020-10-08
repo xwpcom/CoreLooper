@@ -20,6 +20,13 @@ public:
 	virtual int Execute(string url, string saveAsFilePath = "");
 	sigslot::signal4<Handler*, string&, int, ByteBuffer&>	SignalHttpGetAck;
 	
+	void SetHttpAction(const string& action)
+	{
+		mHttpAction = action;
+	}
+	void AddHeader(const string& name, const string& value);
+	void SetBodyRawData(const ByteBuffer& box);
+
 	//返回下载速度,单位:KB/S,仅在下载成功后有意义
 	double GetSpeed()const
 	{
@@ -97,6 +104,9 @@ protected:
 
 	}mReqInfo;
 
+	string mHttpAction = "GET";
+	ByteBuffer mBodyRawData;
+	unordered_map<string, string>  mHeaders;
 };
 
 }

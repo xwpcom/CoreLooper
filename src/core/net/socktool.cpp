@@ -47,7 +47,7 @@ int SockTool::socketpair(SOCKET& sock0, SOCKET& sock1)
 
 	if (sListen == INVALID_SOCKET)
 	{
-		DW("Fail to listen for socketpair");
+		LogW(TAG,"Fail to listen for socketpair");
 		return -1;
 	}
 
@@ -116,10 +116,11 @@ int SockTool::socketpair(SOCKET& sock0, SOCKET& sock1)
 		sock1 = sock[1];
 		SockTool::SetAsync(sock0);
 		SockTool::SetAsync(sock1);
+		LogV(TAG, "socketpair,s0=%d,s1=%d", sock0, sock1);
 	}
 	else
 	{
-		DW("error=%d,%s", errno, strerror(errno));
+		LogW(TAG,"error=%d,%s", errno, strerror(errno));
 		ASSERT(FALSE);
 	}
 	return ret;
@@ -156,7 +157,7 @@ int SockTool::StartServer(int port)
 	SOCKET s = SockTool::SocketEx(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (s == INVALID_SOCKET)
 	{
-		DW("Fail socket,errno=%d(%s)", errno, strerror(errno));
+		LogW(TAG,"Fail socket,errno=%d(%s)", errno, strerror(errno));
 		return -1;
 	}
 	SockTool::CAutoClose ac(&s);
@@ -178,14 +179,14 @@ int SockTool::StartServer(int port)
 	ret = ::bind(s, (SOCKADDR*)&sa, sizeof(sa));
 	if (ret == SOCKET_ERROR)
 	{
-		DW("bind fail,errno=%d(%s),port=%d", errno, strerror(errno), port);
+		LogW(TAG,"bind fail,errno=%d(%s),port=%d", errno, strerror(errno), port);
 		return -1;
 	}
 
 	ret = listen(s, 100);
 	if (ret == SOCKET_ERROR)
 	{
-		DW("listen fail,errno=%d(%s)", errno, strerror(errno));
+		LogW(TAG,"listen fail,errno=%d(%s)", errno, strerror(errno));
 		return -1;
 	}
 
@@ -208,7 +209,7 @@ void SockTool::CLOSE_SOCKET(SOCKET& s)
 			//XiongWanPing 2012.09.10
 			DT("");
 			DT("");
-			DW("############################################################### skip close s=%d", s);
+			LogW(TAG,"############################################################### skip close s=%d", s);
 			DT("");
 			DT("");
 
@@ -224,7 +225,7 @@ SOCKET SockTool::SocketEx(int af, int type, int protocol)
 	SOCKET s = socket(af, type, protocol);
 	if (s == INVALID_SOCKET)
 	{
-		DW("fail socket,af=%d,type=%d,protocol=0x%x,err=%s", af, type, protocol, GetErrorDesc(GetLastError()));
+		LogW(TAG,"fail socket,af=%d,type=%d,protocol=0x%x,err=%s", af, type, protocol, GetErrorDesc(GetLastError()));
 #if !defined _MSC_VER && !defined __APPLE__
 		DT("AF_PACKET=%d,PF_INET=%d,NETLINK_ROUTE=%d,SOCK_STREAM=%d,SOCK_DGRAM=%d,SOCK_PACKET=%d",
 			AF_PACKET, PF_INET, NETLINK_ROUTE, SOCK_STREAM, SOCK_DGRAM, SOCK_PACKET);
@@ -275,7 +276,7 @@ int SockTool::SetAsync(SOCKET s, bool bAsync)
 
 	if (s < 0)
 	{
-		DW("fail SetAsync,sock=%d", s);
+		LogW(TAG,"fail SetAsync,sock=%d", s);
 		return -1;
 	}
 
@@ -287,11 +288,11 @@ int SockTool::SetAsync(SOCKET s, bool bAsync)
 		int err = SockTool::GetLastError();
 		if (err == WSAENOTSOCK)
 		{
-			DW("fail ioctlsocket,WSAENOTSOCK,maybe have closed sock=%d ", s);
+			LogW(TAG,"fail ioctlsocket,WSAENOTSOCK,maybe have closed sock=%d ", s);
 		}
 		else
 		{
-			DW("fail ioctlsocket,error=%d", err);
+			LogW(TAG,"fail ioctlsocket,error=%d", err);
 		}
 	}
 	//ASSERT(ret==0);
@@ -310,7 +311,7 @@ int SockTool::SetAsync(SOCKET s, bool bAsync)
 	ret = fcntl(s, F_SETFL, flags);
 	if (ret)
 	{
-		DW("fail F_SETFL,SetAsync(s=%d,bAsync=%d),err=%d(%s)",
+		LogW(TAG,"fail F_SETFL,SetAsync(s=%d,bAsync=%d),err=%d(%s)",
 			s, bAsync, errno, strerror(errno));
 		//ASSERT(FALSE);
 	}
@@ -464,7 +465,7 @@ string SockTool::GetPeerIP(SOCKET s)
 	}
 	else
 	{
-		//DW("fail getpeername,s=%d,errno=%d(%s)", s, errno, strerror(errno));
+		//LogW(TAG,"fail getpeername,s=%d,errno=%d(%s)", s, errno, strerror(errno));
 	}
 
 	return szBuf;
@@ -482,7 +483,7 @@ int SockTool::GetPeerPort(SOCKET s)
 	}
 	else
 	{
-		//DW("Fail to GetPeerPort for socket %d", s);
+		//LogW(TAG,"Fail to GetPeerPort for socket %d", s);
 	}
 
 	return 0;
@@ -560,7 +561,7 @@ BOOL SockTool::SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut)
 	int nRet = setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char*)&nTimeOut, sizeof(nTimeOut));
 	if (nRet == SOCKET_ERROR)
 	{
-		DW("setsockopt failed!");// ErrCosd=[%d]", WSAGetLastError());
+		LogW(TAG,"setsockopt failed!");// ErrCosd=[%d]", WSAGetLastError());
 		return FALSE;
 	}
 
@@ -568,7 +569,7 @@ BOOL SockTool::SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut)
 	nRet = setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, (char*)&nTimeOut, sizeof(nTimeOut));
 	if (nRet == SOCKET_ERROR)
 	{
-		DW("setsockopt failed!");// ErrCosd=[%d]", WSAGetLastError());
+		LogW(TAG,"setsockopt failed!");// ErrCosd=[%d]", WSAGetLastError());
 		return FALSE;
 	}
 
@@ -700,7 +701,7 @@ int SockTool::Send(SOCKET s, const LPVOID pData, int cbData)
 	}
 	else
 	{
-		DW("invalid socket=%d", s);
+		LogW(TAG,"invalid socket=%d", s);
 	}
 
 	return 0;
@@ -728,7 +729,7 @@ int SockTool::SetSendBuf(SOCKET s, int bufLen)
 	if (value != bufLen)
 	{
 		//ASSERT(FALSE);
-		DW("SetSendBuf fail,ret=%d",ret);
+		LogW(TAG,"SetSendBuf fail,ret=%d",ret);
 	}
 #endif
 
@@ -758,7 +759,7 @@ int SockTool::SetRecvBuf(SOCKET s, int bufLen)
 	if (value != bufLen)
 	{
 		//ASSERT(FALSE);
-		DW("SetRecvBuf fail,ret=%d", ret);
+		LogW(TAG,"SetRecvBuf fail,ret=%d", ret);
 	}
 
 	return ret;

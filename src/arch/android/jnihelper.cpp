@@ -1,7 +1,9 @@
 ﻿#include "stdafx.h"
 #include "arch/android/jnihelper.h"
 #include "core/string//utf8tool.h"
+
 using namespace Bear::Core;
+static const char* TAG = "JniHelper";
 
 tagJniInfo::tagJniInfo()
 {
@@ -21,7 +23,7 @@ JNIEnv* tagJniInfo::GetJniEnv()
 		return env;
 	}
 
-	DW("fail %s", __func__);
+	LogW(TAG,"fail %s", __func__);
 	ASSERT(FALSE);
 	return nullptr;
 }
@@ -178,7 +180,7 @@ int UCNV_Utf8ToGB2312(LPSTR lpstrOut, s32 nOutLen, LPCSTR lpstrIn)
 
 	if (NULL == g_pvUcnvDll)
 	{
-		DW("fail load %s", soPath);
+		LogW(TAG,"fail load %s", soPath);
 		return -1;
 	}
 
@@ -202,7 +204,7 @@ int UCNV_Utf8ToGB2312(LPSTR lpstrOut, s32 nOutLen, LPCSTR lpstrIn)
 
 	if (NULL == g_pvUcnvConvert)
 	{
-		DW("g_pvUcnvConvert is null");
+		LogW(TAG,"g_pvUcnvConvert is null");
 		return -1;
 	}
 
@@ -216,7 +218,7 @@ string JniHelper::Utf8ToGB2312(string utf8)
 #ifdef _MSC_VER
 	return Utf8Tool::UTF_8ToGB2312(utf8);
 #endif
-	//DW("%s,text=%s", __func__, utf8.c_str());
+	//LogW(TAG,"%s,text=%s", __func__, utf8.c_str());
 
 	string ret;
 
@@ -238,7 +240,7 @@ string JniHelper::Utf8ToGB2312(string utf8)
 			}
 			StringTool::AppendFormat(hex, "%02x", ch);
 		}
-		//DW("GB2312ToUtf8 text=%s,hex=%s", utf8.c_str(),hex.c_str());
+		//LogW(TAG,"GB2312ToUtf8 text=%s,hex=%s", utf8.c_str(),hex.c_str());
 		//*/
 
 		ret = out;
@@ -247,7 +249,7 @@ string JniHelper::Utf8ToGB2312(string utf8)
 	}
 	catch (...)
 	{
-		DW("###catch");
+		LogW(TAG,"###catch");
 	}
 
 	return ret;

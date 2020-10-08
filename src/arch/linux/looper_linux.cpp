@@ -16,6 +16,8 @@ namespace Core
 {
 using namespace Net;
 
+static const char* TAG = "Looper_Linux";
+
 class EpollProxyDummy :public EpollProxy
 {
 public:
@@ -41,7 +43,7 @@ public:
 		}
 		else
 		{
-			DW("OnEvent,events = 0x%x", events);
+			LogW(TAG,"OnEvent,events = 0x%x", events);
 		}
 	}
 };
@@ -269,7 +271,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 					auto tick = tickNow - mTickCheckTimer;
 					if (tick > 300)
 					{
-						DW("%s no timer for " FMT_LONGLONG " ms,tickNow=" FMT_LONGLONG ",mTickCheckTimer=" FMT_LONGLONG
+						LogW(TAG,"%s no timer for " FMT_LONGLONG " ms,tickNow=" FMT_LONGLONG ",mTickCheckTimer=" FMT_LONGLONG
 							, mThreadName.c_str()
 							, tick
 							, tickNow
@@ -313,7 +315,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 				mTickCheckTimer = ShellTool::GetTickCount64();
 
 				static int idx = -1;
-				DW("ProcessTimer[%04d].tick=" FMT_LONGLONG, ++idx, tick);
+				LogW(TAG,"ProcessTimer[%04d].tick=" FMT_LONGLONG, ++idx, tick);
 			}
 		}
 #endif
@@ -388,7 +390,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 				}
 				else
 				{
-					DW("unknown event=0x%04x\r\n", events);
+					LogW(TAG,"unknown event=0x%04x\r\n", events);
 					mask |= EPOLLERR;
 				}
 
@@ -413,13 +415,13 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 					{
 						static int idx = -1;
 						++idx;
-						DW("proxy.%p(evt=%d).tick=" FMT_LONGLONG, proxy, evt, tick);
+						LogW(TAG,"proxy.%p(evt=%d).tick=" FMT_LONGLONG, proxy, evt, tick);
 					}
 #endif
 				}
 				else
 				{
-					DW("evt.data.ptr is nullptr");
+					LogW(TAG,"evt.data.ptr is nullptr");
 				}
 			}
 #endif
@@ -453,7 +455,7 @@ bool Looper_Linux::PostQueuedCompletionStatus(HANDLE handle, DWORD bytes, ULONG_
 	auto ret = send(s, buf, sizeof(buf), 0);
 	if (ret != sizeof(buf))
 	{
-		DW("fail send,s=%d,error=%s(%d)", s, strerror(errno), errno);
+		//LogW(TAG,"[%s]fail send,s=%d,error=%s(%d)",GetObjectName().c_str() , s, strerror(errno), errno);
 		return false;
 	}
 	return true;
@@ -470,7 +472,7 @@ int Looper_Linux::CreateSocketPair()
 	int ret = SockTool::socketpair(sockSend, sockReceive);
 	if (ret)
 	{
-		DW("fail create socket pair");
+		LogW(TAG,"fail create socket pair");
 		return -1;
 	}
 
@@ -486,7 +488,7 @@ int Looper_Linux::CreateSocketPair()
 			ret = kevent(mLooperHandle, &evt, 1, NULL, 0, NULL);
 			if (ret)
 			{
-				DW("error=%d,%s", errno, strerror(errno));
+				LogW(TAG,"error=%d,%s", errno, strerror(errno));
 			}
 		}
 		{
@@ -498,7 +500,7 @@ int Looper_Linux::CreateSocketPair()
 			ret = kevent(mLooperHandle, &evt, 1, NULL, 0, NULL);
 			if (ret)
 			{
-				DW("error=%d,%s", errno, strerror(errno));
+				LogW(TAG,"error=%d,%s", errno, strerror(errno));
 			}
 		}
 #else		
@@ -518,7 +520,7 @@ int Looper_Linux::CreateSocketPair()
 			ret = epoll_ctl((int)(LONGLONG)mLooperHandle, EPOLL_CTL_ADD, (int)(SOCKET)s, &evt);
 			if (ret)
 			{
-				DW("error=%d,%s", errno, strerror(errno));
+				LogW(TAG,"error=%d,%s", errno, strerror(errno));
 			}
 		}
 
@@ -532,7 +534,7 @@ int Looper_Linux::CreateSocketPair()
 			ret = epoll_ctl((int)(LONGLONG)mLooperHandle, EPOLL_CTL_ADD, (int)(SOCKET)s, &evt);
 			if (ret)
 			{
-				DW("error=%d,%s", errno, strerror(errno));
+				LogW(TAG,"error=%d,%s", errno, strerror(errno));
 			}
 		}
 #endif

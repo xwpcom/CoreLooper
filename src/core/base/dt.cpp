@@ -371,7 +371,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 		{
 			p = ANDROID_LOG_ERROR;
 
-			LogE("Bear/jni", "%s", szMsg);
+			//LogE("Bear/jni", "%s", szMsg);
 		}
 
 		{
@@ -551,7 +551,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 		{
 			p = ANDROID_LOG_ERROR;
 
-			LogE("Bear/jni", "%s", szMsg);
+			//LogE("Bear/jni", "%s", szMsg);
 		}
 
 		{
