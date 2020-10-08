@@ -24,7 +24,7 @@ CommonTextProtocol_Impl::~CommonTextProtocol_Impl()
 {
 }
 
-int CommonTextProtocol_Impl::Input(void *data, int dataBytes)
+int CommonTextProtocol_Impl::Input(void* data, int dataBytes)
 {
 	if (!mCB)
 	{
@@ -69,7 +69,7 @@ int CommonTextProtocol_Impl::Input(void *data, int dataBytes)
 	return eatBytes;
 }
 
-const char *CommonTextProtocol_Impl::stristr(const char *psz0, const char *psz1)
+const char* CommonTextProtocol_Impl::stristr(const char* psz0, const char* psz1)
 {
 #ifdef _MSC_VER
 	return StrStrIA(psz0, psz1);
@@ -105,10 +105,10 @@ int CommonTextProtocol_Impl::ParseInbox()
 		}
 
 		{
-			char *psz = (char*)ps;
+			char* psz = (char*)ps;
 			auto bCmdOK = false;//是否收到完整的ack
 									//检查\r\n\r\n
-			const char *pszHeaderTail = strstr(psz, "\r\n\r\n");//注意这里不要用StrStrI,它和utf8有点不兼容
+			const char* pszHeaderTail = strstr(psz, "\r\n\r\n");//注意这里不要用StrStrI,它和utf8有点不兼容
 			if (!pszHeaderTail)
 			{
 				// command/ack还没有接收完成
@@ -119,12 +119,12 @@ int CommonTextProtocol_Impl::ParseInbox()
 			int nContentLength = 0;
 			//检查是否存在Content-Length
 			{
-				const char *pszKey = "\r\n" CTP_CMD_BODY_LENGTH "=";
-				const char *pszLength = stristr(psz, pszKey);
+				const char* pszKey = "\r\n" CTP_CMD_BODY_LENGTH "=";
+				const char* pszLength = stristr(psz, pszKey);
 				//注意只能搜索\r\n\r\n之前的Content-Leghth,避免和下一条命令串扰
 				if (pszLength && pszLength < pszHeaderTail)
 				{
-					char *pszEnd = (char*)stristr(pszLength + strlen(pszKey), "\r\n");
+					char* pszEnd = (char*)stristr(pszLength + strlen(pszKey), "\r\n");
 					if (pszEnd)
 					{
 						string szValue(pszLength + strlen(pszKey));
@@ -163,8 +163,7 @@ int CommonTextProtocol_Impl::ParseInbox()
 				{
 					//收到回复包
 					string cmd = item.substr(0, pos);
-					//OnCommandAck(cmd, headerItems, mInputBody);
-					OnCommand(cmd, headerItems, mInputBody);
+					OnCommandAck(cmd, headerItems, mInputBody);
 				}
 				else if ((pos = item.find(".noAck")) != -1)
 				{
@@ -216,26 +215,26 @@ int CommonTextProtocol_Impl::OnError(string error)
 	return -1;
 }
 
-int CommonTextProtocol_Impl::AddCommand(const string&cmd)
+int CommonTextProtocol_Impl::AddCommand(const string& cmd)
 {
 	Bundle bundle;
 	ByteBuffer body;
 	return AddCommand(cmd, bundle, body);
 }
 
-int CommonTextProtocol_Impl::AddCommand(const string&cmd, const Bundle& bundle)
+int CommonTextProtocol_Impl::AddCommand(const string& cmd, const Bundle& bundle)
 {
 	ByteBuffer body;
 	return AddCommand(cmd, bundle, body);
 }
 
-int CommonTextProtocol_Impl::AddCommand(const string&cmd, const Bundle& bundle, const ByteBuffer& body)
+int CommonTextProtocol_Impl::AddCommand(const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {
 	bool needAck = true;
 	return AddCommandEx(cmd, bundle, body, needAck);
 }
 
-int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle, const ByteBuffer& body, bool needAck)
+int CommonTextProtocol_Impl::AddCommandEx(const string& cmd, const Bundle& bundle, const ByteBuffer& body, bool needAck)
 {
 	if (!mCB)
 	{
@@ -294,7 +293,6 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 
 	if (!mReset && needAck)
 	{
-		/*
 		mWaitAckItems[seq] = bundle;
 
 		if (mWaitAckItems.size() > 100)
@@ -312,12 +310,13 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 				auto& items = item.second.mItems;
 				for (auto& item : items)
 				{
-					LogV(TAG, "%s=%s", item.first.c_str(),item.second.c_str());
+					LogV(TAG, "%s=%s", item.first.c_str(), item.second.c_str());
 				}
 			}
 			LogW(TAG, "mWaitAckItems.size()=%d#end", (int)mWaitAckItems.size());
+
+			mWaitAckItems.clear();
 		}
-		*/
 	}
 
 	mOutbox.MakeSureEndWithNull();
@@ -327,7 +326,7 @@ int CommonTextProtocol_Impl::AddCommandEx(const string&cmd, const Bundle& bundle
 	return 0;
 }
 
-int CommonTextProtocol_Impl::AddNotify(const string&cmd)
+int CommonTextProtocol_Impl::AddNotify(const string& cmd)
 {
 	bool needAck = false;
 	Bundle bundle;
@@ -335,14 +334,14 @@ int CommonTextProtocol_Impl::AddNotify(const string&cmd)
 	return AddCommandEx(cmd, bundle, body, needAck);
 }
 
-int CommonTextProtocol_Impl::AddNotify(const string&cmd, const Bundle& bundle)
+int CommonTextProtocol_Impl::AddNotify(const string& cmd, const Bundle& bundle)
 {
 	bool needAck = false;
 	ByteBuffer body;
 	return AddCommandEx(cmd, bundle, body, needAck);
 }
 
-int CommonTextProtocol_Impl::AddNotify(const string&cmd, const Bundle& bundle, const ByteBuffer& body)
+int CommonTextProtocol_Impl::AddNotify(const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {
 	bool needAck = false;
 	return AddCommandEx(cmd, bundle, body, needAck);
@@ -355,7 +354,7 @@ CommonTextProtocol* CommonTextProtocolFactory::Create()
 
 void CommonTextProtocolFactory::Destroy(CommonTextProtocol*& obj)
 {
-	CommonTextProtocol_Impl *pThis = (CommonTextProtocol_Impl*)obj;
+	CommonTextProtocol_Impl* pThis = (CommonTextProtocol_Impl*)obj;
 	delete pThis;
 	obj = nullptr;
 }
@@ -393,8 +392,7 @@ void CommonTextProtocol_Impl::ParseHeaderItems(const string& sz, Bundle& bundle)
 	}
 }
 
-/*
-void CommonTextProtocol_Impl::OnCommandAck(const string&cmd, const Bundle& ackBundle, const ByteBuffer& ackBody)
+void CommonTextProtocol_Impl::OnCommandAck(const string& cmd, const Bundle& ackBundle, const ByteBuffer& ackBody)
 {
 	ASSERT(mCB);
 
@@ -409,9 +407,8 @@ void CommonTextProtocol_Impl::OnCommandAck(const string&cmd, const Bundle& ackBu
 
 	mCB->OnCommandAck(this, cmd, reqBundle, ackBundle, ackBody);
 }
-*/
 
-void CommonTextProtocol_Impl::OnCommand(const string&cmd, const Bundle& inputBundle, const ByteBuffer& inputBody)
+void CommonTextProtocol_Impl::OnCommand(const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody)
 {
 	ASSERT(mCB);
 	//ASSERT(!cmd.empty());
@@ -487,7 +484,7 @@ void CommonTextProtocol_Impl::ResetX()
 
 	mReset = true;
 	mSeq = -1;
-	//mWaitAckItems.clear();
+	mWaitAckItems.clear();
 }
 
 }

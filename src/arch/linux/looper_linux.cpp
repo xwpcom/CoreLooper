@@ -455,7 +455,7 @@ bool Looper_Linux::PostQueuedCompletionStatus(HANDLE handle, DWORD bytes, ULONG_
 	auto ret = send(s, buf, sizeof(buf), 0);
 	if (ret != sizeof(buf))
 	{
-		//LogW(TAG,"[%s]fail send,s=%d,error=%s(%d)",GetObjectName().c_str() , s, strerror(errno), errno);
+		LogW(TAG,"[%s]fail send,s=%d,error=%s(%d)",GetObjectName().c_str() , s, strerror(errno), errno);
 		return false;
 	}
 	return true;

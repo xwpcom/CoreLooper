@@ -43,6 +43,7 @@ protected:
 	int ParseInbox();
 	void ParseHeaderItems(const string& header, Bundle& headerItems);
 	void OnCommand(const string&cmd, const Bundle& inputBundle, const ByteBuffer& inputBody);
+	void OnCommandAck(const string& cmd, const Bundle& ackBundle, const ByteBuffer& ackBody);
 
 	int OnError(string error);
 
@@ -52,7 +53,7 @@ protected:
 	bool mReset = false;
 	int mSeq = -1;
 
-	//map<int, Bundle> mWaitAckItems;
+	map<int, Bundle> mWaitAckItems;
 private:
 	ByteBuffer mInbox;
 	ByteBuffer mOutbox;
