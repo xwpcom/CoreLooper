@@ -68,6 +68,8 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 		mConnected = true;
 		mOutbox.PrepareBuf(16 * 1024);
 	}
+
+	SignalConnectAck(this, error);
 }
 
 void SimpleConnect::OnClose(Channel*)

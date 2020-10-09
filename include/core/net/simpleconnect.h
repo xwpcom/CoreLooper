@@ -49,6 +49,7 @@ public:
 	}
 
 	sigslot::signal3<SimpleConnect*, LPBYTE, int> SignalSendOut;//可用来监测已提交的数据
+	sigslot::signal2<Handler*,int> SignalConnectAck;
 	sigslot::signal1<Handler*> SignalDestroy;
 protected:
 	virtual void OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle* extraInfo);
