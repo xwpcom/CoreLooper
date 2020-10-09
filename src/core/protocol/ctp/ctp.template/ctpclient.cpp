@@ -50,6 +50,11 @@ void CtpClient::OnCommand(CommonTextProtocol* obj, const string& cmd, const Bund
 
 }
 
+void CtpClient::OnCommandAck(CommonTextProtocol* obj, const string& cmd, const Bundle& reqBundle, const Bundle& ackBundle, const ByteBuffer& ackBody)
+{
+	LogV(TAG, "todo:%s(%s)", __func__, cmd.c_str());
+}
+
 //收到对方的通知时调用本接口
 void CtpClient::OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body)
 {

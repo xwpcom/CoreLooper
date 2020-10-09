@@ -9,6 +9,7 @@ namespace Bear {
 namespace Core
 {
 namespace FileSystem {
+static const char* TAG = "IniFile";
 IniFile::IniFile()
 {
 	mTickChanged = 0;
@@ -328,6 +329,7 @@ shared_ptr<tagIniKey> IniFile::FindKey(const char *pszSection, const char *pszKe
 
 void IniFile::UpdateLastModifyTick()
 {
+	LogV(TAG, "%s", __func__);
 	mTickChanged = ShellTool::GetTickCount64();
 	mVersion++;
 }
