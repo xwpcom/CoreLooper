@@ -32,3 +32,5 @@ app-*.apk
 /projects/libcrypt.as/libcorelooper/*.aar
 /projects/libhttp.as/libcorelooper/*.aar
 /projects/libhttp.as/libcrypt/*.aar
+.cxx
+/projects/libcorelooper.as/libcorelooper/*.aar

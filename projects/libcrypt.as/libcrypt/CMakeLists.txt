@@ -68,7 +68,7 @@ find_library( # Sets the name of the path variable.
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
-
+message(WARNING "libcrypt.as CMAKE_BUILD_TYPE =" ${CMAKE_BUILD_TYPE} )
 target_link_libraries( # Specifies the target library.
         ${TARGET_NAME}
         

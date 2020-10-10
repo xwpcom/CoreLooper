@@ -5,17 +5,30 @@
 using namespace Bear::Core;
 using namespace Bear::Core::Net;
 
+static const char* TAG = "MainLooper";
+
 class MainLooper:public MainLooper_
 {
     SUPER(MainLooper_)
 public:
 	shared_ptr<Event> mSelfExitEvent;
+    IniFile mIni;
+    long mTimer_SaveIni=0;
 protected:
     void OnCreate()
     {
         __super::OnCreate();
 
         SetTimer(mTimerTest,1000);
+		{
+			string filePath = "d:/test/test.ini";
+#ifndef _MSC_VER
+			filePath = "/sdcard/eco/test.ini";
+#endif
+			mIni.Load(filePath);
+
+			SetTimer(mTimer_SaveIni, 3 * 1000);
+		}
 
 		{
 			auto svr(make_shared<TcpServer>());
@@ -40,6 +53,15 @@ protected:
             
             return;
         }
+        else if(id==mTimer_SaveIni)
+		{
+			if (mIni.IsModified())
+			{
+				LogV(TAG, "ini.save#1,tick=%lld", mIni.GetLastModifyTick());
+				mIni.Save();
+				LogV(TAG, "ini.save#2");
+			}
+		}
 
         __super::OnTimer(id);
     }

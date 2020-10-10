@@ -8,7 +8,7 @@ if "%1"=="release" (
 )
 
 
-@echo compile libs
+@echo compile %config% libs
 cd /d %~dp0
 call ..\libcorelooper.as\b.bat %1
 
@@ -19,4 +19,7 @@ copy /Y ..\%libname%.as\%libname%\build\outputs\aar\%libname%-%config%.aar %libn
 
 @echo compile current project
 cd /d %~dp0
+
+@echo call gradlew assemble%config%
+
 call gradlew assemble%config%

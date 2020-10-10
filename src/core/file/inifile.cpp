@@ -329,7 +329,6 @@ shared_ptr<tagIniKey> IniFile::FindKey(const char *pszSection, const char *pszKe
 
 void IniFile::UpdateLastModifyTick()
 {
-	LogV(TAG, "%s", __func__);
 	mTickChanged = ShellTool::GetTickCount64();
 	mVersion++;
 }
