@@ -38,7 +38,6 @@ int av_jni_set_java_vm(void *vm, void *log_ctx)
 }
 #endif
 
-
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
 {
 	LogV(TAG,"%s,compile time=[%s %s],jvm=%p", __func__,__DATE__, __TIME__, vm);
