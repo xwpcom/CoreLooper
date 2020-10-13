@@ -369,10 +369,15 @@
     <ClCompile Include="..\..\src\core\net\socktool.cpp" />
     <ClCompile Include="..\..\src\core\net\urltool.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\commontextprotocol_impl2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpclient.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpclient2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctphandler.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctphandler2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver2.cpp" />
     <ClCompile Include="..\..\src\core\string\stringparam.cpp" />
     <ClCompile Include="..\..\src\core\string\textprotocol.cpp" />
     <ClCompile Include="..\..\src\core\string\textseparator.cpp" />
@@ -509,9 +514,13 @@
     <ClInclude Include="..\..\include\core\net\socktool.h" />
     <ClInclude Include="..\..\include\core\net\urltool.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\commontextprotocol.h" />
+    <ClInclude Include="..\..\include\core\protocol\ctp\commontextprotocol2.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpclient.h" />
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctpclient2.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctphandler.h" />
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctphandler2.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver.h" />
+    <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver2.h" />
     <ClInclude Include="..\..\include\core\string\stringcasemap.h" />
     <ClInclude Include="..\..\include\core\string\stringparam.h" />
     <ClInclude Include="..\..\include\core\string\textprotocol.h" />
@@ -550,6 +559,7 @@
     <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\timernode.h" />
     <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.h" />
+    <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl2.h" />
     <ClInclude Include="..\..\src\core\zltoolkit\Network\Buffer.h" />
     <ClInclude Include="..\..\src\core\zltoolkit\Network\Socket.h" />
     <ClInclude Include="..\..\src\core\zltoolkit\Network\sockutil.h" />

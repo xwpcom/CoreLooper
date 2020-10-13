@@ -91,6 +91,11 @@ ${CORE_DIR}/protocol/ctp/commontextprotocol_impl.cpp
 ${CORE_DIR}/protocol/ctp/ctp.template/ctpclient.cpp
 ${CORE_DIR}/protocol/ctp/ctp.template/ctphandler.cpp
 ${CORE_DIR}/protocol/ctp/ctp.template/ctpserver.cpp
+${CORE_DIR}/protocol/ctp/commontextprotocol2.cpp
+${CORE_DIR}/protocol/ctp/commontextprotocol_impl2.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctpclient2.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctphandler2.cpp
+${CORE_DIR}/protocol/ctp/ctp.template/ctpserver2.cpp
 ${CORE_DIR}/string/textprotocol.cpp
 ${CORE_DIR}/string/textseparator.cpp
 ${CORE_DIR}/string/xmlstring.cpp
