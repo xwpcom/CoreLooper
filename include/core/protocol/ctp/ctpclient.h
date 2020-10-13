@@ -15,6 +15,14 @@ public:
 	CtpClient();
 	~CtpClient();
 
+
+	virtual void AddMessage(const string& cmd)
+	{
+		Bundle d;
+		AddMessage(cmd, d);
+	}
+	virtual void AddMessage(const string& cmd, const Bundle& bundle);
+
 protected:
 	void OnCreate();
 	void OnConnect(Channel* endPoint, long error, ByteBuffer*, Bundle* extraInfo)override;
@@ -37,13 +45,6 @@ protected:
 
 	void ParseInbox();
 	CommonTextProtocol* mProtocol = nullptr;
-
-	virtual void AddMessage(const string& cmd)
-	{
-		Bundle d;
-		AddMessage(cmd, d);
-	}
-	virtual void AddMessage(const string& cmd, const Bundle& bundle);
 };
 
 }
