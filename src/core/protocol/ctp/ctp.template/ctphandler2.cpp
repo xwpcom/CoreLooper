@@ -84,8 +84,6 @@ void CtpHandler2::OnConnect(Channel*, long error, Bundle*)
 //CommonTextProtocolCB#begin
 void CtpHandler2::OnCommand(CommonTextProtocol2* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody)
 {
-	UpdateTickAlive();
-
 	int x = 0;
 }
 

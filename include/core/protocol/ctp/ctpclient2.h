@@ -26,7 +26,6 @@ public:
 protected:
 	void OnCreate();
 	void OnConnect(Channel* endPoint, long error, ByteBuffer*, Bundle* extraInfo)override;
-	void OnTimer(long id);
 
 	//CommonTextProtocolCB#begin
 	virtual void OnCommand(CommonTextProtocol2* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& inputBody);
@@ -41,13 +40,6 @@ protected:
 
 	void ParseInbox();
 	CommonTextProtocol2* mProtocol = nullptr;
-	long mTimer_CheckAlive = 0;
-	ULONGLONG mTickAlive = 0;
-
-	void UpdateTickAlive()
-	{
-		mTickAlive = ShellTool::GetTickCount64();
-	}
 
 };
 
