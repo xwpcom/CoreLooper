@@ -41,6 +41,8 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/httpformfield_file.cpp
         ${SRC_DIR}/httphandler.cpp
         ${SRC_DIR}/httpheader.cpp
+        ${SRC_DIR}/httppost.cpp
+        ${SRC_DIR}/httpget.cpp
         ${SRC_DIR}/httppostcommandhandler.cpp
         ${SRC_DIR}/httpposthandler.cpp
         ${SRC_DIR}/httppostparser.cpp
@@ -51,6 +53,8 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/httprequesthandler_file.cpp
         ${SRC_DIR}/httprequesthandler_json.cpp
         ${SRC_DIR}/httpserver.cpp
+        ${SRC_DIR}/mime.cpp
+        ${SRC_DIR}/httpacker.cpp
         ${SRC_DIR}/httptool.cpp
         ${SRC_DIR}/jsonhandler.cpp
         ${SRC_DIR}/posthandler_uploadpicture.cpp

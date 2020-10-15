@@ -99,6 +99,7 @@ ${CORE_DIR}/protocol/ctp/ctp.template/ctpserver2.cpp
 ${CORE_DIR}/string/textprotocol.cpp
 ${CORE_DIR}/string/textseparator.cpp
 ${CORE_DIR}/string/xmlstring.cpp
+${CORE_DIR}/string/stringparam.cpp
 ${CORE_DIR}/thread/autolock.cpp
 ${CORE_DIR}/thread/criticalsection.cpp
 ${CORE_DIR}/thread/event.cpp
