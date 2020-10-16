@@ -44,7 +44,10 @@ int SerialPort_Linux::Send(LPVOID data, int dataLen)
 	int ret = _write(mHandle, data, dataLen);
 	//static int idx = -1;
 	//++idx;
-	//LogV(TAG,"SerialPort_Linux::Write[%04d](dataLen=%d),ret=%d", idx,dataLen,ret);
+	if (ret != dataLen)
+	{
+		LogW(TAG,"fail write,len=%d,ret=%d", dataLen,ret);
+	}
 	return ret;
 }
 
@@ -54,6 +57,10 @@ int SerialPort_Linux::Receive(LPVOID buf, int bufLen)
 	if (ret > 0)
 	{
 		UpdateRecvTick();
+	}
+	else
+	{
+		LogW(TAG, "fail read,error=%d(%s)",errno,strerror(errno));
 	}
 	return ret;
 }
