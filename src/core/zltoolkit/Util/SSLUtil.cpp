@@ -175,6 +175,11 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
     }
 
 #ifdef _CONFIG_DEBUG_WIRESHARK
+    //Wireshark抓包并解析SSL数据
+    //https://www.jianshu.com/p/13d96afb47ce
+    //https://blog.csdn.net/jasonwang1002/article/details/86544947
+    //wireshark+chrome
+    //SSLKEYLOGFILE c:\test\sslkey.log
     class Helper {
     public:
         static void SslKeyLogFunc(const SSL* ssl, const char* line)
