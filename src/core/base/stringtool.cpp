@@ -303,24 +303,6 @@ string StringTool::xml(string sz)
 #ifdef _DEBUG
 int StringTool::Test()
 {
-	{
-		string sz = "##";
-		StringTool::Replace(sz, "#", "##");
-		ASSERT(sz == "####");
-	}
-
-	{
-		string sz = ".";
-		StringTool::Replace(sz, ".", "#");
-		ASSERT(sz == "#");
-	}
-
-	{
-		string sz = "192.168.1.3";
-		StringTool::Replace(sz, ".", ",");
-		ASSERT(sz == "192,168,1,3");
-	}
-
 	return 0;
 }
 #endif

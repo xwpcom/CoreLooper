@@ -50,6 +50,8 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 
 	obj->Connect(bundle);
 
+	mAddress = bundle.GetString("address") + ":" + bundle.GetString("port");
+
 	SetTimer(mTimer_AutoClose, mTimeOutSecond * 1000);
 	return 0;
 }
@@ -58,13 +60,13 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 {
 	if (error)
 	{
-		LogW(TAG,"%p connect fail,error=%d(%s)",this, error,SockTool::GetErrorDesc(error));
+		LogW(TAG,"%p connect [%s] fail,error=%d(%s)",this, mAddress.c_str(),error,SockTool::GetErrorDesc(error));
 
 		Destroy();
 	}
 	else
 	{
-		//DV("%s,connect ok", __func__);
+		LogV(TAG,"%s,connect [%s] ok", __func__, mAddress.c_str());
 		mConnected = true;
 		mOutbox.PrepareBuf(16 * 1024);
 	}

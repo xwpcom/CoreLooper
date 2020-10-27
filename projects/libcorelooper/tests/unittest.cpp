@@ -61,7 +61,7 @@ TEST_CLASS(_TestCPP11)
 					__super::OnCreate();
 
 					{
-						DV("main threadId=%d", ShellTool::GetCurrentThreadId());
+						LogV(TAG,"main threadId=%d", ShellTool::GetCurrentThreadId());
 
 						auto obj = make_shared<DemoLooper>();
 						AddChild(obj);
@@ -72,14 +72,14 @@ TEST_CLASS(_TestCPP11)
 						{
 							Assert::IsTrue(obj->IsMyselfThread());
 
-							DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
-							DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(),obj->GetObjectName().c_str());
+							LogV(TAG,"lambda,a=%d,b=%d,c=%.1f", a, b, c);
+							LogV(TAG,"lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(),obj->GetObjectName().c_str());
 							name = "bear";
 							Looper::GetMainLooper()->PostQuitMessage();
 						};
 
 						obj->sendRunnable(std::bind(func, 100, 'c', 2.5f));
-						DV("name=%s", name.c_str());
+						LogV(TAG,"name=%s", name.c_str());
 					}
 				}
 
@@ -133,7 +133,7 @@ TEST_CLASS(_TestCPP11)
 				n = "world";
 				});
 
-			DV("item=%s", v2[0].c_str());
+			LogV(TAG,"item=%s", v2[0].c_str());
 
 			// Print the count of even numbers to the console.
 			cout << "There are " << evenCount
@@ -167,8 +167,8 @@ TEST_CLASS(_TestCPP11)
 			{
 
 			};
-			DV("name=%s",typeid(TestHandler).name());
-			DV("raw_name=%s", typeid(TestHandler).raw_name());
+			LogV(TAG,"name=%s",typeid(TestHandler).name());
+			LogV(TAG,"raw_name=%s", typeid(TestHandler).raw_name());
 		}
 
 		//学习std move
@@ -182,17 +182,17 @@ TEST_CLASS(_TestCPP11)
 					: _length(length)
 					, _data(new int[length])
 				{
-					DV("%s(%p),length = %d",__func__, this,_length);
+					LogV(TAG,"%s(%p),length = %d",__func__, this,_length);
 				}
 
 				// Destructor.
 				~MemoryBlock()
 				{
-					DV("%s(%p),length = %d", __func__, this, _length);
+					LogV(TAG,"%s(%p),length = %d", __func__, this, _length);
 
 					if (_data != nullptr)
 					{
-						//DV(" Deleting resource.");
+						//LogV(TAG," Deleting resource.");
 						delete[] _data;
 					}
 
@@ -204,8 +204,8 @@ TEST_CLASS(_TestCPP11)
 					: _length(other._length)
 					, _data(new int[other._length])
 				{
-					DV("%s(%p)#copy,length = %d", __func__, this, _length);
-					//DV("(%p)In MemoryBlock(const MemoryBlock&). length = %d . Copying resource."
+					LogV(TAG,"%s(%p)#copy,length = %d", __func__, this, _length);
+					//LogV(TAG,"(%p)In MemoryBlock(const MemoryBlock&). length = %d . Copying resource."
 						//, this
 						//, other._length);
 
@@ -215,8 +215,8 @@ TEST_CLASS(_TestCPP11)
 				// Copy assignment operator.
 				MemoryBlock& operator=(const MemoryBlock& other)
 				{
-					DV("%s(%p)#=,length = %d", __func__, this, _length);
-					//DV("(%p)In operator=(const MemoryBlock&). length = %d,Copying resource."
+					LogV(TAG,"%s(%p)#=,length = %d", __func__, this, _length);
+					//LogV(TAG,"(%p)In operator=(const MemoryBlock&). length = %d,Copying resource."
 						//, this
 						//, other._length);
 
@@ -242,7 +242,7 @@ TEST_CLASS(_TestCPP11)
 					: _data(nullptr)
 					, _length(0)
 				{
-					DV("%s(%p)#move,length = %d", __func__, this, _length);
+					LogV(TAG,"%s(%p)#move,length = %d", __func__, this, _length);
 					// Copy the data pointer and its length from the
 					// source object.
 					_data = other._data;
@@ -257,7 +257,7 @@ TEST_CLASS(_TestCPP11)
 				// Move assignment operator.
 				MemoryBlock& operator=(MemoryBlock&& other)
 				{
-					DV("%s(%p)#move=,length = %d", __func__, this, _length);
+					LogV(TAG,"%s(%p)#move=,length = %d", __func__, this, _length);
 
 					if (this != &other)
 					{
@@ -289,8 +289,8 @@ TEST_CLASS(_TestCPP11)
 				str = std::move(str);
 				std::string str2 = std::move(str);
 				
-				DV("str=[%s]", str.c_str());
-				DV("str2=[%s]", str2.c_str());
+				LogV(TAG,"str=[%s]", str.c_str());
+				LogV(TAG,"str2=[%s]", str2.c_str());
 			}
 			else if (1)
 			{
@@ -299,16 +299,16 @@ TEST_CLASS(_TestCPP11)
 				public:
 					Person()
 					{
-						DV("%s(%p)", __func__, this);
+						LogV(TAG,"%s(%p)", __func__, this);
 					}
 					
 					Person(const Person& src)
 					{
-						DV("%s(%p)#copy", __func__, this);
+						LogV(TAG,"%s(%p)#copy", __func__, this);
 					}
 					Person(Person&& src)
 					{
-						DV("%s(%p)", __func__, this);
+						LogV(TAG,"%s(%p)", __func__, this);
 
 						*this = std::move(src);
 
@@ -327,7 +327,7 @@ TEST_CLASS(_TestCPP11)
 					}
 					virtual ~Person()
 					{
-						DV("%s(%p)", __func__, this);
+						LogV(TAG,"%s(%p)", __func__, this);
 					}
 				protected:
 					string mName;
@@ -442,11 +442,11 @@ public:
 				public:
 					CopyFileTask()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 					~CopyFileTask()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 
 					string mSourceFilePath;
@@ -455,16 +455,16 @@ public:
 					void Run()
 					{
 						auto ret = File::CopyFile(mSourceFilePath, mDestFilePath);
-						DV("FileEx::CopyFile ret=%d", ret);
+						LogV(TAG,"FileEx::CopyFile ret=%d", ret);
 					}
 					void OnPostExecute()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 						Looper::CurrentLooper()->PostQuitMessage();
 					}
 				};
 
-				DV("start copy file");
+				LogV(TAG,"start copy file");
 				auto obj = make_shared<CopyFileTask>();
 				//obj->mWorker = dynamic_pointer_cast<HuiZhouWorker>(shared_from_this());
 				obj->mSourceFilePath = "d:/t.cpp";
@@ -528,7 +528,7 @@ public:
 
 			virtual LRESULT OnTest(WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 
@@ -536,36 +536,36 @@ public:
 			{
 				__super::OnCreate();
 
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 
 			virtual LRESULT OnStart(WPARAM wp,LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 
 			virtual LRESULT OnResume(WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 
 			virtual LRESULT OnPause(WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 			
 			virtual LRESULT OnStop(WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 
 			virtual LRESULT OnRestart(WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 
@@ -573,7 +573,7 @@ public:
 			{
 				__super::OnDestroy();
 
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 
 		};
@@ -585,7 +585,7 @@ public:
 			LRESULT OnTest(WPARAM wp,LPARAM lp)
 			{
 				__super::OnTest(wp,lp);
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return 0;
 			}
 		};
@@ -651,7 +651,7 @@ public:
 
 					void HandleMessage(shared_ptr<Message> msg)
 					{
-						DV("what=%d,arg1=%lld,arg2=%lld", msg->what,msg->arg1,msg->arg2);
+						LogV(TAG,"what=%d,arg1=%lld,arg2=%lld", msg->what,msg->arg1,msg->arg2);
 						//auto p = new int;
 						if (msg->what == 2018)
 						{
@@ -684,9 +684,9 @@ public:
 			{
 				__super::OnCreate();
 
-				DV("mTestMessageId=%d", mTestMessageId);
-				DV("alloc id#1=%d", AllocMessageId());
-				DV("alloc id#2=%d", AllocMessageId());
+				LogV(TAG,"mTestMessageId=%d", mTestMessageId);
+				LogV(TAG,"alloc id#1=%d", AllocMessageId());
+				LogV(TAG,"alloc id#2=%d", AllocMessageId());
 
 
 				BindMessageEx(mTestMessageId, &Handler2::OnTestMessage);
@@ -700,7 +700,7 @@ public:
 
 			LRESULT OnTestMessage(WPARAM wp, LPARAM lp)
 			{
-				DV("%s,wp=%lld,lp=%lld", __func__,wp,lp);
+				LogV(TAG,"%s,wp=%lld,lp=%lld", __func__,wp,lp);
 				return 0;
 			}
 		};
@@ -710,7 +710,7 @@ public:
 			{
 				__super::OnCreate();
 
-				DV("mTestMessageId3=%d", mTestMessageId3);
+				LogV(TAG,"mTestMessageId3=%d", mTestMessageId3);
 			}
 
 			public:
@@ -742,11 +742,11 @@ public:
 	void TestBase(int a, int b)
 	{
 		int c, d, e;
-		DV("&a=%p", &a);
-		DV("&b=%p", &b);
-		DV("&c=%p", &c);
-		DV("&d=%p", &d);
-		DV("&e=%p", &e);
+		LogV(TAG,"&a=%p", &a);
+		LogV(TAG,"&b=%p", &b);
+		LogV(TAG,"&c=%p", &c);
+		LogV(TAG,"&d=%p", &d);
+		LogV(TAG,"&e=%p", &e);
 	}
 
 	TEST_METHOD(TestBase_)
@@ -809,7 +809,7 @@ public:
 
 					if (obj)
 					{
-						DV("obj=%s", obj->GetObjectName().c_str());
+						LogV(TAG,"obj=%s", obj->GetObjectName().c_str());
 					}
 					else
 					{
@@ -822,7 +822,7 @@ public:
 
 					if (obj)
 					{
-						DV("obj=%s", obj->GetObjectName().c_str());
+						LogV(TAG,"obj=%s", obj->GetObjectName().c_str());
 					}
 					else
 					{
@@ -857,29 +857,29 @@ public:
 		public:
 			TestHandler()
 			{
-				DV("%s,this=%p", __func__, this);
+				LogV(TAG,"%s,this=%p", __func__, this);
 			}
 			~TestHandler()
 			{
-				DV("%s,this=%p", __func__, this);
+				LogV(TAG,"%s,this=%p", __func__, this);
 			}
 		protected:
 			LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				return __super::OnMessage(msg, wp, lp);
 			}
 			void OnCreate()
 			{
 				__super::OnCreate();
 
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 
 				class TestRunnable :public Runnable
 				{
 					void Run()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 						Looper::GetMainLooper()->PostQuitMessage();
 					}
 				};
@@ -888,7 +888,7 @@ public:
 
 			void OnDestroy()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				__super::OnDestroy();
 			}
 		};
@@ -985,7 +985,7 @@ public:
 						{
 							case BM_TEST:
 							{
-								DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+								LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 								return 0;
 							}
 						}
@@ -1007,12 +1007,12 @@ public:
 					auto obj = make_shared<Worker>();
 					if (obj)
 					{
-						DV("CreateLooperHandler ok");
+						LogV(TAG,"CreateLooperHandler ok");
 						class TestRunnable :public Runnable
 						{
 							void Run()
 							{
-								DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+								LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 							}
 						};
 
@@ -1061,7 +1061,7 @@ public:
 		}
 
 		tick =ShellTool::GetTickCount()-tick;
-		DV("tick=%lld", tick);
+		LogV(TAG,"tick=%lld", tick);
 
 	}
 
@@ -1079,7 +1079,7 @@ public:
 			{
 				int i = (int)(LONGLONG)p;
 
-				//DV("%s,i=%d#begin", __func__, i);
+				//LogV(TAG,"%s,i=%d#begin", __func__, i);
 				auto obj=Looper::GetMainLooper();
 				for(int idx=0;idx<10;idx++)
 				{
@@ -1091,8 +1091,8 @@ public:
 					{
 						Assert::IsTrue(obj->IsMyselfThread());
 
-						DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
-						DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
+						LogV(TAG,"lambda,a=%d,b=%d,c=%.1f", a, b, c);
+						LogV(TAG,"lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
 						name = "bear";
 						//Looper::GetMainLooper()->PostQuitMessage();
 					};
@@ -1102,8 +1102,8 @@ public:
 					{
 						Assert::IsTrue(obj->IsMyselfThread());
 
-						DV("lambda,a=%d,b=%d,c=%.1f", a, b, c);
-						DV("lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
+						LogV(TAG,"lambda,a=%d,b=%d,c=%.1f", a, b, c);
+						LogV(TAG,"lambda threadId=%d,obj.name=%s", ShellTool::GetCurrentThreadId(), obj->GetObjectName().c_str());
 						name = "bear";
 						//Looper::GetMainLooper()->PostQuitMessage();
 
@@ -1112,7 +1112,7 @@ public:
 
 					obj->sendRunnable(std::bind(func, 100, 'c', 2.5f));
 				}
-				//DV("%s,i=%d#end", __func__, i);
+				//LogV(TAG,"%s,i=%d#end", __func__, i);
 				return nullptr;
 			}
 
@@ -1160,7 +1160,7 @@ public:
 			{
 				if (msg == BM_TEST)
 				{
-					//DV("index=%d", (int)wp);
+					//LogV(TAG,"index=%d", (int)wp);
 				}
 
 				return __super::OnMessage(msg, wp, lp);
@@ -1240,7 +1240,7 @@ public:
 	TEST_METHOD(NormalCase)
 	{
 		{
-			//DV("sizeof(CriticalSection)=%d", sizeof(CriticalSection));
+			//LogV(TAG,"sizeof(CriticalSection)=%d", sizeof(CriticalSection));
 			//正常情况下，只能用make_shared创建Handler及其子类
 			//尽管不能发挥完全的功能，但要确保能在stack构造和析构
 			Handler obj;
@@ -1335,16 +1335,16 @@ public:
 		{
 			auto ret = SendMessage((HWND)(LONGLONG)i, WM_NULL, 0, 0);
 
-			DV("[%04d].ret=%d.error=%d",i, ret,GetLastError());
+			LogV(TAG,"[%04d].ret=%d.error=%d",i, ret,GetLastError());
 		}
 	}
 
 	TEST_METHOD(TestSizeof)
 	{
 		string arr[] = {"1","12","123","1234",};
-		DV("sizeof arr=%d,sizeof string=%d", sizeof(arr),sizeof(string));
-		DV("sizeof(shared_ptr)=%d", sizeof(shared_ptr<Handler>));
-		DV("sizeof(Handler)=%d", sizeof(Handler));
+		LogV(TAG,"sizeof arr=%d,sizeof string=%d", sizeof(arr),sizeof(string));
+		LogV(TAG,"sizeof(shared_ptr)=%d", sizeof(shared_ptr<Handler>));
+		LogV(TAG,"sizeof(Handler)=%d", sizeof(Handler));
 	}
 
 	TEST_METHOD(CreateCrossLooperHandler)
@@ -1424,7 +1424,7 @@ public:
 		auto obj2 = dynamic_pointer_cast<Handler2>(obj.get()->shared_from_this());
 		if (obj == obj2)
 		{
-			DV("ok");
+			LogV(TAG,"ok");
 		}
 		else
 		{
@@ -1519,7 +1519,7 @@ public:
 				obj->sendMessage(BM_NULL);
 			}
 			tick = ShellTool::GetTickCount64() - tick;
-			DV("tick=%I64d", tick);
+			LogV(TAG,"tick=%I64d", tick);
 			obj->PostQuitMessage();
 		}
 		//event->Wait();
@@ -1610,23 +1610,23 @@ public:
 				public:
 					TestHandler()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 					~TestHandler()
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 
 				protected:
 					void OnCreate()
 					{
 						__super::OnCreate();
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 					void OnDestroy()
 					{
 						__super::OnDestroy();
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 					}
 				};
 
@@ -1745,12 +1745,12 @@ public:
 			void OnCreate()
 			{
 				__super::OnCreate();
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 
 				auto obj = _MObject(TestLooper, "TestLooper");
 				if (obj)
 				{
-					DV("obj is ok");
+					LogV(TAG,"obj is ok");
 				}
 				else
 				{
@@ -1761,7 +1761,7 @@ public:
 			
 			void OnDestroy()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				__super::OnDestroy();
 			}
 		};
@@ -1771,7 +1771,7 @@ public:
 		protected:
 			void OnCreate()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				__super::OnCreate();
 
 				{
@@ -1784,7 +1784,7 @@ public:
 			}
 			void OnDestroy()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				__super::OnDestroy();
 			}
 		};
@@ -1814,7 +1814,7 @@ public:
 		}
 
 		tick = ShellTool::GetTickCount64() - tick;
-		DV("tick=%I64d", tick);
+		LogV(TAG,"tick=%I64d", tick);
 	}
 	//评估handler字节数,尽量优化
 	TEST_METHOD(HandlerBytes)
@@ -1827,16 +1827,16 @@ public:
 			//string sz;//+40bytes
 		};
 
-		DV("sizeof(string) = %d", sizeof(string));//40
+		LogV(TAG,"sizeof(string) = %d", sizeof(string));//40
 		std::map<long*, weak_ptr<Handler>> mChildren;
-		DV("sizeof(map) = %d", sizeof(mChildren));//24
-		DV("sizeof(Handler) = %d", sizeof(Handler));
-		DV("sizeof(Handler2) = %d", sizeof(Handler2));
+		LogV(TAG,"sizeof(map) = %d", sizeof(mChildren));//24
+		LogV(TAG,"sizeof(Handler) = %d", sizeof(Handler));
+		LogV(TAG,"sizeof(Handler2) = %d", sizeof(Handler2));
 
-		DV("sizeof(shared_ptr)=%d", sizeof(shared_ptr<std::map<UINT, shared_ptr<tagTimerNode>>>));
+		LogV(TAG,"sizeof(shared_ptr)=%d", sizeof(shared_ptr<std::map<UINT, shared_ptr<tagTimerNode>>>));
 
 		//shared_ptr<Handler> obj;
-		//DV("shared_ptr size=%d", sizeof(obj));
+		//LogV(TAG,"shared_ptr size=%d", sizeof(obj));
 
 	}
 
@@ -1860,7 +1860,7 @@ public:
 				/*
 				if (id == mTimerInConstructor)
 				{
-				DV("%s,mTimerInConstructor", __func__);
+				LogV(TAG,"%s,mTimerInConstructor", __func__);
 				return;
 				}
 				*/
@@ -1881,7 +1881,7 @@ public:
 					for (int i = 0; i < 5; i++)
 					{
 						long id = 0;
-						DV("timerId#%d=%d", i + 1, SetTimer(id,2000));
+						LogV(TAG,"timerId#%d=%d", i + 1, SetTimer(id,2000));
 					}
 					//return;
 
@@ -1891,13 +1891,13 @@ public:
 
 				void OnTimer(long id)
 				{
-					//DV("%s,id=%d", __func__, id);
+					//LogV(TAG,"%s,id=%d", __func__, id);
 
 					if (id == mTimerTest)
 					{
 						static int idx = -1;
 						++idx;
-						DV("id=%d,test idx=%04d", id, idx);
+						LogV(TAG,"id=%d,test idx=%04d", id, idx);
 						if (idx == 5)
 						{
 							KillTimer(mTimerTest);
@@ -1909,7 +1909,7 @@ public:
 					{
 						static int idx = -1;
 						++idx;
-						DV("id=%d,feedDog,idx=%04d", id, idx);
+						LogV(TAG,"id=%d,feedDog,idx=%04d", id, idx);
 						return;
 					}
 
@@ -1929,7 +1929,7 @@ public:
 				auto ret = SetTimer(timerId,1);
 				timerId = -2;
 				KillTimer(timerId);
-				//DV("%d", );
+				//LogV(TAG,"%d", );
 
 				AddChild(make_shared<WatchDog>());
 			}
@@ -1937,7 +1937,7 @@ public:
 
 		auto looper = make_shared<MainLooper>();
 		auto ret = looper->StartRun();
-		DV("exit code=%d", looper->GetQuitCode());
+		LogV(TAG,"exit code=%d", looper->GetQuitCode());
 	}
 
 	//不需要返回时，也没有入参
@@ -2003,7 +2003,7 @@ public:
 
 				obj->StartRun();
 				auto ret = obj->GetQuitCode();
-				DV("quit code=%d", ret);
+				LogV(TAG,"quit code=%d", ret);
 				ASSERT(ret == 2018);
 				//return ret;
 		//}
@@ -2018,11 +2018,11 @@ public:
 		public:
 			DelayLooper()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 			~DelayLooper()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 
 			class DelayHandler :public Handler
@@ -2030,16 +2030,16 @@ public:
 			public:
 				DelayHandler()
 				{
-					DV("%s", __func__);
+					LogV(TAG,"%s", __func__);
 				}
 				~DelayHandler()
 				{
-					DV("%s", __func__);
+					LogV(TAG,"%s", __func__);
 				}
 			protected:
 				void OnDestroy()
 				{
-					DV("%s", __func__);
+					LogV(TAG,"%s", __func__);
 					__super::OnDestroy();
 
 				}
@@ -2056,7 +2056,7 @@ public:
 				{
 					if (id == mTimerDelay)
 					{
-						DV("%s", __func__);
+						LogV(TAG,"%s", __func__);
 						mDelayRef = nullptr;
 						KillTimer(mTimerDelay);
 						return;
@@ -2072,7 +2072,7 @@ public:
 			{
 				__super::OnCreate();
 
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				AddChild(make_shared<DelayHandler>());
 				PostQuitMessage();
 			}
@@ -2123,7 +2123,7 @@ public:
 					if (id == mTimerTest)
 					{
 						++mValue;//访问变量，确保handler是有效的
-						//DV("this=%p,value=%d",this, mValue);
+						//LogV(TAG,"this=%p,value=%d",this, mValue);
 						return;
 					}
 					else if (id == mTimerDelayDestroy)
@@ -2144,7 +2144,7 @@ public:
 			void OnCreate()
 			{
 				__super::OnCreate();
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				class DelayWorker :public Runnable
 				{
 				public:
@@ -2207,7 +2207,7 @@ public:
 				looper->Start();
 
 				auto handler = looper->CreateWorkHandler();
-				//DV("handler=%p", handler);
+				//LogV(TAG,"handler=%p", handler);
 				mWeakHandler =handler;
 
 				SetTimer(mTimerTest, 1);
@@ -2221,7 +2221,7 @@ public:
 					if (x == eTestState_0)
 					{
 						mHandler = mWeakHandler.lock();
-						DV("mHandler=%p", mHandler.get());
+						LogV(TAG,"mHandler=%p", mHandler.get());
 						if (mHandler.get() == nullptr)
 						{
 							DW("error");
@@ -2271,11 +2271,11 @@ public:
 		public:
 			WorkHandler()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 			~WorkHandler()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 			}
 
 			void OnCreate()
@@ -2286,7 +2286,7 @@ public:
 
 			void OnDestroy()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				__super::OnDestroy();
 			}
 			LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp)
@@ -2297,7 +2297,7 @@ public:
 				{
 					static int idx = -1;
 					++idx;
-					DV("BM_TEST,idx=%04d", idx);
+					LogV(TAG,"BM_TEST,idx=%04d", idx);
 					return 0;
 				}
 				}
@@ -2309,7 +2309,7 @@ public:
 			{
 				if (id == mTimerTest)
 				{
-					DV("%s", __func__);
+					LogV(TAG,"%s", __func__);
 					++mValue;
 					return;
 				}
@@ -2385,7 +2385,7 @@ public:
 					mHandler = dynamic_pointer_cast<WorkHandler>(ptr->shared_from_this());
 				}
 
-				DV("WorkLooper PostQuitMessage");
+				LogV(TAG,"WorkLooper PostQuitMessage");
 				looper->PostQuitMessage();
 
 				SetTimer(mTimerDelay,3000);
@@ -2395,7 +2395,7 @@ public:
 
 			void OnTimer(long id)
 			{
-				DV("%s,id=%d", __func__, id);
+				LogV(TAG,"%s,id=%d", __func__, id);
 				if (id == 1)
 				{
 					int x = 0;
@@ -2413,7 +2413,7 @@ public:
 					mHandler = nullptr;
 					KillTimer(mTimerDelay);
 
-					DV("%s,PostQuitMessage", mThreadName.c_str());
+					LogV(TAG,"%s,PostQuitMessage", mThreadName.c_str());
 					PostQuitMessage();
 				}
 
@@ -2440,6 +2440,27 @@ public:
 		//ShellTool::Sleep(2000);
 	}
 
+	TEST_METHOD(StringTool_)
+	{
+		{
+			string sz = "##";
+			StringTool::Replace(sz, "#", "##");
+			ASSERT(sz == "####");
+		}
+
+		{
+			string sz = ".";
+			StringTool::Replace(sz, ".", "#");
+			ASSERT(sz == "#");
+		}
+
+		{
+			string sz = "192.168.1.3";
+			StringTool::Replace(sz, ".", ",");
+			ASSERT(sz == "192,168,1,3");
+		}
+	}
+
 	TEST_METHOD(TestSTL)
 	{
 		list<int> items;
@@ -2450,14 +2471,14 @@ public:
 		
 		for (auto iter = items.rbegin(); iter != items.rend(); ++iter)
 		{
-			DV("%d", *iter);
+			LogV(TAG,"%d", *iter);
 		}
 	}
 
 	TEST_METHOD(TestStringFormat)
 	{
 		auto sz = StringFormat("hello,%d,%s", 123,"bear");
-		DV("%s", sz.c_str());
+		LogV(TAG,"%s", sz.c_str());
 	}
 
 	TEST_METHOD(TestCpp)
@@ -2494,7 +2515,7 @@ public:
 
 		if (sp == sp2)
 		{
-			DV("is equal");
+			LogV(TAG,"is equal");
 		}
 		else
 		{
@@ -2570,17 +2591,17 @@ public:
 	{
 		int ret = -1;
 		size_t xx = ret;
-		DV("xx=%u", xx);
+		LogV(TAG,"xx=%u", xx);
 
 		Bundle obj;
-		DV("pack#1=[%s]", obj.Pack().c_str());
+		LogV(TAG,"pack#1=[%s]", obj.Pack().c_str());
 		obj.Set("name", "bear");
 
 		Bundle obj2;
 		obj2 = obj;
-		DV("name=%s", obj2.GetString("name").c_str()); ;
+		LogV(TAG,"name=%s", obj2.GetString("name").c_str()); ;
 
-		DV("pack=[%s]", obj2.Pack().c_str());
+		LogV(TAG,"pack=[%s]", obj2.Pack().c_str());
 	}
 
 	//显示CoreLooper典型用法
@@ -2591,12 +2612,12 @@ public:
 		public:
 			WorkHandler()
 			{
-				DV("%s,this=%p", __func__, this);
+				LogV(TAG,"%s,this=%p", __func__, this);
 			}
 
 			~WorkHandler()
 			{
-				DV("%s,this=%p", __func__, this);
+				LogV(TAG,"%s,this=%p", __func__, this);
 			}
 
 			void SetTestTimer()
@@ -2611,7 +2632,7 @@ public:
 				{
 					static int idx = -1;
 					++idx;
-					DV("%s,idx=%d", __func__, idx);
+					LogV(TAG,"%s,idx=%d", __func__, idx);
 
 					return;
 				}
@@ -2648,7 +2669,7 @@ public:
 					auto obj = mHandler.lock();
 					if (obj)
 					{
-						DV("destroy %p", obj.get());
+						LogV(TAG,"destroy %p", obj.get());
 						obj->Destroy();
 
 						//测试handler destroy之后timer是否能正常工作
@@ -2662,7 +2683,7 @@ public:
 				{
 					KillTimer(mTimerDelayRelease);
 
-					DV("release mHandlerRef");
+					LogV(TAG,"release mHandlerRef");
 					mHandlerRef = nullptr;
 				}
 				else if (id == mTimerDelayQuit)
@@ -2699,7 +2720,7 @@ public:
 		public:
 			DemoTask()
 			{
-				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+				LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 			}
 			~DemoTask()
 			{
@@ -2708,19 +2729,19 @@ public:
 		protected:
 			virtual void OnPreExecute()
 			{
-				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+				LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 			}
 
 			virtual void OnPostExecute()
 			{
-				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+				LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 
 				Looper::GetMainLooper()->PostQuitMessage();
 			}
 
 			virtual void Run()
 			{
-				DV("%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
+				LogV(TAG,"%s,threadId=%d", __func__, ShellTool::GetCurrentThreadId());
 			}
 
 		};
@@ -2754,7 +2775,7 @@ public:
 				{
 					__super::OnCreate();
 
-					DV("postDelayedRunnable");
+					LogV(TAG,"postDelayedRunnable");
 					postDelayedRunnable(make_shared<DelayExitRunnable>(), 1000);
 				}
 			};
@@ -2801,7 +2822,7 @@ public:
 		public:
 			void Run()
 			{
-				DV("%s", __func__);
+				LogV(TAG,"%s", __func__);
 				static int idx = -1;
 				++idx;
 
@@ -2850,7 +2871,7 @@ public:
 					Looper::CurrentLooper()->PostQuitMessage();
 				}
 
-				//DV("mTimes=%d", mTimes);
+				//LogV(TAG,"mTimes=%d", mTimes);
 			}
 
 		};
@@ -2874,11 +2895,11 @@ public:
 
 		event->Wait();
 		tick = ShellTool::GetTickCount64() - tick;
-		DV("tick = %I64d", tick);//release版100万次约1.2秒,debug版约9.2秒
+		LogV(TAG,"tick = %I64d", tick);//release版100万次约1.2秒,debug版约9.2秒
 		if (tick > 0)
 		{
 			long speed = (long)(gTestTimes *1000.0 / tick);
-			DV("speed = %d/s", (int)speed);//release版88万/秒,debug版10万/秒
+			LogV(TAG,"speed = %d/s", (int)speed);//release版88万/秒,debug版10万/秒
 		}
 	}
 
@@ -2923,7 +2944,7 @@ public:
 
 				static int idx = -1;
 				++idx;
-				DV("%s,idx=%04d", __func__, idx);
+				LogV(TAG,"%s,idx=%04d", __func__, idx);
 			}
 
 			bool IsExecuted()const
@@ -2949,7 +2970,7 @@ public:
 		}
 		event->Wait();
 
-		DV("obj->IsExecuted()=%d", obj->IsExecuted());
+		LogV(TAG,"obj->IsExecuted()=%d", obj->IsExecuted());
 		Assert::AreEqual(obj->IsExecuted(), true);
 	}
 
@@ -2974,7 +2995,7 @@ public:
 
 					static int idx = -1;
 					++idx;
-					DV("%s,idx=%04d", __func__, idx);
+					LogV(TAG,"%s,idx=%04d", __func__, idx);
 				}
 
 				bool IsExecuted()const
@@ -3045,11 +3066,11 @@ public:
 				public:
 					WorkLooper()
 					{
-						DV("%s,this=%p", __func__, this);
+						LogV(TAG,"%s,this=%p", __func__, this);
 					}
 					~WorkLooper()
 					{
-						DV("%s,this=%p", __func__, this);
+						LogV(TAG,"%s,this=%p", __func__, this);
 					}
 				};
 				class Worker :public Runnable
@@ -3057,11 +3078,11 @@ public:
 				public:
 					Worker()
 					{
-						DV("%s,this=%p", __func__, this);
+						LogV(TAG,"%s,this=%p", __func__, this);
 					}
 					virtual ~Worker()
 					{
-						DV("%s,this=%p", __func__, this);
+						LogV(TAG,"%s,this=%p", __func__, this);
 					}
 					void Run()
 					{
@@ -3114,7 +3135,7 @@ public:
 							SetTimer(id,10 * 1000);
 						}
 						tick= ShellTool::GetTickCount64() - tick;
-						DV("tick=%I64d", tick);
+						LogV(TAG,"tick=%I64d", tick);
 
 						CurrentLooper()->PostQuitMessage();
 					}
@@ -3183,7 +3204,7 @@ public:
 			sum += v;
 		}
 
-		DV("sum=%.4f", sum);
+		LogV(TAG,"sum=%.4f", sum);
 	}
 
 	TEST_METHOD(TestWait)
@@ -3199,7 +3220,7 @@ public:
 			auto tick = ShellTool::GetTickCount64();
 			auto ret = GetQueuedCompletionStatus(handle, &bytes, &ptr, &ov, ms);
 			tick = ShellTool::GetTickCount64() - tick;
-			DV("tick[%04d]=%lld", i,tick);//经测试,tick大部分为0,有时为15或16,是windows线程切换引起的
+			LogV(TAG,"tick[%04d]=%lld", i,tick);//经测试,tick大部分为0,有时为15或16,是windows线程切换引起的
 		}
 
 		CloseHandle(handle);
@@ -3271,10 +3292,10 @@ TEST_CLASS(StringTool_UnitTest)
 			"hello,this is a very long text,value=%d",1000
 		);
 		
-		DV("text#1=%s", text.c_str());
+		LogV(TAG,"text#1=%s", text.c_str());
 
 		StringTool::AppendFormat(text, ",name=%s", "xwp");
-		DV("text#2=%s", text.c_str());
+		LogV(TAG,"text#2=%s", text.c_str());
 
 	}
 };
@@ -3403,7 +3424,7 @@ TEST_CLASS(Log)
 
 	TEST_METHOD(TestDT)
 	{
-		DV("DV");
+		LogV(TAG,"DV");
 		DT("DT");
 		DG("DG");
 		DW("DW");
@@ -3415,7 +3436,7 @@ TEST_CLASS(Log)
 		ULONGLONG bytes = 1024 * 4*1024;
 		auto fd=CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, (DWORD)bytes, _T("Local\\CoreLooper"));
 		//auto fd2 = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, bytes, _T("Local\\CoreLooper"));
-		//DV("fd=%p,fd2=%p", fd,fd2);
+		//LogV(TAG,"fd=%p,fd2=%p", fd,fd2);
 
 		auto d = (LPBYTE)MapViewOfFile(fd,FILE_MAP_ALL_ACCESS,0,0, (SIZE_T)bytes);
 		d[0] = 0x12;
@@ -3466,13 +3487,13 @@ TEST_CLASS(STL)
 
 		for (auto& item : items)
 		{
-			DV("%s=%s", item.first.c_str(), item.second.c_str());
+			LogV(TAG,"%s=%s", item.first.c_str(), item.second.c_str());
 		}
 
 		auto iter = items.find("Player");
 		if (iter != items.end())
 		{
-			DV("value=%s", iter->second.c_str());
+			LogV(TAG,"value=%s", iter->second.c_str());
 		}
 
 	}

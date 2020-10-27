@@ -67,6 +67,7 @@ protected:
 	int mTimeOutSecond = 90;
 	ByteBuffer mInbox;
 	ByteBuffer mOutbox;
+	string mAddress;
 
 	long mTimer_AutoClose = 0;
 
