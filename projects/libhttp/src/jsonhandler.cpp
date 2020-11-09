@@ -12,7 +12,7 @@ JsonHandler是从AjaxCommandHandler修改而来,改动如下
  自动注册好处是方便，坏处是一个库用于多个项目时，库中的ajax接口在这些项目中全部可见
  主动注册可避免此问题
 */
-
+static const char* TAG = "JsonHandler";
 JsonHandler::JsonHandler()
 {
 	SetObjectName("JsonHandler");
@@ -29,7 +29,7 @@ string JsonHandler::Process(string url)
 
 	mExtraHeader.clear();
 
-	DV("%s", url.c_str());
+	LogV(TAG,"%s", url.c_str());
 
 	string ack;
 
@@ -37,17 +37,17 @@ string JsonHandler::Process(string url)
 	NameValue params;
 	HttpTool::ParseUrlParam(url, uri, params);
 
-	/*
-	if (!uri.IsEmpty())
+	//*
+	if (!uri.empty())
 	{
 		if (uri[0] == '/')
 		{
-			string tmp = uri.Right(uri.GetLength() - 1);
+			string tmp = uri.substr(1);//.Right(uri.GetLength() - 1);
 			uri = tmp;
 		}
 	}
 
-	auto handler(BaseAjaxHandler::CreateInstance(uri));
+	auto handler(AjaxHandler::CreateInstance(uri));
 	if (handler)
 	{
 		handler->SetVirtualFolder(mVirtualFolder);
@@ -68,7 +68,7 @@ string JsonHandler::Process(string url)
 			else
 			{
 				hasAuth = false;
-				DW("fail [%s],requires auth %s", url.c_str(), info->mPermission.c_str());
+				LogW(TAG,"fail [%s],requires auth %s", url.c_str(), info->mPermission.c_str());
 			}
 		}
 
@@ -77,18 +77,13 @@ string JsonHandler::Process(string url)
 	}
 	else
 	{
-		int errorCode = 501;//http 501错误是Unimplemented
-		StringTool::AppendFormat(ack,"<Result><Error>%d</Error><Desc>Unknown command:%s</Desc></Result>",
-			errorCode,
-			uri.xml().c_str());
+		//int errorCode = 501;//http 501错误是unimplemented
+		ack = "{"
+			"\"error\":\"-1\","
+			"\"desc\":\"unknown command\""
+			"}";
 	}
-	*/
-
-	//DV("ack=[%s]", ack.c_str());
-	ack = "{"
-		"\"name\":\"bear\","
-		"\"age\":\"38\""
-		"}";
+	//*/
 
 	return ack;
 }
