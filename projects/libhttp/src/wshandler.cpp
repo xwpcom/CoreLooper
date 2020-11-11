@@ -39,11 +39,6 @@ public:
 };
 IMPLEMENT_AJAX_CLASS(Ajax_TestWS, "ws.test", "")
 
-enum
-{
-	mTimer_CheckAlive = 10000,
-};
-
 WSHandler::WSHandler()
 {
 	SetObjectName("WSHandler");
@@ -63,7 +58,7 @@ void WSHandler::OnCreate()
 	mProtocol = CommonTextProtocolFactory::Create();
 	mProtocol->SetCB(this);
 
-	int second = 60 * 10;
+	int second = 30;
 
 	SetTimer(mTimer_CheckAlive, second * 1000);
 	UpdateTickAlive();
@@ -116,10 +111,10 @@ void WSHandler::OnTimer(long id)
 	if(id == mTimer_CheckAlive)
 	{
 		auto tickNow = ShellTool::GetTickCount64();
-		int second = 60 * 15;
+		int second = mTimeoutSeconds;
 		if (tickNow > mTickAlive + second * 1000)
 		{
-			LogV(TAG,"destroy due to timeout");
+			LogV(TAG,"%p destroy due to timeout",this);
 			Destroy();
 		}
 

@@ -41,6 +41,7 @@ protected:
 	void UpdateTickAlive();
 	ULONGLONG mTickAlive = 0;
 	long mTimer_CheckAlive = 0;
+	long mTimeoutSeconds = 5 * 60;
 
 	CommonTextProtocol* mProtocol = nullptr;
 };
