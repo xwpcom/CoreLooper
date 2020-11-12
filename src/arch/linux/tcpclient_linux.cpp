@@ -16,7 +16,7 @@ enum
 {
 	BM_DNS_ACK,
 };
-
+static const char* TAG = "TcpClient_Linux";
 TcpClient_Linux::TcpClient_Linux()
 {
 	//DV("%s,this=0x%x", __func__, this);
@@ -355,7 +355,7 @@ void TcpClient_Linux::OnEvent(DWORD events)
 			//134(Transport endpoint is not connected)
 			if (error != 128 && error != 134)
 			{
-				DV("%s,addr=[%s],mSock=%d,events=0x%02x,peer(%s:%d)error=%d,%s",
+				LogW(TAG,"%s,addr=[%s],mSock=%d,events=0x%02x,peer(%s:%d)error=%d,%s",
 					__func__
 					, mAddress.c_str()
 					, mSock
