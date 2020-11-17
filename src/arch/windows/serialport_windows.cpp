@@ -13,6 +13,7 @@ SerialPort_Windows::SerialPort_Windows()
 {
 	SetObjectName("SerialPort_Windows");
 	//DV("%s,this=%p", __func__, this);
+	mDataTimeout = 0;
 	mOutbox.SetBufferSize(4 * 1024, 8 * 1024);
 	mOutbox.PrepareBuf(4096);
 }

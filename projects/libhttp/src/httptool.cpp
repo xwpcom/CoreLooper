@@ -665,7 +665,7 @@ string  HttpTool::encodeURIComponent(string  value)
 		}
 		else
 		{
-			StringTool::AppendFormat(encode, "%%%02X", ch);
+			StringTool::AppendFormat(encode, "%%%hhX", ch);
 		}
 	}
 
