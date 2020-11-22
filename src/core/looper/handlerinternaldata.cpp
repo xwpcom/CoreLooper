@@ -43,18 +43,19 @@ tagHandlerInternalData::tagHandlerInternalData(Handler* handler)
 	mMaybeLongBlock = false;
 	mTimerIdRewind = false;
 
-	//DV("%s,this=%p", __func__, this);
+	//LogV(TAG,"%s,this=%p", __func__, this);
 #ifdef _TEST_TIMER_ID_REWIND
 	mNextTimerId = -2;//for test
 #endif
 
-	//DV("sizeof(tagHandlerInternalData)=%d", sizeof(tagHandlerInternalData));//192
+	//LogV(TAG,"sizeof(tagHandlerInternalData)=%d", sizeof(tagHandlerInternalData));//192
 }
 
-//corelooper框架保证tagHandlerInternalData总是在handler的原生looper中析构
+//corelooper框架保证tagHandlerInternalData总是在handler的原生looper中析构(几乎是100%)
+
 tagHandlerInternalData::~tagHandlerInternalData()
 {
-	//DV("%s,this=%p", __func__, this);
+	//LogV(TAG,"%s,this=%p", __func__, this);
 
 	if (!mIsLooper)
 	{
@@ -199,23 +200,24 @@ int tagHandlerInternalData::AddChildHelper(weak_ptr<Handler> wpChild, string nam
 	bool callDestroy = false;
 
 	{
-		//作为一个稳定的框架，要考虑各种极端情况,
+		//要考虑各种极端情况,
 		//比如用户故意把handler添加到不同的looper中,下面的代码会出现竞争,所以要做同步
+
 		AutoLock lock(&gInternalDataCS);
 
 		if (child->mInternalData->mParent || (!child->IsLooper() && child->IsCreated()))
 		{
 			if (child->mInternalData->mParent)
 			{
-				DW("child->mInternalData->mParent is NOT null");
+				LogW(TAG,"child->mInternalData->mParent is NOT null");
 			}
 
 			if (child->IsCreated())
 			{
-				DW("child is already created");
+				LogW(TAG,"child is already created");
 			}
 
-			DW("%s fail", __func__);
+			LogW(TAG,"%s fail", __func__);
 			//ASSERT(FALSE);
 			return -1;
 		}
@@ -226,7 +228,7 @@ int tagHandlerInternalData::AddChildHelper(weak_ptr<Handler> wpChild, string nam
 			/*
 			if (mHandler->GetThreadId() != child->GetThreadId())
 			{
-				DW("%s fail,handler must be in the same looper as parent handler", __func__);
+				LogW(TAG,"%s fail,handler must be in the same looper as parent handler", __func__);
 				return -1;
 			}
 			*/
@@ -273,7 +275,7 @@ int tagHandlerInternalData::AddChildHelper(weak_ptr<Handler> wpChild, string nam
 
 			if (!parentLooper)
 			{
-				DW("parentLooper is null");
+				LogW(TAG,"parentLooper is null");
 			}
 		}
 
@@ -286,6 +288,7 @@ int tagHandlerInternalData::AddChildHelper(weak_ptr<Handler> wpChild, string nam
 		}
 		
 		//适时触发初始化
+
 		if (!child->mInternalData->mCreated && !child->IsLooper())
 		{
 			callCreate = true;
@@ -300,6 +303,7 @@ int tagHandlerInternalData::AddChildHelper(weak_ptr<Handler> wpChild, string nam
 
 	auto ret = -1;
 	//注意:callCreate和callDestroy同时为true时不要抵消，要按正常流程走完
+
 	if (callCreate)
 	{
 		ret = (int)child->sendMessage(BM_CREATE);
@@ -437,6 +441,7 @@ void tagHandlerInternalData::RemoveChildWeakRef_Impl(Handler *handler)
 }
 
 //注意:SetTimer/SetTimerEx/KillTimer在Handler和Looper的实现是不同的，所以这里要区分
+
 long tagHandlerInternalData::SetTimerEx(UINT interval, shared_ptr<tagTimerExtraInfo> info)
 {
 	if (mHandler->IsLooper())
@@ -544,8 +549,8 @@ void tagHandlerInternalData::Dump(int level, bool includingChild)
 						if (!child->MaybeLongBlock())
 						{
 							auto looper = dynamic_pointer_cast<Looper>(child);
-							//DV("this=0x%08x,looper=0x%08x(%s)", this,looper.get(),looper->mObjectName.c_str());
-							looper->postMessage(BM_DUMP, (WPARAM)(long)(level + 1),(LPARAM)includingChild);//这里用sendMessage可能导致死锁,见2016.12.13文档
+							//LogV(TAG,"this=0x%08x,looper=0x%08x(%s)", this,looper.get(),looper->mObjectName.c_str());
+							looper->postMessage(BM_DUMP, (WPARAM)(long)(level + 1),(LPARAM)includingChild);//这里用sendMessage可能导致死锁,见2016.12.13文档//
 						}
 					}
 					else
