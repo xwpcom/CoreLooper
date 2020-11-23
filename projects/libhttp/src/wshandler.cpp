@@ -12,6 +12,7 @@ namespace Http {
 
 #define TAG "WSHandler"
 
+#ifdef _DEBUG
 class Ajax_TestWS2 :public AjaxHandler
 {
 	DECLARE_AJAX_CLASS(Ajax_TestWS2)
@@ -38,6 +39,7 @@ public:
 	}
 };
 IMPLEMENT_AJAX_CLASS(Ajax_TestWS, "ws.test", "")
+#endif
 
 WSHandler::WSHandler()
 {

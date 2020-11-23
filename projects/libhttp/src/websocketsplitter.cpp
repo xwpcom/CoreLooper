@@ -40,7 +40,8 @@ do{ \
 void WebSocketSplitter::decode(uint8_t* data, uint64_t len) {
 	uint8_t* ptr = data;
 	if (!_got_header) {
-		//还没有获取数据头
+		//还没有获取数据头//
+
 		if (!_remain_data.empty()) {
 			_remain_data.append((char*)data, (size_t)len);
 			data = ptr = (uint8_t*)_remain_data.data();
@@ -105,12 +106,13 @@ void WebSocketSplitter::decode(uint8_t* data, uint64_t len) {
 			onWebSocketDecodeComplete(*this);
 
 			//这是下一个包
+
 			remain -= playload_slice_len;
 			ptr += playload_slice_len;
 			_got_header = false;
 
 			if (remain > 0) {
-				//剩余数据是下一个包，把它的数据放置在缓存中
+				//剩余数据是下一个包，把它的数据放置在缓存中 //
 				string str((char*)ptr, (size_t)remain);
 				_remain_data = str;
 
