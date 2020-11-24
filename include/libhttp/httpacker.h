@@ -4,6 +4,25 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+class HTTP_EXPORT HttpChunker
+{
+public:
+	string Input(const string& text);
+};
+
+	//text must be chunker data,sample:
+	/*
+14
+,"client_id":"saber"
+17
+,"account":"sz2_device"
+2d
+,"jti":"f8ead0ee-d499-46e0-8d24-58294c3e9325"
+1
+}
+0
+	*/
+
 //XiongWanPing 2020.08.06
 //http ack parser,是对HttpAckParser的重构
 

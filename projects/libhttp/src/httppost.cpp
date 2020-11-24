@@ -666,11 +666,19 @@ void HttpPost::ParseInbox()
 
 		if (contentLength == 0)
 		{
-			chunked = (strstr(ack, "Transfer-Encoding: chunked\r\n") != nullptr);
+			//todo:parse all ack header and compare ignore case
+			chunked = (strstr(ack, "Transfer-Encoding: chunked\r\n") != nullptr)
+				|| (strstr(ack, "transfer-encoding: chunked\r\n") != nullptr)
+				;
 
 			if (chunked)
 			{
 				recvFinish = (strstr(ack, "\r\n0\r\n\r\n") != nullptr);
+
+				if (recvFinish)
+				{
+					//extract data from chunked format
+				}
 			}
 			else
 			{
@@ -734,6 +742,14 @@ void HttpPost::SetBodyRawData(const ByteBuffer& box)
 {
 	mBodyRawData.clear();
 	mBodyRawData.Append(box);
+	mBodyRawData.MakeSureEndWithNull();
+}
+
+void HttpPost::SetBody(const string& text)
+{
+	mBodyRawData.clear();
+	mBodyRawData.Write(text);
+	mBodyRawData.MakeSureEndWithNull();
 }
 
 }

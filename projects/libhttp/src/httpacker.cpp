@@ -22,28 +22,6 @@ void HttpAcker::clear()
 	mBody.clear();
 }
 
-/*
-HTTP/1.1 200 OK
-Date: Thu, 06 Aug 2020 09:57:17 GMT
-Server: webserver
-X-Content-Type-Options: nosniff
-X-Frame-Options: SAMEORIGIN
-X-XSS-Protection: 1; mode=block
-Content-Length: 230
-Connection: keep-alive
-Keep-Alive: timeout=8, max=99
-Cache-control: no-cache="set-cookie"
-Content-Type: application/xml
-Set-Cookie: WebSession_0eb6f4251b=2a65bbbaeb553b3a01a5e93c783d8fd2c67406a333eb6ffc83269ddd60843b98; path=/;HttpOnly
-
-<?xml version="1.0" encoding="UTF-8"?>
-<SessionLogin>
-<statusValue>200</statusValue>
-<statusString>OK</statusString>
-<isSupportLoginTiming>false</isSupportLoginTiming>
-<sessionIDVersion>2</sessionIDVersion>
-</SessionLogin>
-*/
 int HttpAcker::Parse(const string& ack)
 {
 	clear();
@@ -121,37 +99,20 @@ int HttpAcker::Parse(const string& ack)
 		//todo:增加对Transfer-Encoding: chunked的处理
 
 		auto it = mFields.find("Transfer-Encoding");
+		if (it == mFields.end())
+		{
+			it= mFields.find("transfer-encoding");
+		}
+
 		if (it != mFields.end())
 		{
 			if (it->second.find("chunked") != string::npos)
 			{
 				auto start = headerTail + 4;
-				auto end = ack.length();
-				while (start < end)
-				{
-					auto p = ack.c_str() + start;
-					auto bytes = (int)strtoull(p, nullptr, 16);
-					if (bytes == 0)
-					{
-						break;
-					}
-
-					auto lineEnd = ack.find("\r\n", start);
-					if (lineEnd == string::npos)
-					{
-						break;
-					}
-
-					if (ack.length() < lineEnd + 2 + bytes)
-					{
-						LogW(TAG, "invalid http ack");
-						return -1;
-					}
-
-					mBody += string(ack.c_str() + lineEnd + 2, (size_t)bytes);
-
-					start += bytes + 6;
-				}
+				auto p = ack.c_str() + start;
+				
+				HttpChunker obj;
+				mBody = obj.Input(p);
 			}
 		}
 
@@ -159,6 +120,41 @@ int HttpAcker::Parse(const string& ack)
 
 
 	return 0;
+}
+
+string HttpChunker::Input(const string& text)
+{
+	auto sz = text.c_str();
+	auto szEnd = sz + text.length();
+	string ack;
+	while (1)
+	{
+		auto lineEnd = strstr(sz, "\r\n");
+		if (!lineEnd)
+		{
+			break;
+		}
+		lineEnd += 2;//2 is \r\n
+
+		char* end = nullptr;
+		auto bytes = strtol(sz, &end, 16);
+		if (bytes <= 0)
+		{
+			break;
+		}
+
+		if (lineEnd + bytes > szEnd)
+		{
+			LogW(TAG, "invalid length");
+			break;
+		}
+
+		ack += string(lineEnd, bytes);
+
+		sz = lineEnd + bytes + 2;
+	}
+
+	return ack;
 }
 
 }

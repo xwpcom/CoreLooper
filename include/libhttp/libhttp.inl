@@ -24,4 +24,6 @@
 #include "httptool.h"
 #include "httpserver.h"
 #include "httpposthandler.h"
-
+#include "httppost.h"
+#include "httpget.h"
+#include "httpacker.h"

@@ -35,7 +35,7 @@ public:
 	//filePath必须为存在的文件
 	int AddFile(string name, string filePath);
 	void SetBodyRawData(const ByteBuffer& box);
-
+	void SetBody(const string& text);
 	int Start(string url);
 protected:
 	void OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundle* extraInfo);
@@ -70,6 +70,7 @@ protected:
 		ITEM(eSendTail),
 		ITEM(eSendBodyRaw),
 		ITEM(eSendFinish),
+#undef ITEM
 	};
 
 	const char* GetStageDesc(eSendStage v);
