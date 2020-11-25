@@ -6,6 +6,9 @@
 #include "loginfo.h"
 #include "logmanager.h"
 #include "EditTextPage.h"
+#include "core/string/utf8tool.h"
+
+using namespace Bear::Core;
 
 enum
 {
@@ -148,6 +151,7 @@ int ConsolePage::Init()
 
 			section = StringTool::Format("log.%d", id);
 			auto title=mIni->GetString(section, "title");
+			//auto text=Utf8Tool::UTF8_to_UNICODE(title.c_str(),title.length());
 			auto obj=CreateTab(title, id);
 		}
 	}
@@ -331,8 +335,9 @@ shared_ptr<LogPage> ConsolePage::CreateTab(string title, int id)
 	obj->Create(IDD_LogPage, parent);
 
 	int newIndex = mTab.GetTabsNum();
-	USES_CONVERSION;
-	mTab.InsertTab(obj.get(), A2T(title.c_str()), newIndex);// , 4);// rand() % 5);
+	//USES_CONVERSION;
+	auto text = Utf8Tool::UTF8_to_UNICODE(title.c_str(), title.length());
+	mTab.InsertTab(obj.get(), text, newIndex);// , 4);// rand() % 5);
 	//auto icon = AfxGetApp()->LoadIcon((newIndex%2)?IDI_SHIP_ONLINE:IDI_SHIP_OFFLINE);
 	//mTab.SetTabHicon(newIndex,icon);
 	int tabId = mTab.GetTabID(newIndex);
@@ -387,7 +392,8 @@ void ConsolePage::SaveConfig()
 		auto page = (LogPage*)mTab.GetTabWnd(i);
 		tabIds += StringTool::Format("%d,", page->pageId());
 		
-		mIni->SetString(page->GetIniSection(), "title", T2A(label));
+		auto text=Utf8Tool::Unicode2Utf8(label);
+		mIni->SetString(page->GetIniSection(), "title", text);// T2A(label));
 	}
 
 	mIni->SetString(mSection, "tabIds", tabIds);

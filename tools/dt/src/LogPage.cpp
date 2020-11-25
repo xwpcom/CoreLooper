@@ -493,7 +493,8 @@ void LogPage::OnCopyFullPath()
 	CString text = A2T(item->file.c_str());
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
 
-	ShowToast(_T("Copy full path OK"));
+	text.Format(_T("Copy full path OK,line = %d"), item->line);
+	ShowToast(text);
 }
 
 void LogPage::OnOpenFolder()

@@ -13,7 +13,7 @@ public:
 
 	string mTitle;
 	string mItemTitle;
-	unordered_map<string, bool> mItems;
+	map<string, bool> mItems;
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_SelectItemPage };

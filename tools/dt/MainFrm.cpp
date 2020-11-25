@@ -23,6 +23,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
 	ON_COMMAND(ID_KEEP_TOP,OnKeepTop)
 	ON_UPDATE_COMMAND_UI(ID_KEEP_TOP,OnUpdateKeepTop)
 	ON_COMMAND(ID_REFRESH_TASK_ICON,OnRefreshTaskIcon)
+	ON_COMMAND(ID_BACKUP_CFG, OnBackupCfg)
 	ON_WM_TIMER()
 	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
@@ -312,5 +313,14 @@ void MainFrame::OnRefreshTaskIcon()
 			int x = 0;
 		}
 	}
-
 }
+
+void MainFrame::OnBackupCfg()
+{
+	auto folder = ShellTool::GetAppPath();
+	auto t = ShellTool::GetCurrentTimeMs();
+	auto time = StringTool::Format("%06d.%06d", t.date(), t.time());
+	auto filePath = StringTool::Format("%s/backup/%s.ini", folder.c_str(),time.c_str());
+	theApp.mIni.Dump(filePath);
+}
+

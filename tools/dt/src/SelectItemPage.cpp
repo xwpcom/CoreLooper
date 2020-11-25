@@ -1,12 +1,7 @@
-// SelectItemPage.cpp : implementation file
-//
-
 #include "pch.h"
 #include "SelectItemPage.h"
 #include "afxdialogex.h"
 #include "resource.h"
-
-// SelectItemPage dialog
 
 IMPLEMENT_DYNAMIC(SelectItemPage, BasePage)
 

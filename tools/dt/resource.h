@@ -72,6 +72,7 @@
 #define IDC_SEL_1                       1022
 #define IDC_SEL_2                       1023
 #define ID_REFRESH_TASK_ICON            4000
+#define ID_BACKUP_CFG                   4001
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_APP_FIRST                    33000
 #define ID_TAB_NEW                      34000

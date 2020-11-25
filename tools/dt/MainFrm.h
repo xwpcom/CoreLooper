@@ -62,6 +62,7 @@ protected:
 	void OnKeepTop();
 	DECLARE_MESSAGE_MAP()
 	void OnRefreshTaskIcon();
+	void OnBackupCfg();
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
