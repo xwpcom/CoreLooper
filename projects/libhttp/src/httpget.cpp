@@ -69,6 +69,7 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 	__super::OnConnect(endPoint, error, pBox, extraInfo);
 
 	//已测试,windows iocp connect 20秒自动超时
+
 	if (error)
 	{
 		mSignaled = true;
@@ -89,11 +90,6 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 			//下载文件,需要支持断点续传
 			string tmpFilePath = mAckInfo.mSaveAsFilePath + ".tmp";
 			ASSERT(!mAckInfo.mFile);
-
-			//if (File::PathIsDirectory(tmpFilePath))
-			{
-				//File::DeleteFolder(tmpFilePath.c_str());
-			}
 
 			File::CreateFolderForFile(tmpFilePath);
 			mAckInfo.mFile = fopen(tmpFilePath.c_str(), "wb");

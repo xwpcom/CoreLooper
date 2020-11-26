@@ -19,12 +19,11 @@ namespace Net {
 namespace Http {
 
 NameValue *HttpRequest::m_mapUriFile = NULL;
-
+static const char* TAG = "HttpRequest";
 HttpRequest::HttpRequest()
 {
 	m_outbox = NULL;
 	m_httpRequestTransform = NULL;
-	m_httpServerInfo = NULL;
 	m_userAuth = this;
 
 	Reset();
@@ -32,7 +31,7 @@ HttpRequest::HttpRequest()
 
 HttpRequest::~HttpRequest()
 {
-	//DW("HttpRequest::~HttpRequest,this=0x%x",this);
+	//LogW(TAG,"HttpRequest::~HttpRequest,this=0x%x",this);
 	m_handler = nullptr;
 }
 
@@ -58,7 +57,8 @@ int HttpRequest::Input(ByteBuffer& inbox)
 			return -1;
 		}
 
-		//处理http post时要返回一些数据，否则浏览器可能一直等待
+		/*处理http post时要返回一些数据，否则浏览器可能一直等待 */
+
 		if (mHttpPostHandler->IsDone())
 		{
 			Output(
@@ -82,7 +82,7 @@ int HttpRequest::Input(ByteBuffer& inbox)
 		}
 
 		//当前handler完成后才处理
-		//DW("delay parse http request");
+		//LogW(TAG,"delay parse http request");
 		return 0;
 	}
 
@@ -99,7 +99,7 @@ int HttpRequest::Input(ByteBuffer& inbox)
 
 	if (pData[0] == '\r' && pData[1] == '\n')
 	{
-		DW("eat bad pending data for IE6");
+		LogW(TAG,"eat bad pending data for IE6");
 		inbox.Eat(2);
 		pData = inbox.GetDataPointer();
 		cbData -= 2;
@@ -169,26 +169,6 @@ int HttpRequest::Input(ByteBuffer& inbox)
 			{
 				return 0;
 			}
-#ifdef _MINI_HTTP
-			if (ret)
-			{
-				static int idx = -1;
-				++idx;
-				DG("httpFail(%s)[%04d],drop data[%s]", m_headerInfo.m_peerAddr.c_str(), idx, m_headerInfo.m_request);
-				inbox.clear();
-				m_headerInfo.Reset();
-				return -1;
-			}
-			else
-			{
-				if (strstr(m_headerInfo.m_request, "McuDeviceStatus.xml") == nullptr)
-				{
-					static int idx = -1;
-					++idx;
-					//DV("httpOK(%s)[%04d],data[%s]", m_headerInfo.m_peerAddr.c_str(), idx, m_headerInfo.m_request);
-				}
-			}
-#endif
 
 			if (m_headerInfo.m_httpMethod == "POST")
 			{
@@ -310,7 +290,7 @@ int HttpRequest::OnHeaderContentReady()
 	m_handler = CreateHandler(m_headerInfo.m_uri);
 	if (!m_handler)
 	{
-		DW("no handler for [%s]", m_headerInfo.m_uri.c_str());
+		LogW(TAG,"no handler for [%s]", m_headerInfo.m_uri.c_str());
 		ASSERT(FALSE);
 		return 0;
 	}
@@ -361,7 +341,7 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 	}
 	else
 	{
-		DW("no transform ptr for [%s]", target.c_str());
+		LogW(TAG,"no transform ptr for [%s]", target.c_str());
 		ASSERT(FALSE);
 	}
 
@@ -466,7 +446,7 @@ int HttpRequest::ParseHeader()
 			ret = sscanf(request, szFmt, szReq, szUrl, szHttpVer);
 			if (ret != 3)
 			{
-				DW("invalid http request");
+				LogW(TAG,"invalid http request");
 				return -1;
 			}
 		}
@@ -479,7 +459,7 @@ int HttpRequest::ParseHeader()
 		m_headerInfo.m_httpMethod = szReq;
 		HttpTool::EscapeUrlString(szUrl);
 		m_headerInfo.mUrl = szUrl;
-		//DW("HTTP Method=[%s]",m_headerInfo.m_httpMethod.c_str());
+		//LogW(TAG,"HTTP Method=[%s]",m_headerInfo.m_httpMethod.c_str());
 
 		HttpTool::ParseUrlParam(szUrl, m_headerInfo.m_uri, m_headerInfo.m_urlParam);
 		{
@@ -516,7 +496,7 @@ int HttpRequest::ParseHeader()
 
 					if (ret <= 0)
 					{
-						DW("fail get m_range");
+						LogW(TAG,"fail get m_range");
 					}
 
 					m_headerInfo.m_range = range;
@@ -526,7 +506,7 @@ int HttpRequest::ParseHeader()
 					{
 						m_headerInfo.m_rangeEnd = m_headerInfo.m_range;
 					}
-					//DW("m_range=%d",m_range);
+					//LogW(TAG,"m_range=%d",m_range);
 				}
 			}
 		}
@@ -748,7 +728,7 @@ int HttpRequest::Output(LPBYTE pData, int cbData)
 	int ret = m_outboxPending.Write(pData, cbData);
 	if (ret != cbData)
 	{
-		DW("HttpRequest outbox overflow");
+		LogW(TAG,"HttpRequest outbox overflow");
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -760,10 +740,6 @@ int HttpRequest::Output(LPBYTE pData, int cbData)
 string  HttpRequest::GetServerName()
 {
 	string  name;
-	if (m_httpServerInfo)
-	{
-		name = m_httpServerInfo->GetServerName();
-	}
 
 	return name;
 }
@@ -1067,29 +1043,6 @@ int HttpRequest::PreProcessHeader()
 		int ret = Transform("rtsp", box);
 		return 0;
 	}
-	/*
-	else if(
-		uri.CompareNoCase("videostream.asf")==0
-		|| uri.CompareNoCase("video.asf")==0
-		)
-	{
-		ByteBuffer box;
-		box.Write(request,len+1);//以'\0'结尾
-		int ret=Transform("asf",box);
-		return 0;
-	}
-	else if(m_headerInfo.m_httpMethod=="POST" && uri.Find("/onvif/")!=-1)
-	{
-		//string  onvifXml(m_headerInfo.m_request+m_headerInfo.m_headerLength,m_headerInfo.m_contentLength);
-		const char *onvifXml=m_headerInfo.m_request+m_headerInfo.m_headerLength;
-		ByteBuffer box;
-		box.Write((LPVOID)onvifXml,m_headerInfo.m_contentLength);
-		box.WriteByte(0);//以'\0'结尾
-
-		Transform("onvif",box);
-		return 0;
-	}
-	*/
 
 	return -1;
 }

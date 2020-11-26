@@ -53,9 +53,7 @@ int HttpRequestHandler_Json::Start(tagHttpHeaderInfo* headerInfo)
 
 		HttpAckHeader httpAckHeader;
 		httpAckHeader.SetStatusCode("200 OK");
-#ifndef _MINI_HTTP
 		httpAckHeader.SetConnection("Keep-Alive");
-#endif
 		httpAckHeader.SetCacheControl("no-cache,no-store");//,must-revalidate");
 		httpAckHeader.SetContentType("application/json;charset=UTF-8");
 

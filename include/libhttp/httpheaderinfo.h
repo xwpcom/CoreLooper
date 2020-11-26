@@ -1,6 +1,5 @@
 ﻿#pragma once
 //XiongWanPing 2017.07.19
-#define _MINI_HTTP	//mcu单片机流量较贵，所以精简一下
 
 #include "auth/userinfo.h"
 #include "auth/userman.h"

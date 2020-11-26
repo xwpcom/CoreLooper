@@ -11,18 +11,14 @@ namespace Http {
 HttpServer::HttpServer()
 {
 	SetObjectName("HttpServer");
-	//DV("%s", __func__);
 }
 
 HttpServer::~HttpServer()
 {
-	//DV("%s", __func__);
 }
 
 std::shared_ptr<Channel> HttpServer::CreateChannel()
 {
-	//DV("%s",__func__);
-
 	auto client(make_shared<Net::TcpClient>());
 #ifdef _CONFIG_OPENSSL
 	if (mUseTls)
@@ -36,8 +32,6 @@ std::shared_ptr<Channel> HttpServer::CreateChannel()
 
 void HttpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bundle*extraInfo)
 {
-	//DV("%s", __func__);
-
 	TcpClient* client = (TcpClient*)endPoint;
 	client->SignalOnConnect.disconnect(this);
 

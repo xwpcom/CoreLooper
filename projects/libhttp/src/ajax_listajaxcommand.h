@@ -7,7 +7,7 @@ class UserInfo;
 namespace Net {
 namespace Http {
 
-//rtsp通道创建后可发送Login.xml来登录
+
 class Ajax_ListAjaxCommand :public AjaxHandler
 {
 	DECLARE_AJAX_CLASS(Ajax_ListAjaxCommand)

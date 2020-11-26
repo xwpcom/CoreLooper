@@ -1,3 +1,7 @@
+# 2020.11.26
+todo:
+- 采用CListCtrl virtual来加速
+https://blog.csdn.net/business122/article/details/78336945?utm_source=blogxgwz3
 
 # 2020.07.14
 - 采用比较笨的办法回避了LogPage中list.GetNextItem(-1, LVNI_SELECTED);异常问题

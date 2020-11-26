@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "httprequesthandler_ajax.h"
-//#include "httpclient.h"
 #include "libhttp/ajaxcommandhandler.h"
 using namespace Bear::Core;
 
@@ -49,17 +48,13 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 			}
 		}
 
-		xml =
-			//"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ 
-			ajax->Process(headerInfo->mUrl);// , headerInfo->m_urlParam);
-		DWORD len = (int)xml.length();
+		xml =ajax->Process(headerInfo->mUrl);
+		auto len = (int)xml.length();
 
 		HttpAckHeader httpAckHeader;
 		httpAckHeader.SetStatusCode("200 OK");
-#ifndef _MINI_HTTP
 		httpAckHeader.SetConnection("Keep-Alive");
-#endif
-		httpAckHeader.SetCacheControl("no-cache,no-store");//,must-revalidate");
+		httpAckHeader.SetCacheControl("no-cache,no-store");
 		httpAckHeader.SetContentType("text/xml;charset=UTF-8");
 
 		if (len > 0)
@@ -82,7 +77,6 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 
 		ack=StringTool::Format(
 			"HTTP/1.1 501\r\n"
-			//"Server: %s\r\n"
 			"Cache-Control: no-cache,no-store,must-revalidate\r\n"
 			"Connection: Close\r\n"
 			"\r\n"
@@ -90,35 +84,8 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 		xml.clear();
 	}
 
-	/*
-	ack.Format(
-		"HTTP/1.1 200 OK\r\n"
-		//"Server: %s\r\n"
-		"Cache-Control: no-cache,no-store,must-revalidate\r\n"
-		"%s"//extra header
-		"Content-Length: %lu\r\n"
-		"Content-Type: text/xml;charset=UTF-8\r\n"
-		"Connection: Keep-Alive\r\n"
-		"\r\n"
-		,
-		m_szXmlAckExtraHeader.IsEmpty()?"":m_szXmlAckExtraHeader.c_str(),
-		len
-		);
-	//*/
-
 	Output(ack);
 	Output(xml);
-
-#ifdef _MSC_VER_DEBUG
-	{
-		static int idx = -1;
-		++idx;
-		string  filePath = StringTool::Format("d:/test/device/%04d_ack.bin", idx);
-
-		File::Dump(ack + xml, filePath.c_str());
-	}
-#endif
-
 
 	SetStatus(eHttpHandlerStatus_Done);
 	return 0;

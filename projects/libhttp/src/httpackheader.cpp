@@ -25,19 +25,15 @@ string  HttpAckHeader::ack(BOOL addTail)
 	string  header = StringTool::Format(
 		"HTTP/%s %s\r\n"
 		"Content-Type: %s\r\n"
-#ifndef _MINI_HTTP
 		//"Server: %s\r\n"
 		"Connection: %s\r\n"
-#endif
 		"%s"
 		,
 		m_httpVersion.empty() ? "1.1" : m_httpVersion.c_str(),
 		m_statusCode.empty() ? "200 OK" : m_statusCode.c_str(),
 		m_contentType.empty() ? "" : m_contentType.c_str(),
-#ifndef _MINI_HTTP
 		//m_serverDesc.c_str(),
-		m_connection.IsEmpty() ? "Keep-Alive" : m_connection.c_str(),
-#endif
+		m_connection.empty() ? "Keep-Alive" : m_connection.c_str(),
 
 		""//hold place
 	);

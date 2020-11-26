@@ -10,6 +10,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpHandler";
+
 HttpHandler::HttpHandler()
 {
 	SetObjectName("HttpHandler");
@@ -135,7 +137,7 @@ void HttpHandler::OnReceive(Channel*)
 		int freeSize = mInbox.GetFreeSize();
 		if (freeSize < 2)//for easy parse,end with '\0'
 		{
-			DW("mInbox is full,dataLen=%d", mInbox.GetActualDataLength());
+			LogW(TAG,"mInbox is full,dataLen=%d", mInbox.GetActualDataLength());
 			return;
 		}
 
@@ -148,7 +150,7 @@ void HttpHandler::OnReceive(Channel*)
 			int ret = mChannel->Receive(buf, len);
 			if (ret == 0)
 			{
-				//DW("socket is broken by client");
+				//LogW(TAG,"socket is broken by client");
 
 				mChannel->Close();
 				return;
@@ -159,27 +161,10 @@ void HttpHandler::OnReceive(Channel*)
 				return;
 			}
 
-#ifdef _MSC_VER
-			if (0)
-			{
-				static DumpFile dump;
-				if (!dump.IsOpen())
-				{
-					dump.Open(ShellTool::GetAppPath() + "/http/recv.bin");
-				}
-				dump.Write(buf, ret);
-			}
-#endif
-
 			buf[ret] = 0;
 			mInbox.Write(buf, ret);
 			mInbox.MakeSureEndWithNull();
 
-#ifdef _MSC_VER_DEBUG
-			{
-				//File::ReadFile("d:/recv.bin", mInbox);
-			}
-#endif
 			ParseInbox();
 		}
 		else
@@ -242,7 +227,7 @@ void HttpHandler::ParseInbox()
 
 			if (mChannel)
 			{
-				DW("no handler for websockt url:%s", url.c_str());
+				LogW(TAG,"no handler for websockt url:%s", url.c_str());
 
 				mChannel->Destroy();
 				mChannel = nullptr;

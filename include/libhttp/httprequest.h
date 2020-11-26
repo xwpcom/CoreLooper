@@ -30,12 +30,6 @@ public:
 	virtual int OnHttpRequestTransform(std::string  target, ByteBuffer& box) = 0;
 };
 
-class IHttpServerInfo
-{
-public:
-	virtual ~IHttpServerInfo() {}
-	virtual std::string  GetServerName() = 0;
-};
 #include "libhttp/httpconfig.h"
 class HttpRequestHandler;
 class HttpPostHandler;
@@ -79,10 +73,6 @@ public:
 	bool IsSending()const;
 	virtual void Process();
 
-	void SetHttpServerInfo(IHttpServerInfo *httpServerInfo)
-	{
-		m_httpServerInfo = httpServerInfo;
-	}
 	void SetTransformPtr(IHttpRequestTransform	*iHttpRequestTransform)
 	{
 		m_httpRequestTransform = iHttpRequestTransform;
@@ -155,7 +145,6 @@ protected:
 	tagHttpHeaderInfo		m_headerInfo;
 
 	IUserInfo				*m_userAuth;
-	IHttpServerInfo			*m_httpServerInfo;
 	IHttpRequestTransform	*m_httpRequestTransform;
 
 	std::shared_ptr<HttpRequestHandler> m_handler;
