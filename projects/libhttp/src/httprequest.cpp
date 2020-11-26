@@ -864,21 +864,6 @@ int HttpRequest::OnRedirect(const char *pszPage)
 	return 0;
 }
 
-bool HttpRequest::IsSending()const
-{
-	if (m_outboxPending.GetActualDataLength() > 0)
-	{
-		return true;
-	}
-
-	if (m_handler && m_handler->IsSending())
-	{
-		return true;
-	}
-
-	return false;
-}
-
 bool HttpRequest::IsDone()
 {
 	return m_eHttpRequestStatus == eHttpRequestStatus_Done && m_outboxPending.empty();

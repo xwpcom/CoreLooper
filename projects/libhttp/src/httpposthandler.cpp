@@ -17,6 +17,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpPostHandler";
+
 HttpPostHandler::HttpPostHandler()
 {
 	mState = eState_WaitHttpHeader;
@@ -132,7 +134,7 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 			int rangeStart = atoi(range.c_str());
 			rangeStart = MAX(0, rangeStart);
 
-			DV("field=[%s],filename=[%s]", fieldName.c_str(), filename.c_str());
+			LogV(TAG,"field=[%s],filename=[%s]", fieldName.c_str(), filename.c_str());
 			mCommandHander->BeginField(fieldName, rangeStart);
 
 			int bytes = (int)(end + CRLF2LEN - psz);
@@ -194,8 +196,6 @@ shared_ptr<HttpPostCommandHandler> HttpPostHandler::CreatePostHandler(shared_ptr
 		obj->SetConfig(mWebConfig);
 		return obj;
 	}
-
-
 
 	auto obj = make_shared<HttpPostCommandHandler>();
 	obj->Init(mHeader);

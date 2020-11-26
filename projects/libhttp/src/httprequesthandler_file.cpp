@@ -28,21 +28,6 @@ HttpRequestHandler_File::~HttpRequestHandler_File()
 	}
 }
 
-bool HttpRequestHandler_File::IsSending()
-{
-	if (!m_hFile)
-	{
-		return false;
-	}
-
-	if (m_fileOffset < m_fileSize)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 /*
 http range bytes是[min,max]
 比如bytes=0-100时服务器会传101字节

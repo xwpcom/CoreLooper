@@ -70,7 +70,6 @@ public:
 	int Input(ByteBuffer& inbox);
 	void SetOutbox(ByteBuffer *outbox);
 
-	bool IsSending()const;
 	virtual void Process();
 
 	void SetTransformPtr(IHttpRequestTransform	*iHttpRequestTransform)

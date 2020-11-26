@@ -8,6 +8,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "Http_Ajax";
+
 HttpRequestHandler_Ajax::HttpRequestHandler_Ajax()
 {
 }
@@ -18,7 +20,8 @@ HttpRequestHandler_Ajax::~HttpRequestHandler_Ajax()
 
 int HttpRequestHandler_Ajax::Process()
 {
-	ASSERT(FALSE);
+	LogV(TAG, "(%p)%s",this,__func__);
+	//ASSERT(FALSE);
 	return 0;
 }
 
@@ -73,8 +76,6 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 	}
 	else
 	{
-		//ASSERT(FALSE);
-
 		ack=StringTool::Format(
 			"HTTP/1.1 501\r\n"
 			"Cache-Control: no-cache,no-store,must-revalidate\r\n"

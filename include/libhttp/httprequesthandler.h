@@ -33,12 +33,6 @@ public:
 	virtual int Start(tagHttpHeaderInfo *headerInfo);
 	virtual int Process();
 
-	//用来支持大数据分块收发
-	virtual bool IsSending()
-	{
-		return false;
-	}
-
 	virtual bool IsRecving()
 	{
 		return false;

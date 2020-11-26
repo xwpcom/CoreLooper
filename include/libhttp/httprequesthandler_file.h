@@ -15,7 +15,6 @@ public:
 
 	virtual int Start(tagHttpHeaderInfo *headerInfo);
 	virtual int Process();
-	virtual bool IsSending();
 
 	static void AddUriFileMap(std::string  uri, std::string  filepath);
 	static void EmptyUriFileMap();
