@@ -23,6 +23,7 @@ public:
 
 	virtual int Input(ByteBuffer& inbox);
 	virtual bool IsDone();
+	virtual string GetAck();
 
 	virtual void SetConfig(std::shared_ptr<tagWebServerConfig> config)
 	{
@@ -35,6 +36,7 @@ protected:
 		eState_WaitHttpHeader,
 		eState_WaitFormDataHeader,
 		eState_WaitFormDataBody,
+		eState_WaitSimpleHttpBody,//non-chunked,none-form format data,such as json
 		eState_Done,
 	};
 	void SwitchState(eState state);
@@ -45,6 +47,8 @@ protected:
 
 	std::shared_ptr<HttpPostCommandHandler>	mCommandHander;
 	std::shared_ptr<tagWebServerConfig>		mWebConfig;
+
+	ULONG mContentLength=0;//used when eState_WaitSimpleHttpBody
 };
 }
 }

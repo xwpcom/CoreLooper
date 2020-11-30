@@ -226,6 +226,7 @@
     <ClCompile Include="src\mime.cpp" />
     <ClCompile Include="src\posthandler_uploadpicture.cpp" />
     <ClCompile Include="src\posthandler_uploadvideo.cpp" />
+    <ClCompile Include="src\postjsonmanager.cpp" />
     <ClCompile Include="src\procmanager.cpp" />
     <ClCompile Include="src\tests\demohttprequesthandler.cpp" />
     <ClCompile Include="src\tests\http_unittest.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="..\..\include\libhttp\mime.h" />
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadpicture.h" />
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadvideo.h" />
+    <ClInclude Include="..\..\include\libhttp\postjsonmanager.h" />
     <ClInclude Include="..\..\include\libhttp\procmanager.h" />
     <ClInclude Include="..\..\include\libhttp\websockethandler.h" />
     <ClInclude Include="..\..\include\libhttp\websocketsplitter.h" />

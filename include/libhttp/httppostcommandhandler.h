@@ -15,19 +15,25 @@ public:
 	HttpPostCommandHandler();
 	virtual ~HttpPostCommandHandler();
 
-	int Init(shared_ptr<HttpHeader> header);
+	virtual int Init(shared_ptr<HttpHeader> header);
 	virtual void SetConfig(shared_ptr<tagWebServerConfig> config)
 	{
 		mWebConfig = config;
 	}
+	virtual string GetAck();
 
 	//接收完所有数据时会调用本接口
 	//error为0表示成功，否则表示失败
 	virtual void OnFinishRecvData(int error);
-	HttpFormField::eResult Input(ByteBuffer& inbox);
+	virtual HttpFormField::eResult Input(ByteBuffer& inbox);
 
-	int BeginField(const string & fieldName, int rangeStart = 0);
-	int EndField();
+	virtual int BeginField(const string & fieldName, int rangeStart = 0);
+	virtual int EndField();
+
+	void SetContentLength(int v)
+	{
+		mContentLength = v;
+	}
 protected:
 	virtual shared_ptr<HttpFormField> CreateField(const string & fieldName);
 
@@ -38,6 +44,9 @@ protected:
 	vector<shared_ptr<HttpFormField>> mFields;
 	shared_ptr<tagWebServerConfig> mWebConfig;
 
+	int mContentLength = 0;
+	ByteBuffer mInboxBody;
+	string mAck;
 };
 }
 }

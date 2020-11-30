@@ -330,10 +330,18 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 
 		if (mHttpPostHandler->IsDone())
 		{
-			Output(
-				"HTTP/1.1 200 OK\r\n"
-				"\r\n"
-			);
+			auto ack = mHttpPostHandler->GetAck();
+			if (ack.empty())
+			{
+				Output(
+					"HTTP/1.1 200 OK\r\n"
+					"\r\n"
+				);
+			}
+			else
+			{
+				Output(ack);
+			}
 
 			SetStatus(eHttpRequestStatus_Done);
 		}

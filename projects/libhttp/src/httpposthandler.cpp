@@ -58,8 +58,8 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 		{
 		case eState_WaitHttpHeader:
 		{
-			const char *psz = (const char *)inbox.GetDataPointer();
-			int len = inbox.GetActualDataLength();
+			const char *psz = (const char *)inbox.data();
+			int len = inbox.length();
 			if (!psz)
 			{
 				return 0;
@@ -77,15 +77,55 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 			mHeader = make_shared<HttpHeader>();
 			mHeader->Parse(ackHeader);
 			tagHttpHeader& header = mHeader->GetHeader();
-			ASSERT(!mCommandHander);
 
-			mCommandHander = CreatePostHandler(mHeader);
+			/*
+			Content-Type: multipart/form-data; boundary=
+			*/
+			{
+				auto ContentType=header.mFields.GetString("Content-Type");
+				if (ContentType.find("multipart/form-data") != string::npos)
+				{
+					ASSERT(!mCommandHander);
 
-			inbox.Eat(bytes);
-			SwitchState(eState_WaitFormDataHeader);
+					mCommandHander = CreatePostHandler(mHeader);
+
+					inbox.Eat(bytes);
+					SwitchState(eState_WaitFormDataHeader);
+				}
+				else
+				{
+					auto ContentLength = header.mFields.GetInt("Content-Length");
+					if (ContentLength > 0)
+					{
+						ASSERT(!mCommandHander);
+
+						mCommandHander = CreatePostHandler(mHeader);
+
+						inbox.Eat(bytes);
+						mContentLength = ContentLength;
+						mCommandHander->SetContentLength(ContentLength);
+						SwitchState(eState_WaitSimpleHttpBody);
+					}
+				}
+				int x = 0;
+			}
+
 			break;
 		}
+		case eState_WaitSimpleHttpBody:
+		{
+			ASSERT(mCommandHander);
 
+			const char* psz = (const char*)inbox.data();
+			auto len = inbox.length();
+			auto ret=mCommandHander->Input(inbox);
+			if (ret == HttpFormField::eResult_Finish)
+			{
+				SwitchState(eState_Done);
+				break;
+			}
+			break;
+		}
 		case eState_WaitFormDataHeader:
 		{
 			ASSERT(mCommandHander);
@@ -167,6 +207,16 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 	}
 
 	return 0;
+}
+
+string HttpPostHandler::GetAck()
+{
+	if (mCommandHander)
+	{
+		return mCommandHander->GetAck();
+	}
+
+	return "";
 }
 
 bool HttpPostHandler::IsDone()
