@@ -110,7 +110,8 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 					auto obj = _Object(PostJsonManager, "PostJsonManager");
 					if (obj)
 					{
-						string name = "";
+						auto& header=mHeader->GetHeader();
+						string name = header.mUri;
 						auto handler = obj->CreatePostJsonHandler(name);
 						if (handler)
 						{
@@ -140,7 +141,7 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 
 				if (mAck.empty())
 				{
-					string jsonText = "{\"error\":-1,\"\"desc\":\"no found json handler\"}";
+					string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
 					mAck = StringTool::Format(
 						"HTTP/1.1 200\r\n"
 						"Content-Type: application/json;charset=UTF-8\r\n"
