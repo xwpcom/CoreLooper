@@ -7,7 +7,7 @@ namespace Net {
 namespace Protocol {
 namespace CTP {
 
-static const char* TAG = "CommonTextProtocol_Impl";
+static const char* TAG = "ctp";
 
 CommonTextProtocol_Impl::CommonTextProtocol_Impl()
 {
@@ -51,7 +51,7 @@ int CommonTextProtocol_Impl::Input(void* data, int dataBytes)
 		int ret = mInbox.Write(d, inputBytes);
 		if (ret != inputBytes || mInbox.MakeSureEndWithNull())
 		{
-			DW("inbox overflow");
+			LogW(TAG,"inbox overflow");
 			return eatBytes;
 		}
 

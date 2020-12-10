@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "protocol/ctp/CommonTextProtocol.h"
 
 namespace Bear {
@@ -31,14 +31,14 @@ protected:
 	//CommonTextProtocolCB#begin
 	virtual void OnCommand(CommonTextProtocol* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody, Bundle& ackBundle, ByteBuffer& ackBody);
 
-	//ÊÕµ½¶Ô·½µÄÍ¨ÖªÊ±µ÷ÓÃ±¾½Ó¿Ú
+	//æ”¶åˆ°å¯¹æ–¹çš„é€šçŸ¥æ—¶è°ƒç”¨æœ¬æ¥å£
 	virtual void OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body);
 
-	//Ğ­ÒéµÈ³ö´íÊ±µ÷ÓÃ±¾½Ó¿Ú
-	//Õı³£Çé¿öÏÂ²»»á´¥·¢,½öÓÃÓÚ¿ª·¢µ÷ÊÔ
+	//åè®®ç­‰å‡ºé”™æ—¶è°ƒç”¨æœ¬æ¥å£
+	//æ­£å¸¸æƒ…å†µä¸‹ä¸ä¼šè§¦å‘,ä»…ç”¨äºå¼€å‘è°ƒè¯•
 	virtual void OnError(CommonTextProtocol* obj, int error, const string& desc);
 
-	//ÓĞÊı¾İÒª·¢¸ø¶Ô·½Ê±£¬»áµ÷ÓÃ±¾½Ó¿Ú
+	//æœ‰æ•°æ®è¦å‘ç»™å¯¹æ–¹æ—¶ï¼Œä¼šè°ƒç”¨æœ¬æ¥å£
 	virtual void Output(CommonTextProtocol* obj, const ByteBuffer& data);
 	//CommonTextProtocolCB#end
 

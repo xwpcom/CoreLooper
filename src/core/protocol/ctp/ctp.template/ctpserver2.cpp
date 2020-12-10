@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "core/protocol/ctp/ctpserver2.h"
 #include "core/protocol/ctp/CtpHandler2.h"
 

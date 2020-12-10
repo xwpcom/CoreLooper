@@ -23,9 +23,11 @@ public:
 		AddCommand(cmd, d);
 	}
 	virtual void AddCommand(const string& cmd, const Bundle& bundle);
+
 protected:
 	void OnCreate();
 	void OnTimer(long id);
+	virtual void OnProtocolCreated() {}
 
 	//CommonTextProtocolCB2#begin
 	virtual void OnCommand(CommonTextProtocol2* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody);

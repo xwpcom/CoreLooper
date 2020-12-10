@@ -26,6 +26,14 @@ public:
 
 	//收到网络包时调用本接口来解析处理
 	virtual int Input(void *data, int dataBytes);
+	void SetReliableMode(bool reliableMode)
+	{
+		mReliableMode = reliableMode;
+	}
+	bool IsReliableMode()const
+	{
+		return mReliableMode;
+	}
 
 protected:
 	virtual int AddCommand(const string&cmd);
@@ -46,10 +54,21 @@ protected:
 	bool mReset = false;
 	int mSeq = -1;
 
+	void SetKeyString(const string &cmd, const string& seq, const string& bytes)
+	{
+		mStringCmd = cmd;
+		mStringSeq = seq;
+		mStringBytes = bytes;
+	}
 private:
 	ByteBuffer mInbox;
 	ByteBuffer mOutbox;
+	
+	string mStringCmd = "_cmd";
+	string mStringSeq = "_seq";
+	string mStringBytes = "_bytes";
 
+	bool mReliableMode = true;
 };
 
 }

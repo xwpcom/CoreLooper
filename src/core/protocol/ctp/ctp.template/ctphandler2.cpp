@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "core/protocol/ctp/CtpHandler2.h"
 
 namespace Bear {
@@ -71,7 +71,10 @@ void CtpHandler2::OnConnect(Channel*, long error, Bundle*)
 		else
 		{
 			mProtocol = CommonTextProtocolFactory2::Create();
+
 			mProtocol->SetCB(this);
+
+			OnProtocolCreated();
 		}
 
 		int second = 60;
@@ -87,14 +90,14 @@ void CtpHandler2::OnCommand(CommonTextProtocol2* obj, const string& cmd, const B
 	int x = 0;
 }
 
-//Ğ­ÒéµÈ³ö´íÊ±µ÷ÓÃ±¾½Ó¿Ú
-//Õı³£Çé¿öÏÂ²»»á´¥·¢,½öÓÃÓÚ¿ª·¢µ÷ÊÔ
+//åè®®ç­‰å‡ºé”™æ—¶è°ƒç”¨æœ¬æ¥å£
+//æ­£å¸¸æƒ…å†µä¸‹ä¸ä¼šè§¦å‘,ä»…ç”¨äºå¼€å‘è°ƒè¯•
 void CtpHandler2::OnError(CommonTextProtocol2* obj, int error, const string& desc)
 {
 
 }
 
-//ÓĞÊı¾İÒª·¢¸ø¶Ô·½Ê±£¬»áµ÷ÓÃ±¾½Ó¿Ú
+//æœ‰æ•°æ®è¦å‘ç»™å¯¹æ–¹æ—¶ï¼Œä¼šè°ƒç”¨æœ¬æ¥å£
 void CtpHandler2::Output(CommonTextProtocol2* obj, const ByteBuffer& data)
 {
 	int ret = mOutbox.Append(data);
@@ -141,13 +144,13 @@ void CtpHandler2::CheckSend()
 
 			if (ret < frameLen)
 			{
-				//Ö»·¢ÁËÒ»²¿·Ö,mOutboxÖĞÃ»·¢ÍêµÄÊı¾İÏÂ´Î»áÔÙ·¢ËÍ
+				//åªå‘äº†ä¸€éƒ¨åˆ†,mOutboxä¸­æ²¡å‘å®Œçš„æ•°æ®ä¸‹æ¬¡ä¼šå†å‘é€
 				return;
 			}
 		}
 		else
 		{
-			//·¢ËÍ³ö´í
+			//å‘é€å‡ºé”™
 			return;
 		}
 	}
@@ -181,6 +184,7 @@ void CtpHandler2::AddCommand(const string& cmd, const Bundle& bundle)
 		mProtocol->AddCommand(cmd, bundle);
 	}
 }
+
 
 }
 }

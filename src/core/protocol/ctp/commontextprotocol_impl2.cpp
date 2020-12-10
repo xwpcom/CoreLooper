@@ -7,7 +7,13 @@ namespace Net {
 namespace Protocol {
 namespace CTP {
 
-static const char* TAG = "CommonTextProtocol_Impl2";
+static const char* TAG = "ctp2";
+
+/*
+#define mStringCmd.c_str()				"_cmd"
+#define mStringSeq.c_str()			"_seq"
+#define mStringBytes.c_str()	"_bytes"
+*/
 
 CommonTextProtocol_Impl2::CommonTextProtocol_Impl2()
 {
@@ -80,13 +86,39 @@ const char* CommonTextProtocol_Impl2::stristr(const char* psz0, const char* psz1
 
 int CommonTextProtocol_Impl2::ParseInbox()
 {
-	const LPBYTE data = mInbox.data();
-	const int dataLen = mInbox.length();
+	LPBYTE data = mInbox.data();
+	int dataLen = mInbox.length();
 
 	if (!data || dataLen <= 0)
 	{
 		//ASSERT(FALSE);
 		return -1;
+	}
+
+	if (!IsReliableMode())
+	{
+		/*
+		* 2020.12.10,rs485 dtu,sctp混杂485总线数据
+		* 清除所有非可见字符，直到遇到cmd=
+		*/
+		string header = mStringCmd + "=";
+		const int headerBytes = (int)header.length();
+		int i = 0;
+		bool found = false;
+		for (i = 0; i < dataLen - headerBytes; i++)
+		{
+			if (memcmp(data + i, header.c_str(), headerBytes)==0)
+			{
+				found = true;
+
+				mInbox.Eat(i);
+				data = mInbox.data();
+				dataLen = mInbox.length();
+				break;
+			}
+		}
+
+		int x = 0;
 	}
 
 	mInbox.Lock();
@@ -119,7 +151,8 @@ int CommonTextProtocol_Impl2::ParseInbox()
 			int nContentLength = 0;
 			//检查是否存在Content-Length
 			{
-				const char* pszKey = "\r\n" CTP_CMD_BODY_LENGTH "=";
+				const auto key = "\r\n"+mStringBytes+ "=";
+				const char* pszKey = key.c_str();
 				const char* pszLength = stristr(psz, pszKey);
 				//注意只能搜索\r\n\r\n之前的Content-Leghth,避免和下一条命令串扰
 				if (pszLength && pszLength < pszHeaderTail)
@@ -153,7 +186,7 @@ int CommonTextProtocol_Impl2::ParseInbox()
 				mInputBody.Write((LPVOID)bodyStart, nContentLength);
 			}
 
-			string cmd = headerItems.GetString(CTP_CMD);
+			string cmd = headerItems.GetString(mStringCmd.c_str());
 			OnCommand(cmd, headerItems, mInputBody);
 
 			int nEat = headerLength + nContentLength;
@@ -211,14 +244,14 @@ int CommonTextProtocol_Impl2::AddCommand(const string& cmd, const Bundle& bundle
 	StringTool::AppendFormat(ackHeader,
 		"%s=%s\r\n"
 		"%s=%d\r\n"
-		, CTP_CMD, cmd.c_str()
-		, CTP_CMD_SEQ, seq
+		, mStringCmd.c_str(), cmd.c_str()
+		, mStringSeq.c_str(), seq
 	);
 
 	const int bodyBytes = body.GetActualDataLength();
 	if (bodyBytes > 0)
 	{
-		StringTool::AppendFormat(ackHeader, "%s=%d\r\n", CTP_CMD_BODY_LENGTH, bodyBytes);
+		StringTool::AppendFormat(ackHeader, "%s=%d\r\n", mStringBytes.c_str(), bodyBytes);
 	}
 
 	{
@@ -226,13 +259,13 @@ int CommonTextProtocol_Impl2::AddCommand(const string& cmd, const Bundle& bundle
 		if (items.size() > 0)
 		{
 #ifdef _DEBUG
-			ASSERT(!bundle.IsKeyExists(CTP_CMD));
-			ASSERT(!bundle.IsKeyExists(CTP_CMD_SEQ));
-			ASSERT(!bundle.IsKeyExists(CTP_CMD_BODY_LENGTH));
+			ASSERT(!bundle.IsKeyExists(mStringCmd.c_str()));
+			ASSERT(!bundle.IsKeyExists(mStringSeq.c_str()));
+			ASSERT(!bundle.IsKeyExists(mStringBytes.c_str()));
 #endif
-			if (bundle.IsKeyExists(CTP_CMD)
-				|| bundle.IsKeyExists(CTP_CMD_SEQ)
-				|| bundle.IsKeyExists(CTP_CMD_BODY_LENGTH)
+			if (bundle.IsKeyExists(mStringCmd.c_str())
+				|| bundle.IsKeyExists(mStringSeq.c_str())
+				|| bundle.IsKeyExists(mStringBytes.c_str())
 				)
 			{
 				ASSERT(false);

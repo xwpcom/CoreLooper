@@ -11,10 +11,6 @@ namespace CTP {
 
 using namespace std;
 
-#define CTP_CMD				"_cmd"
-#define CTP_CMD_SEQ			"_seq"
-#define CTP_CMD_BODY_LENGTH	"_bytes"
-
 class CommonTextProtocol2;
 class CORE_EXPORT CommonTextProtocolCB2
 {
@@ -59,6 +55,10 @@ public:
 	virtual int AddCommand(const string&cmd, const Bundle& bundle, const ByteBuffer& body) = 0;
 
 	virtual void ResetX() = 0;
+
+	virtual void SetReliableMode(bool reliableMode) = 0;
+	virtual bool IsReliableMode()const = 0;
+	virtual void SetKeyString(const string& cmd, const string& len, const string& bytes) = 0;
 };
 
 class CORE_EXPORT CommonTextProtocolFactory2

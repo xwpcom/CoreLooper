@@ -57,7 +57,6 @@ protected:
 private:
 	ByteBuffer mInbox;
 	ByteBuffer mOutbox;
-
 };
 
 }
