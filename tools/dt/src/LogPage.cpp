@@ -45,6 +45,10 @@ void LogPage::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(LogPage, BasePage)
+#ifdef _CONFIG_VLIST
+	ON_NOTIFY(LVN_GETDISPINFO, IDC_LIST, GetDispInfo)
+#endif
+
 	ON_WM_DESTROY()
 	ON_NOTIFY(NM_RCLICK, IDC_LIST, &LogPage::OnNMRClickList)
 	ON_COMMAND(ID_OPEN_FILE_GOTO_LINE, &LogPage::OnOpenFileGotoLine)
@@ -112,6 +116,7 @@ int LogPage::Init()
 	}
 
 	list.SetFont(&mFont);
+	
 	list.SetExtendedStyle(LVS_EX_GRIDLINES | LVS_EX_FULLROWSELECT
 		| LVS_EX_HEADERDRAGDROP | LVS_EX_INFOTIP);// | LVS_EX_LABELTIP );
 	//list.ModifyStyle(LVS_SINGLESEL,NULL);
@@ -124,6 +129,11 @@ int LogPage::Init()
 			virtual COLORREF OnGetCellTextColor(DWORD_PTR context, int row, int col)
 			{
 				auto item = (LogItem*)context;
+				if (!item)
+				{
+					return 0;
+				}
+
 				auto level = item->level;
 				if (level >= 0 && level < COUNT_OF(gColors))
 				{
@@ -135,6 +145,10 @@ int LogPage::Init()
 			virtual COLORREF OnGetCellBkColor(DWORD_PTR context, int row, int col)
 			{
 				auto item = (LogItem*)context;
+				if (!item)
+				{
+					return 0;
+				}
 				static COLORREF clrBK = GetSysColor(COLOR_WINDOW);
 				return clrBK;
 			}
@@ -236,9 +250,11 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		//为简单起见，这里没再严格按date,time排序，绝大部分情况下顺序是正常的
 	}
 	const auto idx=list.InsertItem(nIndex, _T(""));
-	item->mRefs.push_back(item);//从list删除时要释放
+	item->mRefs.push_back(item);//从list删除时要释放 */
 	list.SetItemData(idx, (DWORD_PTR)item.get());
 
+#ifdef _CONFIG_VLIST
+#else
 	USES_CONVERSION;
 	list.SetItemText(nIndex, mArrIdx[eIdxApp], A2T(item->appName.c_str()));
 	list.SetItemText(nIndex, mArrIdx[eIdxTag], A2T(item->tag.c_str()));
@@ -257,6 +273,7 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		list.SetItemText(nIndex, mArrIdx[eIdxMsg], text);
 
 	}
+#endif
 
 	//仅当选中最后一项时才更新选中Item
 	const auto sel = list.GetNextItem(-1, LVNI_SELECTED);
@@ -675,7 +692,7 @@ void LogPage::dump(string desc)
 
 	static int idx = -1;
 	++idx;
-	TRACE("%s,%s[%04d].sel=%04d,\r\n",desc.c_str(), __func__, idx, sel);
+	//TRACE("%s,%s[%04d].sel=%04d,\r\n",desc.c_str(), __func__, idx, sel);
 }
 
 
@@ -685,3 +702,84 @@ void LogPage::OnBnClickedAdd()
 	++idx;
 	//LogV(TAG, "item %04d", idx);
 }
+
+#ifdef _CONFIG_VLIST
+void LogPage::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
+	LV_ITEM* pItem = &(pDispInfo)->item;
+	auto item = (LogItem*)mListCtrl.GetItemData(pItem->iItem);
+
+	if (item && pItem->mask & LVIF_TEXT) //valid text buffer?
+	{
+		// then display the appropriate column
+		int col = pItem->iSubItem;
+		if (col == mArrIdx[eIdxMsg])
+		{
+			auto data = item->msg;
+
+			StringTool::Replace(data, "\r", "^");
+			StringTool::Replace(data, "\n", "~");
+			StringTool::Replace(data, "\t", "`");
+
+			CString text = Utf8Tool::UTF8_to_UNICODE(data.c_str(), data.length());
+			//list.SetItemText(nIndex, mArrIdx[eIdxMsg], text);
+			lstrcpy(pItem->pszText, text);
+		}
+		else if (col == mArrIdx[eIdxTime])
+		{
+			string time;
+			//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
+			auto hour = item->time / 10000000;
+			if (hour == 0 || hour == 23)
+			{
+				//date:yymmdd
+				auto m = (item->date / 100) % 100;
+				auto d = item->date % 100;
+				time = StringTool::Format("%02d.%02d ", m, d);
+			}
+
+			{
+				auto minute = (item->time / 100000) % 100;
+				auto second = (item->time / 1000) % 100;
+				auto ms = item->time % 1000;
+				StringTool::AppendFormat(time, "%02d:%02d:%02d.%03d", hour, minute, second, ms);
+			}
+
+			USES_CONVERSION;
+			lstrcpy(pItem->pszText, A2W(time.c_str()));
+		}
+		else if (col = mArrIdx[eIdxFileLine])
+		{
+			auto text=StringTool::Format("%s(%d)", item->file.c_str(), item->line);
+
+			USES_CONVERSION;
+			lstrcpy(pItem->pszText, A2W(text.c_str()));
+		}
+		else if (col == mArrIdx[eIdxPid])
+		{
+			USES_CONVERSION;
+			auto text=StringTool::Format("%d/%d", item->pid, item->tid);
+			lstrcpy(pItem->pszText, A2T(text.c_str()));
+		}
+		else if (col == mArrIdx[eIdxTag])
+		{
+			USES_CONVERSION;
+			auto text = StringTool::Format("%d/%d", item->pid, item->tid);
+			lstrcpy(pItem->pszText, A2T(text.c_str()));
+		}
+		else if (col == mArrIdx[eIdxApp])
+		{
+			USES_CONVERSION;
+			lstrcpy(pItem->pszText, A2T(item->appName.c_str()));
+		}
+		else
+		{
+			ASSERT(FALSE);
+		}
+	}
+
+	*pResult = 0;
+	//wcscpy(pItem->pszText, rLabel.m_szText[0]);
+}
+#endif

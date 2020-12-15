@@ -6,6 +6,9 @@
 class LogFilterPage;
 class LogItemPage;
 class LogManager;
+/*
+≤‚ ‘ π”√
+*/
 class LogPageEx : public BasePage, public sigslot::has_slots<>
 {
 	DECLARE_DYNAMIC(LogPageEx)

@@ -43,7 +43,6 @@ BOOL App::InitInstance()
 {
 	CWinAppEx::InitInstance();
 
-
 	// Initialize OLE libraries
 	if (!AfxOleInit())
 	{

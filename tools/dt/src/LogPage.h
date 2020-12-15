@@ -6,6 +6,21 @@
 class LogFilterPage;
 class LogItemPage;
 class LogManager;
+
+/*
+https://docs.microsoft.com/en-us/windows/win32/controls/list-view-controls-overview
+You create virtual list-view controls using the CreateWindow or CreateWindowEx function,
+specifying the LVS_OWNERDATA window style as part of the dwStyle function parameter.
+Dynamically switching to and from the LVS_OWNERDATA style is not supported.
+//list.ModifyStyle(0, LVS_OWNERDATA);//not work
+注意:所以要在dialog editor中手工切换owner data样式
+*/
+//#define _CONFIG_VLIST /*此功能还没有测试好,   启用virtual list 注意要手工切换owner data样式 */
+#undef 	_CONFIG_VLIST /* 注意要手工切换owner data样式 */
+
+/*
+XiongWanPing 2020
+*/
 class LogPage : public BasePage, public sigslot::has_slots<>
 {
 	DECLARE_DYNAMIC(LogPage)
@@ -93,4 +108,9 @@ public:
 	afx_msg void OnCopy();
 	afx_msg void OnCopyAll();
 	afx_msg void OnBnClickedAdd();
+
+#ifdef _CONFIG_VLIST
+	void GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
+#endif
+
 };

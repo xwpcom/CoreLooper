@@ -1,5 +1,6 @@
 # 2020.12.15
 发现dt有时没响应，不是bug,而是filter改动后处理的太慢，急需virtual list改进
+https://www.codeguru.com/cpp/controls/listview/advanced/article.php/c4151/MFC-Virtual-List-Control.htm
 
 # 2020.11.26
 todo:
