@@ -15,8 +15,7 @@ Dynamically switching to and from the LVS_OWNERDATA style is not supported.
 //list.ModifyStyle(0, LVS_OWNERDATA);//not work
 注意:所以要在dialog editor中手工切换owner data样式
 */
-//#define _CONFIG_VLIST /*此功能还没有测试好,   启用virtual list 注意要手工切换owner data样式 */
-#undef 	_CONFIG_VLIST /* 注意要手工切换owner data样式 */
+#define _CONFIG_VLIST /*启用virtual list以提高性能,注意要手工切换owner data样式 */
 
 /*
 XiongWanPing 2020
@@ -24,7 +23,7 @@ XiongWanPing 2020
 class LogPage : public BasePage, public sigslot::has_slots<>
 {
 	DECLARE_DYNAMIC(LogPage)
-
+	friend class LogListCtrlNodeProxy;
 public:
 	LogPage(CWnd* pParent = nullptr);   // standard constructor
 	virtual ~LogPage();
@@ -73,7 +72,22 @@ protected:
 
 	shared_ptr<LogFilterPage> mFilterPage;
 	shared_ptr<LogItemPage> mItemPage;
-	list<shared_ptr<LogItem>> mLogItems;
+	list<shared_ptr<LogItem>> mLogItems;/* all items*/
+#ifdef _CONFIG_VLIST
+	typedef struct tagVirtualItem
+	{
+		shared_ptr<LogItem> item;
+		bool virtualReady=false;
+		void makeReady();
+		CString msg;
+		CString time;
+		CString fileLine;
+		CString pid;
+		CString tag;
+		CString app;
+	}VirtualItem;
+	vector<shared_ptr<VirtualItem>> mVirtualItems;/* mLogItems中满足filter后的items */
+#endif
 
 	shared_ptr<LogManager> mLogManager;
 
@@ -113,4 +127,9 @@ public:
 	void GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
 #endif
 
+	afx_msg void OnLvnKeydownList(NMHDR* pNMHDR, LRESULT* pResult);
+	void UpdateUserActionTick();
+
+	ULONGLONG mUserActionTick = 0;
+	afx_msg void OnNMClickList(NMHDR* pNMHDR, LRESULT* pResult);
 };

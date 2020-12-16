@@ -1,9 +1,22 @@
+# 2020.12.16
+LogV 10K条
+ConsolePage::OnCopyDataReady中LogParser::Input约547 ms
+发现CListCtrl virtual list的SetItemCountEx很慢，凡是可能频繁调用到SetItemCountEx的地方都需要优化
+
+changes:
+.增加了ListCtrl virtual以提高性能
+.增加auto scroll checkbox,手工控制更方便
+
+todo:
+.tag部分匹配也要显示出来
+.ribbon上做个combox,可选择常用的filter
+ 可add,edit,remove filter
+
 # 2020.12.15
 发现dt有时没响应，不是bug,而是filter改动后处理的太慢，急需virtual list改进
 https://www.codeguru.com/cpp/controls/listview/advanced/article.php/c4151/MFC-Virtual-List-Control.htm
 
 # 2020.11.26
-todo:
 - 采用CListCtrl virtual来加速
 https://blog.csdn.net/business122/article/details/78336945?utm_source=blogxgwz3
 

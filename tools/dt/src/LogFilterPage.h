@@ -55,7 +55,7 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
-
+	void OnRelayout(const CRect&);
 	DECLARE_MESSAGE_MAP()
 	int Init();
 	virtual void LoadConfig();
@@ -105,10 +105,12 @@ public:
 	void OnBtnApp();
 	//CMFCMenuButtonEx mBtnApp;
 	CButton mBtnApp;
+	bool mAutoScroll = true;
 
 	shared_ptr<LogManager> mLogManager;
 
 	afx_msg void OnBnClickedTag();
 	CComboBox mComboLevel;
 	afx_msg void OnCbnSelchangeCmbLevel();
+	afx_msg void OnBnClickedChkAutoScroll();
 };

@@ -131,6 +131,10 @@ int LogPageEx::Init()
 		public:
 			virtual ~LogListCtrlNodeProxy() {}
 
+			virtual LPVOID GetItemData(int row)
+			{
+				return nullptr;
+			}
 			virtual COLORREF OnGetCellTextColor(DWORD_PTR context, int row, int col)
 			{
 				auto item = (LogItem*)context;

@@ -4,7 +4,7 @@ class ListCtrlNodeProxy
 {
 public:
 	virtual ~ListCtrlNodeProxy() {}
-
+	virtual LPVOID GetItemData(int row) = 0;
 	virtual COLORREF OnGetCellTextColor(DWORD_PTR context,int nRow, int nColum)=0;
 	virtual COLORREF OnGetCellBkColor(DWORD_PTR context, int nRow, int nColum)=0;
 };

@@ -197,6 +197,7 @@ void CDT::send(tagLogInfo& info)
 	cs.cbData = box.length();
 	cs.lpData = box.data();
 	::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
+	//::SendMessage(hwnd, WM_COPYDATA, 0, (LPARAM)&cs);
 }
 
 int CDT::operator()( const char* lpszFormat, ... )

@@ -19,8 +19,8 @@ COLORREF LogListCtrl::OnGetCellTextColor(int row, int col)
 {
 	if (mNodeProxy)
 	{
-		auto data = GetItemData(row);
-		return mNodeProxy->OnGetCellTextColor(data, row, col);
+		auto data = mNodeProxy->GetItemData(row);
+		return mNodeProxy->OnGetCellTextColor((DWORD_PTR)data, row, col);
 	}
 
 	return(row % 2) == 0 ? RGB(128, 37, 0) : RGB(0, 0, 0);
@@ -30,8 +30,8 @@ COLORREF LogListCtrl::OnGetCellBkColor(int row, int col)
 {
 	if (mNodeProxy)
 	{
-		auto data = GetItemData(row);
-		return mNodeProxy->OnGetCellBkColor(data, row, col);
+		auto data = mNodeProxy->GetItemData(row);
+		return mNodeProxy->OnGetCellBkColor((DWORD_PTR)data, row, col);
 	}
 
 	if (m_bMarkSortedColumn && col == m_iSortedColumn)

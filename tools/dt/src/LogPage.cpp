@@ -9,10 +9,12 @@
 #include "core/string/utf8tool.h"
 
 IMPLEMENT_DYNAMIC(LogPage, BasePage)
-
+static const char* TAG = "LogPage";
 enum
 {
 	eTimer_DelayRefreshItemPage,
+	eTimer_Test,
+	eTimer_delaySetItemCount,
 };
 
 enum
@@ -71,6 +73,8 @@ BEGIN_MESSAGE_MAP(LogPage, BasePage)
 	ON_COMMAND(ID_COPY, &LogPage::OnCopy)
 	ON_COMMAND(ID_COPY_ALL, &LogPage::OnCopyAll)
 	ON_BN_CLICKED(IDC_ADD, &LogPage::OnBnClickedAdd)
+	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST, &LogPage::OnLvnKeydownList)
+	ON_NOTIFY(NM_CLICK, IDC_LIST, &LogPage::OnNMClickList)
 END_MESSAGE_MAP()
 
 static COLORREF gColors[] =
@@ -124,8 +128,21 @@ int LogPage::Init()
 		class LogListCtrlNodeProxy:public ListCtrlNodeProxy
 		{
 		public:
+#ifdef _CONFIG_VLIST
+			LogPage* mLogPage = nullptr;
+#else
+			CListCtrl* mList = nullptr;
+#endif
 			virtual ~LogListCtrlNodeProxy() {}
 
+			virtual LPVOID GetItemData(int row)
+			{
+#ifdef _CONFIG_VLIST
+				return mLogPage->mVirtualItems[row]->item.get();
+#else
+				return mList->GetItemData(row);
+#endif
+			}
 			virtual COLORREF OnGetCellTextColor(DWORD_PTR context, int row, int col)
 			{
 				auto item = (LogItem*)context;
@@ -154,7 +171,13 @@ int LogPage::Init()
 			}
 		};
 
-		mListCtrl.SetNodeProxy(make_shared<LogListCtrlNodeProxy>());
+		auto obj = make_shared<LogListCtrlNodeProxy>();
+#ifdef _CONFIG_VLIST
+		obj->mLogPage = this;
+#else
+		obj->mList = &mListCtrl;
+#endif
+		mListCtrl.SetNodeProxy(obj);
 	}
 
 	int idx = -1;
@@ -196,6 +219,9 @@ int LogPage::Init()
 		edit->SetCodePage(code);
 	}
 
+#ifdef _DEBUG
+	SetTimer(eTimer_Test, 1000);
+#endif
 	return ret;
 }
 
@@ -207,26 +233,66 @@ void LogPage::OnLogItemReady(shared_ptr<LogItem> item)
 	{
 		AddItem(item);
 	}
-
-	//int mMaxLogCount = 1;
-	if ((int)mLogItems.size() > mMaxLogCount)
+	
+	/*
+	2020.12.16
+	为方便用户查看日志,最近有用户操作时，不删除过旧日志, 
+	是为了避免日志达到上限后，用户在查看日志时，日志不断上翻，影响体验
+	*/
+	if (ShellTool::GetTickCount64() - mUserActionTick > 5 * 60 * 1000)
 	{
-		mLogItems.pop_front();
-	}							   
 
-	if ((int)mListCtrl.GetItemCount() > mMaxLogCount)
-	{
-		auto idx = 0;
-		auto item = (LogItem*)mListCtrl.GetItemData(idx);
-		mListCtrl.DeleteItem(idx);
-		item->mRefs.pop_back();
+		//int mMaxLogCount = 1;
+		if ((int)mLogItems.size() > mMaxLogCount)
+		{
+			mLogItems.pop_front();
+		}
+
+		if ((int)mListCtrl.GetItemCount() > mMaxLogCount)
+		{
+#ifdef _CONFIG_VLIST
+			mVirtualItems.erase(mVirtualItems.begin());
+#else
+			auto idx = 0;
+			auto item = (LogItem*)mListCtrl.GetItemData(idx);
+			mListCtrl.DeleteItem(idx);
+			item->mRefs.pop_back();
+#endif
+		}
 	}
 
+#ifdef _CONFIG_VLIST
+	SetTimer(eTimer_delaySetItemCount,100);
+#endif
 }
+
+/*
+* 发现条数较多时,在AddItem内部每次都调用SetItemCountEx会比较慢，所以由调用方负责主动调用SetItemCountEx
+*/
 
 void LogPage::AddItem(shared_ptr<LogItem>& item)
 {
 	auto& list = mListCtrl;
+
+#ifdef _CONFIG_VLIST
+	{
+		auto obj = make_shared<VirtualItem>();
+		obj->item = item;
+		mVirtualItems.push_back(obj);
+	}
+
+	//int count = (int)mVirtualItems.size();
+	//list.SetItemCountEx(count);
+	/*
+	int n = list.GetTopIndex();
+	int nLast = n + list.GetCountPerPage();
+	if (count >= n && count <= nLast + 1)
+	{
+		//list.RedrawItems(count - 1, count - 1);
+	}
+	*/
+
+#else
 	string time;
 	//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
 	auto hour = item->time / 10000000;
@@ -253,8 +319,6 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 	item->mRefs.push_back(item);//从list删除时要释放 */
 	list.SetItemData(idx, (DWORD_PTR)item.get());
 
-#ifdef _CONFIG_VLIST
-#else
 	USES_CONVERSION;
 	list.SetItemText(nIndex, mArrIdx[eIdxApp], A2T(item->appName.c_str()));
 	list.SetItemText(nIndex, mArrIdx[eIdxTag], A2T(item->tag.c_str()));
@@ -273,7 +337,6 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		list.SetItemText(nIndex, mArrIdx[eIdxMsg], text);
 
 	}
-#endif
 
 	//仅当选中最后一项时才更新选中Item
 	const auto sel = list.GetNextItem(-1, LVNI_SELECTED);
@@ -284,6 +347,8 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		list.EnsureVisible(nIndex, FALSE);
 		dump("after set select");
 	}
+#endif
+
 }
 
 void LogPage::OnDestroy()
@@ -341,6 +406,11 @@ void LogPage::OnClearLog()
 
 void LogPage::ClearLogListCtrl()
 {
+#ifdef _CONFIG_VLIST
+	mVirtualItems.clear();
+	mListCtrl.SetItemCountEx((int)mVirtualItems.size());
+	mListCtrl.Invalidate();
+#else
 	for(int i=0;i<(int)mListCtrl.GetItemCount();++i)
 	{
 		auto item = (LogItem*)mListCtrl.GetItemData(i);
@@ -348,6 +418,7 @@ void LogPage::ClearLogListCtrl()
 	}
 
 	mListCtrl.DeleteAllItems();
+#endif
 }
 
 void LogPage::OnFilterChanged()
@@ -363,6 +434,10 @@ void LogPage::OnFilterChanged()
 			AddItem(item);
 		}
 	}
+
+	int count = (int)mVirtualItems.size();
+	mListCtrl.SetItemCountEx(count);
+
 }
 
 void LogPage::LoadConfig()
@@ -488,8 +563,12 @@ LogItem* LogPage::GetCurrentLogItem()
 		return nullptr;
 	}
 
+#ifdef _CONFIG_VLIST
+	return mVirtualItems[sel]->item.get();
+#else
 	auto item = (LogItem*)list.GetItemData(sel);
 	return item;
+#endif
 }
 
 void LogPage::OnCopyFullPath()
@@ -598,6 +677,45 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 {
 	switch (nIDEvent)
 	{
+	case eTimer_delaySetItemCount:
+	{
+		KillTimer(nIDEvent);
+#ifdef _CONFIG_VLIST
+		/*
+		* 发现CListCtrl virtual list的SetItemCountEx很慢，凡是可能频繁调用到SetItemCountEx的地方都需要优化
+		*/
+
+		auto count = (int)mVirtualItems.size();
+		mListCtrl.SetItemCountEx(count);
+
+		if (mFilterPage->mAutoScroll && count>0)
+		{
+			auto index = count - 1;
+			auto& list = mListCtrl;
+			list.SetItemState(index, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+			list.EnsureVisible(index, FALSE);
+		}
+#endif
+		return;
+	}
+	case eTimer_Test:
+	{
+		static int idx = -1;
+
+		auto tick = ShellTool::GetTickCount64();
+		for (int i = 0; i < 1; i++)
+		{
+			++idx;
+
+			LogV(TAG, "idx=%04d", idx);
+			LogW(TAG, "idx=%04d", idx);
+		}
+		tick = ShellTool::GetTickCount64()-tick;
+		//TRACE("tick=%lld **********************\r\n", tick);
+		//PostQuitMessage(0);
+		//KillTimer(eTimer_Test);
+		return;
+	}
 	case eTimer_DelayRefreshItemPage:
 	{
 		int sel = mListCtrl.GetNextItem(-1, LVNI_SELECTED);
@@ -610,7 +728,11 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 			++idx;
 			TRACE("SetLogItem[%04d].sel=%d\r\n",idx, sel);
 
+#ifdef _CONFIG_VLIST
+			auto item = mVirtualItems[sel]->item.get();
+#else
 			auto item = (LogItem*)mListCtrl.GetItemData(sel);
+#endif
 			//auto item = GetCurrentLogItem();
 			mItemPage->SetLogItem(item);
 		}
@@ -641,6 +763,30 @@ void LogPage::OnCopy()
 void LogPage::OnCopyAll()
 {
 	string text;
+#ifdef _CONFIG_VLIST
+	char level[] = 
+	{
+		'E',
+		'W',
+		'I',
+		'D',
+		'V',
+	};
+
+	USES_CONVERSION;
+	for (auto& itemA : mVirtualItems)
+	{
+		itemA->makeReady();
+		auto& item = itemA->item;
+
+		StringTool::AppendFormat(text,"%s[%c][%s]%s\r\n"
+			, T2A(itemA->time)
+			, level[item->level]
+			,item->tag.c_str()
+			,item->msg.c_str()
+			);
+	}
+#else
 	auto& list = mListCtrl;
 	int count = list.GetItemCount();
 	for (int i = 0; i < count; i++)
@@ -648,8 +794,8 @@ void LogPage::OnCopyAll()
 		auto item = (LogItem*)list.GetItemData(i);
 
 		text += item->msg + "\r\n";
-
 	}
+#endif
 
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
 }
@@ -704,74 +850,98 @@ void LogPage::OnBnClickedAdd()
 }
 
 #ifdef _CONFIG_VLIST
+void LogPage::VirtualItem::makeReady()
+{
+	if (virtualReady)
+	{
+		return;
+	}
+
+	virtualReady = true;
+
+	USES_CONVERSION;
+	{
+		auto data = item->msg;
+
+		StringTool::Replace(data, "\r", "^");
+		StringTool::Replace(data, "\n", "~");
+		StringTool::Replace(data, "\t", "`");
+
+		msg = Utf8Tool::UTF8_to_UNICODE(data.c_str(), data.length());
+	}
+	{
+		string time;
+		//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
+		auto hour = item->time / 10000000;
+		if (hour == 0 || hour == 23)
+		{
+			//date:yymmdd
+			auto m = (item->date / 100) % 100;
+			auto d = item->date % 100;
+			time = StringTool::Format("%02d.%02d ", m, d);
+		}
+
+		{
+			auto minute = (item->time / 100000) % 100;
+			auto second = (item->time / 1000) % 100;
+			auto ms = item->time % 1000;
+			StringTool::AppendFormat(time, "%02d:%02d:%02d.%03d", hour, minute, second, ms);
+		}
+
+		this->time=A2T(time.c_str());
+	}
+	{
+		auto text = StringTool::Format("%s(%d)", item->file.c_str(), item->line);
+		fileLine=A2T(text.c_str());
+	}
+	
+	{
+		auto text = StringTool::Format("%d/%d", item->pid, item->tid);
+		pid=A2T(text.c_str());
+	}
+	
+	tag=A2T(item->tag.c_str());
+	app=A2T(item->appName.c_str());
+}
+
 void LogPage::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
 	LV_ITEM* pItem = &(pDispInfo)->item;
-	auto item = (LogItem*)mListCtrl.GetItemData(pItem->iItem);
+	auto item = mVirtualItems[pItem->iItem];
+	if (!item->virtualReady)
+	{
+		item->makeReady();
+	}
 
+	auto& dst = pItem->pszText;
+	//LPSTR_TEXTCALLBACK;
 	if (item && pItem->mask & LVIF_TEXT) //valid text buffer?
 	{
-		// then display the appropriate column
-		int col = pItem->iSubItem;
+		const auto col = pItem->iSubItem;
 		if (col == mArrIdx[eIdxMsg])
 		{
-			auto data = item->msg;
-
-			StringTool::Replace(data, "\r", "^");
-			StringTool::Replace(data, "\n", "~");
-			StringTool::Replace(data, "\t", "`");
-
-			CString text = Utf8Tool::UTF8_to_UNICODE(data.c_str(), data.length());
-			//list.SetItemText(nIndex, mArrIdx[eIdxMsg], text);
-			lstrcpy(pItem->pszText, text);
+			dst = (LPWSTR)(LPCTSTR)item->msg;
 		}
 		else if (col == mArrIdx[eIdxTime])
 		{
-			string time;
-			//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
-			auto hour = item->time / 10000000;
-			if (hour == 0 || hour == 23)
-			{
-				//date:yymmdd
-				auto m = (item->date / 100) % 100;
-				auto d = item->date % 100;
-				time = StringTool::Format("%02d.%02d ", m, d);
-			}
-
-			{
-				auto minute = (item->time / 100000) % 100;
-				auto second = (item->time / 1000) % 100;
-				auto ms = item->time % 1000;
-				StringTool::AppendFormat(time, "%02d:%02d:%02d.%03d", hour, minute, second, ms);
-			}
-
-			USES_CONVERSION;
-			lstrcpy(pItem->pszText, A2W(time.c_str()));
+			dst = (LPWSTR)(LPCTSTR)item->time;
 		}
-		else if (col = mArrIdx[eIdxFileLine])
+		else if (col == mArrIdx[eIdxFileLine])
 		{
-			auto text=StringTool::Format("%s(%d)", item->file.c_str(), item->line);
-
-			USES_CONVERSION;
-			lstrcpy(pItem->pszText, A2W(text.c_str()));
+			dst = (LPWSTR)(LPCTSTR)item->fileLine;
 		}
 		else if (col == mArrIdx[eIdxPid])
 		{
-			USES_CONVERSION;
-			auto text=StringTool::Format("%d/%d", item->pid, item->tid);
-			lstrcpy(pItem->pszText, A2T(text.c_str()));
+			dst = (LPWSTR)(LPCTSTR)item->pid;
 		}
 		else if (col == mArrIdx[eIdxTag])
 		{
-			USES_CONVERSION;
-			auto text = StringTool::Format("%d/%d", item->pid, item->tid);
-			lstrcpy(pItem->pszText, A2T(text.c_str()));
+			dst = (LPWSTR)(LPCTSTR)item->tag;
 		}
 		else if (col == mArrIdx[eIdxApp])
 		{
-			USES_CONVERSION;
-			lstrcpy(pItem->pszText, A2T(item->appName.c_str()));
+			dst = (LPWSTR)(LPCTSTR)item->app;
 		}
 		else
 		{
@@ -780,6 +950,38 @@ void LogPage::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 
 	*pResult = 0;
-	//wcscpy(pItem->pszText, rLabel.m_szText[0]);
+	//wcscpy(dst, rLabel.m_szText[0]);
 }
 #endif
+
+
+void LogPage::OnLvnKeydownList(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	//LogV(TAG, "%s", __func__);
+
+	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
+	*pResult = 0;
+
+	UpdateUserActionTick();
+}
+
+/*
+* 有用户动作时，在一定的时间段内不删除过旧的日志
+*/
+void LogPage::UpdateUserActionTick()
+{
+	mUserActionTick = ShellTool::GetTickCount64();
+	//LogV(TAG, "%s", __func__);
+}
+
+
+void LogPage::OnNMClickList(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	//LogV(TAG, "%s", __func__);
+
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	
+	*pResult = 0;
+
+	UpdateUserActionTick();
+}

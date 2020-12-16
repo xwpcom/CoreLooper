@@ -240,6 +240,8 @@ BOOL MsgSinkWnd::Create(CString szName)
 
 BOOL MsgSinkWnd::OnCopyData(CWnd* pWnd, COPYDATASTRUCT* pCopyDataStruct)
 {
+	auto ret=ReplyMessage(0);
+
 	COPYDATASTRUCT* pCDS = pCopyDataStruct;
 	auto data = (LPBYTE)pCDS->lpData;
 	auto bytes = pCDS->cbData;
@@ -285,7 +287,7 @@ void ConsolePage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	__super::OnContextMenu(pWnd, point);
 
-	DV("%s,wnd=%p", __func__, pWnd);
+	//DV("%s,wnd=%p", __func__, pWnd);
 
 	if (pWnd == &mTab)
 	{

@@ -44,6 +44,7 @@ BEGIN_MESSAGE_MAP(LogFilterPage, BasePage)
 	ON_BN_CLICKED(IDC_APP, OnBtnApp)
 	ON_BN_CLICKED(IDC_TAG, &LogFilterPage::OnBnClickedTag)
 	ON_CBN_SELCHANGE(IDC_CMB_LEVEL, &LogFilterPage::OnCbnSelchangeCmbLevel)
+	ON_BN_CLICKED(IDC_CHK_AUTO_SCROLL, &LogFilterPage::OnBnClickedChkAutoScroll)
 END_MESSAGE_MAP()
 
 void LogFilterPage::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
@@ -112,6 +113,9 @@ void LogFilterPage::LoadConfig()
 	//LoadDlgItemString(IDC_EDIT_PROCESS, _T("process"));
 	//LoadCheck(IDC_CHECK_DEFAULT_ON, _T("defaultOn")); 
 	LoadCombo(IDC_CMB_LEVEL, _T("level"));
+	LoadCheck(IDC_CHK_AUTO_SCROLL, _T("autoScroll"));
+
+	mAutoScroll = IsDlgButtonChecked(IDC_CHK_AUTO_SCROLL);
 }
 
 void LogFilterPage::SaveConfig()
@@ -121,6 +125,7 @@ void LogFilterPage::SaveConfig()
 	SaveDlgItemString(IDC_EDIT_APP, _T("app"));
 	SaveDlgItemString(IDC_EDIT_TAG, _T("tag"));
 	SaveCombo(IDC_CMB_LEVEL, _T("level"));
+	SaveCheck(IDC_CHK_AUTO_SCROLL, _T("autoScroll"));
 	//SaveDlgItemString(IDC_EDIT_PROCESS, _T("process"));
 	//SaveCheck(IDC_CHECK_DEFAULT_ON, _T("defaultOn"));
 }
@@ -222,6 +227,8 @@ int LogFilterPage::Filter(shared_ptr<LogItem> item)
 
 void LogFilterPage::tagFilter::dump()
 {
+	return;
+
 	DV("filter.dump.begin");
 	for (auto& item : apps)
 	{
@@ -537,4 +544,28 @@ void LogFilterPage::OnCbnSelchangeCmbLevel()
 		mFilterInfo.level = gLevel[sel].level;
 		SignalFilterChanged();
 	}
+}
+
+void LogFilterPage::OnBnClickedChkAutoScroll()
+{
+	mAutoScroll = IsDlgButtonChecked(IDC_CHK_AUTO_SCROLL);
+}
+
+void LogFilterPage::OnRelayout(const CRect& rc)
+{
+	__super::OnRelayout(rc);
+
+	auto item = GetDlgItem(IDC_EDIT_TAG);
+	if (!item)
+	{
+		return;
+	}
+
+	CRect rcItem;
+	item->GetWindowRect(&rcItem);
+	ScreenToClient(rcItem);
+
+	rcItem.right = rc.right;
+	item->MoveWindow(rcItem);
+
 }
