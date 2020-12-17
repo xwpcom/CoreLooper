@@ -388,23 +388,7 @@ int SerialPort_Windows::OnRecv(IoContext *context, DWORD bytes)
 		UpdateRecvTick();
 
 		int ret = mInbox.Write((LPBYTE)context->mByteBuffer.GetDataPointer(), bytes);
-		if (ret == bytes)
-		{
-			int freeBytes = mInbox.GetTailFreeSize();
-			if (freeBytes > 0)
-			{
-				ret = context->PostRecv(freeBytes);
-				if (ret == 0)
-				{
-					repost = true;
-				}
-				else
-				{
-					Close();
-				}
-			}
-		}
-		else
+		if (ret != bytes)
 		{
 			ASSERT(FALSE);//todo
 		}
@@ -423,14 +407,6 @@ int SerialPort_Windows::OnRecv(IoContext *context, DWORD bytes)
 		}
 		
 	}
-
-	/*
-	if (!repost)
-	{
-	Close();
-	return -1;
-	}
-	*/
 
 	OnReceive();
 
@@ -548,7 +524,7 @@ void SerialPort_Windows::GetDevices(vector<tagSerialPort>& items)
 		NULL, KEY_READ, &hKey);
 	if (ERROR_SUCCESS != ret)
 	{
-		DW("fail enum serial port,ret=%d", ret);
+		LogW(TAG,"fail enum serial port,ret=%d", ret);
 		return;
 	}
 
@@ -564,7 +540,7 @@ void SerialPort_Windows::GetDevices(vector<tagSerialPort>& items)
 		}
 		//if (!memcmp(RegKeyName, "\\Device\\", 8))//过滤虚拟串口
 		{
-			//DW("%s", SerialPortName);   //SerialPortName就是串口名字
+			//LogW(TAG,"%s", SerialPortName);   //SerialPortName就是串口名字
 			USES_CONVERSION;
 
 			tagSerialPort item;
@@ -585,7 +561,7 @@ void SerialPort_Windows::GetDevices(vector<tagSerialPort>& items)
 				item.name = T2A(RegKeyName);
 			}
 
-			//DW("%s", item.name.c_str());
+			//LogW(TAG,"%s", item.name.c_str());
 			items.push_back(item);
 		}
 		i++;

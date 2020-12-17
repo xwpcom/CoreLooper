@@ -36,6 +36,8 @@ enum
 	BM_DNS_ACK,
 };
 
+static const char* TAG = "TcpClient";
+
 TcpClient_Windows::TcpClient_Windows()
 {
 	mInternalData->SetActiveObject();
@@ -70,25 +72,9 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 		UpdateRecvTick();
 
 		int ret = inbox->Write((LPBYTE)context->mByteBuffer.GetDataPointer(), bytes);
-		if (ret == bytes)
+		if (ret != bytes)
 		{
-			int freeBytes = inbox->GetTailFreeSize();
-			if (freeBytes > 0)
-			{
-				ret = context->PostRecv(freeBytes);
-				if (ret == 0)
-				{
-					repost = true;
-				}
-				else
-				{
-					Close();
-				}
-			}
-		}
-		else
-		{
-			DW("fail write,ret=%d,bytes=%d", ret, bytes);
+			LogW(TAG,"fail write,ret=%d,bytes=%d", ret, bytes);
 			ASSERT(FALSE);//todo
 		}
 	}
@@ -99,12 +85,21 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 
 	if (!mReceiveBusying)
 	{
-		//避免重入问题
+		/*避免重入问题 */
 		mReceiveBusying = true;
 		OnReceive();
 		mReceiveBusying = false;
 	}
 
+	if (bytes > 0)
+	{
+		inbox->MoveToHead();
+		auto ret = context->PostRecv();
+		if (ret)
+		{
+			Close();
+		}
+	}
 	return 0;
 }
 
@@ -151,7 +146,7 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 {
 	auto objThis = shared_from_this();//确保在DispatchIoContext执行期间不被删除
 
-	//DW("%s,this=0x%x,threadId=0x%x", __func__, this, GetCurrentThreadId());
+	//LogW(TAG,"%s,this=0x%x,threadId=0x%x", __func__, this, GetCurrentThreadId());
 
 
 	//shared_ptr<TcpClient_Windows> ptr = dynamic_pointer_cast<TcpClient_Windows>(shared_from_this());
@@ -377,7 +372,7 @@ int TcpClient_Windows::ConnectHelper(string ip)
 			sizeof(tcp_keepalive), &ulBytesReturn, NULL, NULL);
 		if (ret == SOCKET_ERROR)
 		{
-			DW("CTCPNetwork::AddSession - WSAIoctl failed. errno(%d)", WSAGetLastError());
+			LogW(TAG,"CTCPNetwork::AddSession - WSAIoctl failed. errno(%d)", WSAGetLastError());
 		}
 	}
 
@@ -413,7 +408,7 @@ int TcpClient_Windows::ConnectHelper(string ip)
 		}
 		else
 		{
-			DW("error = %d", error);
+			LogW(TAG,"error = %d", error);
 		}
 	}
 
@@ -531,7 +526,7 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 		ASSERT(handle == mIocp);
 		if (!handle)
 		{
-			DW("fail CreateIoCompletionPort,error=%d", GetLastError());
+			LogW(TAG,"fail CreateIoCompletionPort,error=%d", GetLastError());
 		}
 
 		ConfigCacheBox();
@@ -570,13 +565,13 @@ void TcpClient_Windows::OnConnectAck()
 			(char *)&seconds, (PINT)&bytes);
 		if (iResult != NO_ERROR)
 		{
-			DW("getsockopt(SO_CONNECT_TIME) failed with error: %u", WSAGetLastError());
+			LogW(TAG,"getsockopt(SO_CONNECT_TIME) failed with error: %u", WSAGetLastError());
 		}
 		else
 		{
 			if (seconds == 0xFFFFFFFF)
 			{
-				//DW("Connection not established yet\n");
+				//LogW(TAG,"Connection not established yet\n");
 			}
 			else
 			{
