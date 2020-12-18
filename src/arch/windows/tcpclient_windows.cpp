@@ -91,7 +91,7 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 		mReceiveBusying = false;
 	}
 
-	if (bytes > 0)
+	if (bytes > 0 && !context->mBusying)
 	{
 		inbox->MoveToHead();
 		auto ret = context->PostRecv();
