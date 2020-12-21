@@ -25,7 +25,7 @@ IoContext::IoContext()
 
 #ifdef _DEBUGXX
 	long rc = InterlockedIncrement(&gIoContextRC);
-	DV("%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
+	LogV(TAG,"%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
 	if (rc == 4)
 	{
 		int x = 0;
@@ -37,7 +37,7 @@ IoContext::~IoContext()
 {
 #ifdef _DEBUGXX
 	long rc = InterlockedDecrement(&gIoContextRC);
-	DV("%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
+	LogV(TAG,"%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
 #endif
 }
 
@@ -61,7 +61,7 @@ int IoContext::PostSend()
 	wb.buf = (char*)mByteBuffer.GetDataPointer();
 	wb.len = mByteBuffer.GetActualDataLength();
 	ASSERT(wb.len > 0);
-	//DV("WSASend,bytes=%d",wb.len);
+	//LogV(TAG,"WSASend,bytes=%d",wb.len);
 	int ret = -1;
 	if (mSocketType)
 	{
@@ -77,13 +77,13 @@ int IoContext::PostSend()
 	}
 	if (ret == 0 || (ret == -1 && WSA_IO_PENDING == WSAGetLastError()))
 	{
-		//DV("WSASend,len=%04d", wb.len);
+		//LogV(TAG,"WSASend,len=%04d", wb.len);
 		mBusying = true;
 		return 0;
 	}
 #endif
 
-	DW("fail to send,maybe socket is closed");
+	LogW(TAG,"fail to send,maybe socket is closed");
 	mByteBuffer.clear();
 	return -1;
 }
@@ -112,6 +112,10 @@ int IoContext::PostRecv(int maxRecvBytes)
 	if (mSocketType)
 	{
 		ret = WSARecv(mSock, &wb, 1, &dwIoSize, &dwFlags, &mOV, NULL);
+		if (ret == 0 && dwIoSize > 0)
+		{
+			/* 经测试，即使运行到此，仍然会收到此帧数据的IoContextType_Recv事件，所以此处不需要做处理 */
+		}
 	}
 	else
 	{
