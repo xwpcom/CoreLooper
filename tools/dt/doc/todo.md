@@ -1,3 +1,7 @@
+# 2020.12.23
+changes:
+.勾上AutoScroll后，当ListCtrl中有mouse,keyboard操作时，设AutoScroll为三态，并在AutoScroll旁边搞一个倒计时，超时才真正scroll
+
 # 2020.12.16
 LogV 10K条
 ConsolePage::OnCopyDataReady中LogParser::Input约547 ms

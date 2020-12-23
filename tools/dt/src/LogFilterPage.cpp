@@ -14,6 +14,11 @@ enum
 	ID_APP_LAST= ID_APP_FIRST+256,
 };
 
+enum
+{
+	eTimer_countDown,
+};
+
 IMPLEMENT_DYNAMIC(LogFilterPage, BasePage)
 
 LogFilterPage::LogFilterPage(CWnd* pParent /*=nullptr*/)
@@ -549,23 +554,101 @@ void LogFilterPage::OnCbnSelchangeCmbLevel()
 void LogFilterPage::OnBnClickedChkAutoScroll()
 {
 	mAutoScroll = IsDlgButtonChecked(IDC_CHK_AUTO_SCROLL);
+
+	if (!mAutoScroll)
+	{
+		KillTimer(eTimer_countDown);
+		mCountDownSeconds = 0;
+		UpdateCountDownText();
+	}
 }
 
 void LogFilterPage::OnRelayout(const CRect& rc)
 {
 	__super::OnRelayout(rc);
 
-	auto item = GetDlgItem(IDC_EDIT_TAG);
-	if (!item)
+	UINT arr[] = { IDC_EDIT_TAG,IDC_EDIT_APP,};
+	for(auto& id:arr)
+	{
+		auto item = GetDlgItem(id);
+		if (!item)
+		{
+			return;
+		}
+
+		CRect rcItem;
+		item->GetWindowRect(&rcItem);
+		ScreenToClient(rcItem);
+
+		rcItem.right = rc.right;
+		item->MoveWindow(rcItem);
+
+	}
+
+}
+
+void LogFilterPage::OnUserAction(ULONGLONG tick)
+{
+	mUserActionTick = tick;
+
+	if (!mAutoScroll)
 	{
 		return;
 	}
 
-	CRect rcItem;
-	item->GetWindowRect(&rcItem);
-	ScreenToClient(rcItem);
+	int seconds = 30;
+	if (mCountDownSeconds == 0)
+	{
+		mCountDownSeconds = seconds;
+		SetTimer(eTimer_countDown, 1000);
+	}
+	else
+	{
+		mCountDownSeconds = seconds;
 
-	rcItem.right = rc.right;
-	item->MoveWindow(rcItem);
+	}
+	UpdateCountDownText();
+}
 
+bool LogFilterPage::IsAutoScrollEnabled()
+{
+	if (mAutoScroll)
+	{
+		return mCountDownSeconds == 0;
+	}
+
+	return mAutoScroll;
+}
+
+void LogFilterPage::OnTimer(UINT_PTR id)
+{
+	if (id == eTimer_countDown)
+	{
+		--mCountDownSeconds;
+		if (mCountDownSeconds <= 0)
+		{
+			KillTimer(id);
+		}
+
+		UpdateCountDownText();
+		return;
+	}
+
+	__super::OnTimer(id);
+}
+
+void LogFilterPage::UpdateCountDownText()
+{
+	if (mCountDownSeconds > 0)
+	{
+		CString text;
+		text.Format(_T("AutoScroll (%d)"),mCountDownSeconds);
+		SetDlgItemText(IDC_CHK_AUTO_SCROLL, text);
+		CheckDlgButton(IDC_CHK_AUTO_SCROLL, BST_INDETERMINATE | BST_PUSHED);
+	}
+	else
+	{
+		SetDlgItemText(IDC_CHK_AUTO_SCROLL, _T("AutoScroll"));
+		CheckDlgButton(IDC_CHK_AUTO_SCROLL, mAutoScroll? BST_CHECKED: BST_UNCHECKED);
+	}
 }

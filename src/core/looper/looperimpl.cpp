@@ -163,7 +163,7 @@ LRESULT LooperImpl::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		}
 
 		auto count = mLooperInternalData->mDestroyedHandlers.size();
-		if (count > 10)
+		if (count > 100)
 		{
 			LogV(TAG,"this=%p,gc size=%d", this, count);
 		}

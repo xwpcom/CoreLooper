@@ -378,11 +378,11 @@ void LogPage::OnRelayout(const CRect& rc)
 
 	CRect rcItem = rc;
 	rcItem.OffsetRect(0, headerHeight);
-	rcItem.bottom = rcItem.top + 32;
+	rcItem.bottom = rcItem.top + 56;
 	mFilterPage->MoveWindow(rcItem);
 
 	int itemHeight = rc.Height() / 5;
-	itemHeight = MAX(itemHeight, 320);
+	itemHeight = MAX(itemHeight, 240);
 
 	rcItem.top = rcItem.bottom + 1;
 	rcItem.bottom = rc.bottom - itemHeight;
@@ -688,7 +688,7 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 		auto count = (int)mVirtualItems.size();
 		mListCtrl.SetItemCountEx(count);
 
-		if (mFilterPage->mAutoScroll && count>0)
+		if (mFilterPage->IsAutoScrollEnabled() && count>0)
 		{
 			auto index = count - 1;
 			auto& list = mListCtrl;
@@ -972,8 +972,8 @@ void LogPage::UpdateUserActionTick()
 {
 	mUserActionTick = ShellTool::GetTickCount64();
 	//LogV(TAG, "%s", __func__);
+	mFilterPage->OnUserAction(mUserActionTick);
 }
-
 
 void LogPage::OnNMClickList(NMHDR* pNMHDR, LRESULT* pResult)
 {

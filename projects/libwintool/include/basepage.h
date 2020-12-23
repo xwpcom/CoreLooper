@@ -126,7 +126,7 @@ protected:
 	virtual int Init();
 	virtual void UpdateControlPos();
 	virtual void OnRelayout(const CRect& rc);
-	void OnTimer(UINT_PTR id);
+	virtual void OnTimer(UINT_PTR id);
 	void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual void OnFirstShow();
 

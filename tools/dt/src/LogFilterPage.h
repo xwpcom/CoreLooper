@@ -36,7 +36,9 @@ public:
 	{
 		mLogManager = obj;
 	}
+	void OnUserAction(ULONGLONG tick);
 
+	bool IsAutoScrollEnabled();
 	int Filter(shared_ptr<LogItem> item);
 	sigslot::signal0<> SignalClearLog;
 	sigslot::signal0<> SignalFilterChanged;
@@ -103,10 +105,13 @@ public:
 	afx_msg void OnBnClickedCheckDefaultOn();
 	afx_msg void OnBnClickedClear();
 	void OnBtnApp();
+	void OnTimer(UINT_PTR id)override;
 	//CMFCMenuButtonEx mBtnApp;
 	CButton mBtnApp;
 	bool mAutoScroll = true;
-
+	ULONGLONG mUserActionTick = 0;
+	int mCountDownSeconds = 0;
+	void UpdateCountDownText();
 	shared_ptr<LogManager> mLogManager;
 
 	afx_msg void OnBnClickedTag();
