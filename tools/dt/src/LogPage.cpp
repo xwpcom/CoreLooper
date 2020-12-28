@@ -749,6 +749,7 @@ void LogPage::OnClear()
 {
 	OnClearLog();
 	mItemPage->clear();
+	mFilterPage->OnClearList();
 }
 
 void LogPage::OnCopy()

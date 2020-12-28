@@ -46,7 +46,7 @@ public:
 		SetMainLooper(this);
 	}
 
-	void DelayExit(int ms)
+	void DelayExit(int ms=0)
 	{
 		postDelayedRunnable(make_shared<DelayExitRunnable>(), ms);
 	}

@@ -610,6 +610,14 @@ void LogFilterPage::OnUserAction(ULONGLONG tick)
 	UpdateCountDownText();
 }
 
+void LogFilterPage::OnClearList()
+{
+	mCountDownSeconds = 0;
+	KillTimer(eTimer_countDown);
+	UpdateCountDownText();
+
+}
+
 bool LogFilterPage::IsAutoScrollEnabled()
 {
 	if (mAutoScroll)

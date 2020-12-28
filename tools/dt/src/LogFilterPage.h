@@ -39,6 +39,7 @@ public:
 	void OnUserAction(ULONGLONG tick);
 
 	bool IsAutoScrollEnabled();
+	void OnClearList();
 	int Filter(shared_ptr<LogItem> item);
 	sigslot::signal0<> SignalClearLog;
 	sigslot::signal0<> SignalFilterChanged;
