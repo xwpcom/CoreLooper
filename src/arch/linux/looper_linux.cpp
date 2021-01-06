@@ -244,6 +244,8 @@ void Looper_Linux::_StackLooperSendMessage(tagLoopMessageInternal& loopMsg)
 
 int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 {
+	mLooperTick = ShellTool::GetTickCount64();
+
 	do
 	{
 		{
@@ -253,6 +255,8 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 			{
 				msg = msgList.front();
 				msgList.pop_front();
+
+				mLastIoTick = mLooperTick;
 
 #ifdef _CONFIG_DEBUG_LOOPER
 				/*
@@ -297,15 +301,9 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 
 		DWORD cmsDelayNext = INFINITE;
 #ifdef _CONFIG_DEBUG_LOOPER
-		if (isMainLooper)
-		{
-			//static int idx = -1;
-			//DV("ProcessTimer#begin,idx=%06d", ++idx);
-		}
-
 		mTickCheckTimer = ShellTool::GetTickCount64();
 #endif
-		ProcessTimer(cmsDelayNext);
+		ProcessTimer(cmsDelayNext, mLooperTick-mLastIoTick);
 #ifdef _CONFIG_DEBUG_LOOPER
 		if (isMainLooper)
 		{
@@ -359,6 +357,10 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 			const int kMaxEvents = 64;
 			struct kevent arr[kMaxEvents];
 			int n = kevent((int)mLooperHandle, NULL, 0, arr, COUNT_OF(arr), &timeout);
+			if (n > 0)
+			{
+				mLastIoTick = mLooperTick;
+			}
 			for (int i = 0; i < n; i++)
 			{
 				EpollProxy *handler = (EpollProxy*)(intptr_t)arr[i].udata;
@@ -399,6 +401,11 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 #else
 			epoll_event events[1024];
 			int ret = epoll_wait((int)(LONGLONG)mLooperHandle, events, COUNT_OF(events), cmsDelayNext);
+			if (ret > 0)
+			{
+				mLastIoTick = mLooperTick;
+			}
+
 			for (int i = 0; i < ret; i++)
 			{
 				if (events[i].data.ptr)

@@ -89,6 +89,7 @@ LooperImpl::LooperImpl()
 #endif
 
 	mInternalData->SetActiveObject();
+	mLooperTick = ShellTool::GetTickCount64();
 }
 
 LooperImpl::~LooperImpl()
@@ -737,7 +738,7 @@ void LooperImpl::sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& loop
 	}
 }
 
-int LooperImpl::ProcessTimer(DWORD& cmsDelayNext)
+int LooperImpl::ProcessTimer(DWORD& cmsDelayNext, ULONGLONG ioIdleTick)
 {
 	if (mTimerManager == nullptr)
 	{
@@ -746,7 +747,7 @@ int LooperImpl::ProcessTimer(DWORD& cmsDelayNext)
 
 	bool needWait = true;
 	auto timerMan = LooperImpl::GetTimerManager();
-	needWait = (timerMan->ProcessTimer(cmsDelayNext) == 0);
+	needWait = (timerMan->ProcessTimer(cmsDelayNext, ioIdleTick) == 0);
 
 	if (needWait)
 	{

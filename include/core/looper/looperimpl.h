@@ -56,7 +56,10 @@ public:
 	virtual void LOOPER_SAFE Destroy();
 	virtual int  LOOPER_SAFE PostQuitMessage(long exitCode = 0);
 	virtual int GetQuitCode()const;
-
+	virtual ULONGLONG tick()const
+	{
+		return mLooperTick;
+	}
 	virtual LRESULT sendMessage(UINT msg, WPARAM wp = NULL, LPARAM lp = NULL);
 	virtual LRESULT postMessage(UINT msg, WPARAM wp = NULL, LPARAM lp = NULL);
 	virtual LRESULT sendMessage(std::shared_ptr<Handler>handler, UINT msg, WPARAM wp = NULL, LPARAM lp = NULL);
@@ -82,7 +85,7 @@ protected:
 	void sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& looper);
 	virtual bool PostQueuedCompletionStatus(HANDLE handle, DWORD bytes = 0, ULONG_PTR key = 0, LPOVERLAPPED lpOverlapped = 0) = 0;
 	virtual void _StackLooperSendMessage(tagLoopMessageInternal& loopMsg) = 0;
-	virtual int ProcessTimer(DWORD& cmsDelayNext);
+	virtual int ProcessTimer(DWORD& cmsDelayNext,ULONGLONG ioIdleTick);
 
 	virtual long SetTimerEx(UINT interval, std::shared_ptr<tagTimerExtraInfo> info = nullptr);
 	virtual long SetTimerEx(std::shared_ptr<Handler>handler, UINT interval, std::shared_ptr<tagTimerExtraInfo> info = nullptr);
@@ -111,7 +114,8 @@ protected:
 
 protected:
 	HANDLE	mLooperHandle;
-
+	ULONGLONG mLooperTick=0;
+	ULONGLONG mLastIoTick = 0;/* 上次io发生的时间 */
 	std::string	mThreadName;
 
 	std::shared_ptr<TimerManager> GetTimerManager();

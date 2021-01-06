@@ -28,6 +28,35 @@ namespace Core_Windows_UnitTest
 TEST_CLASS(Core_Windows)
 {
 public:
+	TEST_METHOD(IoIdleTest)
+	{
+		class MainLooper :public MainLooper_
+		{
+			long mTimer_Test=0;
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+
+				SetTimer(mTimer_Test, 3000);
+			}
+
+			void OnTimer(long id)
+			{
+				if (id == mTimer_Test)
+				{
+					static int idx = -1;
+					++idx;
+					LogV(TAG, "timer,idx=%04d",idx);
+				}
+
+				__super::OnTimer(id);
+			}
+		};
+	
+		make_shared<MainLooper>()->StartRun();
+	}
+
 	TEST_METHOD(TcpListener_)
 	{
 		class MainLooper :public MainLooper_

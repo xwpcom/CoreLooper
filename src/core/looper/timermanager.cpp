@@ -396,9 +396,14 @@ void TimerManager::KillTimer(shared_ptr<Handler>handler, long& timerId)
 	KillTimer(handler.get(), timerId);
 }
 
-int TimerManager::ProcessTimer(DWORD& cmsDelayNext)
+void TimerManager::clearCacheTick()
 {
-	if (mBusying)//禁止重入
+
+}
+
+int TimerManager::ProcessTimer(DWORD& cmsDelayNext, ULONGLONG ioIdleTick)
+{
+	if (mBusying)/* 禁止重入 */
 	{
 		cmsDelayNext = 1;
 		return 0;
@@ -408,7 +413,14 @@ int TimerManager::ProcessTimer(DWORD& cmsDelayNext)
 	DetectList();
 	mBusying = false;
 
-	cmsDelayNext = (DWORD)GetMinIdleTime();
+	if (ioIdleTick < 1000)
+	{
+		cmsDelayNext = 1;
+	}
+	else
+	{
+		cmsDelayNext = (DWORD)GetMinIdleTime();
+	}
 	return 0;
 }
 

@@ -7,6 +7,7 @@
 #include "looper/looper.h"
 #include "../../core/looper/handlerinternaldata.h"
 #include "../../core/looper/looperinternaldata.h"
+#include "../../core/looper/timermanager.h"
 #pragma comment(lib, "WS2_32.lib")
 
 #ifdef _DEBUG
@@ -188,6 +189,8 @@ void Looper_Windows::_StackLooperSendMessage(tagLoopMessageInternal& loopMsg)
 
 int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 {
+	mLooperTick = ShellTool::GetTickCount64();
+
 	do
 	{
 		{
@@ -197,6 +200,7 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 			{
 				msg = msgList.front();
 				msgList.pop_front();
+				mLastIoTick = mLooperTick;
 				return 0;
 			}
 		}
@@ -207,14 +211,11 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 		}
 
 		DWORD cmsDelayNext = INFINITE;
-		bool needWait = (ProcessTimer(cmsDelayNext) != 0);
-		//cmsDelayNext = MAX(cmsDelayNext, 5);
+		ProcessTimer(cmsDelayNext, mLooperTick - mLastIoTick);
 		cmsDelayNext = MAX(1, cmsDelayNext);
 
-		//if (needWait)
 		{
 			//ASSERT(cmsDelayNext);//如果为0，会形成busy loop,占用大量cpu
-			//DV("%s#delay=%d ms", mThreadName.c_str(),cmsDelayNext);
 
 			BOOL ret = FALSE;
 
@@ -222,6 +223,14 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 			ULONG_PTR ptr = NULL;
 			LPOVERLAPPED ov = NULL;
 			ret = GetQueuedCompletionStatus(mLooperHandle, &bytes, &ptr, &ov, cmsDelayNext);
+			if (ptr && mTimerManager)
+			{
+				mLastIoTick = mLooperTick;
+			}
+			else
+			{
+				int x = 0;
+			}
 
 			if (ret == 0)
 			{

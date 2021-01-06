@@ -47,6 +47,7 @@ public:
 	virtual LPVOID GetLooperHandle()const = 0;
 
 	virtual int Wakeup() = 0;
+	virtual ULONGLONG tick()const = 0;
 protected:
 	virtual bool CanQuitLooperNow() = 0;
 	virtual long SetTimer(Handler *handler, UINT interval) = 0;

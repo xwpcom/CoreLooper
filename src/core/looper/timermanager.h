@@ -16,7 +16,8 @@ class TimerManager
 public:
 	TimerManager();
 	virtual ~TimerManager();
-	int ProcessTimer(DWORD& cmsDelayNext);
+	int ProcessTimer(DWORD& cmsDelayNext,ULONGLONG tick);
+	void clearCacheTick();
 
 	int SetTimer(std::shared_ptr<Handler>handler, long timerId, UINT interval, std::shared_ptr<tagTimerExtraInfo> extraInfo = nullptr);
 	void KillTimer(std::shared_ptr<Handler>handler, long& timerId);
@@ -46,6 +47,7 @@ private:
 	tagNodeLink	mReadyNodes;
 	bool		mBusying;
 	bool		mEnableDebugInfo = false;
+	ULONGLONG   mCacheTick=0;
 };
 }
 }
