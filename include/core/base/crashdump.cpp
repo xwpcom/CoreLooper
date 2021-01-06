@@ -10,6 +10,27 @@
 char CCrashDump::m_szPrefix[64];
 BOOL CCrashDump::m_bInstalled=FALSE;
 
+/*
+2021.01.03
+用如下代码测试发现,stack overflow时会在StartAutoDump中报错导致没法生成dmp文件
+
+	class FillStack
+	{
+	public:
+		void func()
+		{
+			char buf[4096];
+			buf[0] = 0;
+			FillStack obj;
+			obj.func();
+		}
+	};
+
+	FillStack obj;
+	obj.func();
+
+*/
+
 //已测试确认，release版不加debug信息，生成的.dmp文件也能定位到bug代码行，前提是生成.exe后代码没修改过
 long CCrashDump::StartAutoDump(struct _EXCEPTION_POINTERS *pep)
 {

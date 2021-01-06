@@ -173,4 +173,7 @@
     <None Include="doc\todo.md" />
     <None Include="doc\memoryLog设计.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\xp.manifest" />
+  </ItemGroup>
 </Project>
