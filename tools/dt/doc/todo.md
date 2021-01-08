@@ -1,4 +1,17 @@
+# 2021.01.07
+
+今天在测试ocx时,vs需要管理员权限才能成功注册ocx
+
+发现此时DT接收不到管理员级别的消息，双击日志也不能在vs中定位到代码行
+
+DT也采用管理员权限运行后，就能正常接收和定位到代码行了
+
+后面需要研究一下权限问题
+
+
+
 # 2020.12.23
+
 changes:
 .勾上AutoScroll后，当ListCtrl中有mouse,keyboard操作时，设AutoScroll为三态，并在AutoScroll旁边搞一个倒计时，超时才真正scroll
 
@@ -71,6 +84,7 @@ todo:
 changes:
 - 增加了open file goto line 功能
   
+
 goto line是采用c#工程CoreLooper\tools\OpenFileGotoLine来做的
 
 <pre>
