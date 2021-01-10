@@ -148,7 +148,7 @@ void SmartTlsLooperManager::clear()
 
 class SmartTlsLooper
 {
-public:
+public:														   
 	SmartTlsLooper(LooperImpl* obj)
 	{
 		mLooper = gTlsLooperManager.PopTlsLooper();
