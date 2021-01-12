@@ -34,8 +34,8 @@ public:
 	WSAOVERLAPPED	mOV;
 	SOCKET			mSock;
 
-	std::shared_ptr<IocpObject> mBaseServer;//用来保证io还在进行中时对象有效
-	std::shared_ptr<IocpObject> mBaseClient;
+	shared_ptr<IocpObject> mBaseServer;//用来保证io还在进行中时对象有效
+	shared_ptr<IocpObject> mBaseClient;
 };
 }
 }

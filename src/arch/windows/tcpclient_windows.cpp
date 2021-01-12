@@ -146,9 +146,6 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 {
 	auto objThis = shared_from_this();//确保在DispatchIoContext执行期间不被删除
 
-	//LogW(TAG,"%s,this=0x%x,threadId=0x%x", __func__, this, GetCurrentThreadId());
-
-
 	//shared_ptr<TcpClient_Windows> ptr = dynamic_pointer_cast<TcpClient_Windows>(shared_from_this());
 	//2016.03.22,现在采用PostDispose来保证不会删除调用栈上的对象
 	//所以不再需要在这里用shared_ptr保护TcpClient_Windows
@@ -168,7 +165,6 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 	case IoContextType_Connect:
 	{
 		mIoContextConnect.mBusying = false;
-		//PostDispose(mIoContextConnect.mBaseClient);
 		mIoContextConnect.mBaseClient = nullptr;
 		OnConnectAck();
 		break;

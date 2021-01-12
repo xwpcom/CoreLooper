@@ -22,23 +22,10 @@ IoContext::IoContext()
 	memset(&mOV, 0, sizeof(mOV));
 
 	mByteBuffer.SetBufferSize(1024 * 4, 1024 * 16);
-
-#ifdef _DEBUGXX
-	long rc = InterlockedIncrement(&gIoContextRC);
-	LogV(TAG,"%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
-	if (rc == 4)
-	{
-		int x = 0;
-	}
-#endif
 }
 
 IoContext::~IoContext()
 {
-#ifdef _DEBUGXX
-	long rc = InterlockedDecrement(&gIoContextRC);
-	LogV(TAG,"%s,gIoContextRC = %ld,this=0x%08x", __func__, gIoContextRC, this);
-#endif
 }
 
 int IoContext::PostSend()
@@ -61,7 +48,7 @@ int IoContext::PostSend()
 	wb.buf = (char*)mByteBuffer.GetDataPointer();
 	wb.len = mByteBuffer.GetActualDataLength();
 	ASSERT(wb.len > 0);
-	//LogV(TAG,"WSASend,bytes=%d",wb.len);
+	
 	int ret = -1;
 	if (mSocketType)
 	{
@@ -77,14 +64,16 @@ int IoContext::PostSend()
 	}
 	if (ret == 0 || (ret == -1 && WSA_IO_PENDING == WSAGetLastError()))
 	{
-		//LogV(TAG,"WSASend,len=%04d", wb.len);
+		
 		mBusying = true;
 		return 0;
 	}
 #endif
 
-	LogW(TAG,"fail to send,maybe socket is closed");
 	mByteBuffer.clear();
+
+	auto error = WSAGetLastError();
+	LogW(TAG,"fail to send,,error=%d(%s)", error, SockTool::GetErrorDesc(error));
 	return -1;
 }
 
@@ -134,5 +123,7 @@ int IoContext::PostRecv(int maxRecvBytes)
 
 	return -1;
 }
+
 }
-}}
+}
+}

@@ -41,6 +41,7 @@ public:
 	}
 
 	int operator()(const char* tag, const char* lpszFormat, ...);
+	int operator()(const string&tag, const char* lpszFormat, ...);
 protected:
 
 	const char* m_lpszFile;

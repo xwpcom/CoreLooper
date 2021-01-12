@@ -64,6 +64,41 @@ static WORD gAppNameBytes;
 
 #ifdef _MSC_VER
 static const auto* gTitle = _T("DT2020 ");
+int CLog::operator()(const string& tag, const char* lpszFormat, ...)
+{
+#ifdef _CONFIG_DT_2020
+	//send message to new dt (2020.02.04)
+	{
+		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+		if (!IsWindow(hwnd))
+		{
+			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
+		}
+
+		if (hwnd)
+		{
+
+			char szMsg[1024 * 64 * sizeof(char)];
+
+			va_list argList;
+			va_start(argList, lpszFormat);
+			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
+			va_end(argList);
+
+			tagLogInfo info;
+			info.hwnd = hwnd;
+			info.msg = szMsg;
+			info.mFile = m_lpszFile;
+			info.mLevel = m_nLevel;
+			info.mLine = m_nLine;
+			info.mTag = tag.c_str();
+
+			CDT::send(info);
+		}
+	}
+#endif
+	return 0;
+}
 
 int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 {

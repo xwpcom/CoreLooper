@@ -226,9 +226,6 @@
     <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\arch\windows\handlerwnd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -598,9 +595,6 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h">
-      <Filter>header files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\arch\windows\handlerwnd.h">
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\arch\windows\wndmanager.h">

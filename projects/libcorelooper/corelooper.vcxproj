@@ -312,7 +312,6 @@
     <ClCompile Include="..\..\src\arch\linux\udpclient_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\udpserver_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\linuxsignal.cpp" />
-    <ClCompile Include="..\..\src\arch\windows\handlerwnd.cpp" />
     <ClCompile Include="..\..\src\arch\windows\iocpobject.cpp" />
     <ClCompile Include="..\..\src\arch\windows\looper_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp" />
@@ -453,7 +452,6 @@
     <ClInclude Include="..\..\include\arch\linux\udpserver_linux.h" />
     <ClInclude Include="..\..\include\arch\linux\linuxsignal.h" />
     <ClInclude Include="..\..\include\arch\linux\looper_linux.h" />
-    <ClInclude Include="..\..\include\arch\windows\handlerwnd.h" />
     <ClInclude Include="..\..\include\arch\windows\iocpobject.h" />
     <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h" />
     <ClInclude Include="..\..\include\arch\windows\serialport_windows.h" />

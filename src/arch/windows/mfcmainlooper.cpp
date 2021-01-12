@@ -6,12 +6,10 @@ namespace Bear {
 namespace Windows {
 MfcMainLooper::MfcMainLooper()
 {
-	//DG("%s", __func__);
 }
 
 MfcMainLooper::~MfcMainLooper()
 {
-	//DG("%s", __func__);
 }
 
 shared_ptr<MfcMainLooper> MfcMainLooper::CheckCreateMainLooper()
