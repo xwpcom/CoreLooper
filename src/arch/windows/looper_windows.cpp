@@ -207,19 +207,81 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 			return -1;
 		}
 
-		DWORD cmsDelayNext = INFINITE;
-		ProcessTimer(cmsDelayNext, mLooperTick - mLastIoTick);
-		cmsDelayNext = MAX(1, cmsDelayNext);
+		DWORD msDelayNext = INFINITE;
+		ProcessTimer(msDelayNext, mLooperTick - mLastIoTick);
+		msDelayNext = MAX(1, msDelayNext);
 
 		{
-			//ASSERT(cmsDelayNext);//如果为0，会形成busy loop,占用大量cpu
+			//ASSERT(msDelayNext);//如果为0，会形成busy loop,占用大量cpu
+
+#if 1
+			BOOL fAlertable = FALSE;
+			ULONG count = 0;
+			OVERLAPPED_ENTRY items[100];
+			BOOL ok=GetQueuedCompletionStatusEx(mLooperHandle
+				,items
+				,_countof(items)
+				,&count
+				,msDelayNext
+				,fAlertable
+			);
+
+			if (!ok)
+			{
+				return 0;
+			}
+			
+			if (count>0 && mTimerManager)
+			{
+				mLastIoTick = mLooperTick;
+			}
+
+			if (count > 1)
+			{
+				//LogV(TAG, "iocp finish count = %d",(int)count);
+			}
+
+			for (ULONG i = 0; i < count; i++)
+			{
+				auto& item = items[i];
+				auto ptr = item.lpCompletionKey;
+				auto ov = item.lpOverlapped;
+				auto bytes = item.dwNumberOfBytesTransferred;
+
+				if (ptr > 0xFFFF)
+				{
+					ASSERT(ov);
+
+					IocpObject* obj = (IocpObject*)ptr;
+					IoContext* context = CONTAINING_RECORD(ov, IoContext, mOV);
+					obj->DispatchIoContext(context, bytes);
+				}
+				else if (ptr && ptr <= 0xFFFF)
+				{
+					UINT msg = (UINT)ptr;
+					LPVOID info = (LPVOID)(ULONGLONG)bytes;
+					LPVOID obj = (LPVOID)ov;
+
+					if (obj > (LPVOID)0xFFFF)
+					{
+						IocpObject* iocpObject = (IocpObject*)obj;
+						iocpObject->OnCustomIocpMessage(msg, info);
+					}
+					else
+					{
+						//OnCustomIocpMessage(obj, msg, info);
+					}
+				}
+			}
+
+#else
 
 			BOOL ret = FALSE;
 
 			DWORD bytes = 0;
 			ULONG_PTR ptr = NULL;
 			LPOVERLAPPED ov = NULL;
-			ret = GetQueuedCompletionStatus(mLooperHandle, &bytes, &ptr, &ov, cmsDelayNext);
+			ret = GetQueuedCompletionStatus(mLooperHandle, &bytes, &ptr, &ov, msDelayNext);
 			if (ptr && mTimerManager)
 			{
 				mLastIoTick = mLooperTick;
@@ -227,24 +289,6 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 			else
 			{
 				int x = 0;
-			}
-
-			if (ret == 0)
-			{
-#ifdef _DEBUG
-				int error = GetLastError();
-				if (error != WAIT_TIMEOUT)
-				{
-					if (ov == NULL && error == ERROR_ABANDONED_WAIT_0)
-					{
-						int x = 0;
-					}
-					else
-					{
-						int x = 0;
-					}
-				}
-#endif
 			}
 
 			if (ptr > 0xFFFF)
@@ -271,6 +315,7 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 					//OnCustomIocpMessage(obj, msg, info);
 				}
 			}
+#endif
 
 			if (mLooperInternalData->mAttachThread)
 			{

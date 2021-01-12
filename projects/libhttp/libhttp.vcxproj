@@ -228,7 +228,6 @@
     <ClCompile Include="src\posthandler_uploadvideo.cpp" />
     <ClCompile Include="src\postjsonmanager.cpp" />
     <ClCompile Include="src\procmanager.cpp" />
-    <ClCompile Include="src\tests\demohttprequesthandler.cpp" />
     <ClCompile Include="src\tests\http_unittest.cpp" />
     <ClCompile Include="src\textparser.cpp" />
     <ClCompile Include="src\userinfo.cpp" />
@@ -291,7 +290,6 @@
     <ClInclude Include="src\ajax_tree.h" />
     <ClInclude Include="src\openssl\SSLBox.h" />
     <ClInclude Include="src\openssl\SSLUtil.h" />
-    <ClInclude Include="src\tests\demohttprequesthandler.h" />
     <ClInclude Include="src\textparser.h" />
     <ClInclude Include="src\zltoolkit\Network\Buffer.h" />
     <ClInclude Include="src\zltoolkit\Network\Socket.h" />

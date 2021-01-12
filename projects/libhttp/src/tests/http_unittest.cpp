@@ -593,7 +593,7 @@ public:
 			void TestDownloadFile()
 			{
 				static int idx = -1;
-				if (idx >= 0)
+				if (idx >= 2)
 				{
 					return;
 				}

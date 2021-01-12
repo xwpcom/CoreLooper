@@ -9,6 +9,8 @@ using namespace FileSystem;
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpFormField_File";
+
 HttpFormField_File::HttpFormField_File()
 {
 	mFile = nullptr;
@@ -78,7 +80,7 @@ int HttpFormField_File::Input(LPBYTE data, int dataLen)
 		}
 		else
 		{
-			DW("fail fwrite,dataLen=%d,ret=%d,error=%d", dataLen, ret, errno);
+			LogW(TAG,"fail fwrite,dataLen=%d,ret=%d,error=%d", dataLen, ret, errno);
 		}
 	}
 	else
@@ -101,7 +103,7 @@ void HttpFormField_File::SetDataReady(bool ready)
 
 void HttpFormField_File::OnPostFail()
 {
-	//不要删除，可支持断点继传
+	//不要删除已下载的部分文件，可用于支持断点继传
 }
 
 }
