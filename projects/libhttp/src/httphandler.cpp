@@ -15,14 +15,13 @@ static const char* TAG = "HttpHandler";
 HttpHandler::HttpHandler()
 {
 	SetObjectName("HttpHandler");
-	//DV("%s", __func__);
 
 	mOutbox.PrepareBuf(1024 * 16);
 }
 
 HttpHandler::~HttpHandler()
 {
-	//DV("%s", __func__);
+	
 }
 
 void HttpHandler::OnConnect(Channel*, long error, Bundle*)
@@ -43,8 +42,6 @@ void HttpHandler::OnClose(Channel*)
 
 void HttpHandler::OnSend(Channel*)
 {
-	//DV("%s", __func__);
-
 	CheckSend();
 }
 
@@ -130,7 +127,7 @@ void HttpHandler::CheckSend()
 
 void HttpHandler::OnReceive(Channel*)
 {
-	//DV("%s", __func__);
+	
 
 	while (mChannel)
 	{

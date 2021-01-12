@@ -66,7 +66,7 @@ public:
 				__super::OnCreate();
 
 				{
-					DV("main threadId=%d", ShellTool::GetCurrentThreadId());
+					LogV(TAG,"main threadId=%d", ShellTool::GetCurrentThreadId());
 
 					
 					for(int i=0;i<5;i++)
@@ -78,7 +78,7 @@ public:
 						obj->SignalAccept.connect(this, &MainLooper::OnAccept);
 					}
 
-					postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
+					DelayExit(5000);
 				}
 			}
 

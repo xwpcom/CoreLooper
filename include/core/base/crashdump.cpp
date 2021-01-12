@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "crashdump.h"
+#include <string>
+using namespace std;
+#include "shelltool.h"
+using namespace Bear::Core;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,15 +41,18 @@ long CCrashDump::StartAutoDump(struct _EXCEPTION_POINTERS *pep)
 	char	szFileName[_MAX_PATH]	= {0};
 	SYSTEMTIME stLocalTime;
 	GetLocalTime( &stLocalTime );
+	string folder = ShellTool::GetAppPath();
 	if(m_szPrefix[0])
 	{
-		sprintf( szFileName,"%s_%d%02d%02d_%02d%02d%02d.dmp",
+		sprintf( szFileName,"%s/%s_%d%02d%02d_%02d%02d%02d.dmp",
+			folder.c_str(),
 			m_szPrefix,
 			stLocalTime.wYear,stLocalTime.wMonth,stLocalTime.wDay,stLocalTime.wHour,stLocalTime.wMinute,stLocalTime.wSecond);  
 	}
 	else
 	{
-		sprintf( szFileName,"%d%02d%02d_%02d%02d%02d.dmp",
+		sprintf( szFileName,"%s/%d%02d%02d_%02d%02d%02d.dmp",
+			folder.c_str(),
 			stLocalTime.wYear,stLocalTime.wMonth,stLocalTime.wDay,stLocalTime.wHour,stLocalTime.wMinute,stLocalTime.wSecond);  
 	}
 	HANDLE hFile = CreateFileA(szFileName, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ); 

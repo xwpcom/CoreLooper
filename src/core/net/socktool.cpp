@@ -18,7 +18,7 @@ int SockTool::InitSockTool()
 	int nRet = 0;
 	if ((nRet = WSAStartup(MAKEWORD(2, 2), &wsaData)) != 0)
 	{
-		LogW(TAG,"Fail to CSockTool::InitWSASocket");
+		LogW(TAG,"Fail WSAStartup");
 		return -1;
 	}
 #endif

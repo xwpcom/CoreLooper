@@ -34,7 +34,7 @@ int TcpListener_Windows::StartListener(int port)
 		*/
 
 		//Looper::CurrentLooper()->AddChild(shared_from_this());
-		DW("%s fail,please call Create() and try again", __func__);
+		LogW(TAG,"%s fail,please call Create() and try again", __func__);
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -56,7 +56,7 @@ int TcpListener_Windows::StartListener(int port)
 	int ret = ::bind(sock, (LPSOCKADDR)&addr, sizeof(addr));
 	if (ret)
 	{
-		DW("fail to StartServer(port=%d)", port);
+		LogW(TAG,"fail to StartServer(port=%d)", port);
 		ASSERT(FALSE);
 
 		SockTool::CAutoClose ac(&sock);
@@ -117,7 +117,7 @@ int TcpListener_Windows::StartListener(int port)
 
 		for (int i = 0; i < 2; i++)
 		{
-			IoContext* context = new IoContext;//Stop()后GetQueuedCompletionStatus返回accept失败时delete
+			IoContext* context = new IoContext;//Stop()后返回accept失败时delete
 			ret = PostAccept(context);
 			if (ret == 0)
 			{
@@ -157,7 +157,7 @@ int TcpListener_Windows::PostAccept(IoContext* ioContext)
 	{
 		if (WSA_IO_PENDING != WSAGetLastError())
 		{
-			DW("lpfnAcceptEx failed with error code: %d/n", WSAGetLastError());
+			LogW(TAG,"lpfnAcceptEx failed with error code: %d/n", WSAGetLastError());
 
 			return -1;
 		}

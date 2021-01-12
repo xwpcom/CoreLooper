@@ -21,7 +21,8 @@ protected:
 	bool	*mDone=nullptr;
 	bool	mWaitAck=false;
 	LRESULT *mAck=nullptr;
-	std::shared_ptr<LooperImpl> mSourceBaseLoop=nullptr;//处理完消息后要通知mSourceBaseLoop
+	//std::shared_ptr<LooperImpl> mSourceBaseLoop=nullptr;//处理完消息后要通知mSourceBaseLoop
+	LooperImpl* mSendLooper=nullptr;
 };
 
 struct tagSetKillTimerInfo

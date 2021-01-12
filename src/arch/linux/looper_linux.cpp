@@ -435,7 +435,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 
 			if (mLooperInternalData->mAttachThread)
 			{
-				//stack looper只触发，不收真正有用的消息
+				/* stack looper只触发，不收真正有用的消息 */
 				return -1;
 			}
 		}

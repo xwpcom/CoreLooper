@@ -5,6 +5,7 @@
 #include "parser_unittest.h"
 #include "libhttp/httpacker.h"
 #include "string/stringparam.h"
+#include "libhttp/httppost.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -487,7 +488,147 @@ public:
 			Assert::IsTrue(body.length() == 0x79);
 		}
 	}
+	
+	TEST_METHOD(StressTest)
+	{
+		/*
+		2021.01.11
+		最近发现iot经常crash在libhttp.dll,call stack耗尽，导致没法生成.dmp文件
+		*/
 
+		class MainLooper :public MainLooper_
+		{
+			long mTimer_Test=0;
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				SetTimer(mTimer_Test, 100);
+			}
+
+			void OnTimer(long id)
+			{
+				if (id == mTimer_Test)
+				{
+					TestHttpPost();
+					TestDownloadFile();
+					return;
+				}
+
+				__super::OnTimer(id);
+			}
+
+			int TestHttpPost()
+			{
+				auto obj = make_shared<HttpPost>();
+				AddChild(obj);
+				obj->SetServerPort("192.168.1.3", 79);
+				string url = StringTool::Format("/ISAPI/Security/sessionLogin?timeStamp=%lld", (LONGLONG)time(nullptr));
+				obj->AddHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+
+				{
+					string user = "bear";
+					string sn = "123";
+
+					string text = "<SessionLogin>";
+					XmlString x;
+					x.AddItem("userName", user);
+					x.AddItem("password", sn);
+					text += x.GetString().c_str();
+					text += "</SessionLogin>";
+					ByteBuffer box;
+					box.Write(text);
+
+					obj->SetBodyRawData(box);
+				}
+
+				class PostAckHandler :public HttpPostAckHandler
+				{
+				public:
+					shared_ptr< Handler> mRef;
+					sigslot::signal2<int, const string&> SignalLoginAck;
+					sigslot::signal1<HttpPostAckHandler*> SignalFinish;
+					PostAckHandler()
+					{
+						LogV(TAG, "%s(%p)", __func__, this);
+					}
+					~PostAckHandler()
+					{
+						LogV(TAG, "%s(%p)", __func__, this);
+					}
+				protected:
+					void OnPostAck(const string& ack)
+					{
+						LogV(TAG, "%s", ack.c_str());
+						SignalLoginAck(0, ack);
+					}
+
+					void OnPostFail(int error, string desc)
+					{
+						LogW(TAG, "%s,desc=[%s]", __func__, desc.c_str());
+						Destroy();
+						SignalLoginAck(-1, "");
+					}
+
+					void Destroy()
+					{
+						SignalFinish(this);
+					}
+				};
+
+				auto handler = make_shared<PostAckHandler>();
+				handler->SignalLoginAck.connect(this, &MainLooper::OnLoginAck);
+				handler->mRef = shared_from_this();
+				obj->SetAckHandler(handler);
+				obj->Start(url);
+				return 0;
+			}
+
+			void OnLoginAck(int error, const string& ack)
+			{
+
+			}
+
+			/* 下载超大文件，注意不要保存在ssd */
+			void TestDownloadFile()
+			{
+				static int idx = -1;
+				if (idx >= 0)
+				{
+					return;
+				}
+
+				++idx;
+
+				auto obj(make_shared<HttpGet>());
+				AddChild(obj);
+
+				obj->SignalHttpGetAck.connect(this, &MainLooper::OnDownloadAck);
+
+				string url = "http://192.168.1.3:79/historyDownload/office2007.zip";
+				//url = "http://download.agora.io/sdk/release/Agora_Native_SDK_for_Windows_v2_2_1_FULL.zip";
+				//url = "http://www.nsfocus.com.cn/";
+				string saveAsFilePath = StringTool::Format("e:/test/%04d.zip",idx);
+				obj->Execute(url, saveAsFilePath);
+			}
+			void OnDownloadAck(Handler* handler, string&, int error, ByteBuffer&)
+			{
+				auto obj = dynamic_cast<HttpGet*>(handler);
+				if (error == 0)
+				{
+					LogV(TAG, "download success,speed=%.1f KB/S", obj->GetSpeed());	/* 本机约50MB/s */
+				}
+				else
+				{
+					LogW(TAG,"download fail,error=%d", error);
+				}
+
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
 };
 
 

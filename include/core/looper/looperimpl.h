@@ -65,7 +65,7 @@ public:
 	virtual LRESULT sendMessage(std::shared_ptr<Handler>handler, UINT msg, WPARAM wp = NULL, LPARAM lp = NULL);
 	virtual LRESULT postMessage(std::shared_ptr<Handler>handler, UINT msg, WPARAM wp = NULL, LPARAM lp = NULL);
 
-	virtual void CancelRunnableInQueue(std::shared_ptr<Handler> handler,std::shared_ptr<Runnable> runnable);
+	virtual void CancelRunnableInQueue(shared_ptr<Handler>& handler,shared_ptr<Runnable>& runnable);
 
 #ifdef _DEBUG
 	static int mTestState;
@@ -97,7 +97,7 @@ protected:
 	virtual int StartHelper(bool newThread) = 0;
 
 	virtual int Run();
-	virtual int SingleStep();
+	virtual void SingleStep();
 	virtual int getMessage(tagLoopMessageInternal& msg) = 0;
 	virtual LRESULT OnThreadMessage(tagLoopMessageInternal& msg);
 	virtual LRESULT dispatchMessage(tagLoopMessageInternal& msg);

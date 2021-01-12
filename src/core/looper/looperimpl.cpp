@@ -35,7 +35,7 @@ LooperImpl *LooperImpl::CurrentLooper()
 {
 	if (!gBaseLooper)
 	{
-		//DV("gBaseLooper is null");
+		//LogV(TAG,"gBaseLooper is null");
 	}
 
 	return gBaseLooper;
@@ -96,7 +96,7 @@ LooperImpl::~LooperImpl()
 {
 	//在非looper线程中发消息给looper时会创建临时looper
 	//如果需要频繁的从非looper线程中发looper消息,可调用Looper::BindTLSLooper()来绑定
-	//DV("%s,name=%s", __func__, mThreadName.c_str());//这里打印消息，可避免无意中创建太多临时looper,影响性能.
+	//LogV(TAG,"%s,name=%s", __func__, mThreadName.c_str());//这里打印消息，可避免无意中创建太多临时looper,影响性能.
 	LONGLONG tick = 0;
 	if (mLooperInternalData->mTickStartQuit)
 	{
@@ -216,13 +216,15 @@ void LooperImpl::OnBMQuit()
 {
 	ASSERT(!mLooperInternalData->mBMQuit);
 	mLooperInternalData->mBMQuit = true;
-	//DV("%s,mBMQuit=%d",mThreadName.c_str(),mBMQuit);
+	//LogV(TAG,"%s,mBMQuit=%d",mThreadName.c_str(),mBMQuit);
 
 	ASSERT(mLooperInternalData->mTimerCheckQuitLooper == 0);
 	if(mLooperInternalData->mTimerCheckQuitLooper == 0)
 	{
-		//注意:如果CanQuitLooperNow()返回false时,并且后续动作不能主动触发looper,
-		//则需要主动定时触发CanQuitLooperNow()，否则looper有可能死等待
+		/*
+		注意:如果CanQuitLooperNow()返回false时,并且后续动作不能主动触发looper,
+		则需要主动定时触发CanQuitLooperNow()，否则looper有可能死等待
+		*/
 		mLooperInternalData->mTimerCheckQuitLooper = SetTimerEx(10);//定时检查CanQuitLooperNow()
 	}
 }
@@ -292,7 +294,7 @@ long LooperImpl::SetTimerEx(UINT interval, shared_ptr<tagTimerExtraInfo> info)
 void LooperImpl::OnDestroy()
 {
 	__super::OnDestroy();
-	//DV("%s(%s)", __func__, mThreadName.c_str());
+	//LogV(TAG,"%s(%s)", __func__, mThreadName.c_str());
 }
 
 int LooperImpl::Wakeup()
@@ -313,7 +315,6 @@ void LooperImpl::KillTimer(Handler *handler, long& timerId)
 		ASSERT(FALSE);
 		return ;
 	}
-	//long ret = -1;
 
 	if (!IsCurrentThread())
 	{
@@ -323,7 +324,6 @@ void LooperImpl::KillTimer(Handler *handler, long& timerId)
 
 	auto timerMan = LooperImpl::GetTimerManager();
 	timerMan->KillTimer(handler, timerId);
-	//return 0;
 }
 
 long LooperImpl::SetTimerEx(Handler *handler, UINT interval, shared_ptr<tagTimerExtraInfo> info)
@@ -342,7 +342,7 @@ long LooperImpl::SetTimerEx(Handler *handler, UINT interval, shared_ptr<tagTimer
 
 	if (!handler->IsCreated())
 	{
-		DW("fail set timer,handler is NOT created");
+		LogW(TAG,"fail set timer,handler is NOT created");
 		return 0;
 	}
 
@@ -352,7 +352,7 @@ long LooperImpl::SetTimerEx(Handler *handler, UINT interval, shared_ptr<tagTimer
 		{
 			if (mLooperInternalData->mDestroyedHandlers.find(handler) == mLooperInternalData->mDestroyedHandlers.end())
 			{
-				DW("fail set timer,handler is destroyed");
+				LogW(TAG,"fail set timer,handler is destroyed");
 				return 0;
 			}
 		}
@@ -361,7 +361,7 @@ long LooperImpl::SetTimerEx(Handler *handler, UINT interval, shared_ptr<tagTimer
 	auto timerMan = GetTimerManager();
 	auto timerId = handler->mInternalData->NextTimerId();
 	timerMan->SetTimer(handler, timerId, interval, info);
-	postMessage(BM_NULL);//投递消息保证重新计算等待时间
+	postMessage(BM_NULL); /* 投递消息保证重新计算等待时间 */
 	return timerId;
 }
 
@@ -391,7 +391,7 @@ long LooperImpl::SetTimerEx(shared_ptr<Handler>handler, UINT interval, shared_pt
 	return SetTimerEx(handler.get(), interval, info);
 }
 
-int LooperImpl::SingleStep()
+void LooperImpl::SingleStep()
 {
 	tagLoopMessageInternal msg;
 	int ret = getMessage(msg);
@@ -412,8 +412,11 @@ int LooperImpl::SingleStep()
 		}
 #endif
 
-		// 注意:这里不能用ret=dispatchMessage(msg)
-		// message处理结果已经通过其他方式返回给message发送方
+		/*
+		注意:这里不能用ret=dispatchMessage(msg)
+		message处理结果已经通过其他方式返回给message发送方 
+		*/
+
 		dispatchMessage(msg);
 
 #ifdef _CONFIG_DEBUG_LOOPER
@@ -423,13 +426,11 @@ int LooperImpl::SingleStep()
 			tick = ShellTool::GetTickCount64() - tick;
 			if (tick > 200)
 			{
-				DV("main looper too slow? %s.msg=%d,tick=" FMT_LONGLONG, name.c_str(), msgId, tick);
+				LogV(TAG,"main looper too slow? %s.msg=%d,tick=" FMT_LONGLONG, name.c_str(), msgId, tick);
 			}
 		}
 #endif
 	}
-
-	return ret;
 }
 
 LRESULT LooperImpl::dispatchMessage(tagLoopMessageInternal& msg)
@@ -453,10 +454,11 @@ LRESULT LooperImpl::dispatchMessage(tagLoopMessageInternal& msg)
 
 		*msg.mDone = true;
 
-		if (msg.mWaitAck && msg.mSourceBaseLoop)
+		/* 由于SenderLooper是采用sendMessage调用到此,能保证SenderLooper到此一直有效 */
+		if (msg.mWaitAck && msg.mSendLooper)
 		{
-			ASSERT(msg.mSourceBaseLoop != shared_from_this());
-			msg.mSourceBaseLoop->Wakeup();
+			ASSERT(msg.mSendLooper != this);
+			msg.mSendLooper->Wakeup();
 		}
 	}
 
@@ -474,8 +476,9 @@ int LooperImpl::Run()
 {
 	while (1)
 	{
-		int ret = SingleStep();
-		if (ret && mLooperInternalData->mBMQuit && CanQuitLooperNow())
+		SingleStep();
+
+		if (mLooperInternalData->mBMQuit && CanQuitLooperNow())
 		{
 			AutoLock lock(&mLooperInternalData->mMessageLock);
 			if (mLooperInternalData->mMessageList.size() == 0)
@@ -499,7 +502,7 @@ int LooperImpl::StartRun()
 {
 	if (CurrentLooper())
 	{
-		DW("");
+		LogW(TAG,"");
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -528,22 +531,21 @@ long LooperImpl::_WorkThread()
 	}
 
 	mThreadId = ShellTool::GetCurrentThreadId();
-	//DV("%s::%s,mThreadId=%d", mThreadName.c_str(), __func__, mThreadId);
+	//LogV(TAG,"%s::%s,mThreadId=%d", mThreadName.c_str(), __func__, mThreadId);
 
-	//说明:在创建thread之前就要置mCreated = true;
-	//如果到这里才置true,由于线程调度影响，可能导致looper->Start()之后mCreate短暂为false而导致竞争关系
-	//影响是send/post会失败!
-	//if (!IsCreated())
-	{
-		//mInternalData->mCreated = true;
-		OnCreate();
-	}
+	/*
+	说明:在创建thread之前就要置mCreated = true;
+	如果到这里才置true,由于线程调度影响，可能导致looper->Start()之后mCreate短暂为false而导致竞争关系
+	影响是send/post会失败!
+	*/
+
+	OnCreate();
 
 	Run();
 
 	auto ret = mLooperInternalData->mExitCode;
 	ASSERT(!mLooperInternalData->mLooperRunning);
-	//ExitInstance();
+
 	ASSERT(mInternalData->mSelfRef);
 	mInternalData->mSelfRef = nullptr;//这里会自动调用delete this
 
@@ -567,7 +569,7 @@ LPVOID LooperImpl::_WorkThreadCB(LPVOID p)
 	{
 #ifdef _DEBUG
 
-		//DV("SetEvent(%s)", name.c_str());
+		//LogV(TAG,"SetEvent(%s)", name.c_str());
 		//ShellTool::Sleep(3000);
 #endif
 		exitEvent->Set();//上层可等待此事件，确认looper完全退出
@@ -583,7 +585,7 @@ LRESULT LooperImpl::postMessage(shared_ptr<Handler>handler, UINT msg, WPARAM wp,
 	{
 		if(handler)
 		{
-			DW("skip postMessage(handler=%s,msg=%d)",handler->GetObjectName().c_str(),msg);
+			LogW(TAG,"skip postMessage(handler=%s,msg=%d)",handler->GetObjectName().c_str(),msg);
 		}
 		
 		//ASSERT(FALSE);
@@ -597,10 +599,9 @@ LRESULT LooperImpl::postMessage(shared_ptr<Handler>handler, UINT msg, WPARAM wp,
 	loopMsg.mLP = lp;
 
 	{
-		//*
 		if (mLooperInternalData->mAttachThread)
 		{
-			//stack looper没有消息循环,所以只触发，不加空消息
+			/* stack looper没有消息循环,所以只触发，不加空消息 */
 			if (msg == BM_NULL)
 			{
 				
@@ -611,7 +612,6 @@ LRESULT LooperImpl::postMessage(shared_ptr<Handler>handler, UINT msg, WPARAM wp,
 			}
 		}
 		else
-			//*/
 		{
 			AutoLock lock(&mLooperInternalData->mMessageLock);
 			if (!mLooperInternalData->mLooperRunning)
@@ -633,13 +633,13 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 	if (!mLooperInternalData->mLooperRunning)
 	{
 		//ASSERT(FALSE);
-		DW("looper is NOT running,skip %s(msg=%d)", __func__, msg);
+		LogW(TAG,"looper is NOT running,skip msg(%d)", msg);
 		return 0;
 	}
 
 	if (mLooperInternalData->mAttachThread && IsMyselfThread())
 	{
-		//清理stack looper收到的所有BM_NULL消息
+		/* 清理stack looper收到的所有BM_NULL消息 */
 		AutoLock lock(&mLooperInternalData->mMessageLock);
 		auto& msgList = mLooperInternalData->mMessageList;
 		while (!msgList.empty())
@@ -658,7 +658,7 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 	}
 
 	bool done = false;
-	LRESULT ack = 0;//默认不能为-1,原因是app可能把返回值当指针
+	LRESULT ack = 0;/* 默认不能为-1,原因是app可能把返回值当指针 */
 	tagLoopMessageInternal loopMsg;
 	loopMsg.mHandler = handler;
 	loopMsg.mMsg = msg;
@@ -667,7 +667,11 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 	loopMsg.mDone = &done;
 	loopMsg.mAck = &ack;
 
-	//注意:在主线程调用looper Start()之后马上调用sendMessage时,有可能looper中的mThreadId在_WorkThread中还没初始化，但这不影响结果
+	/*
+	注意:
+	在主线程调用looper Start()之后马上调用sendMessage时,有可能looper中的mThreadId在_WorkThread中还没初始化，但这不影响结果
+	*/
+
 	if (IsCurrentThread())
 	{
 		return dispatchMessage(loopMsg);
@@ -690,28 +694,13 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 	return 0;
 #endif
 
-#ifdef _DEBUGx
-	{
-		//_StackLooperSendMessage比较低效，所以这里打印出一些信息,上层可据此优化，比如调用BindTlsLooper
-		//已采用SmartTlsLooper优化
-		string desc;
-		if (handler)
-		{
-			desc += StringTool::Format("obj=%s", handler->GetObjectName().c_str());
-		}
-
-		desc += StringTool::Format(",msg=%u", msg);
-		DV("_StackLooperSendMessage,desc=%s", desc.c_str());
-	}
-#endif
-
 	_StackLooperSendMessage(loopMsg);
 	return ack;
 }
 
 void LooperImpl::sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& looper)
 {
-	msg.mSourceBaseLoop = dynamic_pointer_cast<LooperImpl>(looper.shared_from_this());
+	msg.mSendLooper = &looper;// dynamic_pointer_cast<LooperImpl>(looper.shared_from_this());
 
 	{
 		AutoLock lock(&mLooperInternalData->mMessageLock);
@@ -753,7 +742,7 @@ int LooperImpl::ProcessTimer(DWORD& cmsDelayNext, ULONGLONG ioIdleTick)
 	{
 		if (cmsDelayNext != INFINITE)
 		{
-			cmsDelayNext = MAX(1, cmsDelayNext);//发现timer不是很精确,不能恰好等那么长时间，也许可提高精度
+			cmsDelayNext = MAX(1, cmsDelayNext);/* 发现timer不是很精确,不能恰好等那么长时间，也许可提高精度 */
 		}
 
 		ASSERT(cmsDelayNext);//如果为0，会形成busy loop,占用大量cpu
@@ -826,7 +815,7 @@ bool LooperImpl::CanQuitLooperNow()
 			for (UINT i = 0; i < events.size(); i++)
 			{
 				bool signal = events[i]->Wait(0);
-				//DV("events[%d],signal=%d",i,signal);
+				//LogV(TAG,"events[%d],signal=%d",i,signal);
 				if (signal)
 				{
 				}
@@ -842,7 +831,7 @@ bool LooperImpl::CanQuitLooperNow()
 		for (UINT i = 0; i < events.size(); i++)
 		{
 			bool signal = events[i]->Wait(0);
-			//DV("events[%d],signal=%d",i,signal);
+			//LogV(TAG,"events[%d],signal=%d",i,signal);
 			if (signal)
 			{
 			}
@@ -890,13 +879,8 @@ int LooperImpl::SetOwnerLooper(weak_ptr<Looper> owner)
 	return 0;
 }
 
-void LooperImpl::CancelRunnableInQueue(shared_ptr<Handler> handler, shared_ptr<Runnable> runnable)
+void LooperImpl::CancelRunnableInQueue(shared_ptr<Handler>& handler, shared_ptr<Runnable>& runnable)
 {
-	if (!handler || !runnable)
-	{
-		return;
-	}
-
 	if (!IsMyselfThread())
 	{
 		ASSERT(FALSE);
@@ -951,7 +935,7 @@ int LooperImpl::GetQuitCode()const
 int LooperImpl::mTestState = -1;
 void LooperImpl::SetTestState(int state)
 {
-	DV("%s,state=%d", __func__, state);
+	LogV(TAG,"%s,state=%d", __func__, state);
 	mTestState = state;
 }
 

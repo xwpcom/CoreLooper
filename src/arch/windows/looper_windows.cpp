@@ -8,45 +8,44 @@
 #include "../../core/looper/handlerinternaldata.h"
 #include "../../core/looper/looperinternaldata.h"
 #include "../../core/looper/timermanager.h"
+
 #pragma comment(lib, "WS2_32.lib")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-using namespace std;
 using namespace Bear::Core::Net;
 
 namespace Bear {
 namespace Core
 {
+static const char* TAG = "Looper";
+
 Looper_Windows::Looper_Windows()
 {
-	SetObjectName("Looper_Windows");
+	SetObjectName("Looper");
 	mThreadName = GetObjectName();
-	//DV("%s,this=0x%08x", __func__, this);
 
 	{
 		static bool first = true;
 		if (first)
 		{
 			first = false;
-
-			SockTool::InitSockTool();//现在还有不用网络的app吗?
+			SockTool::InitSockTool();
 		}
 	}
 }
 
 Looper_Windows::~Looper_Windows()
 {
-	//DV("%s,this=0x%08x", __func__, this);
 }
 
 int Looper_Windows::StartHelper(bool newThread)
 {
 	if (mLooperInternalData->mLooperRunning)
 	{
-		DW("mLooperRunning=%d,CurrentLooper=%p", mLooperInternalData->mLooperRunning, CurrentLooper());
+		LogW(TAG,"mLooperRunning=%d,CurrentLooper=%p", mLooperInternalData->mLooperRunning, CurrentLooper());
 		ASSERT(FALSE);
 		return 0;
 	}
@@ -61,8 +60,6 @@ int Looper_Windows::StartHelper(bool newThread)
 			}
 		}
 	}
-
-	//ASSERT(mExitEvent);
 
 	{
 		ASSERT(mLooperHandle == INVALID_HANDLE_VALUE);
@@ -234,14 +231,10 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 
 			if (ret == 0)
 			{
+#ifdef _DEBUG
 				int error = GetLastError();
 				if (error != WAIT_TIMEOUT)
 				{
-					if (error != 995)
-					{
-						//DV("fail,GetQueuedCompletionStatus error=%d", error);
-					}
-
 					if (ov == NULL && error == ERROR_ABANDONED_WAIT_0)
 					{
 						int x = 0;
@@ -251,6 +244,7 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 						int x = 0;
 					}
 				}
+#endif
 			}
 
 			if (ptr > 0xFFFF)
@@ -280,7 +274,8 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 
 			if (mLooperInternalData->mAttachThread)
 			{
-				//stack looper只触发，不收真正有用的消息
+				/* stack looper只触发，不收真正有用的消息 */
+				
 				return -1;
 			}
 		}
@@ -291,12 +286,10 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 
 bool Looper_Windows::PostQueuedCompletionStatus(HANDLE handle, DWORD bytes, ULONG_PTR key, LPOVERLAPPED lpOverlapped)
 {
-	//DV("PostQueuedCompletionStatus(handle=%d)",handle);
-
 	bool ok = !!::PostQueuedCompletionStatus(handle, bytes, key, lpOverlapped);
 	if (!ok)
 	{
-		DW("fail to PostQueuedCompletionStatus,error=%d", ShellTool::GetLastError());
+		LogW(TAG,"fail to PostQueuedCompletionStatus,error=%d", ShellTool::GetLastError());
 		int x = 0;
 		ASSERT(ok);
 	}

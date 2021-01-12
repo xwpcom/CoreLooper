@@ -110,52 +110,9 @@ enum
 	eLogMax = eLogA,
 };
 
-struct tagObjectLogConfig
-{
-	tagObjectLogConfig()
-	{
-		mDumpLevel = eLogI;
-		mDumpFileLevel = eLogI;
-	}
-
-	int	mDumpLevel;		//输出在logcat中的级别
-	int	mDumpFileLevel; //保存到文件
-};
-
-struct tagLogItem
-{
-	int		mLevel;
-	std::string	mTag;
-	std::string	mText;
-	DWORD	mThreadId;
-};
-
-
 #ifdef _MSC_VER
 #define vsnprintf _vsnprintf
 #endif
-
-#define LOG_IMPL(Tag,logLevel)										\
-	do{																\
-		int level = logLevel;										\
-		string tag2=Tag;												\
-		tagObjectLogConfig cfg;										\
-		Handler::GetLogConfig(tag2, cfg);						\
-		if (cfg.mDumpFileLevel > level && cfg.mDumpLevel > level)	\
-		{															\
-			return;													\
-		}															\
-																	\
-		char szMsg[1024 * 64 * sizeof(TCHAR)];						\
-		memset(szMsg, 0, sizeof(szMsg));							\
-																	\
-		va_list argList;											\
-		va_start(argList, pszFormat);								\
-		vsnprintf(szMsg,sizeof(szMsg)-1, (char*)pszFormat, argList);	\
-		va_end(argList);											\
-																	\
-		Handler::Log(tag2,level, cfg, szMsg);					\
-	}while(0)
 
 #endif
 
@@ -214,7 +171,7 @@ public:
 	LRESULT SendMessage(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 	{
 		//本函数用来拦截误调用win32 SendMessage,但没法拦截::SendMessage
-		DW("In order to avoid potential deadlock,please use PostMessage to win32 thread");
+		LogW("Handler","In order to avoid potential deadlock,please use PostMessage to win32 thread");
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -250,7 +207,7 @@ public:
 	{
 		if (!IsCreated())
 		{
-			DW("fail %s", __func__);
+			LogW("Handler","fail %s", __func__);
 			return;
 		}
 		if (!sp)
@@ -305,11 +262,6 @@ public:
 	virtual bool LOOPER_SAFE MaybeLongBlock()const;
 
 #ifdef _CONFIG_HANDLER_PROC
-	static void GetLogMap(std::map<std::string, tagObjectLogConfig>& obj);
-	static void SetTagConfig(const std::string& tag, int dumpLevel, int dumpFileLevel);
-	static void LoadLogConfig(FileSystem::IniFile *ini, const std::string& section);
-	static void SaveLogConfig(FileSystem::IniFile *ini, const std::string& section);
-	static int GetLogLevel(char ch);
 
 	//flags为eProcDataFlag,可|多个标志
 	template<class T> int BindProcData(T& value, std::string name, std::string desc = "", DWORD flags = PDF_READ)
@@ -356,19 +308,7 @@ public:
 	int OnProcDataSetter(std::string name, LONGLONG value);
 	int OnProcDataSetter(std::string name, ULONGLONG value);
 
-	virtual int Test();
 	virtual void DumpProcData(std::string& xml, DWORD flags = 0);
-
-#ifdef _CONFIG_HANDLER_LOG
-	virtual void LogV(const char* pszFormat, ...);
-	virtual void LogD(const char* pszFormat, ...);
-	virtual void LogI(const char* pszFormat, ...);
-	virtual void LogW(const char* pszFormat, ...);
-	virtual void LogE(const char* pszFormat, ...);
-	static  void Log(const std::string&tag, int level, tagObjectLogConfig& cfg, const char* text);
-
-	static void GetLogConfig(const std::string& objName, tagObjectLogConfig& cfg);
-#endif
 
 #endif
 
@@ -378,9 +318,6 @@ protected:
 
 #ifdef _CONFIG_HANDLER_PROC
 	std::shared_ptr<ProcNode> mProcNode;
-
-	static CriticalSection	mLogConfigCS;
-	static std::map<std::string, tagObjectLogConfig> sLogMap;
 #endif
 
 	UINT AllocMessageId();

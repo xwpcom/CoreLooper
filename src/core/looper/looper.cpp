@@ -54,7 +54,7 @@ int Looper::SetMainLooper(Looper* looper)
 {
 	if (looper)
 	{
-		LogV(TAG,"%s,name=%s", __func__, looper->mThreadName.c_str());
+		//LogV(TAG,"%s,name=%s", __func__, looper->mThreadName.c_str());
 
 		if (gMainLooper)
 		{

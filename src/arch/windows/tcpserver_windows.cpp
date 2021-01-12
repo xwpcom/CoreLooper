@@ -136,7 +136,7 @@ int TcpServer_Windows::StartServer(int port)
 
 		for (int i = 0; i < 2; i++)
 		{
-			IoContext *context = new IoContext;//Stop()后GetQueuedCompletionStatus返回accept失败时delete
+			IoContext *context = new IoContext;//Stop()后返回accept失败时delete
 			ret = PostAccept(context);
 			if (ret == 0)
 			{

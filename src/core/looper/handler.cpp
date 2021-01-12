@@ -69,7 +69,7 @@ Handler::Handler()
 #endif
 
 	//在没有调用Create绑定到looper之前，认为Handler是自由的,threadId为0
-	mThreadId = 0;// looper ? looper->GetThreadId() : ShellTool::GetCurrentThreadId();
+	mThreadId = 0;
 
 #ifdef _CONFIG_MONITOR_HANDLER
 	{
@@ -77,9 +77,10 @@ Handler::Handler()
 		tagHandlerInternalData::gHandlers[(long*)this] = (long*)this;
 
 		int nc = (int)tagHandlerInternalData::gHandlers.size();
-		if (tagHandlerInternalData::gRationalHandlerUpperLimit && nc > tagHandlerInternalData::gRationalHandlerUpperLimit)
+		auto& limit = tagHandlerInternalData::gRationalHandlerUpperLimit;
+		if (limit && nc > limit)
 		{
-			LogW(TAG,"new Handler(0x%p) out of limit,count=%d,limit=%d", this, nc, tagHandlerInternalData::gRationalHandlerUpperLimit);
+			LogW(TAG,"create Handler(0x%p) out of limit,count=%d,limit=%d", this, nc, limit);
 		}
 	}
 #endif
@@ -228,7 +229,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 	{
 		if (IsCreated())
 		{
-			DV("skip double BM_CREATE");
+			LogV(TAG,"skip double BM_CREATE");
 		}
 		else
 		{
@@ -396,16 +397,6 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		return 0;
 	}
 #ifdef _CONFIG_HANDLER_PROC
-	case BM_ADD_FILE_LOG_ITEM:
-	{
-		//这里是避免main looper没响应此消息时，用来自动删除item
-		tagLogItem *item = (tagLogItem *)wp;
-		LogW(TAG,"should handle in main looper,tag=[%s],text=[%s]", item->mTag.c_str(), item->mText.c_str());
-		delete item;
-		item = nullptr;
-
-		return 0;
-	}
 	case BM_DUMP_PROC_DATA:
 	{
 		string* xml = (string*)wp;
@@ -548,15 +539,6 @@ void Handler::OnCreate()
 {
 	//LogV("%s::OnCreate",GetObjectName().c_str());
 	mInternalData->mOnCreateCalled = true;
-
-#ifdef _DEBUGx
-	auto& name = mInternalData->GetName();
-	if (name.empty())
-	{
-
-	}
-#endif
-
 }
 
 Loop *Handler::GetCurrentLooper()
@@ -701,7 +683,7 @@ void Handler::Destroy()
 
 //原生looper中调用时,可成功取消用postRunnable和postDelayedRunnable投递并且还没执行的Runnable
 //跨looper调用时，无法取消postRunnable投递的Runnable,可以取消用postDelayedRunnable投递并且还没执行的Runnable
-//最高效的办法是在Runnable子类中用bool mCancel变量标记，在Run()中检查mCancel为true时直接返回，也能达到取消的效果
+//更高效的办法是在Runnable子类中用bool mCancel变量标记，在Run()中检查mCancel为true时直接返回，也能达到取消的效果
 void Handler::cancelRunnable(shared_ptr<Runnable> obj)
 {
 	if (!IsCreated() || !obj)
@@ -883,8 +865,6 @@ void HandlerDebug::DumpAll()
 #ifdef _CONFIG_HANDLER_PROC
 using namespace FileSystem;
 
-CriticalSection	Handler::mLogConfigCS;
-map<string, tagObjectLogConfig> Handler::sLogMap;
 int Handler::OnProcDataGetter(const string& name, string& desc)
 {
 	LogW(TAG,"请在子类实现 %s.%s%s", GetObjectName().c_str(), name.c_str(), desc.c_str());
@@ -899,21 +879,6 @@ int Handler::OnProcDataSetter(string name, int value)
 {
 	UNUSED(name);
 	UNUSED(value);
-
-	/*
-	if (name == "age")
-	{
-		if (value >= 0 && value <= 100)
-		{
-			mAge = value;
-			return 0;
-		}
-		else
-		{
-			LogW(TAG,"invalid value %d for %s", value, "age");
-		}
-	}
-	*/
 
 	return eSetterResult_InvalidName;
 }
@@ -967,11 +932,6 @@ int Handler::OnProcDataSetter(string, string)
 	return eSetterResult_InvalidName;
 }
 
-int Handler::Test()
-{
-	return 0;
-}
-
 void Handler::DumpProcData(string& xmlAck, DWORD flags)
 {
 	bool debug = false;
@@ -979,7 +939,7 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 	{
 		if (debug)
 		{
-			DV("%s skip %s due to NOT local looper", GetObjectName().c_str(), __func__);
+			LogV(TAG,"%s skip %s due to NOT local looper", GetObjectName().c_str(), __func__);
 		}
 
 		return;
@@ -1005,11 +965,11 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 		{
 			if (mProcNode)
 			{
-				DV("mProcNode is exists");
+				LogV(TAG,"mProcNode is exists");
 			}
 			else
 			{
-				DV("mProcNode is null");
+				LogV(TAG,"mProcNode is null");
 			}
 		}
 
@@ -1027,7 +987,7 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 				auto item = iter->second.lock();
 				if (item && !item->MaybeLongBlock())
 				{
-					//DV("item=[%s]", item->GetObjectName().c_str());
+					//LogV(TAG,"item=[%s]", item->GetObjectName().c_str());
 					item->sendMessage(BM_DUMP_PROC_DATA, (WPARAM)&xmlChild, (LPARAM)(LONGLONG)flags);//item有可能位于其他线程
 				}
 			}
@@ -1036,14 +996,14 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 			{
 				if (debug)
 				{
-					DV("xmlChild is empty");
+					LogV(TAG,"xmlChild is empty");
 				}
 			}
 			else
 			{
 				if (debug)
 				{
-					DV("xmlChild=%s", xmlChild.c_str());
+					LogV(TAG,"xmlChild=%s", xmlChild.c_str());
 				}
 				xml += StringTool::Format("<%s>%s</%s>", CHILD_NODE_NAME, xmlChild.c_str(), CHILD_NODE_NAME);
 
@@ -1059,241 +1019,7 @@ void Handler::DumpProcData(string& xmlAck, DWORD flags)
 	}
 }
 
-#ifdef _CONFIG_HANDLER_LOG
-
-void Handler::LogV(const char* pszFormat, ...)
-{
-	LOG_IMPL(GetObjectName(), eLogV);
-}
-
-void Handler::LogD(const char* pszFormat, ...)
-{
-	LOG_IMPL(GetObjectName(), eLogD);
-}
-
-void Handler::LogI(const char* pszFormat, ...)
-{
-	LOG_IMPL(GetObjectName(), eLogI);
-}
-
-void Handler::LogW(const char* pszFormat, ...)
-{
-	LOG_IMPL(GetObjectName(), eLogW);
-}
-
-void Handler::LogE(const char* pszFormat, ...)
-{
-	LOG_IMPL(GetObjectName(), eLogE);
-}
-
-void Handler::Log(const string& tag, int level, tagObjectLogConfig& cfg, const char* text)
-{
-	{
-		//直接在此logcat
-		if (level >= cfg.mDumpLevel)
-		{
-#if defined _CONFIG_ANDROID
-			__android_log_print((android_LogPriority)level, ("Bear/" + tag).c_str(), "%s", text);
-#else
-			if (level == eLogV)
-			{
-				DV("%s", text);
-			}
-			else if (level == eLogI)
-			{
-				DG("%s", text);
-			}
-			else if (level == eLogW)
-			{
-				LogW(TAG,"%s", text);
-			}
-			else if (level == eLogE)
-			{
-				DE("%s", text);
-			}
-			else if (level == eLogA)
-			{
-				DE("%s", text);
-				ASSERT(FALSE);
-			}
-
-			//printf("%s\n", text);
 #endif
-		}
-	}
-
-	if (level >= cfg.mDumpFileLevel)
-	{
-		//保存文件要发给main looper来串行处理
-
-		auto obj = Looper::GetMainLooper();
-		if (obj)
-		{
-			tagLogItem *item = new tagLogItem;
-			item->mLevel = level;
-			item->mTag = tag;
-			item->mText = text;
-			item->mThreadId = ShellTool::GetCurrentThreadId();
-
-			if (Looper::CurrentLooper() == obj)
-			{
-				obj->sendMessage(BM_ADD_FILE_LOG_ITEM, (WPARAM)item);
-			}
-			else
-			{
-				obj->postMessage(BM_ADD_FILE_LOG_ITEM, (WPARAM)item);
-			}
-		}
-		else
-		{
-			LogW(TAG,"no main looper,skip log(%s)", text);
-		}
-	}
-}
-
-void Handler::GetLogConfig(const string& objName, tagObjectLogConfig& cfg)
-{
-	AutoLock lock(&mLogConfigCS);
-	auto iter = sLogMap.find(objName);
-	if (iter != sLogMap.end())
-	{
-		cfg = iter->second;
-	}
-	else
-	{
-		tagObjectLogConfig def;
-		sLogMap[objName] = def;
-		cfg = def;
-	}
-}
-
-void Handler::GetLogMap(map<string, tagObjectLogConfig>& obj)
-{
-	AutoLock lock(&mLogConfigCS);
-	for (auto iter = sLogMap.begin(); iter != sLogMap.end(); ++iter)
-	{
-		obj[iter->first] = iter->second;
-	}
-}
-
-void Handler::SetTagConfig(const string& tags, int dumpLevel, int dumpFileLevel)
-{
-	//多个tag以逗号分隔
-	TextSeparator demux(tags.c_str(), ",");
-	vector<string> vec;
-	string item;
-	while (demux.GetNext(item) == 0)
-	{
-		if (!item.empty())
-		{
-			vec.push_back(item.c_str());
-		}
-	}
-
-	AutoLock lock(&mLogConfigCS);
-	if (dumpLevel != -1)
-	{
-		for (auto iter = vec.begin(); iter != vec.end(); ++iter)
-		{
-			sLogMap[*iter].mDumpLevel = dumpLevel;
-		}
-
-	}
-
-	if (dumpFileLevel != -1)
-	{
-		for (auto iter = vec.begin(); iter != vec.end(); ++iter)
-		{
-			sLogMap[*iter].mDumpFileLevel = dumpFileLevel;
-		}
-	}
-}
-
-int Handler::GetLogLevel(char ch)
-{
-	static char levels[] = { '.','.','V','D','I','W','E','A', };
-	for (size_t i = 0; i < sizeof(levels); ++i)
-	{
-		if (ch == levels[i])
-		{
-			if (i >= eLogMin && i <= eLogMax)
-			{
-				return (int)i;
-			}
-			break;
-		}
-	}
-
-	return eLogV;
-}
-
-void Handler::LoadLogConfig(IniFile *ini, const string& section)
-{
-	vector<string> vec = ini->GetSectionKeys(section.c_str());
-	vector<tagObjectLogConfig> configs;
-	for (auto iter = vec.begin(); iter != vec.end(); ++iter)
-	{
-		tagObjectLogConfig cfg;
-		string value = ini->GetString(section.c_str(), iter->c_str());
-		int len = (int)value.length();
-		if (len > 0)
-		{
-			cfg.mDumpLevel = GetLogLevel(value[0]);
-		}
-		if (len > 1)
-		{
-			cfg.mDumpFileLevel = GetLogLevel(value[1]);
-		}
-
-		configs.push_back(cfg);
-	}
-
-	ASSERT(vec.size() == configs.size());
-
-	{
-		AutoLock lock(&mLogConfigCS);
-		int idx = -1;
-		for (auto iter = vec.begin(); iter != vec.end(); ++iter)
-		{
-			++idx;
-			sLogMap[iter->c_str()] = configs[idx];
-		}
-	}
-}
-
-static bool SortString(const string &v1, const string &v2)
-{
-	return v1.compare(v2) < 0;
-}
-
-void Handler::SaveLogConfig(IniFile *ini, const string& section)
-{
-	map<string, tagObjectLogConfig> items;
-	GetLogMap(items);
-
-	//按名称排序
-	vector<string> vec;
-	for (auto iter = items.begin(); iter != items.end(); ++iter)
-	{
-		vec.push_back(iter->first);
-	}
-
-	std::sort(vec.begin(), vec.end(), SortString);
-
-	static char levels[] = { '.','.','V','D','I','W','E','A', };
-
-	string value;
-	for (auto iter = vec.begin(); iter != vec.end(); ++iter)
-	{
-		auto cfg = items[*iter];
-		value = StringTool::Format("%c%c", levels[cfg.mDumpLevel], levels[cfg.mDumpFileLevel]);
-		ini->SetString(section.c_str(), (*iter).c_str(), value.c_str());
-	}
-}
-
-#endif
-#endif
-
 
 }
 }

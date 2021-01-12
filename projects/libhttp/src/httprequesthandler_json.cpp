@@ -79,7 +79,7 @@ int HttpRequestHandler_Json::Start(tagHttpHeaderInfo* headerInfo)
 	Output(ack);
 	Output(xml);
 
-#ifdef _MSC_VER_DEBUG
+#ifdef _MSC_VER_DEBUGx
 	{
 		static int idx = -1;
 		++idx;

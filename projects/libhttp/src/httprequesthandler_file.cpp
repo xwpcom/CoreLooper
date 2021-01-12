@@ -308,18 +308,18 @@ int HttpRequestHandler_File::OutputPlainText(string  text, string  statusCode)
 		text.c_str()
 	);
 
-	HttpAckHeader httpAckHeader;
-	httpAckHeader.SetStatusCode(statusCode);//"200 OK");
-	httpAckHeader.SetContentType("text/html;charset=UTF-8");
-	httpAckHeader.SetContentLength((int)content.length());
-	httpAckHeader.SetConnection("Keep-Alive");
-	httpAckHeader.SetCacheControl("no-cache,no-store");
+	HttpAckHeader acker;
+	acker.SetStatusCode(statusCode);//"200 OK");
+	acker.SetContentType("text/html;charset=UTF-8");
+	acker.SetContentLength((int)content.length());
+	acker.SetConnection("Keep-Alive");
+	acker.SetCacheControl("no-cache,no-store");
 
 	string  ack = StringTool::Format(
 		"%s"
 		"%s"
 		,
-		httpAckHeader.ack().c_str(),
+		acker.ack().c_str(),
 		content.c_str()
 	);
 	/*

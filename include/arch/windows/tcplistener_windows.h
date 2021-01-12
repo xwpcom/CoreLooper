@@ -9,12 +9,13 @@
 #include "arch/windows/iocpobject.h"
 #include "arch/windows/iocontext.h"
 #include "base/object.h"
-//XiongWanPing 2020.06.15
+
 namespace Bear {
 namespace Core
 {
 namespace Net {
 
+//XiongWanPing 2020.06.15
 class CORE_EXPORT TcpListener_Windows:public Handler, public IocpObject
 {
 	SUPER(Handler);
