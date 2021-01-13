@@ -354,6 +354,7 @@
     <ClCompile Include="..\..\src\core\looper\looperinternaldata.cpp" />
     <ClCompile Include="..\..\src\core\looper\looperpool.cpp" />
     <ClCompile Include="..\..\src\core\looper\procnode.cpp" />
+    <ClCompile Include="..\..\src\core\looper\tests\looper.test.cpp" />
     <ClCompile Include="..\..\src\core\looper\timermanager.cpp" />
     <ClCompile Include="..\..\src\core\net\channel.cpp" />
     <ClCompile Include="..\..\src\core\net\dnser.cpp" />

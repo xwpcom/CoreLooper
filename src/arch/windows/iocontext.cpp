@@ -8,11 +8,9 @@
 namespace Bear {
 namespace Core
 {
-static const char* TAG = "IoContext";
 namespace Net {
-#ifdef _DEBUGXX
-static long gIoContextRC = 0;
-#endif
+
+static const char* TAG = "IoContext";
 
 IoContext::IoContext()
 {

@@ -6,6 +6,8 @@
 #endif
 using namespace Bear::Core;
 
+static const char* TAG = "Buffer";
+
 ByteBuffer::ByteBuffer(void)
 {
 	m_pBuf = NULL;
@@ -52,7 +54,7 @@ int ByteBuffer::SetBufferSize(UINT nInitSize,UINT nMaxSize)
 	m_pBuf = new BYTE[nInitSize];
 	if(!m_pBuf)
 	{
-		DW("fail ByteBuffer::SetBufferSize,nInitSize=%d",nInitSize);
+		LogW(TAG,"fail ByteBuffer::SetBufferSize,nInitSize=%d",nInitSize);
 		return -1;
 	}
 
@@ -96,7 +98,7 @@ int ByteBuffer::Write(const LPVOID data,int dataLen)
 	{
 		if(m_nData+cbData>m_cbMaxBuf)
 		{
-			DW("box overflow,name=[%s],m_cbMaxBuf=%d,m_nData=%d,cbData=%d",mName.c_str(),m_cbMaxBuf,m_nData,cbData);
+			LogW(TAG,"box overflow,name=[%s],m_cbMaxBuf=%d,m_nData=%d,cbData=%d",mName.c_str(),m_cbMaxBuf,m_nData,cbData);
 			
 			//write partly
 			cbData = m_cbMaxBuf - m_nData;
@@ -113,7 +115,7 @@ int ByteBuffer::Write(const LPVOID data,int dataLen)
 		LPBYTE pBuf = new BYTE[newsize];
 		if(!pBuf)
 		{
-			DW("fail new BYTE[%d]",newsize);
+			LogW(TAG,"fail new BYTE[%d]",newsize);
 			return 0;
 		}
 

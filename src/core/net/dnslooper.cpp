@@ -61,6 +61,8 @@ bool DnsLooper::mThreadRunning = false;
 char DnsLooper::mDns[128];
 char DnsLooper::mIP[16];
 
+static const char* TAG = "DnsLooper";
+
 #ifdef _MSC_VER
 #define _TLS	__declspec(thread)
 #else
@@ -106,7 +108,7 @@ int DnsLooper::AddRequest(string dns, weak_ptr<Handler> handler, UINT msg)
 	int ret = (int)sendMessage(BM_ADD_REQUEST, (WPARAM)&info);
 	if (ret)
 	{
-		DW("fail BM_ADD_REQUEST,dns=[%s]", dns.c_str());
+		LogW(TAG,"fail BM_ADD_REQUEST,dns=[%s]", dns.c_str());
 		ASSERT(FALSE);
 	}
 	return ret;
@@ -124,7 +126,7 @@ LRESULT DnsLooper::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 {
 	switch (msg)
 	{
-	case BM_ADD_REQUEST:
+	case BM_ADD_REQUEST:						  
 	{
 		tagItemInfo& info = *(tagItemInfo*)wp;
 		mItems.push_back(info);
@@ -151,7 +153,7 @@ LRESULT DnsLooper::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 			auto iterSave = iter;
 			++iter;
 
-			shared_ptr<Handler> handler2 = iterSave->mHandler.lock();
+			auto handler2 = iterSave->mHandler.lock();
 			if (handler2 && handler2.get() == handler.get())
 			{
 				mItems.erase(iterSave);
@@ -209,9 +211,9 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			hints.ai_socktype = SOCK_STREAM;
 			hints.ai_protocol = IPPROTO_TCP;
 
-			//DV("getaddrinfo(%s)#begin", mDns);
+			//LogV(TAG,"getaddrinfo(%s)#begin", mDns);
 			dwRetval = getaddrinfo(mDns, nullptr, &hints, &result);//注意在断网情况下，此api可能阻塞60秒或更长时间
-			//DV("getaddrinfo(%s)#end,ret=%d", mDns, dwRetval);
+			//LogV(TAG,"getaddrinfo(%s)#end,ret=%d", mDns, dwRetval);
 			if (dwRetval == 0)
 			{
 				for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
@@ -221,7 +223,7 @@ void* DnsLooper::_DnsThreadCB(void *p)
 					  //    inet_ntop(AF_INET, &sa->sin_addr.s_addr, ip, sizeof (ip)));  
 					const char *ipThis = inet_ntoa(sa->sin_addr);
 					//DT("Length of this sockaddr: %d,ip=[%s]", ptr->ai_addrlen,ip);
-					//DV("Canonical name: %s,ipThis=%s", ptr->ai_canonname,ipThis);
+					//LogV(TAG,"Canonical name: %s,ipThis=%s", ptr->ai_canonname,ipThis);
 					if (ipThis)
 					{
 						strncpy(mIP, ipThis, sizeof(mIP) - 1);
@@ -231,7 +233,7 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			}
 			else
 			{
-				DW("getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
+				LogW(TAG,"getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
 			}
 
 			//DT("freeaddrinfo#begin,result=0x%08x", result);
@@ -287,7 +289,7 @@ void DnsLooper::OnDnsParseDone(string dns, string ip)
 
 		if (item.mCancel)
 		{
-			DV("DnsLooper:dns %s to ip %s,but handler is cancelled", item.mDns.c_str(), ip.c_str());
+			LogV(TAG,"DnsLooper:dns %s to ip %s,but handler is cancelled", item.mDns.c_str(), ip.c_str());
 		}
 		else
 		{
@@ -296,7 +298,7 @@ void DnsLooper::OnDnsParseDone(string dns, string ip)
 			{
 				if (!ip.empty())
 				{
-					//DV("DnsLooper:dns [%s] to ip [%s]", item.mDns.c_str(), ip.c_str());
+					//LogV(TAG,"DnsLooper:dns [%s] to ip [%s]", item.mDns.c_str(), ip.c_str());
 				}
 
 				handler->sendMessage(item.mMsg, (WPARAM)item.mDns.c_str(), (LPARAM)ip.c_str());

@@ -184,6 +184,10 @@ void Looper_Windows::_StackLooperSendMessage(tagLoopMessageInternal& loopMsg)
 #endif
 }
 
+/*
+返回0表示获取到消息
+否则返回-1
+*/
 int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 {
 	mLooperTick = ShellTool::GetTickCount64();
@@ -228,7 +232,7 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 
 			if (!ok)
 			{
-				return 0;
+				return -1;
 			}
 			
 			if (count>0 && mTimerManager)
