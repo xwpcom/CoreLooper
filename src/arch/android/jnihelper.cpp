@@ -47,7 +47,7 @@ tagJniInfo::~tagJniInfo()
 		}
 		else
 		{
-			DV("jni env is null,desc=[%s]", mDesc.c_str());//影响不大,如果能在JniLooper中析构tagJniInfo,则不会有此问题
+			LogW(TAG,"jni env is null,desc=[%s]", mDesc.c_str());//影响不大,如果能在JniLooper中析构tagJniInfo,则不会有此问题
 		}
 	}
 

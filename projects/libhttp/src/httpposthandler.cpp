@@ -54,6 +54,13 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 			return 0;
 		}
 
+		if (mState == eState_Done)
+		{
+			LogW(TAG, "state is done");
+			ASSERT(FALSE);
+			return -1;
+		}
+
 		switch (mState)
 		{
 		case eState_WaitHttpHeader:

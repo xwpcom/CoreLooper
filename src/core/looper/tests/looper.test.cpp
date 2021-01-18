@@ -53,8 +53,8 @@ public:
 			{
 				__super::OnCreate();
 
-				BM_NULL;
 				SetTimer(mTimer_parseDns, 1);
+				DelayExit(5000);
 			}
 
 			void OnTimer(long id)
