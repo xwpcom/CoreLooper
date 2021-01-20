@@ -33,6 +33,7 @@ struct tagLooperInternalData
 	//private:
 	std::map<void*, std::shared_ptr<Handler>> mDestroyedHandlers;
 	long	mTimerGC = 0;
+	int		mSeqGC = 0;
 };
 
 }

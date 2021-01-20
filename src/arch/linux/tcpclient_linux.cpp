@@ -228,6 +228,10 @@ void TcpClient_Linux::OnReceive()
 int TcpClient_Linux::Send(LPVOID data, int dataLen)
 {
 	//DV("%s,dataLen=%d", __func__,dataLen);
+	if (mSock == -1)
+	{
+		return 0;
+	}
 
 	ASSERT(IsMyselfThread());
 	int ret = (int)send(mSock, (char*)data, dataLen, 0);

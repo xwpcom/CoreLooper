@@ -160,7 +160,7 @@ LRESULT LooperImpl::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 
 		if (!mLooperInternalData->mTimerGC)
 		{
-			SetTimer(mLooperInternalData->mTimerGC,1000);
+			SetTimer(mLooperInternalData->mTimerGC,1);
 		}
 
 		auto count = mLooperInternalData->mDestroyedHandlers.size();
@@ -206,6 +206,13 @@ void LooperImpl::OnTimer(long id)
 	if (id == mLooperInternalData->mTimerGC)
 	{
 		mLooperInternalData->gc();
+		auto n = mLooperInternalData->mSeqGC;
+		if (n > 0)
+		{
+			auto interval = (n + 1) * n / 2;
+			auto ms = MIN(1000, interval);
+			SetTimer(mLooperInternalData->mTimerGC, ms);
+		}
 		return;
 	}
 

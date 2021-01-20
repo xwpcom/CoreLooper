@@ -30,6 +30,7 @@ tagLooperInternalData::~tagLooperInternalData()
 void tagLooperInternalData::gc()
 {
 	//ASSERT(IsMyselfThread());
+	++mSeqGC;
 
 	auto& items = mDestroyedHandlers;
 	for (auto iter = items.begin(); iter != items.end();)
@@ -96,6 +97,7 @@ void tagLooperInternalData::gc()
 	if (items.size() == 0)
 	{
 		mLooperImpl->KillTimer(mTimerGC);
+		mSeqGC = 0;
 	}
 }
 
