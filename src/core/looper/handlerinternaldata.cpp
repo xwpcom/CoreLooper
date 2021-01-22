@@ -11,7 +11,7 @@ using namespace std;
 namespace Bear {
 namespace Core
 {
-#define TAG "tagHandlerInternalData"
+#define TAG "handlerData"
 
 #ifdef _MSC_VER_DEBUG
 //#define _TEST_TIMER_ID_REWIND	//测试timerId回绕
