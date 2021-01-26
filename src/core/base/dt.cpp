@@ -415,7 +415,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 			string info(szMsg);
 			//info.Replace('\r','~');
 			//info.Replace('\n', '`');
-			string Tag = StringTool::Format("jni#%s",tag);
+			string Tag = StringTool::Format("Bear/jni#%s",tag);
 			__android_log_print(p, Tag.c_str(), "%s", szMsg);
 
 			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
