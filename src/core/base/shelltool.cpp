@@ -166,10 +166,17 @@ ULONGLONG ShellTool::GetTickCount64()
 #else
 
 #ifdef _CONFIG_ANDROID
-	JavaVM* jvm = AfxGetJavaVM();
-	if(jvm)
+	/*
+		为了检查视频延时的原因,统一采用SystemClock.elapsedRealtime()标记frame tick
+		这样java和c++ tick统一起来,便于排查是哪个环节出了问题
+	*/
+	if (0)
 	{
-		return JniHelper::SystemClock_elapsedRealtime();
+		JavaVM* jvm = AfxGetJavaVM();
+		if (jvm)
+		{
+			return JniHelper::SystemClock_elapsedRealtime();
+		}
 	}
 #endif
 	struct timespec tp;
@@ -178,7 +185,7 @@ ULONGLONG ShellTool::GetTickCount64()
 	long ret = clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
 	if (ret)
 	{
-		DW("err=%d(%s)", errno, strerror(errno));
+		LogW(TAG,"err=%d(%s)", errno, strerror(errno));
 	}
 	ASSERT(ret == 0);
 	ULONGLONG tick = (ULONGLONG)tp.tv_sec * 1000 + tp.tv_nsec / 1000000;
