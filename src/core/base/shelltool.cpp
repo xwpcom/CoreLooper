@@ -175,6 +175,10 @@ ULONGLONG ShellTool::GetTickCount64()
 		JavaVM* jvm = AfxGetJavaVM();
 		if (jvm)
 		{
+			/*
+			启用后可视对讲在a64上空跑也要占用25% cpu,所以仅在调试时使用本功能
+			不启用由cpu占用为0%
+			*/
 			return JniHelper::SystemClock_elapsedRealtime();
 		}
 	}
