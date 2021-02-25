@@ -51,10 +51,10 @@
 #include <sys/select.h>
 #include <time.h>
 #include <sys/time.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #ifndef __APPLE__
+#include <sys/types.h>
 #include <linux/if.h>
 #include <net/if_arp.h>
 #include <arpa/inet.h>
