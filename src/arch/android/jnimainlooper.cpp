@@ -4,10 +4,11 @@
 
 namespace Bear {
 namespace Android {
+static const char* TAG = "JniMainLooper";
+
 shared_ptr<Handler> JniMainLooper::gInstance;
 JniMainLooper::JniMainLooper()
 {
-
 }
 
 void JniMainLooper::OnCreate()
@@ -29,7 +30,7 @@ void JniMainLooper::CheckCreateJniMainLooper()
 		auto looper = dynamic_pointer_cast<JniMainLooper>(obj->shared_from_this());
 		if (!looper)
 		{
-			DE("please make sure MainLooper is kind of JniMainLooper");
+			LogE(TAG,"please make sure MainLooper is kind of JniMainLooper");
 		}
 	}
 	else
