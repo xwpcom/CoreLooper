@@ -8,6 +8,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpPostCommandHandler";
+
 HttpPostCommandHandler::HttpPostCommandHandler()
 {
 }
@@ -107,14 +109,38 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 				bytes = mInboxBody.length();
 
 				{
+#ifdef _CONFIG_ANDROID
+					/*
+					2021.03.04
+					采用目前最新的AndroidStudio4.1.2
+					在liblift.so中定义的PostJsonManager子类,
+					在libhtt.so中能搜索到Handler,但dynamic_pointer_cast到PostJsonManager时返回nullptr
+					vs2019没有此问题
+					感觉是as的bug?
+
+					临时解决办法:c style cast
+					*/
+					//LogV(TAG, "PostJsonManager=%p",obj?obj.get():nullptr);
+					auto obj2 = _Object(Handler, "PostJsonManager");
+					//LogV(TAG, "Handler.PostJsonManager=%p", obj2 ? obj2.get() : nullptr);
+					PostJsonManager* obj = nullptr;
+					if (obj2)
+					{
+						obj = (PostJsonManager*)obj2.get();
+					}
+#else
 					auto obj = _Object(PostJsonManager, "PostJsonManager");
+#endif					
 					if (obj)
 					{
+						//LogV(TAG, "%s#3", __func__);
 						auto& header=mHeader->GetHeader();
 						string name = header.mUri;
+						//LogV(TAG, "try handler json:%s", name.c_str());
 						auto handler = obj->CreatePostJsonHandler(name);
 						if (handler)
 						{
+							//LogV(TAG, "%s#4", __func__);
 							obj->AddChild(handler);
 
 							DynamicJsonBuffer jBuffer;
