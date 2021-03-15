@@ -108,6 +108,8 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 				data = mInboxBody.data();
 				bytes = mInboxBody.length();
 
+				auto& header = mHeader->GetHeader();
+				auto& name = header.mUri;
 				{
 #ifdef _CONFIG_ANDROID
 					/*
@@ -134,8 +136,6 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 					if (obj)
 					{
 						//LogV(TAG, "%s#3", __func__);
-						auto& header=mHeader->GetHeader();
-						string name = header.mUri;
 						//LogV(TAG, "try handler json:%s", name.c_str());
 						auto handler = obj->CreatePostJsonHandler(name);
 						if (handler)
@@ -167,7 +167,16 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 
 				if (mAck.empty())
 				{
-					string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
+					DynamicJsonBuffer jBuffer;
+					auto& json = jBuffer.createObject();
+					{
+						json["error"] = -1;
+						json["desc"] = StringTool::Format("no found json handler(%s)",name.c_str());
+					}
+					string jsonText;
+					json.printTo(jsonText);
+
+					//string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
 					mAck = StringTool::Format(
 						"HTTP/1.1 200\r\n"
 						"Content-Type: application/json;charset=UTF-8\r\n"
