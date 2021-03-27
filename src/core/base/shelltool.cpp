@@ -263,6 +263,14 @@ string ShellTool::CreateGuid()
 	return szGuid;
 }
 
+string ShellTool::CreateGuidToken()
+{
+	auto guid = ShellTool::CreateGuid();
+	StringTool::MakeUpper(guid);
+	StringTool::Replace(guid, "-", "");
+	return guid;
+}
+
 struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
 {
 	CTime t = CTime::GetCurrentTime();

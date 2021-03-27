@@ -75,6 +75,7 @@ public:
 #ifdef _MSC_VER	
 	static struct tagTimeMs GetRelativeTimeMs(int deltaDays);
 	static string CreateGuid();
+	static string CreateGuidToken();
 #endif
 
 	static DWORD GetCurrentProcessId();
