@@ -30,9 +30,9 @@ public:
 		return CompareNoCase(obj1, obj2);
 	}
 	static std::string& Replace(std::string&obj, const std::string& src, const std::string& target);
-	static std::string& Trim(std::string&obj, char ch);
-	static std::string& TrimLeft(std::string&obj, char ch);
-	static std::string& TrimRight(std::string&obj, char ch);
+	static std::string& Trim(std::string&obj, char ch=' ');
+	static std::string& TrimLeft(std::string&obj, char ch = ' ');
+	static std::string& TrimRight(std::string&obj, char ch = ' ');
 	static std::string& MakeUpper(std::string&obj);
 	static std::string& MakeLower(std::string&obj);
 	static bool IsHexChar(char ch);
