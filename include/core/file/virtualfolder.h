@@ -8,13 +8,13 @@ namespace Core {
 namespace FileSystem {
 struct tagVirtualFolderPoint
 {
-	std::string mName;	//virtual folder name
-	std::string mPath;	//real folder path
+	string mName;	//virtual folder name
+	string mPath;	//real folder path
 
 						//注意:不要与linux根目录下的顶级文件夹重名,否则可能引起误操作
 	//如果name与windows本地磁盘根目录下的文件或者linux根目录顶级文件重名,可能会产生问题
 
-	std::shared_ptr<Object> mUserObject;//用户可扩展
+	shared_ptr<Object> mUserObject;//用户可扩展
 };
 
 //XiongWanPing 2011.06.14
@@ -23,9 +23,9 @@ struct tagVirtualFolderPoint
 class CORE_EXPORT VirtualFolder :public Handler
 {
 public:
-	std::shared_ptr<tagVirtualFolderPoint> AddMount(const string& name, const string& path);
+	shared_ptr<tagVirtualFolderPoint> AddMount(const string& name, const string& path);
 
-	std::string GetVirtualRootPath()
+	string GetVirtualRootPath()
 	{
 		return "/";
 	}
@@ -34,15 +34,15 @@ public:
 	virtual ~VirtualFolder(void);
 
 	BOOL IsVirtualRootDir(const char *pszPathFile, BOOL bSuperUser = FALSE);
-	std::string Virtual2LocalPathFile(const std::string& virtualFullPathFile, BOOL bSuperUser = FALSE);
+	string Virtual2LocalPathFile(const string& virtualFullPathFile, BOOL bSuperUser = FALSE);
 
-	std::list<std::shared_ptr<tagVirtualFolderPoint>>& GetMountPoints()
+	list<shared_ptr<tagVirtualFolderPoint>>& GetMountPoints()
 	{
 		return mMountPoints;
 	}
 protected:
-	bool IsNameExits(const std::string& name);
-	std::list<std::shared_ptr<tagVirtualFolderPoint>> mMountPoints;
+	bool IsNameExits(const string& name);
+	list<shared_ptr<tagVirtualFolderPoint>> mMountPoints;
 };
 }
 }
