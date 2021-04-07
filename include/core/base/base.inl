@@ -190,6 +190,7 @@ private:							\
 #include "core/file/file.h"
 #include "core/file/inifile.h"
 #include "core/file/dumpfile.h"
+#include "core/file/filefinder.h"
 #include "core/base/bundle.h"
 #include "core/base/bundleex.h"
 #include "core/thread/event.h"
