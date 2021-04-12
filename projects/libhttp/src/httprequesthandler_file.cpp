@@ -135,8 +135,17 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	if (!hFile)
 	{
 		//再试www文件夹
+
 		szFileName = StringTool::Format("%s%s", mWebConfig->mWebRootFolder.c_str(), uri.c_str());
 		hFile = File::fopen(szFileName.c_str(), "rb");
+	}
+	
+	bool vueSPA = false;
+	if (!hFile)
+	{
+		szFileName = StringTool::Format("%s%s", mWebConfig->mWebRootFolder.c_str(), "/index.html");
+		hFile = File::fopen(szFileName.c_str(), "rb");
+		vueSPA = true;
 	}
 
 	if (!hFile)
@@ -148,8 +157,18 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	m_fileSize = File::GetFileLength(hFile);
 	m_fileOffset = 0;
 
-	string  ext = HttpTool::GetUriExt(uri);
-	string  contentType = HttpTool::GetContentType(ext);
+	string  ext;
+	string  contentType;
+	if (vueSPA)
+	{
+		ext = ".html";
+		contentType = "text/html";
+	}
+	else
+	{
+		ext = HttpTool::GetUriExt(uri);
+		contentType = HttpTool::GetContentType(ext);
+	}
 
 	string  szLastModifiedTime;
 	bool canUseCache = HttpTool::CheckFileCache(szFileName, m_headerInfo->m_if_modified_since,

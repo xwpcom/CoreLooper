@@ -48,6 +48,7 @@ public:
 	}
 
 	static AjaxHandler* CreateInstance(std::string commandName);
+	static bool AjaxCommandExists(const string& cmd);
 	void SetVirtualFolder(std::shared_ptr<VirtualFolder> vm)
 	{
 		mVirtualFolder = vm;

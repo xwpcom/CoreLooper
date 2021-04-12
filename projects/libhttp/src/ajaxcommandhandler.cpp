@@ -9,6 +9,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "AjaxCommandHandler";
+
 AjaxCommandHandler::AjaxCommandHandler()
 {
 
@@ -70,7 +72,7 @@ string  AjaxCommandHandler::Process(string  url)
 			else
 			{
 				hasAuth = false;
-				DW("fail [%s],requires auth %s", url.c_str(), info->mPermission.c_str());
+				LogW(TAG,"fail [%s],requires auth %s", url.c_str(), info->mPermission.c_str());
 			}
 		}
 
@@ -91,10 +93,17 @@ string  AjaxCommandHandler::Process(string  url)
 	}
 	else
 	{
-		int errorCode = 501;//http 501错误是Unimplemented
-		StringTool::AppendFormat(ack, "<Result><Error>%d</Error><Desc>Unknown command:%s</Desc></Result>",
-			errorCode,
-			StringTool::xml(uri).c_str());
+		if (url.find(".xml") == string::npos)
+		{
+			
+		}
+		else
+		{
+			int errorCode = 501;//http 501错误是Unimplemented
+			StringTool::AppendFormat(ack, "<Result><Error>%d</Error><Desc>Unknown command:%s</Desc></Result>",
+				errorCode,
+				StringTool::xml(uri).c_str());
+		}
 	}
 
 	//DV("len=%d,%s", ack.length(),ack.c_str());
