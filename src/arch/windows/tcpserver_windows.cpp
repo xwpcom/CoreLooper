@@ -21,6 +21,8 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+static const char* TAG = "TcpServer_Windows";
+
 TcpServer_Windows::TcpServer_Windows()
 {
 	mInternalData->SetActiveObject();
@@ -52,7 +54,7 @@ int TcpServer_Windows::StartServer(int port)
 		*/
 
 		//Looper::CurrentLooper()->AddChild(shared_from_this());
-		DW("%s fail,please call Create() and try again",__func__);
+		LogW(TAG,"%s fail,please call Create() and try again",__func__);
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -75,7 +77,7 @@ int TcpServer_Windows::StartServer(int port)
 	int ret = ::bind(sock, (LPSOCKADDR)&addr, sizeof(addr));
 	if (ret)
 	{
-		DW("fail to StartServer(port=%d)", port);
+		LogW(TAG,"fail to StartServer(port=%d)", port);
 		ASSERT(FALSE);
 
 		SockTool::CAutoClose ac(&sock);
@@ -176,7 +178,7 @@ int TcpServer_Windows::PostAccept(IoContext *ioContext)
 	{
 		if (WSA_IO_PENDING != WSAGetLastError())
 		{
-			DW("lpfnAcceptEx failed with error code: %d/n", WSAGetLastError());
+			LogW(TAG,"lpfnAcceptEx failed with error code: %d/n", WSAGetLastError());
 
 			return -1;
 		}
