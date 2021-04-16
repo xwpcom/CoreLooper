@@ -17,11 +17,13 @@ public:
 	~WSHandler();
 
 	sigslot::signal2<Handler*, ByteBuffer&> SignalSend;
+	sigslot::signal1<Handler*> SignalDestroy;
 
 	virtual void OnWebSocketRecv(Handler*, LPBYTE, int);
 	virtual void OnWebSocketClosed(Handler*);
 protected:
 	void OnCreate();
+	void OnDestroy();
 	void OnTimer(long id);
 
 	//CommonTextProtocolCB#begin

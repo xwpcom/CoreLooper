@@ -20,6 +20,21 @@ WebSocketHandler::~WebSocketHandler()
 	LogV(TAG,"%s,this=%p", __func__, this);
 }
 
+void WebSocketHandler::OnWSHandlerDestroy(Handler*)
+{
+	Destroy();
+}
+
+void WebSocketHandler::OnDestroy()
+{
+	__super::OnDestroy();
+
+	if (mChannel)
+	{
+		mChannel->Destroy();
+	}
+}
+
 void WebSocketHandler::Attach(shared_ptr<Channel> channel)
 {
 	mChannel = channel;

@@ -18,7 +18,7 @@ public:
 	sigslot::signal1 < Handler*>			SignalOnWebSocketClosed;
 	sigslot::signal1<Handler*>				SignalOnWebSocketReadySend;
 	virtual void Send(Handler*, ByteBuffer& box);
-
+	void OnWSHandlerDestroy(Handler*);
 	void Attach(shared_ptr<Channel> channel);
 
 protected:
@@ -27,6 +27,7 @@ protected:
 	virtual void OnReceive(Channel*);
 
 	void CheckSend();
+	void OnDestroy();
 
 	void onWebSocketDecodePlayload(const WebSocketHeader& header, const uint8_t* ptr, uint64_t len, uint64_t recved);
 	void onWebSocketEncodeData(const uint8_t* ptr, uint64_t len);

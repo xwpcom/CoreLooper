@@ -60,11 +60,20 @@ void WSHandler::OnCreate()
 	mProtocol = CommonTextProtocolFactory::Create();
 	mProtocol->SetCB(this);
 
-	int second = 30;
-
+	int second = 10;
+#ifdef _DEBUG
+	second = 1;
+#endif
 	SetTimer(mTimer_CheckAlive, second * 1000);
 	UpdateTickAlive();
 	//PerformTimer(mTimer_CheckAlive);
+}
+
+void WSHandler::OnDestroy()
+{
+	__super::OnDestroy();
+
+	SignalDestroy(this);
 }
 
 //CommonTextProtocolCB#begin
