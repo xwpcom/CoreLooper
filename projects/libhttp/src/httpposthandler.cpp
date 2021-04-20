@@ -56,7 +56,7 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 
 		if (mState == eState_Done)
 		{
-			LogW(TAG, "state is done");
+			LogV(TAG, "state is done");
 			ASSERT(FALSE);
 			return -1;
 		}
@@ -101,17 +101,25 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 				}
 				else
 				{
-					auto ContentLength = header.mFields.GetInt("Content-Length");
-					if (ContentLength > 0)
+					//if (header.mFields.IsExists("Content-Length"))
 					{
-						ASSERT(!mCommandHander);
+						auto ContentLength = header.mFields.GetInt("Content-Length");
+						if (ContentLength > 0)
+						{
+							ASSERT(!mCommandHander);
 
-						mCommandHander = CreatePostHandler(mHeader);
+							mCommandHander = CreatePostHandler(mHeader);
 
-						inbox.Eat(bytes);
-						mContentLength = ContentLength;
-						mCommandHander->SetContentLength(ContentLength);
-						SwitchState(eState_WaitSimpleHttpBody);
+							inbox.Eat(bytes);
+							mContentLength = ContentLength;
+							mCommandHander->SetContentLength(ContentLength);
+							SwitchState(eState_WaitSimpleHttpBody);
+						}
+						else
+						{
+							SwitchState(eState_Done);
+							return 0;
+						}
 					}
 				}
 				int x = 0;

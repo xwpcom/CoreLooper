@@ -188,6 +188,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 #else
 		header.SetCacheControl("max-age=60");
 #endif
+		header.SetField("Access-Control-Allow-Origin", "*");
 
 		string  ack = header.ack();
 		/*
@@ -226,6 +227,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 			httpAckHeader.SetContentLength(contentLength);
 			httpAckHeader.SetContentType(contentType);
 			httpAckHeader.SetConnection("Keep-Alive");
+			httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 
 			string  contentRange = StringTool::Format("bytes %lu-%lu/%lu",
 				m_headerInfo->m_range,
@@ -262,7 +264,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 			httpAckHeader.SetContentLength(m_fileSize);
 			httpAckHeader.SetContentType(contentType);
 			httpAckHeader.SetConnection("Keep-Alive");
-
+			httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 			header = httpAckHeader.ack();
 			/*
 			header.Format(
@@ -295,7 +297,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		httpAckHeader.SetContentLength(m_fileSize);
 		httpAckHeader.SetConnection("Keep-Alive");
 		httpAckHeader.SetField("Last-Modified", szLastModifiedTime);
-
+		httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 		header = httpAckHeader.ack();
 
 		/*
