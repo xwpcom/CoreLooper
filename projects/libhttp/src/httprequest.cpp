@@ -350,7 +350,7 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 	else
 	{
 		LogW(TAG,"no transform ptr for [%s]", target.c_str());
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 	}
 
 	SetStatus(eHttpRequestStatus_Done);
