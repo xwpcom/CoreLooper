@@ -137,7 +137,6 @@ class CORE_EXPORT Handler :public Object
 	friend class TimerManager;
 	friend struct tagHandlerInternalData;
 	friend struct tagLooperInternalData;
-	friend class Handler;
 	friend class SmartTlsLooper;
 	friend class SmartTlsLooper_Linux;
 public:

@@ -10,25 +10,25 @@ namespace Core
 class Bundle
 {
 public:
-	template <class T> void Set(std::string name, T tmp)
+	template <class T> void Set(string name, T tmp)
 	{
-		std::stringstream ss;
+		stringstream ss;
 		ss << tmp;
 		Set(name, ss.str());
 	}
 
-	void Set(const std::string& name, const std::string& value)
+	void Set(const string& name, const string& value)
 	{
 		mItems[name] = value;
 	}
 
-	bool IsKeyExists(std::string name)const
+	bool IsKeyExists(string name)const
 	{
 		auto iter = mItems.find(name);
 		return iter != mItems.end();
 	}
 
-	bool GetBool(const std::string&name, bool defaultValue = false)const
+	bool GetBool(const string&name, bool defaultValue = false)const
 	{
 		if (!IsKeyExists(name))
 		{
@@ -38,7 +38,7 @@ public:
 		return atoi(GetString(name).c_str()) != 0;
 	}
 
-	int GetInt(const std::string&name, int defaultValue = 0)const
+	int GetInt(const string&name, int defaultValue = 0)const
 	{
 		if (!IsKeyExists(name))
 		{
@@ -48,7 +48,7 @@ public:
 		return atoi(GetString(name).c_str());
 	}
 
-	long GetLong(const std::string&name, long defaultValue = 0)const
+	long GetLong(const string&name, long defaultValue = 0)const
 	{
 		if (!IsKeyExists(name))
 		{
@@ -58,7 +58,7 @@ public:
 		return atol(GetString(name).c_str());
 	}
 
-	double GetDouble(const std::string&name, double defaultValue = 0)const
+	double GetDouble(const string&name, double defaultValue = 0)const
 	{
 		if (!IsKeyExists(name))
 		{
@@ -68,7 +68,7 @@ public:
 		return atof(GetString(name).c_str());
 	}
 
-	LONGLONG GetLongLong(const std::string&name, LONGLONG defaultValue = 0)const
+	LONGLONG GetLongLong(const string&name, LONGLONG defaultValue = 0)const
 	{
 		if (!IsKeyExists(name))
 		{
@@ -78,7 +78,7 @@ public:
 		return atoll(GetString(name).c_str());
 	}
 
-	const std::string GetString(const std::string&name, const char *defaultValue = "")const
+	const string GetString(const string&name, const char *defaultValue = "")const
 	{
 		auto iter = mItems.find(name);
 		if (iter != mItems.end())
@@ -94,7 +94,7 @@ public:
 		mItems.clear();
 	}
 
-	void Remove(const std::string& name)
+	void Remove(const string& name)
 	{
 		auto iter = mItems.find(name);
 		if (iter != mItems.end())
@@ -103,18 +103,18 @@ public:
 		}
 	}
 
-	std::string Pack()const
+	string Pack()const
 	{
-		std::string items;
+		string items;
 		for (auto iter = mItems.begin(); iter != mItems.end(); ++iter)
 		{
 			items += StringTool::Format("%s=%s\r\n", iter->first.c_str(), iter->second.c_str());
 		}
-		return std::move(items);
+		return items;
 	}
 
 public:
-	std::map<std::string, std::string> mItems;
+	map<string, string> mItems;
 };
 }
 }

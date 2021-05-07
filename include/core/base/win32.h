@@ -10,6 +10,8 @@
 
 #ifdef _MSC_VER
 #define SUPER(X) using X::X;
+#elif defined _CONFIG_INGENIC
+#define SUPER(X) private: typedef X __super;
 #else
 #define SUPER(X) using X::X; private: typedef X __super;
 #endif

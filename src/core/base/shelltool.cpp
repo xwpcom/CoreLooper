@@ -186,7 +186,13 @@ ULONGLONG ShellTool::GetTickCount64()
 	struct timespec tp;
 	tp.tv_sec = 0;
 	tp.tv_nsec = 0;
-	long ret = clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
+
+	auto flag = CLOCK_MONOTONIC;
+#ifdef CLOCK_MONOTONIC_RAW
+	flag = CLOCK_MONOTONIC_RAW;
+#endif
+
+	long ret = clock_gettime(flag, &tp);
 	if (ret)
 	{
 		LogW(TAG,"err=%d(%s)", errno, strerror(errno));

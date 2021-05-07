@@ -48,7 +48,7 @@ string Utf8Tool::UNICODE_to_UTF8(const CString& unicodeString)
 	string str = buffer;
 
 	delete[] buffer;
-	return std::move(str);
+	return str;
 }
 
 #endif
@@ -69,7 +69,7 @@ string Utf8Tool::Unicode2Utf8(const void* text)
 	string ack(szUtf8);
 	delete[]szUtf8;
 	szUtf8 = nullptr;
-	return std::move(ack);
+	return ack;
 }
 
 //说明:

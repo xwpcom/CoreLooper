@@ -41,19 +41,23 @@ public:
 
 	virtual int ConfigSendBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 	virtual int ConfigRecvBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 
 	virtual int GetSendBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 	virtual int GetRecvBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 

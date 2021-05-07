@@ -22,6 +22,11 @@ struct StrCaseCompare {
 //key大小写不敏感map,比如用来存储http,rtsp header fields
 //应用场合:websocket协议规定upgrade时header字段是大小写不敏感
 
+/*
+2021.05.07,发现君正gcc4.7.2不支持Super::emplace
+*/
+
+#ifndef _CONFIG_INGENIC
 class StringCaseMap : public multimap<string, string, StrCaseCompare> 
 {
 public:
@@ -59,5 +64,8 @@ public:
 	}
 };
 
+#endif
+
 }
 }
+

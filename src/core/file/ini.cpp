@@ -173,8 +173,8 @@ void Ini::Load(ByteBuffer& box)
 		}
 		*/
 
-		auto& key = line.substr(0, pos);
-		auto& value = line.substr(pos + 1);
+		auto key = line.substr(0, pos);
+		auto value = line.substr(pos + 1);
 		mSections[section][key] = value;
 	}
 }
