@@ -366,9 +366,10 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 
 	len = strlen(p);
 	_snprintf(p + len, sizeof(szMsg) - len - 1,
-		"%s[%s]",
-		header,
-		buf
+		"%s%s#[%s]"
+		,header
+		,tag
+		,buf
 	);
 
 	bool align = true;//when save log file,maybe disable align
