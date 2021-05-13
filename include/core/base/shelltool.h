@@ -138,6 +138,10 @@ public:
 #endif
 
 	static int System(const char *szCmd);
+	static int System(const string& cmd)
+	{
+		return System(cmd.c_str());
+	}
 };
 
 }

@@ -7,11 +7,6 @@ namespace Net {
 namespace Protocol {
 namespace CTP {
 
-enum
-{
-	eTimerTest,
-};
-
 static const char* TAG = "CtpClient2";
 
 CtpClient2::CtpClient2()

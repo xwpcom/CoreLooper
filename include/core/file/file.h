@@ -29,7 +29,15 @@ public:
 
 	int Open(const string& filePath, bool createIfNecessary = true);
 	int Read(LPBYTE data, int bytes);
+	int Read(void* data, int bytes)
+	{
+		return Read((LPBYTE)data, bytes);
+	}
 	int Write(LPBYTE data, int bytes);
+	int Write(void* data, int bytes)
+	{
+		return Write((LPBYTE)data, bytes);
+	}
 
 	int Write(const string& text)
 	{
@@ -155,6 +163,10 @@ public:
 	static void PathMakePretty(std::string& filePath);
 	static void sync();
 	static int  mkdir(const char *pszDir, DWORD mode = 0777);
+	static int  mkdir(const string& dir, DWORD mode = 0777)
+	{
+		return mkdir(dir.c_str(), mode);
+	}
 	static int  chmod(const char *pszFile, DWORD mode = 0777);
 	static int	rename(const char *oldname, const char *newname);
 	static int	rename(const std::string& oldname, const std::string& newname)

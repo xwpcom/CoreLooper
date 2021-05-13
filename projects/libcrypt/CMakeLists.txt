@@ -4,6 +4,7 @@ SET(TARGET_APP crypt)
 # project(${TARGET_APP})
 
 aux_source_directory(./src SRC)
+aux_source_directory(./src/ssl SRC)
 
 # message(STATUS " ${PROJECT_SOURCE_DIR} ")
 
@@ -13,6 +14,7 @@ INCLUDE_DIRECTORIES(../../include)
 INCLUDE_DIRECTORIES(../../include/core)
 INCLUDE_DIRECTORIES(../../include/core/base)
 INCLUDE_DIRECTORIES(../../include/libcrypt)
+INCLUDE_DIRECTORIES(../../include/libcrypt/ssl)
 
 INCLUDE_DIRECTORIES(/mnt/os/openssl/openssl-1.1.1k/include)
 
