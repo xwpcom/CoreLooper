@@ -48,6 +48,17 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 	mChannel = obj;
 	AddChild(obj);
 
+	if (mVerbose)
+	{
+		//LogV(TAG, "enable verbose#1");
+		obj->EnableVerbose();
+	}
+	else
+	{
+		//LogV(TAG, "disable verbose#1,obj=%p",obj.get());
+		obj->DisableVerbose();
+	}
+
 	obj->Connect(bundle);
 
 	mAddress = bundle.GetString("address") + ":" + bundle.GetString("port");
@@ -60,13 +71,20 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 {
 	if (error)
 	{
-		LogW(TAG,"%p connect [%s] fail,error=%d(%s)",this, mAddress.c_str(),error,SockTool::GetErrorDesc(error));
+		if (mVerbose)
+		{
+			LogW(TAG, "%p connect [%s] fail,error=%d(%s)", this, mAddress.c_str(), error, SockTool::GetErrorDesc(error));
+		}
 
 		Destroy();
 	}
 	else
 	{
-		LogV(TAG,"%s,connect [%s] ok", __func__, mAddress.c_str());
+		if (mVerbose)
+		{
+			LogV(TAG, "%s,connect [%s] ok", __func__, mAddress.c_str());
+		}
+
 		mConnected = true;
 		mOutbox.PrepareBuf(16 * 1024);
 	}

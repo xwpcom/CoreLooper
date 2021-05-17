@@ -138,7 +138,7 @@ BOOL SockTool::IsWouldBlock()
 		//在t20上面ftpclient连接有时报connect ret=-1,error=150(Operation now in progress)
 		static const char *desc = "Operation now in progress";
 		const char *reason = strerror(err);
-		DV("errno=%d(%s)", err, reason);
+		//LogV(TAG,"errno=%d(%s)", err, reason);
 		if (reason)
 		{
 			if (strcmp(desc, reason) == 0)

@@ -72,9 +72,13 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 
 	if (error)
 	{
-		mSignaled = true;
 		mAckInfo.mAckBody.MakeSureEndWithNull();
-		SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
+
+		if (!mSignaled)
+		{
+			mSignaled = true;
+			SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
+		}
 
 		Destroy();
 	}
@@ -98,8 +102,11 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 				Destroy();
 
 
-				mSignaled = true;
-				SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
+				if (!mSignaled)
+				{
+					mSignaled = true;
+					SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
+				}
 				return;
 			}
 
@@ -425,8 +432,11 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 			}
 		}
 
-		mSignaled = true;
-		SignalHttpGetAck(this, mUrl, 0, mAckInfo.mAckBody);
+		if (!mSignaled)
+		{
+			mSignaled = true;
+			SignalHttpGetAck(this, mUrl, 0, mAckInfo.mAckBody);
+		}
 
 		Destroy();
 		break;

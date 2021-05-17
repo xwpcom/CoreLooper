@@ -134,7 +134,12 @@ int TcpClient_Linux::Connect(Bundle& info)
 int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 {
 	SOCKET s = (SOCKET)handle;
-	LogV(TAG,"%s,sock=%d,peer=[%s]", __func__, s,SockTool::GetPeerIP(s).c_str());
+	if (mVerbose)
+	{
+#ifndef _CONFIG_INGENIC
+		LogV(TAG, "(%p)%s#123,sock=%d,peer=[%s]", this,__func__, s, SockTool::GetPeerIP(s).c_str());
+#endif
+	}
 
 	if (s != INVALID_SOCKET)
 	{

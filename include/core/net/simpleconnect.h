@@ -13,6 +13,16 @@ class CORE_EXPORT SimpleConnect :public Handler
 public:
 	SimpleConnect();
 	virtual ~SimpleConnect();
+	
+	void EnableVerbose()
+	{
+		mVerbose = true;
+	}
+
+	void DisableVerbose()
+	{
+		mVerbose = false;
+	}
 
 #ifdef _MSC_VER
 	//目前只有windows下做了openssl支持
@@ -75,6 +85,8 @@ protected:
 #ifdef _MSC_VER
 	bool mUseTls = false;
 #endif
+
+	bool mVerbose = false;
 };
 
 }
