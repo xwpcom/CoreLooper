@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "socktool.h"
 #include "base/stringtool.h"
+#include "bindwrapper.h"
 
 using namespace std;
 
@@ -150,6 +151,11 @@ BOOL SockTool::IsWouldBlock()
 
 	return err == EAGAIN || err == EWOULDBLOCK || err == EINPROGRESS || err == WSAEWOULDBLOCK;
 #endif
+}
+
+int SockTool::Bind(int sockfd, const struct sockaddr* addr, socklen_t addrlen)
+{
+	return BindWrapper::Bind(sockfd, (SOCKADDR*)addr, addrlen);
 }
 
 int SockTool::StartServer(int port)

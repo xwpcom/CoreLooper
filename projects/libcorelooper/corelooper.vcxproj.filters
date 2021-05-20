@@ -361,6 +361,9 @@
     <ClCompile Include="..\..\src\core\looper\tests\looper.test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\net\bindwrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -838,6 +841,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver2.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\net\bindwrapper.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>
