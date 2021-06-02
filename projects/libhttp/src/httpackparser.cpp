@@ -30,8 +30,14 @@ void HttpAckParser::Parse(const string & sz)
 	}
 
 	auto& ack = sz;
-	auto key = "Content-Length: ";
+	auto key = "Content-Length: ";/* 2021.06.02有些http server不讲武德，没带空格(也是符合rfc规范,是我这里没完善)  */
 	auto pos = ack.find(key);
+	if (pos == -1)
+	{
+		key = "Content-Length:";
+		pos = ack.find(key);
+	}
+
 	if (pos == -1)
 	{
 		const char* headerTailKey = "\r\n\r\n";

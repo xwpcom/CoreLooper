@@ -10,14 +10,11 @@ typedef char HASHHEX[HASHHEXLEN + 1];
 
 //XiongWanPing 2015.11.08
 //HTTP digest access auth
-class CRYPT_EXT_CLASS CDigestAccessAuth
+class CRYPT_EXT_CLASS DigestAccessAuth
 {
 public:
-#ifdef _DEBUG
-	void Test();
-#endif
-
-	std::string  CreateResponse(std::string  realm, std::string  nonce, std::string  cmd, std::string  uri, std::string  user, std::string  password);
+	string  CreateResponse(const string& realm, const string& qop, const string& nonce, const string& cnonce, const string& cmd,
+		const string& uri, const string& user, const string& password);
 
 #define IN
 #define OUT

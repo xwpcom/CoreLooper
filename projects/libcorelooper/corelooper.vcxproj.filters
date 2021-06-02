@@ -870,6 +870,7 @@
     <None Include="..\..\doc\cn\log.md">
       <Filter>doc</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />

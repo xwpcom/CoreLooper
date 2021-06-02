@@ -19,6 +19,9 @@ public:
 	//url可以为http url,比如网页或文件
 	virtual int Execute(string url, string saveAsFilePath = "");
 	sigslot::signal4<Handler*, string&, int, ByteBuffer&>	SignalHttpGetAck;
+	sigslot::signal2 < Handler*, const string&> SignalDownloadFileDone;
+
+	unordered_map<string, string>  mAckHeaders;
 	
 	void SetHttpAction(const string& action)
 	{

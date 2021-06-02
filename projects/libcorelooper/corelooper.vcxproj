@@ -445,6 +445,7 @@
     <None Include="..\..\include\core\looper\libcorelooper.inl" />
     <None Include="..\..\include\core\looper\looperimpl.inl" />
     <None Include="..\..\src\core\looper\message.inl" />
+    <None Include="ClassDiagram.cd" />
     <None Include="corelooper.def" />
     <None Include="res\corelooper.rc2" />
   </ItemGroup>

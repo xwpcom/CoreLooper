@@ -4,7 +4,7 @@
 using namespace std;
 using namespace Bear::Core;
 
-void CDigestAccessAuth::GetRand(char value[33])
+void DigestAccessAuth::GetRand(char value[33])
 {
 	static int idx = 0;
 	srand((int)ShellTool::GetTickCount64());
@@ -17,7 +17,7 @@ void CDigestAccessAuth::GetRand(char value[33])
 	//DT("value=%s",value);
 }
 
-void CDigestAccessAuth::CvtHex(
+void DigestAccessAuth::CvtHex(
 	IN HASH Bin,
 	OUT HASHHEX Hex
 	)
@@ -41,7 +41,7 @@ void CDigestAccessAuth::CvtHex(
 }
 
 /* calculate H(A1) as per spec */
-void CDigestAccessAuth::DigestCalcHA1(
+void DigestAccessAuth::DigestCalcHA1(
 	const IN char * pszAlg,
 	const IN char * pszUserName,
 	const IN char * pszRealm,
@@ -64,7 +64,7 @@ void CDigestAccessAuth::DigestCalcHA1(
 }
 
 /* calculate request-digest/response-digest as per HTTP Digest spec */
-void CDigestAccessAuth::DigestCalcResponse(
+void DigestAccessAuth::DigestCalcResponse(
 	IN HASHHEX HA1,           /* H(A1) */
 	const IN char * pszNonce,       /* nonce from server */
 	const IN char * pszNonceCount,  /* 8 hex digits */
@@ -108,16 +108,17 @@ void CDigestAccessAuth::DigestCalcResponse(
 	CvtHex(RespHash, Response);
 }
 
-string  CDigestAccessAuth::CreateResponse(string  realm, string  nonce, string  cmd, string  uri, string  user, string  password)
+string  DigestAccessAuth::CreateResponse(const string&  realm, const string& qop,const string& nonce, const string& cnonce,const string& cmd,
+	const string& uri, const string& user, const string& password)
 {
 	const char * pszNonce = nonce.c_str();
-	const char * pszCNonce = "0a4f113b";
+	const char* pszCNonce = cnonce.c_str();
 	const char * pszUser = user.c_str();
 	const char * pszRealm = realm.c_str();
 	const char * pszPass = password.c_str();
 	char szNonceCount[9] = "00000001";
 	const char * pszMethod = cmd.c_str();
-	const char * pszQop = "";
+	const char * pszQop = qop.c_str();
 	const char * pszURI = uri.c_str();
 	const char * pszAlg = "";
 	HASHHEX HA1;
@@ -130,32 +131,3 @@ string  CDigestAccessAuth::CreateResponse(string  realm, string  nonce, string  
 	 string  ack = Response;
 	 return ack;
 }
-
-#ifdef _DEBUG
-
-void CDigestAccessAuth::Test()
-{
-	{
-		string  response = CreateResponse("jconvs", "fa6e9addfad6b404e0bfe182ba339e7f", "DESCRIBE", "rtsp://192.168.1.22:556/stream1", "admin", "admin");
-		DT("response = [%s]", response.c_str());
-	}
-
-	const char * pszNonce = "fa6e9addfad6b404e0bfe182ba339e7f";
-	const char * pszCNonce = "0a4f113b";
-	const char * pszUser = "admin";
-	const char * pszRealm = "jconvs";
-	const char * pszPass = "admin";
-	const char szNonceCount[9] = "00000001";
-	const char * pszMethod = "DESCRIBE";
-	const char * pszQop = "";
-	const char * pszURI = "rtsp://192.168.1.22:556/stream1";
-	const char * pszAlg = "";
-	HASHHEX HA1;
-	HASHHEX HA2 = "";
-	HASHHEX Response;
-	DigestCalcHA1(pszAlg, pszUser, pszRealm, pszPass, pszNonce, pszCNonce, HA1);
-	DigestCalcResponse(HA1, pszNonce, szNonceCount, pszCNonce, pszQop, pszMethod, pszURI, HA2, Response);
-	DT("Response = %s", Response);
-	int x = 0;
-}
-#endif
