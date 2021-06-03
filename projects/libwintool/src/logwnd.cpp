@@ -18,6 +18,8 @@ enum
 
 using namespace Bear::Core;
 
+static const char* TAG = "logWnd";
+
 LogWnd::LogWnd()
 {
 
@@ -113,8 +115,8 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		auto anchor=SendMessage(SCI_GETANCHOR);
 
 		bool hasSelect = (anchor != pos);
-		DV("line:%d/%d",currentLine,lineCount);
-		DV("anchor:%d,pos=%d,len=%d", anchor,pos,len);
+		LogV(TAG,"line:%d/%d",currentLine,lineCount);
+		LogV(TAG,"anchor:%d,pos=%d,len=%d", anchor,pos,len);
 
 		/*
 		//SCI_MOVECARETINSIDEVIEW
@@ -180,6 +182,8 @@ void LogWnd::clear()
 	SendMessage(SCI_SETREADONLY, 0);
 	SendMessage(SCI_CLEARALL);
 	SendMessage(SCI_SETREADONLY, 1);
+
+	CheckUpdateMarginWidth();
 }
 
 void LogWnd::CopyAll()
