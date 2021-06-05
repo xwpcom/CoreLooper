@@ -2443,6 +2443,65 @@ public:
 	TEST_METHOD(StringTool_)
 	{
 		{
+			class Tool {
+			public:
+				static string Format(const char* fmt, ...)
+				{
+					if (!fmt || fmt[0] == 0)
+					{
+						return "";
+					}
+
+					string result;
+					va_list list;
+					va_start(list, fmt);
+
+					int ret = 0;
+					ret = vsnprintf(nullptr, 0, fmt, list);
+					printf("fmt#1=[%s],ret=%d\r\n", fmt, ret);
+
+					va_end(list);
+					va_start(list, fmt);
+
+					ret = vsnprintf(nullptr, 0, fmt, list);
+					printf("fmt#2=[%s],ret=%d\r\n", fmt, ret);
+
+					if (ret > 0)
+					{
+						result.resize(ret + 1);
+						ret = vsnprintf((char*)result.data(), ret + 1, fmt, list);
+						//printf("vsnprintf ret=%d\r\n", ret);
+
+						auto len = ret;// MIN(ret, result.size());
+						//printf("len=%d\r\n", (int)len);
+						result.erase(len);
+					}
+
+					va_end(list);
+
+					return result;
+				}
+			};
+
+			int idx = 123456789;
+			auto text = Tool::Format("hello%d", idx);
+			printf("text=[%s]\r\n", text.c_str());
+
+		}
+
+		{
+			int idx = -1;
+
+			LogV(TAG, "%s,sizeof(int)=%d", __func__, (int)sizeof(int));
+			++idx;
+
+			//LogV(TAG, "fmt#1");
+			auto text = StringTool::Format("hello%d", idx);
+			int x = 0;
+
+		}
+
+		{
 			string sz = "##";
 			StringTool::Replace(sz, "#", "##");
 			ASSERT(sz == "####");

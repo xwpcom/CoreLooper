@@ -70,7 +70,7 @@ void SerialPort_Linux::OnEvent(DWORD events)
 {
 	auto objThis = shared_from_this();//确保在OnEvent执行期间不被删除
 
-	//LogV(TAG,"SerialPort_Linux::events=0x%02x", events);
+	LogV(TAG,"SerialPort_Linux::events=0x%02x", events);
 
 	if (events & EPOLLIN)
 	{
