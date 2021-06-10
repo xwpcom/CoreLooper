@@ -73,7 +73,7 @@ int SctpClient::AddCommand(const string& cmd, Bundle& bundle)
 {
 	if (!mConnected || cmd.empty())
 	{
-		LogV(TAG, "skip %s,mConnected=%d,cmd=[%s]", __func__, mConnected, cmd);
+		LogV(TAG, "skip %s,mConnected=%d,cmd=[%s]", __func__, mConnected, cmd.c_str());
 		return -1;
 	}
 

@@ -7,6 +7,7 @@ AUX_SOURCE_DIRECTORY(core/net SRC)
 AUX_SOURCE_DIRECTORY(core/string SRC)
 AUX_SOURCE_DIRECTORY(core/thread SRC)
 AUX_SOURCE_DIRECTORY(core/protocol/ctp SRC)
+AUX_SOURCE_DIRECTORY(core/protocol/sctp SRC)
 AUX_SOURCE_DIRECTORY(core/protocol/ctp/ctp.template SRC)
 
 add_library(corelooper ${SRC})

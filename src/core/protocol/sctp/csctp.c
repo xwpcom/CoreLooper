@@ -309,6 +309,7 @@ int SCTP_CreateOutboxData(tagSCTP *obj)
 
 int SCTP_IsReservedKey(const char* name)
 {
+	int i;
 	static const char* arr[] =
 	{
 		"cmd",
@@ -316,7 +317,7 @@ int SCTP_IsReservedKey(const char* name)
 		"seq",
 	};
 
-	for (int i = 0; i < COUNT_OF(arr); ++i)
+	for (i = 0; i < COUNT_OF(arr); ++i)
 	{
 		if (strcmp(name, arr[i]) == 0)
 		{
