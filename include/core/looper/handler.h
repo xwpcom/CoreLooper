@@ -119,7 +119,7 @@ enum
 //约定:
 //采用LOOPER_SAFE修饰的接口可以安全的跨looper调用
 //没有采用LOOPER_SAFE修饰的接口，不保证跨looper安全调用，应该只在handler所在looper里调用
-#define LOOPER_SAFE	//表示接口是跨looper安全的
+#define LOOPER_SAFE	//表示handler创建后接口是跨looper安全的
 
 //XiongWanPing 2016.01.21
 class CORE_EXPORT Handler :public Object

@@ -31,6 +31,7 @@ public:
 		return AddCommand(cmd, bundle);
 	}
 	int AddCommand(const string& cmd, Bundle& bundle);
+	sigslot::signal3<Handler*, const string&, JsonObject&> SignalOnCommand;
 protected:
 	void OnCreate();
 

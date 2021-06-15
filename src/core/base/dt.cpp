@@ -17,6 +17,13 @@ extern "C"
 
 bool CDT::mEnabled=true;
 
+typedef void (*LogCB)(const char* text);
+LogCB gLogCB;
+CORE_EXPORT void SetLogCB(LogCB obj)
+{
+	gLogCB = obj;
+}
+
 void CDT::enableDT(bool enable)
 {
 	mEnabled = enable;
@@ -37,9 +44,6 @@ extern "C"
 #define new DEBUG_NEW
 #endif
 
-#define _CONFIG_DT_2020 //2020 year new dt
-
-#ifdef _CONFIG_DT_2020
 enum eType
 {
 	//有些项目是固定长度，所以不需要用TLV表示
@@ -60,13 +64,11 @@ enum eType
 
 static char gAppName[64];
 static WORD gAppNameBytes;
-#endif
 
 #ifdef _MSC_VER
 static const auto* gTitle = _T("DT2020 ");
 int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 {
-#ifdef _CONFIG_DT_2020
 	//send message to new dt (2020.02.04)
 	{
 		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
@@ -96,13 +98,12 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 			CDT::send(info);
 		}
 	}
-#endif
+
 	return 0;
 }
 
 int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 {
-#ifdef _CONFIG_DT_2020
 	//send message to new dt (2020.02.04)
 	{
 		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
@@ -132,7 +133,7 @@ int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 			CDT::send(info);
 		}
 	}
-#endif
+
 	return 0;
 }
 
@@ -140,6 +141,11 @@ void CDT::send(tagLogInfo& info)
 {
 	HWND hwnd = info.hwnd;
 	const char* msg=info.msg;
+
+	if (gLogCB)
+	{
+		gLogCB(msg);
+	}
 
 	if (!gAppName[0])
 	{
@@ -242,7 +248,6 @@ int CDT::operator()( const char* lpszFormat, ... )
 		return -1;
 	}
 
-#ifdef _CONFIG_DT_2020
 	//send message to new dt (2020.02.04)
 	{
 		static HWND hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
@@ -277,7 +282,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 			send(info);
 		}
 	}
-#endif
+
 	return 0;
 }
 #else
@@ -425,6 +430,12 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 	}
 #else
 	printf("%s\n", szMsg);
+
+	if (gLogCB)
+	{
+		gLogCB(szMsg);
+	}
+
 #endif
 
 
@@ -432,7 +443,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 	return 0;
 }
 
-int AppendLogToFile(const char *pszLogFile,const char *msg)
+static int AppendLogToFile(const char *pszLogFile,const char *msg)
 {
 	auto dwLen=File::GetFileLength(pszLogFile);
 	size_t maxFileLen=64*1024;

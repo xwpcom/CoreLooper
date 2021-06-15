@@ -27,7 +27,9 @@ void SctpClient::OnCreate()
 
 void SctpClient::OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* params)
 {
-	LogV(TAG, "%s,cmd=[%s]", __func__, szCommand);
+	KeepAlive();
+
+	//LogV(TAG, "%s,cmd=[%s]", __func__, szCommand);
 	string cmd = szCommand;
 
 	DynamicJsonBuffer jBuffer;
@@ -35,12 +37,13 @@ void SctpClient::OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* para
 
 	for (int i = 0; i < params->mCount; i++)
 	{
-		tagKeyValue* item = params->mItems;
-		root[item->name] = item->value;
+		tagKeyValue& item = params->mItems[i];
+		root[item.name] = item.value;
+		//LogV(TAG, "item[%02d] [%s]=[%s]", i, item.name, item.value);
 	}
 
 	{
-		LogV(TAG, "%s(%s)", __func__, cmd.c_str());
+		//LogV(TAG, "%s(%s)", __func__, cmd.c_str());
 
 		//LogV(TAG, "cmd=%s",cmd.c_str());
 		auto iter = mEntries.find(cmd);
@@ -49,8 +52,9 @@ void SctpClient::OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* para
 			auto& fun = iter->second;
 			(this->*fun)(cmd, root);
 		}
-	}
 
+		SignalOnCommand(this, cmd, root);
+	}
 }
 
 void SctpClient::ParseInbox()

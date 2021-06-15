@@ -140,6 +140,7 @@ public:
 		return GetDataPointer() + GetActualDataLength();
 	}
 
+	int ReadLine(string& line);
 
 	//返回数据指针
 	LPBYTE GetDataPointer()const;
