@@ -61,7 +61,7 @@ int SerialPort_Linux::Receive(LPVOID buf, int bufLen)
 	else
 	{
 		int err = errno;
-		LogW(TAG, "fail read#1,error=%d(%s)",err,strerror(err));
+		//LogW(TAG, "fail read#1,error=%d(%s)",err,strerror(err));
 	}
 	return ret;
 }
