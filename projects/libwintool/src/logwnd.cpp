@@ -2,6 +2,8 @@
 #include "../include/logwnd.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
+#include "core/string/utf8tool.h"
+
 
 IMPLEMENT_DYNAMIC(LogWnd, ScintillaWnd)
 
@@ -67,9 +69,10 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_STRING, SC_CHARSET_GB2312);
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_USERLITERAL, SC_CHARSET_GB2312);
 	*/
-
+#ifdef _DEBUG
+	SetTimer(eTimerTest, 1*10, nullptr);
+#endif
 	/*
-	SetTimer(eTimerTest, 1000, nullptr);
 	{
 		SendMessage(SCI_SETREADONLY, 0);
 		string text;
@@ -139,6 +142,66 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 	}
 	case eTimerTest:
 	{
+		KillTimer(eTimerTest);
+
+#ifdef _DEBUG
+		auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
+		//SendMessage(SCI_STYLESETSIZE, STYLE_LINENUMBER,v*10);//not work
+		//SendMessage(SCI_STYLESETBOLD, STYLE_LINENUMBER,true);//not work
+
+		for (int i = 0; i < 10; i++)
+		{
+			auto text = StringTool::Format("this is a test line to show style demo,idx=%04d\r\n",i);
+			AddLog(text);
+		}
+
+		enum
+		{
+			styleNotice = 88,
+			styleError,
+			styleAnnotation,
+		};
+
+		SendMessage(SCI_STYLESETFORE, styleNotice,RGB(0, 0, 255));
+		SendMessage(SCI_STYLESETFORE, styleError, RGB(255, 0, 0));
+		
+		SendMessage(SCI_STYLESETFORE, styleAnnotation, RGB(128, 128, 128));
+		//SendMessage(SCI_STYLESETBACK, styleAnnotation, RGB(255, 0, 255));
+		SendMessage(SCI_STYLESETSIZE, styleAnnotation, 16);
+		//SendMessage(SCI_STYLESETSIZE, styleAnnotation, 24);
+
+
+		SendMessage(SCI_STARTSTYLING,0, 0);
+		SendMessage(SCI_SETSTYLING,100, styleNotice);
+
+		SendMessage(SCI_STARTSTYLING, 100, 0);
+		SendMessage(SCI_SETSTYLING, 200, styleError);
+
+		int line = 1;
+		{
+			SendMessage(SCI_ANNOTATIONSETVISIBLE, ANNOTATION_STANDARD);
+			SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+
+			
+			auto msg = u8"标注测试";
+			auto text = Utf8Tool::UTF_8ToGB2312(msg);
+			SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+		}
+
+		/*
+		{
+			int margin = 3;
+			int pixelWidth = 200;
+			SendMessage(SCI_SETMARGINWIDTHN, margin, pixelWidth);
+
+			auto msg = u8"时间 2021.06.18 09:37:00.345";
+			auto text = Utf8Tool::UTF_8ToGB2312(msg);
+			SendMessage(SCI_MARGINSETTEXT,line, (LPARAM)text.c_str());
+		}
+		*/
+
+#endif
+
 		/*
 		AddLog("item1\r\n");
 		

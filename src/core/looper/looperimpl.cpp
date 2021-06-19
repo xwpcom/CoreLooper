@@ -68,7 +68,7 @@ shared_ptr<Handler> LooperImpl::Object(const string& url)
 		return Looper::CurrentLooper()->FindObject(url);
 	}
 
-	ASSERT(FALSE);
+	//ASSERT(FALSE);
 	return nullptr;
 }
 
