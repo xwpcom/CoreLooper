@@ -182,6 +182,10 @@ int SockTool::StartServer(int port)
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons((unsigned short)port);
 	sa.sin_addr.s_addr = htonl(INADDR_ANY);
+	if (port == 0)
+	{
+		int x = 0;
+	}
 	ret = ::bind(s, (SOCKADDR*)&sa, sizeof(sa));
 	if (ret == SOCKET_ERROR)
 	{

@@ -145,16 +145,6 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		KillTimer(eTimerTest);
 
 #ifdef _DEBUG
-		auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
-		//SendMessage(SCI_STYLESETSIZE, STYLE_LINENUMBER,v*10);//not work
-		//SendMessage(SCI_STYLESETBOLD, STYLE_LINENUMBER,true);//not work
-
-		for (int i = 0; i < 10; i++)
-		{
-			auto text = StringTool::Format("this is a test line to show style demo,idx=%04d\r\n",i);
-			AddLog(text);
-		}
-
 		enum
 		{
 			styleNotice = 88,
@@ -162,31 +152,40 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 			styleAnnotation,
 		};
 
-		SendMessage(SCI_STYLESETFORE, styleNotice,RGB(0, 0, 255));
+		SendMessage(SCI_STYLESETFORE, styleNotice, RGB(0, 0, 255));
 		SendMessage(SCI_STYLESETFORE, styleError, RGB(255, 0, 0));
-		
+
 		SendMessage(SCI_STYLESETFORE, styleAnnotation, RGB(128, 128, 128));
 		//SendMessage(SCI_STYLESETBACK, styleAnnotation, RGB(255, 0, 255));
 		SendMessage(SCI_STYLESETSIZE, styleAnnotation, 16);
 		//SendMessage(SCI_STYLESETSIZE, styleAnnotation, 24);
+		SendMessage(SCI_ANNOTATIONSETVISIBLE, ANNOTATION_STANDARD);
 
-
-		SendMessage(SCI_STARTSTYLING,0, 0);
-		SendMessage(SCI_SETSTYLING,100, styleNotice);
-
-		SendMessage(SCI_STARTSTYLING, 100, 0);
-		SendMessage(SCI_SETSTYLING, 200, styleError);
-
-		int line = 1;
+		for (int i = 0; i < 10; i++)
 		{
-			SendMessage(SCI_ANNOTATIONSETVISIBLE, ANNOTATION_STANDARD);
-			SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+			auto text = StringTool::Format("this is  a test line to show style demo,idx=%04d\r\n",i);
+			auto line=AddLog(text);
 
-			
-			auto msg = u8"标注测试";
-			auto text = Utf8Tool::UTF_8ToGB2312(msg);
-			SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+			if(line==3)
+			{
+				SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+
+				auto msg = StringTool::Format(u8"标注测试 %04d",line);
+				auto text = Utf8Tool::UTF_8ToGB2312(msg);
+				SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+			}
 		}
+
+
+		SendMessage(SCI_STARTSTYLING, 0, 0);
+		SendMessage(SCI_SETSTYLING, 10, styleNotice);
+
+		SendMessage(SCI_STARTSTYLING, 20, 0);
+		SendMessage(SCI_SETSTYLING, 30, styleError);
+
+		auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
+		//SendMessage(SCI_STYLESETSIZE, STYLE_LINENUMBER,v*10);//not work
+		//SendMessage(SCI_STYLESETBOLD, STYLE_LINENUMBER,true);//not work
 
 		/*
 		{
@@ -209,6 +208,7 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		break;
 		*/
 
+		if(0)
 		{
 			/*
 			SCI_APPENDTEXT(position length, const char *text)
@@ -255,7 +255,7 @@ void LogWnd::CopyAll()
 	SendMessage(SCI_COPYRANGE, 0, len);
 }
 
-void LogWnd::AddLog(const string& text)
+int LogWnd::AddLog(const string& text)
 {
 	bool scroll = false;
 
@@ -280,6 +280,16 @@ void LogWnd::AddLog(const string& text)
 	if (scroll)
 	{
 		SendMessage(SCI_DOCUMENTEND);
+	}
+
+	{
+		auto len = SendMessage(SCI_GETLENGTH);
+		auto line=SendMessage(SCI_LINEFROMPOSITION, len);
+		auto pos2 = SendMessage(SCI_GETCURRENTPOS);
+		LogV(TAG, "pos=%d,pos2=%d,line=%d", pos, pos2,line);
+	
+		return line;
+
 	}
 }
 

@@ -1,4 +1,29 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////
+2021.06.21//////////////////////////////////////////////////////////////////////////////////
+changes:
+.TcpServer_Linux::StartServer自动绑定端口时要更新mPort
+ ftp server用到此功能
+int TcpServer_Linux::StartServer(int port)
+{
+	ASSERT(mSock == INVALID_SOCKET);
+	mSock = SockTool::StartServer(port);
+	SockTool::SetAsync(mSock);
+
+	if (port == 0)
+	{
+		// get actual port when use auto bind
+
+		struct sockaddr_in sa;
+		socklen_t saLen = sizeof(sa);
+		if (0 == getsockname(mSock, (struct sockaddr*)&sa, &saLen))
+		{
+			port = ntohs(sa.sin_port);
+		}
+	}
+...
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
 2021.06.12//////////////////////////////////////////////////////////////////////////////////
 changes:
 .CLog增加了SetLogCB,用于4G项目发送日志到平台

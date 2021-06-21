@@ -9,19 +9,22 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+
+static const char* TAG = "TcpServer_Linux";
+
 TcpServer_Linux::TcpServer_Linux()
 {
 	mSock = INVALID_SOCKET;
 	mPort = 0;
 
-	//DV("%s", __func__);
+	//LogV(TAG,"%s", __func__);
 }
 
 TcpServer_Linux::~TcpServer_Linux()
 {
 	SockTool::CLOSE_SOCKET(mSock);
 
-	//DV("%s", __func__);
+	//LogV(TAG,"%s", __func__);
 }
 
 int TcpServer_Linux::StartServer(int port)
@@ -30,8 +33,20 @@ int TcpServer_Linux::StartServer(int port)
 	mSock = SockTool::StartServer(port);
 	SockTool::SetAsync(mSock);
 
+	if (port == 0)
+	{
+		// get actual port when use auto bind
+
+		struct sockaddr_in sa;
+		socklen_t saLen = sizeof(sa);
+		if (0 == getsockname(mSock, (struct sockaddr*)&sa, &saLen))
+		{
+			port = ntohs(sa.sin_port);
+		}
+	}
+
 #ifdef _DEBUG
-	DV("%s,port=%d,sock=%d", __func__, port, mSock);
+	LogV(TAG,"%s,port=%d,sock=%d", __func__, port, mSock);
 #endif
 
 	if (mSock != INVALID_SOCKET)
@@ -83,7 +98,7 @@ int TcpServer_Linux::OnAccept()
 		{
 			++acceptCount;
 
-			//DV("accept sock=%d", s);
+			//LogV(TAG,"accept sock=%d", s);
 
 			SockTool::SetAsync(s);
 
@@ -110,7 +125,7 @@ int TcpServer_Linux::OnAccept()
 
 	if (acceptCount > 1)
 	{
-		//DV("accept client count = %d", acceptCount);
+		//LogV(TAG,"accept client count = %d", acceptCount);
 	}
 	else if (acceptCount == 0)
 	{
@@ -171,7 +186,7 @@ void TcpServer_Linux::OnEvent(DWORD events)
 {
 	//auto objThis = shared_from_this();//确保在OnEvent执行期间不被删除
 
-	//DV("OnEvent,events = 0x%x", events);
+	//LogV(TAG,"OnEvent,events = 0x%x", events);
 	if (events & EPOLLIN)
 	{
 		OnAccept();
