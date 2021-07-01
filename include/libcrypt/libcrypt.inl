@@ -17,3 +17,7 @@
 #include "base64ex.h"
 #include "md5ex.h"
 #include "digestaccessauth.h"
+#include "crc16.h"
+#include "crypthelper.h"
+#include "hmac_sha1.h"
+#include "hmac_sha256.h"

@@ -177,12 +177,14 @@ void CtpHandler2::OnTimer(long id)
 	__super::OnTimer(id);
 }
 
-void CtpHandler2::AddCommand(const string& cmd, const Bundle& bundle)
+int CtpHandler2::AddCommand(const string& cmd, const Bundle& bundle)
 {
 	if (mProtocol)
 	{
-		mProtocol->AddCommand(cmd, bundle);
+		return mProtocol->AddCommand(cmd, bundle);
 	}
+
+	return -1;
 }
 
 

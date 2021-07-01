@@ -22,7 +22,7 @@ public:
 		Bundle d;
 		AddCommand(cmd, d);
 	}
-	virtual void AddCommand(const string& cmd, const Bundle& bundle);
+	virtual int AddCommand(const string& cmd, const Bundle& bundle);
 
 protected:
 	void OnCreate();

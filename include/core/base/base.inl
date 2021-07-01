@@ -207,3 +207,5 @@ private:							\
 #include "core/net/channel.h"
 #include "json/ArduinoJson.h"
 #include "json/jsonhelper.h"
+#include "core/base/bytetool.h"
+
