@@ -322,4 +322,18 @@ int ByteBuffer::ReadLine(string& line)
 	return -1;
 }
 
+ByteBuffer& ByteBuffer::operator=(const ByteBuffer& src)
+{
+	if (&src == this)
+	{
+		return *this;
+	}
+
+	clear();
+
+	Append(src, false);
+	//mName=src.mName;//for debug only
+	return *this;
+}
+
 
