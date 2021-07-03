@@ -197,6 +197,7 @@ private:							\
 #include "core/base/log.h"
 //#include "core/string/Utf8Tool.h"
 #include "core/string/stringcasemap.h"
+#include "core/string/stringparam.h"
 #include "core/string/textprotocol.h"
 #include "core/string/textseparator.h"
 #include "core/string/xmlstring.h"
@@ -208,4 +209,3 @@ private:							\
 #include "json/ArduinoJson.h"
 #include "json/jsonhelper.h"
 #include "core/base/bytetool.h"
-
