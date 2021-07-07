@@ -1060,7 +1060,7 @@ public:
 			//cs.Unlock();
 		}
 
-		tick =ShellTool::GetTickCount()-tick;
+		tick =ShellTool::GetTickCount64()-tick;
 		LogV(TAG,"tick=%lld", tick);
 
 	}

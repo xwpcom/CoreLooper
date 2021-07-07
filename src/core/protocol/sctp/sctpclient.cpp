@@ -29,7 +29,10 @@ void SctpClient::OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* para
 {
 	KeepAlive();
 
-	//LogV(TAG, "%s,cmd=[%s]", __func__, szCommand);
+	if (mDumpCommand)
+	{
+		LogV(TAG, "%s,cmd=[%s]", __func__, szCommand);
+	}
 	string cmd = szCommand;
 
 	DynamicJsonBuffer jBuffer;
@@ -39,7 +42,11 @@ void SctpClient::OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* para
 	{
 		tagKeyValue& item = params->mItems[i];
 		root[item.name] = item.value;
-		//LogV(TAG, "item[%02d] [%s]=[%s]", i, item.name, item.value);
+		
+		if (mDumpCommand)
+		{
+			LogV(TAG, "item[%02d] [%s]=[%s]", i, item.name, item.value);
+		}
 	}
 
 	{

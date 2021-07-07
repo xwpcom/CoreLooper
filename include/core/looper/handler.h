@@ -251,6 +251,10 @@ public:
 	bool LOOPER_SAFE IsLooper()const;
 	virtual shared_ptr<Handler> LOOPER_SAFE FindObject(const string& url);
 	virtual shared_ptr<Handler> LOOPER_SAFE GetChild(LONG_PTR id);
+	virtual shared_ptr<Handler> mapChild(const string& token)
+	{
+		return nullptr;
+	}
 	
 	int LOOPER_SAFE RegisterShortcut(const string& name, weak_ptr<Handler> obj);
 	shared_ptr<Handler> LOOPER_SAFE Shortcut(const string& name);
@@ -331,7 +335,7 @@ protected:
 	void GetChildren(unordered_map<long*, weak_ptr<Handler>>& items);
 	LPVOID GetLooperHandle();
 
-	virtual shared_ptr<Handler> GetChild(string name, Handler *afterHandler = nullptr);
+	virtual shared_ptr<Handler> GetChild(const string& name, Handler *afterHandler = nullptr);
 	DWORD GetThreadId()const
 	{
 		return mThreadId;

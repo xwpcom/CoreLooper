@@ -44,6 +44,7 @@ protected:
 	unordered_map<string, Entry> mEntries;
 	virtual void InitEntries();
 
+	bool mDumpCommand = false;
 };
 
 }
