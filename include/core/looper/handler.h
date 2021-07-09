@@ -62,6 +62,19 @@ public:
 	shared_ptr<Object> mObject;
 };
 
+typedef function<void()> TaskEntry;
+
+class TaskRunnable :public Runnable
+{
+	void Run()
+	{
+		mTask();
+	}
+public:
+	TaskEntry mTask;
+};
+
+
 struct tagDelayedRunnable;
 struct tagTimerExtraInfo;
 struct tagTimerNode;
@@ -191,6 +204,18 @@ public:
 
 	//lambda+functional
 	virtual LRESULT LOOPER_SAFE sendRunnable(const std::function<void()>& fn);
+	virtual LOOPER_SAFE void postRunnable(TaskEntry t)
+	{
+		return post(t);
+	}
+	virtual LOOPER_SAFE void post(TaskEntry t)
+	{
+		//LogV(TAG, "%s", __func__);
+
+		auto obj = make_shared<TaskRunnable>();
+		obj->mTask = t;
+		this->postRunnable(obj);
+	}
 
 	bool LOOPER_SAFE IsMyselfThread()const
 	{

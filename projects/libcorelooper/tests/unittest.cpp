@@ -1064,6 +1064,40 @@ public:
 		LogV(TAG,"tick=%lld", tick);
 
 	}
+	TEST_METHOD(postAsync)
+	{
+		class WorkLooper :public BlockLooper
+		{
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+				LogV(TAG, "%s", __func__);
+
+				auto obj = make_shared <WorkLooper>();
+				AddChild(obj);
+				obj->Start();
+
+				string text = "Hello";
+				obj->post([text]()
+					{
+						LogI(TAG, "%s,text=[%s]", __func__,text.c_str());
+					}
+				);
+
+				text = "123";
+				LogV(TAG, "text=[%s]", text.c_str());
+				
+				PostQuitMessage();
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
 
 	TEST_METHOD(SmartTlsLooper_)
 	{
@@ -3676,7 +3710,6 @@ TEST_CLASS(STL)
 		string sz = std::move(text);
 		int x = 0;
 	}
-
 };
 
 }
