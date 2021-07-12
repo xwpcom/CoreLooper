@@ -254,6 +254,13 @@ shared_ptr<HttpPostCommandHandler> HttpPostHandler::CreatePostHandler(shared_ptr
 		obj->SetConfig(mWebConfig);
 		return obj;
 	}
+	else if (cmd == "uploadFile")
+	{
+		auto obj = make_shared<PostHandler_UploadFile>();
+		obj->Init(mHeader);
+		obj->SetConfig(mWebConfig);
+		return obj;
+	}
 	else if (StringTool::CompareNoCase(cmd, "UploadVideo.cgi") == 0)
 	{
 		auto obj = make_shared<PostHandler_UploadVideo>();

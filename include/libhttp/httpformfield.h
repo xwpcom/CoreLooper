@@ -16,6 +16,10 @@ public:
 	virtual ~HttpFormField();
 
 	int InitField(std::shared_ptr<HttpHeader> header, const std::string & fieldName, int rangeStart = 0);
+	void SetFileName(const string& filename)
+	{
+		mFileName = filename;
+	}
 	virtual void SetConfig(std::shared_ptr<tagWebServerConfig> config)
 	{
 		mWebConfig = config;
@@ -54,6 +58,7 @@ protected:
 	virtual int Input(LPBYTE data, int dataLen);
 protected:
 	std::string 	mFieldName;
+	string			mFileName;
 	std::string 	mBoundary;
 	int			mBoundaryBytes = -1;
 	int			mTotalBytes = -1;

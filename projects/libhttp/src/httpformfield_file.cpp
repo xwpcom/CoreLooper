@@ -50,7 +50,16 @@ int HttpFormField_File::Input(LPBYTE data, int dataLen)
 	{
 		//mFieldName中可能也带有子目录
 
-		string  fullFilePath = mFolder + "/" + mFieldName;
+		string  fullFilePath;
+		if (!mFileName.empty())
+		{
+			fullFilePath = mFolder + "/" + mFileName;
+		}
+		else
+		{
+			fullFilePath = mFolder + "/" + mFieldName;
+		}
+
 		File::CreateFolderForFile(fullFilePath.c_str());
 		mFilePath = fullFilePath;
 		mFilePathTmp = fullFilePath + ".tmp";

@@ -16,6 +16,17 @@ public:
 protected:
 	std::shared_ptr<HttpFormField> CreateField(const std::string & fieldName);
 };
+
+class PostHandler_UploadFile :public HttpPostCommandHandler
+{
+public:
+	PostHandler_UploadFile();
+	~PostHandler_UploadFile();
+protected:
+	std::shared_ptr<HttpFormField> CreateField(const std::string& fieldName);
+};
+
+
 }
 }
 }
