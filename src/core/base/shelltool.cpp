@@ -1869,6 +1869,20 @@ time_t DateTime::time()
 	return (ShellTool::GetTickCount() / 1000) + gBaseTime;
 #endif
 }
+
+time_t tagTimeMs::to_time_t()
+{
+	tm tm1 = { 0 };
+	tm1.tm_year = year - 1900;
+	tm1.tm_mon = month - 1;
+	tm1.tm_mday = day;
+	tm1.tm_hour = hour;
+	tm1.tm_min = minute;
+	tm1.tm_sec = second;
+	time_t t1 = DateTime::mktime(&tm1);
+	return t1;
+}
+
 //返回晚于obj的天数
 //比如是obj的后一天，则返回1
 //如果obj晚于本对象,返回天数为负数
@@ -1889,3 +1903,40 @@ int tagTimeMs::laterDays(const tagTimeMs& obj)
 	int days = DateTime::spanDays(tm1, tm2);
 	return days;
 }
+
+void tagTimeMs::from_time_t(time_t t)
+{
+	tm time = { 0 };
+	DateTime::localtime(t, &time);
+
+	year = time.tm_year + 1900;
+	month = time.tm_mon + 1;
+	day = time.tm_mday;
+	hour = time.tm_hour;
+	minute = time.tm_min;
+	second = time.tm_sec;
+	ms = 0;
+}
+
+string tagTimeMs::toText()
+{
+	string text = StringTool::Format("%04d.%02d.%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
+	return text;
+}
+
+int tagTimeMs::String2TimeMs(const string& text, tagTimeMs& ms)
+{
+	tagTimeMs& t = ms;
+	int ret = sscanf(text.c_str(), "%04d.%02d.%02d %02d:%02d:%02d"
+		, &t.year, &t.month, &t.day, &t.hour, &t.minute, &t.second
+	);
+
+	if (ret == 6)
+	{
+		return 0;
+	}
+
+	LogV(TAG, "fail %s,text=%s", __func__, text.c_str());
+	return -1;
+}
+

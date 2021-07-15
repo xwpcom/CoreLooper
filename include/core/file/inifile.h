@@ -87,6 +87,10 @@ public:
 	{
 		return SetInt(pszSection, pszName, nValue);
 	}
+	int SetBool(const string& section, const string& name, bool nValue)
+	{
+		return SetInt(section, name.c_str(), nValue);
+	}
 	int GetInt(const char *pszSection, const char *pszName, int nDefaultValue = 0);
 	int GetInt(string pszSection, const char *pszName, int nDefaultValue = 0)
 	{
