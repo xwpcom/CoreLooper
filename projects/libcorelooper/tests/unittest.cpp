@@ -1082,16 +1082,27 @@ public:
 				obj->Start();
 
 				string text = "Hello";
-				obj->post([text]()
-					{
-						LogI(TAG, "%s,text=[%s]", __func__,text.c_str());
-					}
+				auto fn = [text]()
+				{
+					LogI(TAG, "%s,text=[%s]", __func__, text.c_str());
+				};
+				obj->post(fn
+					,10*1000
 				);
 
-				text = "123";
-				LogV(TAG, "text=[%s]", text.c_str());
+				text = "#1";
+				LogV(TAG, "#2text=[%s]", text.c_str());
 				
-				PostQuitMessage();
+				{
+					/*
+					测试场景:有post还没执行时，提前退出main looper
+					*/
+					obj->post([&]() {
+							PostQuitMessage();
+						}
+						, 1 * 1000
+					);
+				}
 			}
 
 		};
