@@ -388,6 +388,9 @@
     <ClCompile Include="..\..\src\core\protocol\sctp\sctpclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\base\fieldtracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -889,6 +892,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\protocol\sctp\sctpclient.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\fieldtracker.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -195,6 +195,7 @@ private:							\
 #include "core/base/bundleex.h"
 #include "core/thread/event.h"
 #include "core/base/log.h"
+#include "core/base/fieldtracker.h"
 //#include "core/string/Utf8Tool.h"
 #include "core/string/stringcasemap.h"
 #include "core/string/stringparam.h"

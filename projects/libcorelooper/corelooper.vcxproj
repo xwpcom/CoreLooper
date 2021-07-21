@@ -328,6 +328,7 @@
     <ClCompile Include="..\..\src\arch\windows\udpiocontext.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndhandler.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp" />
+    <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
     <ClCompile Include="..\..\src\core\base\memorylog.cpp" />
     <ClCompile Include="..\..\src\core\base\object.cpp" />
     <ClCompile Include="..\..\src\core\base\bytebuffer.cpp" />
@@ -511,6 +512,7 @@
     <ClInclude Include="..\..\include\core\base\bytetool.h" />
     <ClInclude Include="..\..\include\core\base\crashdump.h" />
     <ClInclude Include="..\..\include\core\base\dt.h" />
+    <ClInclude Include="..\..\include\core\base\fieldtracker.h" />
     <ClInclude Include="..\..\include\core\base\log.h" />
     <ClInclude Include="..\..\include\core\base\memorylog.h" />
     <ClInclude Include="..\..\include\core\base\namevalue.h" />
