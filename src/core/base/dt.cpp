@@ -17,8 +17,12 @@ extern "C"
 
 bool CDT::mEnabled=true;
 
-typedef void (*LogCB)(const char* text);
+typedef void (*LogCB)(const char* tag, const char* msg, int level, DWORD threadId, const tagTimeMs& t);
 LogCB gLogCB;
+
+/*
+目前只在linux下生效
+*/
 CORE_EXPORT void SetLogCB(LogCB obj)
 {
 	gLogCB = obj;
@@ -141,11 +145,6 @@ void CDT::send(tagLogInfo& info)
 {
 	HWND hwnd = info.hwnd;
 	const char* msg=info.msg;
-
-	if (gLogCB)
-	{
-		gLogCB(msg);
-	}
 
 	if (!gAppName[0])
 	{
@@ -318,40 +317,15 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 		strcat(header, "###Error  ");
 	}
 
-#ifdef _MSC_VER
-	SYSTEMTIME st;
-	GetLocalTime(&st);
-	int year = st.wYear;
-	int month = st.wMonth;
-	int day = st.wDay;
-	int hour = st.wHour;
-	int minute = st.wMinute;
-	int second = st.wSecond;
-	int ms = st.wMilliseconds;
-#else
-	struct timeval tv = { 0 };
-	gettimeofday(&tv, nullptr);
-	time_t time = tv.tv_sec;
-	auto ms = (int)(tv.tv_usec / 1000);
-
-	struct tm tmNow;
-	localtime_r(&time, &tmNow);
-	int year = tmNow.tm_year + 1900;
-	int month = tmNow.tm_mon + 1;
-	int day = tmNow.tm_mday;
-	int hour = tmNow.tm_hour;
-	int minute = tmNow.tm_min;
-	int second = tmNow.tm_sec;
-#endif
-
 #ifdef _CONFIG_ANDROID
 	//AndroidStudio自带时间，所以这里不再添加时间
 	auto len = 0;
 #else
+	tagTimeMs t = ShellTool::GetCurrentTimeMs();
 	auto len = strlen(header);
 	_snprintf(header + len, sizeof(header) - len - 1,
 		"[%04d.%02d.%02d %02d:%02d:%02d.%03u#%04u]"
-		, year, month, day, hour, minute, second, ms
+		, t.year, t.month, t.day, t.hour, t.minute, t.second, t.ms
 		, ShellTool::GetCurrentThreadId()
 	);
 #endif
@@ -433,7 +407,10 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 
 	if (gLogCB)
 	{
-		gLogCB(szMsg);
+		/*
+		const char *tag,const char *msg,int level,DWORD threadId,const tagTimeMs& t
+		*/
+		gLogCB(tag,buf, m_nLevel, ShellTool::GetCurrentThreadId(),t);
 	}
 
 #endif
@@ -505,31 +482,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 		strcat(header,"###Error  ");
 	}
 
-#ifdef _MSC_VER
-	SYSTEMTIME st;
-	GetLocalTime(&st);
-	int year = st.wYear;
-	int month = st.wMonth;
-	int day = st.wDay;
-	int hour = st.wHour;
-	int minute = st.wMinute;
-	int second = st.wSecond;
-	int ms = st.wMilliseconds;
-#else
-	struct timeval tv = { 0 };
-	gettimeofday(&tv, nullptr);
-	time_t time = tv.tv_sec;
-	auto ms = (int)(tv.tv_usec / 1000);
-
-	struct tm tmNow;
-	localtime_r(&time, &tmNow);
-	int year = tmNow.tm_year + 1900;
-	int month = tmNow.tm_mon + 1;
-	int day = tmNow.tm_mday;
-	int hour = tmNow.tm_hour;
-	int minute = tmNow.tm_min;
-	int second = tmNow.tm_sec;
-#endif
+	tagTimeMs t = ShellTool::GetCurrentTimeMs();
 
 #ifdef _CONFIG_ANDROID
 	//AndroidStudio自带时间，所以这里不再添加时间
@@ -538,7 +491,7 @@ int CDT::operator()( const char* lpszFormat, ... )
 	auto len=strlen(header);
 	_snprintf(header+len,sizeof(header)-len-1,
 		"[%04d.%02d.%02d %02d:%02d:%02d.%03u#%04u]"
-		, year, month, day, hour, minute, second, ms
+		, t.year, t.month, t.day, t.hour, t.minute, t.second, t.ms
 		, ShellTool::GetCurrentThreadId()
 		);
 #endif
