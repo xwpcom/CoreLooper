@@ -16,7 +16,8 @@ extern "C"
 #endif
 
 bool CDT::mEnabled=true;
-
+namespace Bear {
+namespace Core {
 typedef void (*LogCB)(const char* tag, const char* msg, int level, DWORD threadId, const tagTimeMs& t);
 LogCB gLogCB;
 
@@ -27,6 +28,11 @@ CORE_EXPORT void SetLogCB(LogCB obj)
 {
 	gLogCB = obj;
 }
+
+}
+}
+
+using namespace Bear::Core;
 
 void CDT::enableDT(bool enable)
 {
