@@ -17,11 +17,12 @@ HttpPost::HttpPost()
 	//DW("%s,this=%p", __func__, this);
 	SetObjectName("HttpPost");
 	mBoundary = "--------------------------716657498184592405569245";
+	//LogV(TAG, "%s,this=%p", __func__, this);
 }
 
 HttpPost::~HttpPost()
 {
-	//DW("%s,this=%p", __func__, this);
+	//LogV(TAG,"%s,this=%p", __func__, this);
 
 	if (!mRecvAckDone)
 	{

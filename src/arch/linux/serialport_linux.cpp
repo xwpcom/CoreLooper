@@ -61,7 +61,7 @@ int SerialPort_Linux::Receive(LPVOID buf, int bufLen)
 	else
 	{
 		int err = errno;
-		LogW(TAG, "fail read#1,error=%d(%s)",err,strerror(err));
+		//LogW(TAG, "fail read#1,error=%d(%s)",err,strerror(err));
 	}
 	return ret;
 }
@@ -292,6 +292,7 @@ void SerialPort_Linux::OnCreate()
 		filePath = mDeviceName;
 	}
 
+	LogV(TAG, "try open[%s]", filePath.c_str());
 	mHandle = _open(filePath.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
 
 	int error = mHandle > 0 ? 0 : -1;

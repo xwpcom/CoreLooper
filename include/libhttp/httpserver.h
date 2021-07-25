@@ -9,7 +9,7 @@ class Bundle;
 namespace Net {
 class Channel;
 namespace Http {
-class HTTP_EXPORT HttpServer :public Net::TcpServer
+class HTTP_EXPORT HttpServer :public TcpServer
 {
 public:
 	HttpServer();

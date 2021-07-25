@@ -79,7 +79,7 @@ protected:
 			"<Result><Error>0</Error>%s</Result>"
 			,x.GetString().c_str()
 		);
-		return std::move(ack);
+		return ack;
 	}
 };
 

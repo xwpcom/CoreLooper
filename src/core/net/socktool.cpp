@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "socktool.h"
 #include "base/stringtool.h"
+#include "bindwrapper.h"
 
 using namespace std;
 
@@ -138,7 +139,7 @@ BOOL SockTool::IsWouldBlock()
 		//在t20上面ftpclient连接有时报connect ret=-1,error=150(Operation now in progress)
 		static const char *desc = "Operation now in progress";
 		const char *reason = strerror(err);
-		DV("errno=%d(%s)", err, reason);
+		//LogV(TAG,"errno=%d(%s)", err, reason);
 		if (reason)
 		{
 			if (strcmp(desc, reason) == 0)
@@ -150,6 +151,11 @@ BOOL SockTool::IsWouldBlock()
 
 	return err == EAGAIN || err == EWOULDBLOCK || err == EINPROGRESS || err == WSAEWOULDBLOCK;
 #endif
+}
+
+int SockTool::Bind(int sockfd, const struct sockaddr* addr, socklen_t addrlen)
+{
+	return BindWrapper::Bind(sockfd, (SOCKADDR*)addr, addrlen);
 }
 
 int SockTool::StartServer(int port)
@@ -176,6 +182,10 @@ int SockTool::StartServer(int port)
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons((unsigned short)port);
 	sa.sin_addr.s_addr = htonl(INADDR_ANY);
+	if (port == 0)
+	{
+		int x = 0;
+	}
 	ret = ::bind(s, (SOCKADDR*)&sa, sizeof(sa));
 	if (ret == SOCKET_ERROR)
 	{

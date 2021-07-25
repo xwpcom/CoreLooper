@@ -7,7 +7,7 @@ class WIN_CLASS LogWnd :public ScintillaWnd
 	DECLARE_DYNAMIC(LogWnd)
 public:
 	LogWnd();
-	void AddLog(const string& line);
+	int AddLog(const string& line);
 	void clear();
 	void CopyAll();
 	void CheckUpdateMarginWidth();

@@ -9,7 +9,7 @@ namespace Bear {
 namespace Core
 {
 namespace FileSystem {
-static const char* TAG = "IniFile";
+//static const char* TAG = "IniFile";
 IniFile::IniFile()
 {
 	mTickChanged = 0;

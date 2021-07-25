@@ -3,7 +3,6 @@
 
 #ifdef _MSC_VER_DEBUG
 //#define new DEBUG_NEW //不兼容c++ placement new,所以屏蔽它
-#endif
 
 namespace Bear {
 namespace Core {
@@ -145,3 +144,4 @@ void MemoryLog::AddLog(const char* msg)
 }
 }
 
+#endif

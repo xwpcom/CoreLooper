@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "ajax_proc.h"
 
+using namespace Bear::Core;
+HTTP_EXPORT void _avoidCompileRemove_proc()
+{
+	LogV("compile", "%s",__func__);
+}
+
 namespace Bear {
 namespace Core {
 using namespace FileSystem;

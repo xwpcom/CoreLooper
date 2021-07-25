@@ -51,10 +51,10 @@
 #include <sys/select.h>
 #include <time.h>
 #include <sys/time.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #ifndef __APPLE__
+#include <sys/types.h>
 #include <linux/if.h>
 #include <net/if_arp.h>
 #include <arpa/inet.h>
@@ -190,12 +190,15 @@ private:							\
 #include "core/file/file.h"
 #include "core/file/inifile.h"
 #include "core/file/dumpfile.h"
+#include "core/file/filefinder.h"
 #include "core/base/bundle.h"
 #include "core/base/bundleex.h"
 #include "core/thread/event.h"
 #include "core/base/log.h"
+#include "core/base/fieldtracker.h"
 //#include "core/string/Utf8Tool.h"
 #include "core/string/stringcasemap.h"
+#include "core/string/stringparam.h"
 #include "core/string/textprotocol.h"
 #include "core/string/textseparator.h"
 #include "core/string/xmlstring.h"
@@ -206,3 +209,4 @@ private:							\
 #include "core/net/channel.h"
 #include "json/ArduinoJson.h"
 #include "json/jsonhelper.h"
+#include "core/base/bytetool.h"

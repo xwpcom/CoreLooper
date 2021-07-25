@@ -6,6 +6,8 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+static const char* TAG = "UdpServer";
+
 //SO_REUSEADDR and SO_REUSEPORT
 //https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t
 UdpServer_Linux::UdpServer_Linux()
@@ -43,7 +45,7 @@ int UdpServer_Linux::StartServer(int port)
 
 	mSock = s;
 #ifdef _DEBUG
-	DV("%s,port=%d,sock=%d", __func__, port, mSock);
+	LogV(TAG,"%s,port=%d,sock=%d", __func__, port, mSock);
 #endif
 
 	if (mSock != INVALID_SOCKET)
@@ -84,7 +86,7 @@ int UdpServer_Linux::StartServer(int port)
 
 void UdpServer_Linux::OnEvent(DWORD events)
 {
-	//DV("this=0x%08x,%s,sock=%d,events = 0x%x", this, __func__, mSock, events);
+	//LogV(TAG,"this=0x%08x,%s,sock=%d,events = 0x%x", this, __func__, mSock, events);
 
 	if (events & EPOLLIN)
 	{
@@ -92,7 +94,7 @@ void UdpServer_Linux::OnEvent(DWORD events)
 	}
 	else
 	{
-		DW("todo:events=0x%08x", events);
+		LogW(TAG,"todo:events=0x%08x", events);
 	}
 }
 
@@ -120,7 +122,7 @@ int UdpServer_Linux::OnAccept()
 		sbuf, sizeof(sbuf), NI_NUMERICHOST | NI_NUMERICSERV);
 	//check(ret == 0, "getnameinfo");
 
-	DV("recv[%s:%s]:[%s]", hbuf, sbuf, buf);
+	LogV(TAG,"recv[%s:%s]:[%s]", hbuf, sbuf, buf);
 	return OnNewConnect((struct sockaddr_in*)&client_addr, data);
 #endif
 }
@@ -156,12 +158,12 @@ int UdpServer_Linux::OnNewConnect(struct sockaddr_in  *addr, shared_ptr<ByteBuff
 	my_addr.sin_addr.s_addr = INADDR_ANY;
 	if (::bind(s, (struct sockaddr *) &my_addr, sizeof(struct sockaddr)) == -1)
 	{
-		DW("fail bind");
+		LogW(TAG,"fail bind");
 		return -1;
 	}
 
 	auto ret = connect(s, (struct sockaddr*)addr, sizeof(struct sockaddr_in));
-	DV("udp bind connect %s:%d,peer port=%d,connect ret=%d"
+	LogV(TAG,"udp bind connect %s:%d,peer port=%d,connect ret=%d"
 		, inet_ntoa(addr->sin_addr)
 		, addr->sin_port
 		, SockTool::GetPeerPort(s)
@@ -200,7 +202,7 @@ int UdpServer_Linux::OnNewConnect(struct sockaddr_in  *addr, shared_ptr<ByteBuff
 #endif
 	if (ret == 0)
 	{
-		DV("epoll_ctl ret=%d", ret);
+		LogV(TAG,"epoll_ctl ret=%d", ret);
 	}
 	else
 	{
@@ -272,7 +274,7 @@ int udp_socket_connect(int epollfd, struct sockaddr_in  *servaddr)
 	if (fd == -1)
 		return  -1;
 
-	DV("udp bind connect %s:%d,peer port=%d"
+	LogV(TAG,"udp bind connect %s:%d,peer port=%d"
 		, inet_ntoa(servaddr->sin_addr)
 		, servaddr->sin_port
 		, SockTool::GetPeerPort(fd)
@@ -312,7 +314,7 @@ void accept_client(int epollfd, int fd)
 
 void msg_process(int epollfd, int fd)
 {
-	DV("%s", __func__);
+	LogV(TAG,"%s", __func__);
 
 	int nread = 0;
 	char buf[MAXBUF];
@@ -335,7 +337,7 @@ void msg_process(int epollfd, int fd)
 int mainUdpServer()
 {
 	auto listener = socket(AF_INET, SOCK_DGRAM, 0);
-	DV("listener=%d", listener);
+	LogV(TAG,"listener=%d", listener);
 	SockTool::ReuseAddr(listener);
 	SockTool::SetAsync(listener);
 
@@ -358,7 +360,7 @@ int mainUdpServer()
 	ret = epoll_ctl(kdpfd, EPOLL_CTL_ADD, (int)listener, &ev);
 	if (ret < 0)
 	{
-		DW("epoll fail");
+		LogW(TAG,"epoll fail");
 		return -1;
 	}
 
@@ -377,7 +379,7 @@ int mainUdpServer()
 		{
 			if (events[n].data.fd == listener)
 			{
-				DV("accept");
+				LogV(TAG,"accept");
 				accept_client((int)kdpfd, (int)listener);
 			}
 			else

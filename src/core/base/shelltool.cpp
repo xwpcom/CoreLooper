@@ -147,7 +147,7 @@ DWORD ShellTool::GetTickCount()
 	long ret = clock_gettime(flag, &tp);
 	if (ret)
 	{
-		DW("err=%d(%s)", errno, strerror(errno));
+		LogW(TAG,"err=%d(%s)", errno, strerror(errno));
 	}
 	ASSERT(ret == 0);
 	DWORD dwTick = (DWORD)(tp.tv_sec * 1000) + (DWORD)(tp.tv_nsec / 1000000);
@@ -186,7 +186,13 @@ ULONGLONG ShellTool::GetTickCount64()
 	struct timespec tp;
 	tp.tv_sec = 0;
 	tp.tv_nsec = 0;
-	long ret = clock_gettime(CLOCK_MONOTONIC_RAW, &tp);
+
+	auto flag = CLOCK_MONOTONIC;
+#ifdef CLOCK_MONOTONIC_RAW
+	flag = CLOCK_MONOTONIC_RAW;
+#endif
+
+	long ret = clock_gettime(flag, &tp);
 	if (ret)
 	{
 		LogW(TAG,"err=%d(%s)", errno, strerror(errno));
@@ -234,7 +240,7 @@ void ShellTool::Sleep(UINT ms)
 			break;
 		}
 
-		DW("usleep fail,err=%d,desc=[%s]", errno, strerror(errno));
+		LogW(TAG,"usleep fail,err=%d,desc=[%s]", errno, strerror(errno));
 
 		const auto tickNow = ShellTool::GetTickCount64();
 		if (tickNow >= tickStart + ms)
@@ -261,6 +267,14 @@ string ShellTool::CreateGuid()
 	pszGuid = NULL;
 
 	return szGuid;
+}
+
+string ShellTool::CreateGuidToken()
+{
+	auto guid = ShellTool::CreateGuid();
+	StringTool::MakeUpper(guid);
+	StringTool::Replace(guid, "-", "");
+	return guid;
 }
 
 struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
@@ -344,7 +358,7 @@ BOOL ShellTool::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function, PVOID Context
 		}
 		else
 		{
-			DW("Fail pthread_create,error=%d(%s)",errno,strerror(errno));
+			LogW(TAG,"Fail pthread_create,error=%d(%s)",errno,strerror(errno));
 			ASSERT(FALSE);
 		}
 
@@ -804,7 +818,7 @@ void ShellTool::LoadWindowPos(HWND hWnd, CString szWinName, IniFile& ini)
 //WaitThreadExitEx能过滤等待过程中的用户输入,如mouse,keyboard.
 BOOL ShellTool::WaitThreadExitEx(HANDLE handle)
 {
-	//  DW("WaitThreadExitEx#1,threadid=%d",GetCurrentThreadId());
+	//  LogW(TAG,"WaitThreadExitEx#1,threadid=%d",GetCurrentThreadId());
 
 	while (TRUE)
 	{
@@ -852,12 +866,12 @@ BOOL ShellTool::WaitThreadExitEx(HANDLE handle)
 			}
 
 
-			//DW("One of the handles became signaled.,exit MessageLoop");
+			//LogW(TAG,"One of the handles became signaled.,exit MessageLoop");
 			return TRUE;
 			//DoStuff (result - WAIT_OBJECT_0) ; 
 		} // End of else clause.
 	}
-	//DW("WaitThreadExitEx#2,threadid=%d",GetCurrentThreadId());
+	//LogW(TAG,"WaitThreadExitEx#2,threadid=%d",GetCurrentThreadId());
 }
 //进行message loop循环的同时等待某个变量值为FALSE.
 //一般用于确保工作线程事务完成.
@@ -1608,7 +1622,7 @@ int ShellTool::System(const char *szCmd)
 //不要使用linux api system(),它有很多坑，经常不按期望的工作，手工在secureCRT中运行正常，用system()来调用就不正常
 int ShellTool::System(const char *szCmd)
 {
-	DV("System(%s)", szCmd);
+	LogV(TAG,"System(%s)", szCmd);
 
 	pid_t pid = 0;
 	int ret = SUCCESS;
@@ -1633,7 +1647,7 @@ int ShellTool::System(const char *szCmd)
 
 	if (0 > pid)
 	{
-		DW("fork failed retry=%d\n", nRetry);
+		LogW(TAG,"fork failed retry=%d\n", nRetry);
 		ret = FAILURE;
 	}
 	else if (0 == pid)
@@ -1855,6 +1869,20 @@ time_t DateTime::time()
 	return (ShellTool::GetTickCount() / 1000) + gBaseTime;
 #endif
 }
+
+time_t tagTimeMs::to_time_t()
+{
+	tm tm1 = { 0 };
+	tm1.tm_year = year - 1900;
+	tm1.tm_mon = month - 1;
+	tm1.tm_mday = day;
+	tm1.tm_hour = hour;
+	tm1.tm_min = minute;
+	tm1.tm_sec = second;
+	time_t t1 = DateTime::mktime(&tm1);
+	return t1;
+}
+
 //返回晚于obj的天数
 //比如是obj的后一天，则返回1
 //如果obj晚于本对象,返回天数为负数
@@ -1875,3 +1903,40 @@ int tagTimeMs::laterDays(const tagTimeMs& obj)
 	int days = DateTime::spanDays(tm1, tm2);
 	return days;
 }
+
+void tagTimeMs::from_time_t(time_t t)
+{
+	tm time = { 0 };
+	DateTime::localtime(t, &time);
+
+	year = time.tm_year + 1900;
+	month = time.tm_mon + 1;
+	day = time.tm_mday;
+	hour = time.tm_hour;
+	minute = time.tm_min;
+	second = time.tm_sec;
+	ms = 0;
+}
+
+string tagTimeMs::toText()
+{
+	string text = StringTool::Format("%04d.%02d.%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
+	return text;
+}
+
+int tagTimeMs::String2TimeMs(const string& text, tagTimeMs& ms)
+{
+	tagTimeMs& t = ms;
+	int ret = sscanf(text.c_str(), "%04d.%02d.%02d %02d:%02d:%02d"
+		, &t.year, &t.month, &t.day, &t.hour, &t.minute, &t.second
+	);
+
+	if (ret == 6)
+	{
+		return 0;
+	}
+
+	LogV(TAG, "fail %s,text=%s", __func__, text.c_str());
+	return -1;
+}
+

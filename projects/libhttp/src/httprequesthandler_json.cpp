@@ -56,6 +56,7 @@ int HttpRequestHandler_Json::Start(tagHttpHeaderInfo* headerInfo)
 		httpAckHeader.SetConnection("Keep-Alive");
 		httpAckHeader.SetCacheControl("no-cache,no-store");//,must-revalidate");
 		httpAckHeader.SetContentType("application/json;charset=UTF-8");
+		httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 
 		if (len > 0)
 		{

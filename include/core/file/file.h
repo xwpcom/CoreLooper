@@ -29,7 +29,15 @@ public:
 
 	int Open(const string& filePath, bool createIfNecessary = true);
 	int Read(LPBYTE data, int bytes);
+	int Read(void* data, int bytes)
+	{
+		return Read((LPBYTE)data, bytes);
+	}
 	int Write(LPBYTE data, int bytes);
+	int Write(void* data, int bytes)
+	{
+		return Write((LPBYTE)data, bytes);
+	}
 
 	int Write(const string& text)
 	{
@@ -142,14 +150,9 @@ public:
 	static FILE* fopen(const char *pszFile, const char *pszMode);
 	static size_t GetFileLength(FILE *hFile);
 	static size_t GetFileLength(const char *pszFile);
-	static int Delete(const string& filePath)
-	{
-		if(FileExists(filePath))
-			return DeleteFile(filePath.c_str());
-		return DeleteFolder(filePath.c_str());
-	}
+	static int Delete(const string& filePath, bool recursive = false);
 	static int DeleteFile(const char *pszFile);
-	static int DeleteFolder(const char *pszFile);
+	static int DeleteFolder(const char *pszFile, bool recursive=false);
 	static BOOL RemoveDirectory(const char *pszDir);
 	static BOOL MakeSureDirectoryPathExists(LPCSTR lpszDirPath);
 	static BOOL CreateFolderForFile(const std::string& filePath);
@@ -160,6 +163,10 @@ public:
 	static void PathMakePretty(std::string& filePath);
 	static void sync();
 	static int  mkdir(const char *pszDir, DWORD mode = 0777);
+	static int  mkdir(const string& dir, DWORD mode = 0777)
+	{
+		return mkdir(dir.c_str(), mode);
+	}
 	static int  chmod(const char *pszFile, DWORD mode = 0777);
 	static int	rename(const char *oldname, const char *newname);
 	static int	rename(const std::string& oldname, const std::string& newname)

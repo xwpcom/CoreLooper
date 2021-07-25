@@ -23,7 +23,21 @@ string StringTool::Format(const char* fmt, ...)
 	if (ret >0)
 	{
 		result.resize(ret + 1);
+		
+		/*
+		2021.06.04,ubuntu20下面出现
+terminate called after throwing an instance of 'std::out_of_range'
+  what():  basic_string::erase: __pos (which is 16) > this->size() (which is 11)
+vsnprintf的返回值比result.size()要大
+已解决,重新每次引用fmt,list后要重新va_start
+在windows下不需要，fmt,list一直有效，但ubuntu环境下面fmt,list引用后会失效
+		*/
+		va_end(list);
+		va_start(list, fmt);
 		ret = vsnprintf((char*)result.c_str(), ret + 1, fmt, list);
+
+
+		//auto len = MIN(ret, result.size());
 		result.erase(ret);
 	}
 
@@ -46,6 +60,10 @@ string& StringTool::AppendFormat(string& obj, const char* fmt, ...)
 	if (ret > 0)
 	{
 		result.resize(ret + 1);
+
+		va_end(list);
+		va_start(list, fmt);
+
 		ret = vsnprintf((char*)result.c_str(), ret + 1, fmt, list);
 		result.erase(ret);
 	}

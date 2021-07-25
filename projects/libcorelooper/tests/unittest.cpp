@@ -1060,9 +1060,54 @@ public:
 			//cs.Unlock();
 		}
 
-		tick =ShellTool::GetTickCount()-tick;
+		tick =ShellTool::GetTickCount64()-tick;
 		LogV(TAG,"tick=%lld", tick);
 
+	}
+	TEST_METHOD(postAsync)
+	{
+		class WorkLooper :public BlockLooper
+		{
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+				LogV(TAG, "%s", __func__);
+
+				auto obj = make_shared <WorkLooper>();
+				AddChild(obj);
+				obj->Start();
+
+				string text = "Hello";
+				auto fn = [text]()
+				{
+					LogI(TAG, "%s,text=[%s]", __func__, text.c_str());
+				};
+				obj->post(fn
+					,10*1000
+				);
+
+				text = "#1";
+				LogV(TAG, "#2text=[%s]", text.c_str());
+				
+				{
+					/*
+					测试场景:有post还没执行时，提前退出main looper
+					*/
+					obj->post([&]() {
+							PostQuitMessage();
+						}
+						, 1 * 1000
+					);
+				}
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
 	}
 
 	TEST_METHOD(SmartTlsLooper_)
@@ -2443,6 +2488,65 @@ public:
 	TEST_METHOD(StringTool_)
 	{
 		{
+			class Tool {
+			public:
+				static string Format(const char* fmt, ...)
+				{
+					if (!fmt || fmt[0] == 0)
+					{
+						return "";
+					}
+
+					string result;
+					va_list list;
+					va_start(list, fmt);
+
+					int ret = 0;
+					ret = vsnprintf(nullptr, 0, fmt, list);
+					printf("fmt#1=[%s],ret=%d\r\n", fmt, ret);
+
+					va_end(list);
+					va_start(list, fmt);
+
+					ret = vsnprintf(nullptr, 0, fmt, list);
+					printf("fmt#2=[%s],ret=%d\r\n", fmt, ret);
+
+					if (ret > 0)
+					{
+						result.resize(ret + 1);
+						ret = vsnprintf((char*)result.data(), ret + 1, fmt, list);
+						//printf("vsnprintf ret=%d\r\n", ret);
+
+						auto len = ret;// MIN(ret, result.size());
+						//printf("len=%d\r\n", (int)len);
+						result.erase(len);
+					}
+
+					va_end(list);
+
+					return result;
+				}
+			};
+
+			int idx = 123456789;
+			auto text = Tool::Format("hello%d", idx);
+			printf("text=[%s]\r\n", text.c_str());
+
+		}
+
+		{
+			int idx = -1;
+
+			LogV(TAG, "%s,sizeof(int)=%d", __func__, (int)sizeof(int));
+			++idx;
+
+			//LogV(TAG, "fmt#1");
+			auto text = StringTool::Format("hello%d", idx);
+			int x = 0;
+
+		}
+
+		{
 			string sz = "##";
 			StringTool::Replace(sz, "#", "##");
 			ASSERT(sz == "####");
@@ -2587,6 +2691,119 @@ public:
 
 	}
 
+	TEST_METHOD(HandlerMap)
+	{
+		/*
+		研究url中支持如下使用
+		proc.xml?url=IotServer["00000EMU"]
+		proc.xml?url=IotServer["imei"]["00000EMU"]
+		*/
+
+		class Desktop :public Handler
+		{
+		protected:
+			typedef unordered_map <string, unordered_map<string, weak_ptr<Handler>>> MapItemType;
+			unique_ptr<MapItemType> mMapItemPtr;
+			//unordered_map <string,unordered_map<string, weak_ptr<Handler>>> mMapItems;//tag=> name=>
+			/* tag默认为"",可用来区分不同的map */
+
+		public:
+			Desktop()
+			{
+				SetObjectName("desktop");
+
+				//LogV(TAG, "sizeof(mMapItems)=%d", (int)sizeof(mMapItems));//40
+				//LogV(TAG, "sizeof(mMapItemPtr)=%d", (int)sizeof(mMapItemPtr));//4
+			}
+
+			shared_ptr<Handler> operator[](const string& name) {
+				return MapItem(name, "");
+			}
+			
+			/* c++不支持重载[][] */
+			shared_ptr<Handler> MapItem(const string& name, const string& tag="")
+			{
+				if (!mMapItemPtr)
+				{
+					return nullptr;
+				}
+
+				auto& mMapItems = *mMapItemPtr;
+
+				auto it = mMapItems.find(tag);
+				if (it != mMapItems.end())
+				{
+					auto it2 = it->second.find(name);
+					if (it2 != it->second.end())
+					{
+						auto obj = it2->second.lock();
+						return obj;
+					}
+				}
+				return nullptr;
+			}
+
+
+			void AddMapItem(shared_ptr<Handler> obj, const string& name="", const string& tag = "")
+			{
+				if (!mMapItemPtr)
+				{
+					mMapItemPtr = make_unique<MapItemType>();
+				}
+
+				auto& mMapItems = *mMapItemPtr;
+				if (name.empty())
+				{
+					string text = obj->GetObjectName();
+					mMapItems[tag][text] = obj;
+				}
+				else
+				{
+					mMapItems[tag][name] = obj;
+				}
+			}
+
+		};
+
+		class EcoHandler :public Handler
+		{
+		public:
+			EcoHandler()
+			{
+				SetObjectName("EcoHandler");
+			}
+		protected:
+			void OnCreate() {
+				__super::OnCreate();
+			}
+
+		};
+
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto desktop = make_shared<Desktop>();
+				AddChild(desktop);
+
+				auto eco = make_shared<EcoHandler>();
+				AddChild(eco);
+
+				desktop->AddMapItem(eco, "EcoHandler");
+				desktop->AddMapItem(eco, "00000EMU","uid");
+				auto obj2=desktop->MapItem("00000EMU");
+
+				auto obj = (*desktop)["EcoHandler"];
+				int x = 0;
+
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+	
 	TEST_METHOD(Bundle_Test)
 	{
 		int ret = -1;
@@ -3504,7 +3721,6 @@ TEST_CLASS(STL)
 		string sz = std::move(text);
 		int x = 0;
 	}
-
 };
 
 }

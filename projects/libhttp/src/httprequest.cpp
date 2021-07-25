@@ -350,7 +350,7 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 	else
 	{
 		LogW(TAG,"no transform ptr for [%s]", target.c_str());
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 	}
 
 	SetStatus(eHttpRequestStatus_Done);
@@ -991,7 +991,14 @@ shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri)
 	{
 		string  ext = HttpTool::GetUriExt(uri);
 
-		if (StringTool::CompareNoCase(ext, ".xml") == 0 || ext.empty())
+		if (ext.empty())
+		{
+			if (AjaxHandler::AjaxCommandExists(uri))
+			{
+				handler = make_shared<HttpRequestHandler_Ajax>();
+			}
+		}
+		else if (StringTool::CompareNoCase(ext, ".xml") == 0)
 		{
 			handler = make_shared<HttpRequestHandler_Ajax>();
 		}

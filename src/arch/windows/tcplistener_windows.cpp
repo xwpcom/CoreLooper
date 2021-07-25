@@ -17,6 +17,8 @@ TcpListener_Windows::TcpListener_Windows()
 
 TcpListener_Windows::~TcpListener_Windows()
 {
+	LogV(TAG, "port=%d", mPort);
+
 	SockTool::CLOSE_SOCKET(mSock);
 }
 

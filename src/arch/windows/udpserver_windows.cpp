@@ -13,6 +13,9 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+
+static const char* TAG = "UdpServer";
+
 UdpServer_Windows::UdpServer_Windows()
 {
 	SetObjectName("UdpServer");
@@ -43,7 +46,7 @@ int UdpServer_Windows::StartServer(int port)
 	int ret = ::bind(sock, (LPSOCKADDR)&addr, sizeof(addr));
 	if (ret)
 	{
-		DW("fail to StartServer(port=%d)", port);
+		LogW(TAG,"fail to StartServer(port=%d)", port);
 		ASSERT(FALSE);
 
 		SockTool::CAutoClose ac(&sock);
@@ -156,7 +159,7 @@ void UdpServer_Windows::OnRecv(LPBYTE data, int dataBytes, const sockaddr& addr)
 	++idx;
 
 	string text((char*)data, dataBytes);
-	DW("recv[%04d]=[%s]", idx, text.c_str());
+	LogW(TAG,"recv[%04d]=[%s]", idx, text.c_str());
 
 	auto client = make_shared<UdpClient_Windows>();
 	int x = 0;

@@ -9,11 +9,23 @@ namespace Core
 //.保证有效数据是连续的
 class CORE_EXPORT ByteBuffer
 {
-	DISABLE_COPY_CLASS(ByteBuffer);
+	//DISABLE_COPY_CLASS(ByteBuffer);
 public:
 	ByteBuffer(void);
 	virtual ~ByteBuffer(void);
 	
+	ByteBuffer& operator=(const ByteBuffer& src);
+	ByteBuffer(const ByteBuffer& src)
+	{
+		m_pBuf = NULL;
+		m_cbBuf = 0;
+		m_cbMaxBuf = 0;
+		m_nDataOff = 0;
+		m_nData = 0;
+
+		*this = src;
+	}
+
 	void SetName(const char *name)
 	{
 		mName = name;
@@ -140,6 +152,7 @@ public:
 		return GetDataPointer() + GetActualDataLength();
 	}
 
+	int ReadLine(string& line);
 
 	//返回数据指针
 	LPBYTE GetDataPointer()const;

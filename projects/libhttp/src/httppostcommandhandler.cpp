@@ -8,6 +8,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpPostCommandHandler";
+
 HttpPostCommandHandler::HttpPostCommandHandler()
 {
 }
@@ -106,15 +108,39 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 				data = mInboxBody.data();
 				bytes = mInboxBody.length();
 
+				auto& header = mHeader->GetHeader();
+				auto& name = header.mUri;
 				{
+#ifdef _CONFIG_ANDROID
+					/*
+					2021.03.04
+					采用目前最新的AndroidStudio4.1.2
+					在liblift.so中定义的PostJsonManager子类,
+					在libhtt.so中能搜索到Handler,但dynamic_pointer_cast到PostJsonManager时返回nullptr
+					vs2019没有此问题
+					感觉是as的bug?
+
+					临时解决办法:c style cast
+					*/
+					//LogV(TAG, "PostJsonManager=%p",obj?obj.get():nullptr);
+					auto obj2 = _Object(Handler, "PostJsonManager");
+					//LogV(TAG, "Handler.PostJsonManager=%p", obj2 ? obj2.get() : nullptr);
+					PostJsonManager* obj = nullptr;
+					if (obj2)
+					{
+						obj = (PostJsonManager*)obj2.get();
+					}
+#else
 					auto obj = _Object(PostJsonManager, "PostJsonManager");
+#endif					
 					if (obj)
 					{
-						auto& header=mHeader->GetHeader();
-						string name = header.mUri;
+						//LogV(TAG, "%s#3", __func__);
+						//LogV(TAG, "try handler json:%s", name.c_str());
 						auto handler = obj->CreatePostJsonHandler(name);
 						if (handler)
 						{
+							//LogV(TAG, "%s#4", __func__);
 							obj->AddChild(handler);
 
 							DynamicJsonBuffer jBuffer;
@@ -141,7 +167,16 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 
 				if (mAck.empty())
 				{
-					string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
+					DynamicJsonBuffer jBuffer;
+					auto& json = jBuffer.createObject();
+					{
+						json["error"] = -1;
+						json["desc"] = StringTool::Format("no found json handler(%s)",name.c_str());
+					}
+					string jsonText;
+					json.printTo(jsonText);
+
+					//string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
 					mAck = StringTool::Format(
 						"HTTP/1.1 200\r\n"
 						"Content-Type: application/json;charset=UTF-8\r\n"

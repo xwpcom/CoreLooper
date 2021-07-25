@@ -7,6 +7,7 @@
 //android,ios and linux
 #include "arch/linux/looper_linux.h"
 #define BASE_LOOPER Looper_Linux
+#include "arch/linux/linuxsignal.h"
 #endif
 
 namespace Bear {
@@ -37,6 +38,7 @@ class DelayExitRunnable :public Runnable
 //main looper helper
 class CORE_EXPORT MainLooper_ :public Looper
 {
+	SUPER(Looper);
 public:
 	MainLooper_()
 	{
@@ -49,6 +51,21 @@ public:
 	void DelayExit(int ms=0)
 	{
 		postDelayedRunnable(make_shared<DelayExitRunnable>(), ms);
+	}
+protected:
+	void OnCreate()
+	{
+		__super::OnCreate();
+
+#ifndef _MSC_VER
+		/* I hate signal very much */
+		{
+			LinuxSignal t;
+			//t.Init();
+			t.InitEx();
+		}
+
+#endif
 	}
 };
 

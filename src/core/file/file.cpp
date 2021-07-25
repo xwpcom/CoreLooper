@@ -136,7 +136,7 @@ int File::remove_file(const char *path, int flags)
 	{
 		if (errno != ENOENT)
 		{
-			DW("unable to stat `%s'", path);
+			LogW(TAG,"unable to stat `%s'", path);
 			return -1;
 		}
 
@@ -147,7 +147,7 @@ int File::remove_file(const char *path, int flags)
 	{
 		if (!(flags & FILEUTILS_FORCE))
 		{
-			DW("cannot remove `%s'", path);
+			LogW(TAG,"cannot remove `%s'", path);
 			return -1;
 		}
 		return 0;
@@ -161,7 +161,7 @@ int File::remove_file(const char *path, int flags)
 
 		if (!(flags & FILEUTILS_RECUR))
 		{
-			DW("%s: is a directory", path);
+			LogW(TAG,"%s: is a directory", path);
 			return -1;
 		}
 
@@ -173,7 +173,7 @@ int File::remove_file(const char *path, int flags)
 
 		if ((dp = opendir(path)) == NULL)
 		{
-			DW("FailOpen `%s'", path);
+			LogW(TAG,"FailOpen `%s'", path);
 			return -1;
 		}
 
@@ -192,7 +192,7 @@ int File::remove_file(const char *path, int flags)
 
 		if (closedir(dp) < 0)
 		{
-			DW("FailClose '%s'", path);
+			LogW(TAG,"FailClose '%s'", path);
 			return -1;
 		}
 
@@ -203,7 +203,7 @@ int File::remove_file(const char *path, int flags)
 
 		if (rmdir(path) < 0)
 		{
-			DW("FailRemove '%s'", path);
+			LogW(TAG,"FailRemove '%s'", path);
 			return -1;
 		}
 
@@ -220,7 +220,7 @@ int File::remove_file(const char *path, int flags)
 
 		if (unlink(path) < 0)
 		{
-			DW("FailRemove '%s'", path);
+			LogW(TAG,"FailRemove '%s'", path);
 			return -1;
 		}
 		//sync();
@@ -234,7 +234,7 @@ int File::DeleteFile(const char *pszFile)
 {
 	if (pszFile && pszFile[0])
 	{
-		//DV("File::DeleteFile(%s)", pszFile);
+		//LogV(TAG,"File::DeleteFile(%s)", pszFile);
 	}
 	else
 	{
@@ -252,17 +252,42 @@ int File::DeleteFile(const char *pszFile)
 	int ret = unlink(pszFile);
 	if (ret)
 	{
-		DW("unlink(%s) errno=%d(%s)", pszFile, errno, strerror(errno));
+		LogW(TAG,"unlink(%s) errno=%d(%s)", pszFile, errno, strerror(errno));
 	}
 	return ret;
 #endif
 }
 
-//linux下递归删除文件夹,windows下只能删除空文件夹
-int File::DeleteFolder(const char *pszFile)
+/* 支持递归删除文件夹 */
+int File::DeleteFolder(const char *pszFile, bool recursive)
 {
-	DV("File::DeleteFolder(%s)", pszFile);
+	LogV(TAG,"File::DeleteFolder(%s)", pszFile);
 #ifdef _MSC_VER
+
+	if(recursive)
+	{
+		string folder = pszFile;
+		FileFinder finder;
+		BOOL bOK = finder.FindFile(folder);
+		while (bOK)
+		{
+			bOK = finder.FindNextFile();
+			if (finder.IsDots())
+			{
+				continue;
+			}
+
+			string fullPath = folder + "/" + finder.GetFileName();
+			if (finder.IsDirectory())
+			{
+				DeleteFolder(fullPath.c_str(), recursive);
+			}
+			else
+			{
+				DeleteFile(fullPath.c_str());
+			}
+		}
+	}
 	BOOL bOK = ::RemoveDirectoryA(pszFile);
 	if (!bOK && GetLastError() == ERROR_FILE_NOT_FOUND)
 	{
@@ -270,7 +295,7 @@ int File::DeleteFolder(const char *pszFile)
 	}
 	return bOK ? 0 : -1;
 #else
-	int ret = remove_file(pszFile, FILEUTILS_RECUR | FILEUTILS_FORCE);
+	int ret = remove_file(pszFile, recursive?(FILEUTILS_RECUR | FILEUTILS_FORCE):0);
 	return ret;
 #endif
 }
@@ -297,7 +322,7 @@ BOOL File::FileExists(const  string& szFile)
 	if (ret)
 	{
 #ifndef _MSC_VER
-		//DW("fail access %s,ret=%d,error=%d(%s)",pszFile,ret,errno,strerror(errno));
+		//LogW(TAG,"fail access %s,ret=%d,error=%d(%s)",pszFile,ret,errno,strerror(errno));
 #endif
 	}
 	return ret == 0;
@@ -341,7 +366,7 @@ int File::DeleteParentFolder(const char *pszFile)
 				int err = ShellTool::GetLastError();
 				if (err != 0x00000091 && err != ENOTDIR && err != ENOTEMPTY)//folder is NOT empty
 				{
-					DW("fail RemoveDirectory(%s),err=%d(%s)", szFile, err, strerror(errno));
+					LogW(TAG,"fail RemoveDirectory(%s),err=%d(%s)", szFile, err, strerror(errno));
 				}
 				//maybe NOT empty?
 				return -1;
@@ -393,7 +418,7 @@ int File::SetFileModifyTime(const char *szFile, time_t tm)
 
 	if (ret)
 	{
-		DW("Fail to utime(%s),error=%d(%s)", szFile, errno, strerror(errno));
+		LogW(TAG,"Fail to utime(%s),error=%d(%s)", szFile, errno, strerror(errno));
 	}
 	return 0;
 #endif
@@ -410,7 +435,7 @@ int	File::rename(const char *oldname, const char *newname)
 	int ret = ::rename(oldname, newname);
 	if (ret)
 	{
-		DW("rename(%s,%s) errno=%d(%s)", oldname, newname, errno, strerror(errno));
+		LogW(TAG,"rename(%s,%s) errno=%d(%s)", oldname, newname, errno, strerror(errno));
 	}
 
 	return ret;
@@ -518,7 +543,7 @@ int File::chmod(const char *pszFile, DWORD mode)
 	ret = ::chmod(pszFile, mode);
 	if (ret)
 	{
-		DW("chmod fail ret=%d,file=[%s],errno=%d(%s)", ret, pszFile, errno, strerror(errno));
+		LogW(TAG,"chmod fail ret=%d,file=[%s],errno=%d(%s)", ret, pszFile, errno, strerror(errno));
 	}
 #endif
 	return ret;
@@ -615,12 +640,12 @@ int File::Dump(const LPVOID pBuf, int nBuf, const char *pszFile)
 			}
 			else
 			{
-				DW("fail fwriate,nBuf=%d,ret=%d", nBuf, ret);
+				LogW(TAG,"fail fwriate,nBuf=%d,ret=%d", nBuf, ret);
 			}
 		}
 		else
 		{
-			//DW("fail dump[%s],invalid param,nBuf=%d",pszFile,nBuf);
+			//LogW(TAG,"fail dump[%s],invalid param,nBuf=%d",pszFile,nBuf);
 		}
 
 		fclose(hFile);
@@ -628,7 +653,7 @@ int File::Dump(const LPVOID pBuf, int nBuf, const char *pszFile)
 	}
 	else
 	{
-		DW("fail dump [%s],error=%d(%s)", pszFile, errno, strerror(errno));
+		LogW(TAG,"fail dump [%s],error=%d(%s)", pszFile, errno, strerror(errno));
 	}
 
 	return ret;
@@ -758,7 +783,7 @@ int File::MoveFile(const char *pszOldName, const char *pszNewName)
 	int ret = rename(pszOldName, pszNewName);
 	if (ret)
 	{
-		DW("rename(%s,%s) errno=%d(%s)", pszOldName, pszNewName, errno, strerror(errno));
+		LogW(TAG,"rename(%s,%s) errno=%d(%s)", pszOldName, pszNewName, errno, strerror(errno));
 	}
 	return ret;
 #endif
@@ -792,7 +817,7 @@ int File::GetFileSystemInfo(const char *path, DWORD& totalKB, DWORD& freeKB)
 		string dir = path;
 		if (dir.Find("/nfs") != -1)
 		{
-			DW("skip [%s]", dir.c_str());
+			LogW(TAG,"skip [%s]", dir.c_str());
 			return -1;
 		}
 	}
@@ -929,7 +954,7 @@ int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 	auto hDestFile = fopen(destFilePath.c_str(), "wb");
 	if (!hDestFile)
 	{
-		DW("fail open %s", destFilePath.c_str());
+		LogW(TAG,"fail open %s", destFilePath.c_str());
 		return -1;
 	}
 	auto destFile = shared_ptr<FILE>(hDestFile, ::fclose);
@@ -937,7 +962,7 @@ int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 	auto hSourceFile = fopen(sourceFilePath.c_str(), "rb");
 	if (!hSourceFile)
 	{
-		DW("fail open %s", sourceFilePath.c_str());
+		LogW(TAG,"fail open %s", sourceFilePath.c_str());
 		return -1;
 	}
 	auto sourceFile = shared_ptr<FILE>(hSourceFile, ::fclose);
@@ -951,7 +976,7 @@ int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 			auto bytes = fwrite(buf, 1, ret, hDestFile);
 			if (bytes != ret)
 			{
-				DW("fwrite fail,want write %d,return %d", ret, bytes);
+				LogW(TAG,"fwrite fail,want write %d,return %d", ret, bytes);
 				return -1;
 			}
 		}
@@ -988,7 +1013,7 @@ int File::CompareFileContent(const string& filePath1, const string& filePath2)
 
 	if (box1.length() == 0 || box1.length() != box2.length())
 	{
-		DW("fail read file?");
+		LogW(TAG,"fail read file?");
 		return -1;
 	}
 
@@ -1149,6 +1174,18 @@ string File::GetFileExt(const string& fileName)
 
 	return "";
 }
+
+int File::Delete(const string& filePath, bool recursive)
+{
+	if (PathIsDirectory(filePath.c_str()))
+	{
+		return DeleteFolder(filePath.c_str(), recursive);
+	}
+	//if(FileExists(filePath))
+	return DeleteFile(filePath.c_str());
+
+}
+
 
 }
 }

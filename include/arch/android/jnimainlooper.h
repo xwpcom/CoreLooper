@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 namespace Bear {
 using namespace Bear::Core;
@@ -6,11 +6,11 @@ namespace Android {
 
 /*
 XiongWanPing 2019.08.30
-JniMainLooperÓÃ·¨:
-ÔÚjavaÖĞÍ¨¹ıjni½Ó¿Ú
-.Í¨¹ıJniMainLooper::CheckCreateJniMainLooper()À´´´½¨
-.JniMainLooper×÷Îªc++ main looper,Ò»Ö±ÔËĞĞ£¬²»Ìá¹©ÍË³ö»úÖÆ
-.java nativeÀà¶ÔÏóÓ³Éäµ½c++ handler¶ÔÏó,´Ëhandler¶ÔÏó°ó¶¨ÔÚJniMainLooperÖĞ£¬¿ÉÒÔcreate,destroy
+JniMainLooperç”¨æ³•:
+åœ¨javaä¸­é€šè¿‡jniæ¥å£
+.é€šè¿‡JniMainLooper::CheckCreateJniMainLooper()æ¥åˆ›å»º
+.JniMainLooperä½œä¸ºc++ main looper,ä¸€ç›´è¿è¡Œï¼Œä¸æä¾›é€€å‡ºæœºåˆ¶
+.java nativeç±»å¯¹è±¡æ˜ å°„åˆ°c++ handlerå¯¹è±¡,æ­¤handlerå¯¹è±¡ç»‘å®šåœ¨JniMainLooperä¸­ï¼Œå¯ä»¥create,destroy
 */
 class CORE_EXPORT JniMainLooper :public MainLooper_
 {

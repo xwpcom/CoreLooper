@@ -361,6 +361,36 @@
     <ClCompile Include="..\..\src\core\looper\tests\looper.test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\net\bindwrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\cbundle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\cbytebuffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\ccrc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\csctp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctphandler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\tool.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctpclient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\base\fieldtracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -838,6 +868,33 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver2.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\net\bindwrapper.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\cbundle.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\cbytebuffer.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\ccrc.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\csctp.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\sctp.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\tool.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\sctp\sctpclient.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\fieldtracker.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

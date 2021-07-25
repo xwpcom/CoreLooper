@@ -59,6 +59,7 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 		httpAckHeader.SetConnection("Keep-Alive");
 		httpAckHeader.SetCacheControl("no-cache,no-store");
 		httpAckHeader.SetContentType("text/xml;charset=UTF-8");
+		httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 
 		if (len > 0)
 		{

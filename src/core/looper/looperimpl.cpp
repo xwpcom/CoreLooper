@@ -68,7 +68,7 @@ shared_ptr<Handler> LooperImpl::Object(const string& url)
 		return Looper::CurrentLooper()->FindObject(url);
 	}
 
-	ASSERT(FALSE);
+	//ASSERT(FALSE);
 	return nullptr;
 }
 
@@ -934,7 +934,6 @@ shared_ptr<Event> LooperImpl::GetExitEvent()const
 
 int LooperImpl::GetQuitCode()const
 {
-	//compatible with int main(...)
 	return (int)mLooperInternalData->mExitCode;
 }
 

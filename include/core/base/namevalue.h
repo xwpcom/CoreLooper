@@ -17,6 +17,10 @@ class CORE_EXPORT NameValue
 {
 public:
 	NameValue();
+	NameValue(const unordered_map<string, string>& params)
+	{
+		mItems = params;
+	}
 	virtual ~NameValue();
 
 	int Set(const char* key, const char* value);
@@ -49,7 +53,10 @@ public:
 	void Append(const NameValue& src);
 	void Dump()const;
 	void RemoveKey(const string& key);
-
+	void operator=(const unordered_map<string, string>& params)
+	{
+		mItems = params;
+	}
 protected:
 	unordered_map<string, string> mItems;
 };

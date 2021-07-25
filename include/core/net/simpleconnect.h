@@ -13,6 +13,16 @@ class CORE_EXPORT SimpleConnect :public Handler
 public:
 	SimpleConnect();
 	virtual ~SimpleConnect();
+	
+	void EnableVerbose()
+	{
+		mVerbose = true;
+	}
+
+	void DisableVerbose()
+	{
+		mVerbose = false;
+	}
 
 #ifdef _MSC_VER
 	//目前只有windows下做了openssl支持
@@ -36,6 +46,7 @@ public:
 	{
 		//正常情况下，应该在子类及时取出并处理
 		//当子类没有处理时，在这里自动删除过长的数据,防止占用过多内存
+
 		if (mInbox.GetDataLength() > 64 * 1024)
 		{
 			mInbox.clear();
@@ -74,6 +85,8 @@ protected:
 #ifdef _MSC_VER
 	bool mUseTls = false;
 #endif
+
+	bool mVerbose = false;
 };
 
 }

@@ -40,6 +40,16 @@ struct CORE_EXPORT tagTimeMs
 	int second = 0;
 	int ms = 0;
 
+	tagTimeMs()
+	{
+		memset(this, 0, sizeof(*this));
+	}
+
+	tagTimeMs(time_t t)
+	{
+		from_time_t(t);
+	}
+
 	int date()const
 	{
 		return year * 10000 + month * 100 + day;
@@ -50,7 +60,22 @@ struct CORE_EXPORT tagTimeMs
 		return hour * 10000 + minute * 100 + second;
 	}
 
+	time_t to_time_t();
+	void from_time_t(time_t t);
+
 	int laterDays(const tagTimeMs& obj);
+	static int time2Seconds(int time)
+	{
+		//time格式:hhmmss
+
+		int h = time / 10000;
+		int m = (time / 100) % 100;
+		int s = time % 100;
+		return h * 3600 + m * 60 + s;
+	}
+
+	static int String2TimeMs(const string& text, tagTimeMs& ms);
+	string toText();
 };
 
 class CORE_EXPORT ShellTool
@@ -75,6 +100,7 @@ public:
 #ifdef _MSC_VER	
 	static struct tagTimeMs GetRelativeTimeMs(int deltaDays);
 	static string CreateGuid();
+	static string CreateGuidToken();
 #endif
 
 	static DWORD GetCurrentProcessId();
@@ -137,6 +163,10 @@ public:
 #endif
 
 	static int System(const char *szCmd);
+	static int System(const string& cmd)
+	{
+		return System(cmd.c_str());
+	}
 };
 
 }

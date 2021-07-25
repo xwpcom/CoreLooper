@@ -31,8 +31,8 @@ class HTTP_EXPORT HttpAcker
 public:
 	HttpAcker();
 
-	//ack必须是完整的http回复
-	int Parse(const string& ack);
+	//ack必须是完整的http回复或header
+	int Parse(const string& ack,bool onlyHeader = false);
 
 	void clear();
 

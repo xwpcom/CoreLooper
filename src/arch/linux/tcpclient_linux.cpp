@@ -16,7 +16,7 @@ enum
 {
 	BM_DNS_ACK,
 };
-static const char* TAG = "TcpClient_Linux";
+static const char* TAG = "TcpClient";
 TcpClient_Linux::TcpClient_Linux()
 {
 	//DV("%s,this=0x%x", __func__, this);
@@ -134,7 +134,12 @@ int TcpClient_Linux::Connect(Bundle& info)
 int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 {
 	SOCKET s = (SOCKET)handle;
-	DV("%s,sock=%d,peer=[%s]", __func__, s,SockTool::GetPeerIP(s).c_str());
+	if (mVerbose)
+	{
+#ifndef _CONFIG_INGENIC
+		LogV(TAG, "(%p)%s#123,sock=%d,peer=[%s]", this,__func__, s, SockTool::GetPeerIP(s).c_str());
+#endif
+	}
 
 	if (s != INVALID_SOCKET)
 	{
@@ -163,7 +168,7 @@ int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 		evt.data.ptr = (EpollProxy*)this;
 		ret = epoll_ctl((int)handle, EPOLL_CTL_ADD, (int)s, &evt);
 #endif
-		DV("epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
+		//DV("epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
 		//ASSERT(ret == 0);
 		if (ret)
 		{
@@ -293,7 +298,7 @@ LRESULT TcpClient_Linux::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 	{
 		string dns = (const char*)wp;
 		string ip = (const char *)lp;
-		DV("dnsAck,%s=[%s]", dns.c_str(), ip.c_str());
+		LogV(TAG,"dnsAck,%s=[%s]", dns.c_str(), ip.c_str());
 		if (dns == mBundle.GetString("address") && mSock == INVALID_SOCKET)
 		{
 			ConnectHelper(ip);

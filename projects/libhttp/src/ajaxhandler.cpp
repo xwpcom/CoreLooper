@@ -50,6 +50,23 @@ void AjaxHandler::Destroy()
 	}
 }
 
+bool AjaxHandler::AjaxCommandExists(const string& cmd)
+{
+	const AjaxRuntimeClass* pd = &AjaxHandler::classAjaxHandler;
+
+	if (!pd->m_mapPackClass)
+	{
+		return false;
+	}
+
+	auto iter = pd->m_mapPackClass->find(cmd);
+	if (iter != pd->m_mapPackClass->end() && iter->second->m_pCreateInstance)
+	{
+		return true;
+	}
+	return false;
+}
+
 AjaxHandler* AjaxHandler::CreateInstance(string commandName)
 {
 	const AjaxRuntimeClass *pd = &AjaxHandler::classAjaxHandler;

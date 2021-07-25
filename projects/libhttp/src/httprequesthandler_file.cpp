@@ -135,8 +135,17 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	if (!hFile)
 	{
 		//再试www文件夹
+
 		szFileName = StringTool::Format("%s%s", mWebConfig->mWebRootFolder.c_str(), uri.c_str());
 		hFile = File::fopen(szFileName.c_str(), "rb");
+	}
+	
+	bool vueSPA = false;
+	if (!hFile)
+	{
+		szFileName = StringTool::Format("%s%s", mWebConfig->mWebRootFolder.c_str(), "/index.html");
+		hFile = File::fopen(szFileName.c_str(), "rb");
+		vueSPA = true;
 	}
 
 	if (!hFile)
@@ -148,8 +157,18 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 	m_fileSize = File::GetFileLength(hFile);
 	m_fileOffset = 0;
 
-	string  ext = HttpTool::GetUriExt(uri);
-	string  contentType = HttpTool::GetContentType(ext);
+	string  ext;
+	string  contentType;
+	if (vueSPA)
+	{
+		ext = ".html";
+		contentType = "text/html";
+	}
+	else
+	{
+		ext = HttpTool::GetUriExt(uri);
+		contentType = HttpTool::GetContentType(ext);
+	}
 
 	string  szLastModifiedTime;
 	bool canUseCache = HttpTool::CheckFileCache(szFileName, m_headerInfo->m_if_modified_since,
@@ -169,6 +188,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 #else
 		header.SetCacheControl("max-age=60");
 #endif
+		header.SetField("Access-Control-Allow-Origin", "*");
 
 		string  ack = header.ack();
 		/*
@@ -207,6 +227,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 			httpAckHeader.SetContentLength(contentLength);
 			httpAckHeader.SetContentType(contentType);
 			httpAckHeader.SetConnection("Keep-Alive");
+			httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 
 			string  contentRange = StringTool::Format("bytes %lu-%lu/%lu",
 				m_headerInfo->m_range,
@@ -243,7 +264,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 			httpAckHeader.SetContentLength(m_fileSize);
 			httpAckHeader.SetContentType(contentType);
 			httpAckHeader.SetConnection("Keep-Alive");
-
+			httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 			header = httpAckHeader.ack();
 			/*
 			header.Format(
@@ -276,7 +297,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 		httpAckHeader.SetContentLength(m_fileSize);
 		httpAckHeader.SetConnection("Keep-Alive");
 		httpAckHeader.SetField("Last-Modified", szLastModifiedTime);
-
+		httpAckHeader.SetField("Access-Control-Allow-Origin", "*");
 		header = httpAckHeader.ack();
 
 		/*

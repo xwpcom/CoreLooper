@@ -47,6 +47,8 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 
 	USES_CONVERSION;
 	string target = mDir + filter;
+	StringTool::Replace(target,"/", "\\");
+	StringTool::Replace(target, "\\\\", "\\");
 	BOOL bOK = finder.FindFile(A2T(target.c_str()));
 	if (!bOK)
 	{

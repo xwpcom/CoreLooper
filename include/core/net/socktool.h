@@ -43,7 +43,7 @@ public:
 	static int GetPeerPort(SOCKET s);
 	static std::string GetLocalIP(SOCKET s);
 	static int GetLocalPort(SOCKET s);
-
+	static int Bind(int sockfd, const struct sockaddr* addr, socklen_t addrlen);
 	static int InitSockTool();
 	static int StartServer(int nPort);
 	static BOOL IsWouldBlock();

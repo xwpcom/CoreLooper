@@ -75,7 +75,7 @@ ${CORE_DIR}/looper/looperimpl.cpp
 ${CORE_DIR}/looper/looperinternaldata.cpp
 ${CORE_DIR}/looper/procnode.cpp
 ${CORE_DIR}/looper/timermanager.cpp
-
+${CORE_DIR}/net/bindwrapper.cpp
 ${CORE_DIR}/net/channel.cpp
 ${CORE_DIR}/net/dnslooper.cpp
 ${CORE_DIR}/net/nettool.cpp

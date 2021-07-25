@@ -559,7 +559,7 @@ Loop *Handler::GetCurrentLooper()
 }
 
 //根据name来返回mChildren中匹配的子对象,不递归
-shared_ptr<Handler> Handler::GetChild(string name, Handler *afterHandler)
+shared_ptr<Handler> Handler::GetChild(const string& name, Handler *afterHandler)
 {
 	if (!IsCreated())
 	{

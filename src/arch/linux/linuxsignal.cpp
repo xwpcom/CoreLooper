@@ -5,11 +5,13 @@ namespace Bear {
 namespace Core
 {
 
+static const char* TAG = "linuxSignal";
+
 #ifndef _CONFIG_ANDROID
 #ifndef _MSC_VER
 void handle_sigterm(int sig)
 {
-	DW("handle_sigterm,sig=%s", LinuxSignal::GetSigName(sig));
+	LogW(TAG,"handle_sigterm,sig=%s", LinuxSignal::GetSigName(sig));
 	if (sig != SIGPIPE)
 	{
 		exit(1);
@@ -59,11 +61,11 @@ int LinuxSignal::ResetAll()
 		int ret = sigaction(sig, &act, NULL);
 		if (ret == 0)
 		{
-			DW("sigaction sig=%d", sig);
+			LogW(TAG,"sigaction sig=%d", sig);
 		}
 		else
 		{
-			DW("fail sigaction,sig=%s,errno=%d(%s)",
+			LogW(TAG,"fail sigaction,sig=%s,errno=%d(%s)",
 				GetSigName(sig),
 				errno,
 				strerror(errno)
@@ -156,7 +158,7 @@ const char *LinuxSignal::GetSigName(int sig)
 		return arr[sig];
 	}
 
-	DW("unknown sig=%d",sig);
+	LogW(TAG,"unknown sig=%d",sig);
 	return "unknown sig";
 	//*/
 }
@@ -166,13 +168,13 @@ void LinuxSignal::SigAction(int sig, siginfo_t* sigInfo, void * )
 	const int errnoSave = errno;
 
 #ifndef _MSC_VER
-	DW("\n\n\n\n\n");
-	DW("###sig_handler,sig=%d(%s),sigInfo=%p\n",
+	LogW(TAG,"\n\n\n\n\n");
+	LogW(TAG,"###sig_handler,sig=%d(%s),sigInfo=%p\n",
 		sig,
 		GetSigName(sig),
 		sigInfo
 	);
-	DW("si_signo=%d,si_code=%d,"
+	LogW(TAG,"si_signo=%d,si_code=%d,"
 		//"si_value=0x%x,"
 		"si_errno=%d,"
 		"si_pid=0x%x,si_uid=0x%x,si_addr=0x%p,si_status=0x%x,si_band=0x%x"
@@ -197,7 +199,7 @@ void LinuxSignal::SigAction(int sig, siginfo_t* sigInfo, void * )
 	case SIGBUS:
 	case SIGTRAP:
 	{
-		DW("crash addr=%p\n", sigInfo->si_addr);
+		LogW(TAG,"crash addr=%p\n", sigInfo->si_addr);
 		break;
 	}
 	default:
@@ -217,7 +219,7 @@ void LinuxSignal::SigAction(int sig, siginfo_t* sigInfo, void * )
 		exit(0);
 	}
 
-	DW("\n\n\n\n\n");
+	LogW(TAG,"\n\n\n\n\n");
 	errno = errnoSave;
 #endif
 }
@@ -246,7 +248,7 @@ int LinuxSignal::Init()
 			int ret = sigaction(sig, &act, NULL);
 			if (ret)
 			{
-				DW("fail sigaction,sig=%s,errno=%d(%s)",
+				LogW(TAG,"fail sigaction,sig=%s,errno=%d(%s)",
 					GetSigName(sig),
 					errno,
 					strerror(errno)
@@ -287,14 +289,14 @@ int LinuxSignal::Test()
 		recvSignalTimes++;
 		if (recvSignalTimes == 3)
 		{
-			DT("test divide 0#begin");
+			LogV(TAG,"test divide 0#begin");
 			int value = 0;
 			int x = 1 / value;
 			int xx = x;
 
-			DT("test divide 0#end");
+			LogV(TAG,"test divide 0#end");
 		}
-		//DT("recvSignalTimes=%d",recvSignalTimes);
+		//LogV(TAG,"recvSignalTimes=%d",recvSignalTimes);
 	}
 
 	return -1;

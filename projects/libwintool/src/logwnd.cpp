@@ -2,6 +2,8 @@
 #include "../include/logwnd.h"
 #include "Scintilla.h"
 #include "SciLexer.h"
+#include "core/string/utf8tool.h"
+
 
 IMPLEMENT_DYNAMIC(LogWnd, ScintillaWnd)
 
@@ -17,6 +19,8 @@ enum
 };
 
 using namespace Bear::Core;
+
+static const char* TAG = "logWnd";
 
 LogWnd::LogWnd()
 {
@@ -65,9 +69,10 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_STRING, SC_CHARSET_GB2312);
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_USERLITERAL, SC_CHARSET_GB2312);
 	*/
-
+#ifdef _DEBUG
+	SetTimer(eTimerTest, 1*10, nullptr);
+#endif
 	/*
-	SetTimer(eTimerTest, 1000, nullptr);
 	{
 		SendMessage(SCI_SETREADONLY, 0);
 		string text;
@@ -113,8 +118,8 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		auto anchor=SendMessage(SCI_GETANCHOR);
 
 		bool hasSelect = (anchor != pos);
-		DV("line:%d/%d",currentLine,lineCount);
-		DV("anchor:%d,pos=%d,len=%d", anchor,pos,len);
+		LogV(TAG,"line:%d/%d",currentLine,lineCount);
+		LogV(TAG,"anchor:%d,pos=%d,len=%d", anchor,pos,len);
 
 		/*
 		//SCI_MOVECARETINSIDEVIEW
@@ -137,6 +142,65 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 	}
 	case eTimerTest:
 	{
+		KillTimer(eTimerTest);
+
+#ifdef _DEBUG
+		enum
+		{
+			styleNotice = 88,
+			styleError,
+			styleAnnotation,
+		};
+
+		SendMessage(SCI_STYLESETFORE, styleNotice, RGB(0, 0, 255));
+		SendMessage(SCI_STYLESETFORE, styleError, RGB(255, 0, 0));
+
+		SendMessage(SCI_STYLESETFORE, styleAnnotation, RGB(128, 128, 128));
+		//SendMessage(SCI_STYLESETBACK, styleAnnotation, RGB(255, 0, 255));
+		SendMessage(SCI_STYLESETSIZE, styleAnnotation, 16);
+		//SendMessage(SCI_STYLESETSIZE, styleAnnotation, 24);
+		SendMessage(SCI_ANNOTATIONSETVISIBLE, ANNOTATION_STANDARD);
+
+		for (int i = 0; i < 10; i++)
+		{
+			auto text = StringTool::Format("this is  a test line to show style demo,idx=%04d\r\n",i);
+			auto line=AddLog(text);
+
+			if(line==3)
+			{
+				SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+
+				auto msg = StringTool::Format(u8"标注测试 %04d",line);
+				auto text = Utf8Tool::UTF_8ToGB2312(msg);
+				SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+			}
+		}
+
+
+		SendMessage(SCI_STARTSTYLING, 0, 0);
+		SendMessage(SCI_SETSTYLING, 10, styleNotice);
+
+		SendMessage(SCI_STARTSTYLING, 20, 0);
+		SendMessage(SCI_SETSTYLING, 30, styleError);
+
+		auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
+		//SendMessage(SCI_STYLESETSIZE, STYLE_LINENUMBER,v*10);//not work
+		//SendMessage(SCI_STYLESETBOLD, STYLE_LINENUMBER,true);//not work
+
+		/*
+		{
+			int margin = 3;
+			int pixelWidth = 200;
+			SendMessage(SCI_SETMARGINWIDTHN, margin, pixelWidth);
+
+			auto msg = u8"时间 2021.06.18 09:37:00.345";
+			auto text = Utf8Tool::UTF_8ToGB2312(msg);
+			SendMessage(SCI_MARGINSETTEXT,line, (LPARAM)text.c_str());
+		}
+		*/
+
+#endif
+
 		/*
 		AddLog("item1\r\n");
 		
@@ -144,6 +208,7 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		break;
 		*/
 
+		if(0)
 		{
 			/*
 			SCI_APPENDTEXT(position length, const char *text)
@@ -180,6 +245,8 @@ void LogWnd::clear()
 	SendMessage(SCI_SETREADONLY, 0);
 	SendMessage(SCI_CLEARALL);
 	SendMessage(SCI_SETREADONLY, 1);
+
+	CheckUpdateMarginWidth();
 }
 
 void LogWnd::CopyAll()
@@ -188,7 +255,7 @@ void LogWnd::CopyAll()
 	SendMessage(SCI_COPYRANGE, 0, len);
 }
 
-void LogWnd::AddLog(const string& text)
+int LogWnd::AddLog(const string& text)
 {
 	bool scroll = false;
 
@@ -213,6 +280,16 @@ void LogWnd::AddLog(const string& text)
 	if (scroll)
 	{
 		SendMessage(SCI_DOCUMENTEND);
+	}
+
+	{
+		auto len = SendMessage(SCI_GETLENGTH);
+		auto line=SendMessage(SCI_LINEFROMPOSITION, len);
+		auto pos2 = SendMessage(SCI_GETCURRENTPOS);
+		LogV(TAG, "pos=%d,pos2=%d,line=%d", pos, pos2,line);
+	
+		return line;
+
 	}
 }
 

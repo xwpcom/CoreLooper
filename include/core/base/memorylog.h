@@ -4,6 +4,8 @@ namespace Core {
 //XiongWanPing 2019.09.29
 //采用共享内存来做日志
 
+#ifdef _MSC_VER_DEBUG
+
 class CORE_EXPORT MemoryLog
 {
 public:
@@ -14,7 +16,7 @@ public:
 protected:
 	int mValue = 0x12345678;
 };
-
+#endif
 
 }
 }

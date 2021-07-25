@@ -62,6 +62,19 @@ public:
 	shared_ptr<Object> mObject;
 };
 
+typedef function<void()> TaskEntry;
+
+class TaskRunnable :public Runnable
+{
+	void Run()
+	{
+		mTask();
+	}
+public:
+	TaskEntry mTask;
+};
+
+
 struct tagDelayedRunnable;
 struct tagTimerExtraInfo;
 struct tagTimerNode;
@@ -119,7 +132,7 @@ enum
 //约定:
 //采用LOOPER_SAFE修饰的接口可以安全的跨looper调用
 //没有采用LOOPER_SAFE修饰的接口，不保证跨looper安全调用，应该只在handler所在looper里调用
-#define LOOPER_SAFE	//表示接口是跨looper安全的
+#define LOOPER_SAFE	//表示handler创建后接口是跨looper安全的
 
 //XiongWanPing 2016.01.21
 class CORE_EXPORT Handler :public Object
@@ -137,7 +150,6 @@ class CORE_EXPORT Handler :public Object
 	friend class TimerManager;
 	friend struct tagHandlerInternalData;
 	friend struct tagLooperInternalData;
-	friend class Handler;
 	friend class SmartTlsLooper;
 	friend class SmartTlsLooper_Linux;
 public:
@@ -192,6 +204,18 @@ public:
 
 	//lambda+functional
 	virtual LRESULT LOOPER_SAFE sendRunnable(const std::function<void()>& fn);
+	virtual LOOPER_SAFE void postRunnable(TaskEntry t,UINT ms=0)
+	{
+		return post(t,ms);
+	}
+	virtual LOOPER_SAFE void post(TaskEntry t,UINT ms=0)
+	{
+		//LogV(TAG, "%s", __func__);
+
+		auto obj = make_shared<TaskRunnable>();
+		obj->mTask = t;
+		this->postDelayedRunnable(obj,ms);
+	}
 
 	bool LOOPER_SAFE IsMyselfThread()const
 	{
@@ -252,6 +276,10 @@ public:
 	bool LOOPER_SAFE IsLooper()const;
 	virtual shared_ptr<Handler> LOOPER_SAFE FindObject(const string& url);
 	virtual shared_ptr<Handler> LOOPER_SAFE GetChild(LONG_PTR id);
+	virtual shared_ptr<Handler> mapChild(const string& token)
+	{
+		return nullptr;
+	}
 	
 	int LOOPER_SAFE RegisterShortcut(const string& name, weak_ptr<Handler> obj);
 	shared_ptr<Handler> LOOPER_SAFE Shortcut(const string& name);
@@ -332,7 +360,7 @@ protected:
 	void GetChildren(unordered_map<long*, weak_ptr<Handler>>& items);
 	LPVOID GetLooperHandle();
 
-	virtual shared_ptr<Handler> GetChild(string name, Handler *afterHandler = nullptr);
+	virtual shared_ptr<Handler> GetChild(const string& name, Handler *afterHandler = nullptr);
 	DWORD GetThreadId()const
 	{
 		return mThreadId;

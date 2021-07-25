@@ -8,15 +8,18 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
+
+static const char* TAG = "UdpClient";
+
 UdpClient_Linux::UdpClient_Linux()
 {
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 	SetObjectName("BaseUdpClient");
 }
 
 UdpClient_Linux::~UdpClient_Linux()
 {
-	DV("%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p", __func__, this);
 }
 
 int UdpClient_Linux::AttachSocket(SOCKET s)
@@ -64,7 +67,7 @@ int UdpClient_Linux::ConnectHelper(string ip)
 }
 void UdpClient_Linux::OnEvent(DWORD events)
 {
-	//DV("this=0x%08x,%s,sock=%d,events = 0x%x", this, __func__, mSock, events);
+	//LogV(TAG,"this=0x%08x,%s,sock=%d,events = 0x%x", this, __func__, mSock, events);
 
 #if 1
 	if (mWaitFirstEvent)
@@ -80,7 +83,7 @@ void UdpClient_Linux::OnEvent(DWORD events)
 			//134(Transport endpoint is not connected)
 			if (error != 128 && error != 134)
 			{
-				DV("%s,addr=[%s],mSock=%d,events=0x%02x,peer(%s:%d)error=%d,%s",
+				LogV(TAG,"%s,addr=[%s],mSock=%d,events=0x%02x,peer(%s:%d)error=%d,%s",
 					__func__
 					, mAddress.c_str()
 					, mSock
@@ -126,7 +129,7 @@ void UdpClient_Linux::OnEvent(DWORD events)
 
 	if (events & EPOLLOUT)
 	{
-		//DV("EPOLLOUT,this=%p",this);
+		//LogV(TAG,"EPOLLOUT,this=%p",this);
 		
 		if (mListenWritable)
 		{
@@ -163,7 +166,7 @@ void UdpClient_Linux::OnReceive()
 		for (auto iter = mPendingData.begin(); iter != mPendingData.end(); ++iter)
 		{
 			const char *buf = (const char*)(*iter)->GetDataPointer();
-			DV("%s", buf);
+			LogV(TAG,"%s", buf);
 		}
 		mPendingData.clear();
 	}
@@ -176,7 +179,7 @@ void UdpClient_Linux::OnReceive()
 	if (ret > 0)
 	{
 		buf[ret] = 0;
-		DV("%s", buf);
+		LogV(TAG,"%s", buf);
 	}
 	else
 	{
@@ -237,7 +240,7 @@ void UdpClient_Linux::EnableListenWritable()
 
 	evt.data.ptr = (EpollProxy*)this;
 	ret = epoll_ctl((int)(LRESULT)handle, EPOLL_CTL_MOD, (int)s, &evt);
-	//DV("epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
+	//LogV(TAG,"epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
 #endif
 	ASSERT(ret == 0);
 	UNUSED(ret);

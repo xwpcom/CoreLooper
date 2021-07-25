@@ -5,6 +5,7 @@ namespace Windows {
 using namespace Bear::Core;
 
 //XiongWanPing 2019.10.01
+/* 用法见BearStudio */
 
 class CORE_EXPORT WndManager :public CWnd
 {

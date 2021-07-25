@@ -29,6 +29,15 @@ public:
 	virtual int Connect(Bundle& info) = 0;//bundle中传送连接所需的信息，比如ip,port,p2p id等
 	virtual void Close();
 
+	virtual void EnableVerbose()
+	{
+		mVerbose = true;
+	}
+	virtual void DisableVerbose()
+	{
+		mVerbose = false;
+	}
+
 	virtual int Send(LPVOID data, int dataLen) = 0;
 	virtual int Receive(LPVOID buf, int bufLen) = 0;
 
@@ -41,19 +50,23 @@ public:
 
 	virtual int ConfigSendBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 	virtual int ConfigRecvBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 
 	virtual int GetSendBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 	virtual int GetRecvBuf(int bytes)
 	{
+		bytes = bytes;
 		return -1;
 	}
 
@@ -108,6 +121,7 @@ protected:
 	std::string		mLocalDesc;
 	std::string		mPeerDesc;
 	long		mTimerCheckAlive = 0;
+	bool mVerbose = true;
 	const UINT mMessageClose= BindMessage(&Channel::HandleClose);
 };
 }

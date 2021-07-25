@@ -370,8 +370,39 @@ shared_ptr<Handler> tagHandlerInternalData::FindObject_Impl(const string& url)
 		{
 			obj = mHandler->shared_from_this();
 		}
+		/*
+		http://127.0.0.1/proc.xml?url=IotServer[SW.00168FXP]
+		*/
 
-		auto child = obj->GetChild(item.c_str(), nullptr);
+		auto pos1 = item.find('[');
+		if (pos1 != string::npos)
+		{
+			auto pos2 = item.find(']',pos1);
+			if (pos2 != string::npos)
+			{
+				auto name = item.substr(0, pos1);
+				auto token = item.substr(pos1+1, pos2 - pos1-1);
+				
+				auto root=obj->GetChild(name, nullptr);
+				if (!root)
+				{
+					LogV(TAG, "no find [%s]", name.c_str());
+					return nullptr;
+				}
+
+				auto child = root->mapChild(token);
+				if (!child)
+				{
+					LogV(TAG, "no find [%s]", item.c_str());
+					return nullptr;
+				}
+
+				obj = child;
+				continue;
+			}
+		}
+
+		auto child = obj->GetChild(item, nullptr);
 		if (!child)
 		{
 			LogV(TAG,"no find [%s]", item.c_str());

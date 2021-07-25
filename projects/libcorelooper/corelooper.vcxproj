@@ -256,6 +256,7 @@
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
       <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
       <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -327,6 +328,7 @@
     <ClCompile Include="..\..\src\arch\windows\udpiocontext.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndhandler.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp" />
+    <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
     <ClCompile Include="..\..\src\core\base\memorylog.cpp" />
     <ClCompile Include="..\..\src\core\base\object.cpp" />
     <ClCompile Include="..\..\src\core\base\bytebuffer.cpp" />
@@ -356,6 +358,11 @@
     <ClCompile Include="..\..\src\core\looper\procnode.cpp" />
     <ClCompile Include="..\..\src\core\looper\tests\looper.test.cpp" />
     <ClCompile Include="..\..\src\core\looper\timermanager.cpp" />
+    <ClCompile Include="..\..\src\core\net\bindwrapper.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\src\core\net\channel.cpp" />
     <ClCompile Include="..\..\src\core\net\dnser.cpp" />
     <ClCompile Include="..\..\src\core\net\simpleconnect.cpp" />
@@ -378,6 +385,38 @@
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctphandler2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver2.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\sctp\cbundle.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\cbytebuffer.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\ccrc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\csctp.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctp.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctpclient.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\sctp\sctphandler.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\tool.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\..\src\core\string\stringparam.cpp" />
     <ClCompile Include="..\..\src\core\string\textprotocol.cpp" />
     <ClCompile Include="..\..\src\core\string\textseparator.cpp" />
@@ -473,6 +512,7 @@
     <ClInclude Include="..\..\include\core\base\bytetool.h" />
     <ClInclude Include="..\..\include\core\base\crashdump.h" />
     <ClInclude Include="..\..\include\core\base\dt.h" />
+    <ClInclude Include="..\..\include\core\base\fieldtracker.h" />
     <ClInclude Include="..\..\include\core\base\log.h" />
     <ClInclude Include="..\..\include\core\base\memorylog.h" />
     <ClInclude Include="..\..\include\core\base\namevalue.h" />
@@ -520,6 +560,13 @@
     <ClInclude Include="..\..\include\core\protocol\ctp\ctphandler2.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver2.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\cbundle.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\cbytebuffer.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\ccrc.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\csctp.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\sctp.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\sctpclient.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\tool.h" />
     <ClInclude Include="..\..\include\core\string\stringcasemap.h" />
     <ClInclude Include="..\..\include\core\string\stringparam.h" />
     <ClInclude Include="..\..\include\core\string\textprotocol.h" />
@@ -557,6 +604,7 @@
     <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\timernode.h" />
+    <ClInclude Include="..\..\src\core\net\bindwrapper.h" />
     <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl.h" />
     <ClInclude Include="..\..\src\core\protocol\ctp\commontextprotocol_impl2.h" />
     <ClInclude Include="..\..\src\core\zltoolkit\Network\Buffer.h" />

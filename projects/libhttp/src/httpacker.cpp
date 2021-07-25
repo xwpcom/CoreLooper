@@ -11,7 +11,6 @@ static const char* TAG = "HttpAcker";
 
 HttpAcker::HttpAcker()
 {
-
 }
 
 void HttpAcker::clear()
@@ -22,7 +21,7 @@ void HttpAcker::clear()
 	mBody.clear();
 }
 
-int HttpAcker::Parse(const string& ack)
+int HttpAcker::Parse(const string& ack, bool onlyHeader)
 {
 	clear();
 
@@ -63,16 +62,24 @@ int HttpAcker::Parse(const string& ack)
 			}
 
 			//p[0,lineEnd]
-			auto dot = ack.find(':', off);
-			if (dot != string::npos && dot < headerTail)
+			string line=ack.substr(off,lineEnd-off);
+			auto dot = line.find(':');
+			if (dot != string::npos)
 			{
-				string name(p, dot - off);
-				string value(ack.c_str() + dot + 2, lineEnd - dot - 2);
+				string name = line.substr(0, dot);
+				string value=line.substr(dot+1);
+				StringTool::Trim(name, ' ');
+				StringTool::Trim(value, ' ');
 				mFields[name] = value;
 			}
 
 			p += (lineEnd - off) + 2;
 		}
+	}
+
+	if (onlyHeader)
+	{
+		return 0;
 	}
 
 	{

@@ -66,6 +66,7 @@ add_library( # Sets the name of the library.
         ${SRC_DIR}/websockethandler.cpp
         ${SRC_DIR}/websocketsplitter.cpp
         ${SRC_DIR}/wshandler.cpp
+        ${SRC_DIR}/postjsonmanager.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a

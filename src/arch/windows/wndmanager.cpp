@@ -84,7 +84,7 @@ void WndManager::NotifyQuit()
 	auto obj = dynamic_pointer_cast<Looper>(mLooper.lock());
 	if (obj)
 	{
-		obj->postMessage(BM_DUMP_ALL);
+		//obj->postMessage(BM_DUMP_ALL);
 		obj->PostQuitMessage();
 	}
 }
@@ -95,7 +95,7 @@ bool WndManager::CanQuitNow()const
 	auto ok = obj ? false : true;
 	if (ok)
 	{
-		//处理looper可能已投递的未决WM_LOOPER_EVENT消息
+		/* 处理looper可能已投递的未决WM_LOOPER_EVENT消息 */
 		ShellTool::EatUpMessage();
 	}
 

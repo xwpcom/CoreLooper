@@ -299,3 +299,41 @@ LPBYTE ByteBuffer::GetDataPointer()const
 	auto p = m_pBuf + m_nDataOff;
 	return p;
 }
+
+int ByteBuffer::ReadLine(string& line)
+{
+	line.clear();
+
+	MakeSureEndWithNull();
+	while (!empty())
+	{
+		auto p = (const char*)GetDataPointer();
+		auto pEnd = strstr(p, "\n");
+		if (pEnd)
+		{
+			int len = pEnd - p;
+			line = string(p, len);
+			//DV("[%s]", line.c_str());
+			Eat(len + 1);
+			return 0;
+		}
+	}
+
+	return -1;
+}
+
+ByteBuffer& ByteBuffer::operator=(const ByteBuffer& src)
+{
+	if (&src == this)
+	{
+		return *this;
+	}
+
+	clear();
+
+	Append(src, false);
+	//mName=src.mName;//for debug only
+	return *this;
+}
+
+

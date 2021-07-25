@@ -401,6 +401,11 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 #else
 			epoll_event events[1024];
 			int ret = epoll_wait((int)(LONGLONG)mLooperHandle, events, COUNT_OF(events), cmsDelayNext);
+			if (ret == -1)
+			{
+				LogW(TAG, "epoll_wait error=%d(%s)",errno,strerror(errno));
+			}
+
 			if (ret > 0)
 			{
 				mLastIoTick = mLooperTick;
