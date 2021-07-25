@@ -233,6 +233,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		}
 		else
 		{
+			beforeCreate();
 			mInternalData->mCreated = true;
 			OnCreate();
 			if (!mInternalData->mOnCreateCalled)
@@ -240,6 +241,7 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 				LogW(TAG,"%s,Handler::OnCreate() is NOT called,make sure __super::OnCreate() is called.", GetObjectName().c_str());
 				ASSERT(FALSE);
 			}
+			afterCreate();
 		}
 
 		return 0;
@@ -531,6 +533,16 @@ void Handler::Create(shared_ptr<Handler> parent)
 	{
 		sendMessage(BM_CREATE);
 	}
+}
+
+void Handler::beforeCreate()
+{
+
+}
+
+void Handler::afterCreate()
+{
+
 }
 
 //本接口用来初始化

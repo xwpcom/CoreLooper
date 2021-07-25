@@ -339,7 +339,9 @@ protected:
 	}
 
 	virtual LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp);
+	virtual void beforeCreate();
 	virtual void OnCreate();
+	virtual void afterCreate();
 	virtual void OnDestroy();
 	virtual void OnTimer(long /*timerId*/) {}
 
