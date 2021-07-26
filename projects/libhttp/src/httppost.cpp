@@ -14,7 +14,7 @@ static const char* TAG = "HttpPost";
 
 HttpPost::HttpPost()
 {
-	//DW("%s,this=%p", __func__, this);
+	//LogW(TAG,"%s,this=%p", __func__, this);
 	SetObjectName("HttpPost");
 	mBoundary = "--------------------------716657498184592405569245";
 	//LogV(TAG, "%s,this=%p", __func__, this);
@@ -71,7 +71,7 @@ int HttpPost::AddFile(string name, string filePath)
 	auto obj = shared_ptr<FILE>(file, ::fclose);
 
 	item.mBytes = File::GetFileLength(file);
-	//DV("AddFile(%s),bytes=%d",filePath.c_str(),item.mBytes);
+	//LogV(TAG,"AddFile(%s),bytes=%d",filePath.c_str(),item.mBytes);
 	mFiles.push_back(item);
 	return 0;
 }
@@ -196,8 +196,8 @@ int HttpPost::PackData()
 
 			auto fileBytes = File::GetFileLength(iter->value.c_str());
 			//body.Write(desc);
-			//DV("desc.len=%d", desc.length());
-			//DV("file.len=%d", fileBytes);
+			//LogV(TAG,"desc.len=%d", desc.length());
+			//LogV(TAG,"file.len=%d", fileBytes);
 		}
 	}
 	int contentLength = body.GetDataLength();
@@ -206,7 +206,7 @@ int HttpPost::PackData()
 		"--%s--\r\n"
 		, boundary.c_str()
 	);
-	//DV("tail.len=%d", tail.length());
+	//LogV(TAG,"tail.len=%d", tail.length());
 	contentLength += tail.length();
 
 	ByteBuffer req;
@@ -367,9 +367,9 @@ int HttpPost::PrepareData()
 			"--%s--\r\n"
 			, boundary.c_str()
 		);
-		//DV("tail.len=%d", tail.length());
+		//LogV(TAG,"tail.len=%d", tail.length());
 		contentLength += tail.length();
-		//DV("contentLength=%d", contentLength);
+		//LogV(TAG,"contentLength=%d", contentLength);
 	}
 
 	ByteBuffer req;
@@ -398,7 +398,7 @@ void HttpPost::SwitchStage(HttpPost::eSendStage stage)
 	}
 
 	mInfo.mStage = stage;
-	//DV("SwitchStage(%s)", GetStageDesc(stage));
+	//LogV(TAG,"SwitchStage(%s)", GetStageDesc(stage));
 
 	if (stage == eSendFinish)
 	{
@@ -454,7 +454,7 @@ void HttpPost::OnOutboxWritable()
 
 void HttpPost::PreStage(HttpPost::eSendStage stage)
 {
-	//DV("PreStage(%s)", GetStageDesc(stage));
+	//LogV(TAG,"PreStage(%s)", GetStageDesc(stage));
 	switch (stage)
 	{
 	case eSendHeader:
@@ -491,23 +491,23 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 					if (file)
 					{
 						mInfo.mFile = shared_ptr<FILE>(file, ::fclose);
-						//DV("fopen(%s),bytes=%d", fileInfo.value.c_str(), fileBytes);
+						//LogV(TAG,"fopen(%s),bytes=%d", fileInfo.value.c_str(), fileBytes);
 						if (fileInfo.mBytes != fileBytes)
 						{
 							//android平板大华camera结束录像后
 							//cached fileInfo.mBytes=180224 not equal current bytes=200704
 							//
-							DW("cached fileInfo.mBytes=%d not equal current bytes=%d", fileInfo.mBytes, fileBytes);
+							LogW(TAG,"cached fileInfo.mBytes=%d not equal current bytes=%d", fileInfo.mBytes, fileBytes);
 							ASSERT(FALSE);
 							Destroy();
 							return;
 						}
 
-						//DV("fopen(%s),fileBytes=%d", fileInfo.value.c_str(), fileBytes);
+						//LogV(TAG,"fopen(%s),fileBytes=%d", fileInfo.value.c_str(), fileBytes);
 					}
 					else
 					{
-						DW("fail fopen %s", fileInfo.value.c_str());
+						LogW(TAG,"fail fopen %s", fileInfo.value.c_str());
 						Destroy();
 						return;
 					}
@@ -533,7 +533,7 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 			auto ret = fread(p, 1, bytes, mInfo.mFile.get());
 			if (ret > 0)
 			{
-				//DV("fread bytes =%d",ret);
+				//LogV(TAG,"fread bytes =%d",ret);
 				mOutbox.WriteDirect(ret);
 				CheckSend();
 			}
@@ -575,7 +575,7 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 //完成当前发送任务时调用本接口，一般是转到一下stage
 void HttpPost::PostStage(eSendStage stage)
 {
-	//DV("PostStage(%s)", GetStageDesc(stage));
+	//LogV(TAG,"PostStage(%s)", GetStageDesc(stage));
 
 	switch (stage)
 	{
@@ -692,7 +692,7 @@ void HttpPost::ParseInbox()
 		}
 	}
 
-	//	DV("recvFinish=%d", recvFinish);
+	//	LogV(TAG,"recvFinish=%d", recvFinish);
 	if (recvFinish)
 	{
 		/*
@@ -711,12 +711,12 @@ void HttpPost::ParseInbox()
 				{
 					break;
 				}
-				DV("bytes=%d#begin", bytes);
+				LogV(TAG,"bytes=%d#begin", bytes);
 				auto line = msg.substr(offset, bytes);
-				DV("bytes=%d#end", bytes);
+				LogV(TAG,"bytes=%d#end", bytes);
 				offset += bytes;
 				len -= bytes;
-				DV("http post ack.%02d=[%s]", idx, line.c_str());
+				LogV(TAG,"http post ack.%02d=[%s]", idx, line.c_str());
 			}
 		}
 		//*/

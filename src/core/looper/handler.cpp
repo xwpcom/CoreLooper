@@ -540,6 +540,11 @@ void Handler::beforeCreate()
 
 }
 
+/*
+某些业务有如下需求:
+基类OnCreate()需要在子类OnCreate()完成之后执行一些操作
+为此引入本接口
+*/
 void Handler::afterCreate()
 {
 

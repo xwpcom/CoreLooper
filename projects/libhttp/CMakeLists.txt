@@ -21,3 +21,4 @@ add_library(${TARGET_APP} ${SRC_LIST})
 set_target_properties(${TARGET_APP} PROPERTIES RUNTIME_OUTPUT_DIRECTORY /home/bear/work/nfs)
 
 
+add_subdirectory(src/tests)

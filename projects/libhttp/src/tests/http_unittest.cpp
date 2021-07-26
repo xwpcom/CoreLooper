@@ -1,21 +1,23 @@
 #include "stdafx.h"
-#include "CppUnitTest.h"
 #include "libhttp.inl"
 #include "libhttp/httpget.h"
+#include "libhttp/httppost.h"
+#ifdef _MSC_VER
 #include "parser_unittest.h"
 #include "libhttp/httpacker.h"
 #include "string/stringparam.h"
-#include "libhttp/httppost.h"
 
-#ifdef _MSC_VER_DEBUG
+#include "CppUnitTest.h"
 #define new DEBUG_NEW
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #endif
 
-using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;
 using namespace Bear::Core::Net;
 using namespace Bear::Core::Net::Http;
+
+#ifdef _MSC_VER
 using namespace mediakit;
 
 namespace mediakit {
@@ -629,7 +631,154 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
+
+	TEST_METHOD(uploadFile)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				//string fileName = "2013.10.02.zip";
+				//string filePath = "F:/Picture&Video/" + fileName;
+
+				string fileName = "c++.zip";
+				string filePath = "d:/" + fileName;
+
+				auto obj = make_shared<HttpPost>();
+				AddChild(obj);
+
+				auto t = ShellTool::GetCurrentTimeMs();
+				auto time = StringTool::Format("%04d.%02d.%02d_%02d.%02d.%02d"
+					, t.year
+					, t.month
+					, t.day
+					, t.hour
+					, t.minute
+					, t.second
+				);
+
+				string noise;
+				noise = StringTool::Format("%d", 123);
+				string uid = "00000EMU";
+
+				obj->SetServerPort("127.0.0.1", 8889);
+				obj->AddFile("2021-07-12_161900.jpg", filePath);
+
+				class AckHandler :public HttpPostAckHandler
+				{
+					void OnPostAck(const string& ack)
+					{
+						LogV(TAG, "%s,ack=[%s]", __func__, ack.c_str());
+						OnAck(0);
+					}
+
+					void OnPostFail(int error, string desc)
+					{
+						LogV(TAG, "%s,desc=[%s]", __func__, desc.c_str());
+						OnAck(error);
+					}
+
+					void OnAck(int error)
+					{
+						LogV(TAG, error == 0 ? u8"上传文件成功" : u8"上传文件失败");
+
+						GetMainLooper()->PostQuitMessage();
+					}
+
+				public:
+					weak_ptr<Handler> mManager;
+				};
+
+				auto handler = make_shared<AckHandler>();
+				handler->mManager = shared_from_this();
+				obj->SetAckHandler(handler);
+
+				obj->Start("/uploadFile?tag=upload&uid=00000EMU&date=20210712&fileName=" + fileName);
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+
 };
 
 
 }
+#else
+static const char* TAG = "httpTest";
+int main()
+{
+	class MainLooper :public MainLooper_
+	{
+		SUPER(MainLooper_);
+
+		void OnCreate()
+		{
+			__super::OnCreate();
+
+			//string fileName = "2013.10.02.zip";
+			//string filePath = "F:/Picture&Video/" + fileName;
+
+			string fileName = "ai.zip";
+			string filePath = ShellTool::GetAppPath()+"/" + fileName;
+
+			auto obj = make_shared<HttpPost>();
+			AddChild(obj);
+
+			auto t = ShellTool::GetCurrentTimeMs();
+			auto time = StringTool::Format("%04d.%02d.%02d_%02d.%02d.%02d"
+				, t.year
+				, t.month
+				, t.day
+				, t.hour
+				, t.minute
+				, t.second
+			);
+
+			string noise;
+			noise = StringTool::Format("%d", 123);
+			string uid = "00000EMU";
+
+			obj->SetServerPort("4g.jjyip.com", 8889);
+			obj->AddFile("2021-07-12_161900.jpg", filePath);
+
+			class AckHandler :public HttpPostAckHandler
+			{
+				void OnPostAck(const string& ack)
+				{
+					LogV(TAG, "%s,ack=[%s]", __func__, ack.c_str());
+					OnAck(0);
+				}
+
+				void OnPostFail(int error, string desc)
+				{
+					LogV(TAG, "%s,desc=[%s]", __func__, desc.c_str());
+					OnAck(error);
+				}
+
+				void OnAck(int error)
+				{
+					LogV(TAG, error == 0 ? u8"上传文件成功" : u8"上传文件失败");
+
+					GetMainLooper()->PostQuitMessage();
+				}
+
+			public:
+				weak_ptr<Handler> mManager;
+			};
+
+			auto handler = make_shared<AckHandler>();
+			handler->mManager = shared_from_this();
+			obj->SetAckHandler(handler);
+
+			obj->Start("/uploadFile?tag=upload&uid=00000EMU&date=20210712&fileName=" + fileName);
+		}
+		};
+
+	make_shared<MainLooper>()->StartRun();
+
+	return 0;
+}
+#endif
