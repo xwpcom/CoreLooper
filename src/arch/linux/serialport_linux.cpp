@@ -36,7 +36,11 @@ int SerialPort_Linux::Connect(Bundle& info)
 
 void SerialPort_Linux::Close()
 {
-
+	if (mHandle >= 0)
+	{
+		_close(mHandle);
+		mHandle = -1;
+	}
 }
 
 int SerialPort_Linux::Send(LPVOID data, int dataLen)
@@ -271,6 +275,17 @@ int SerialPort_Linux::SetComSpeed(int fd, unsigned int baud_rate)
 	}
 #endif
 	return 0;
+}
+
+void SerialPort_Linux::OnDestroy()
+{
+	__super::OnDestroy();
+
+	if (mHandle >= 0)
+	{
+		_close(mHandle);
+		mHandle = -1;
+	}
 }
 
 void SerialPort_Linux::OnCreate()

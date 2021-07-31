@@ -12,6 +12,11 @@ public:
 	SerialPort_Linux();
 	virtual ~SerialPort_Linux();
 
+	int handle()const
+	{
+		return mHandle;
+	}
+
 	sigslot::signal2<Handler*,int>	SignalSerialOpenAck;
 
 	virtual int Connect(Bundle& info);//bundle中传送连接所需的信息，比如ip,port,p2p id等
@@ -42,6 +47,7 @@ public:
 
 protected:
 	void OnCreate();
+	void OnDestroy();
 	void OnEvent(DWORD events);
 
 	virtual int OnConnect(long handle, Bundle* extraInfo);
