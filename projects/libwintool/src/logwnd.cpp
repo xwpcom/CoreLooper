@@ -286,7 +286,7 @@ int LogWnd::AddLog(const string& text)
 		auto len = SendMessage(SCI_GETLENGTH);
 		auto line=SendMessage(SCI_LINEFROMPOSITION, len);
 		auto pos2 = SendMessage(SCI_GETCURRENTPOS);
-		LogV(TAG, "pos=%d,pos2=%d,line=%d", pos, pos2,line);
+		//LogV(TAG, "pos=%d,pos2=%d,line=%d", pos, pos2,line);
 	
 		return line;
 

@@ -244,6 +244,15 @@ void CDT::send(tagLogInfo& info)
 	cs.lpData = box.data();
 	::SendMessageTimeout(hwnd, WM_COPYDATA, 0, (LPARAM)&cs, SMTO_BLOCK, 10 * 1000, (PDWORD_PTR)&dwRet);
 	//::SendMessage(hwnd, WM_COPYDATA, 0, (LPARAM)&cs);
+
+	if (gLogCB)
+	{
+		/*
+		const char *tag,const char *msg,int level,DWORD threadId,const tagTimeMs& t
+		*/
+		gLogCB(info.mTag, info.msg, info.mLevel, ShellTool::GetCurrentThreadId(), t);
+	}
+
 }
 
 int CDT::operator()( const char* lpszFormat, ... )
