@@ -28,7 +28,7 @@ public:
 
 	virtual void OnCommandAck(CommonTextProtocol* obj, const string& cmd, const Bundle& reqBundle, const Bundle& ackBundle, const ByteBuffer& ackBody)
 	{
-		LogV("CTP", "todo:%s(%s)",__func__,cmd.c_str());
+		//LogV("CTP", "todo:%s(%s)",__func__,cmd.c_str());
 	}
 
 	//收到对方的通知时调用本接口
