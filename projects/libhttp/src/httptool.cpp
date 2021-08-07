@@ -7,6 +7,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpTool";
+
 int HttpTool::GetInt(const char *request, const char *name, int defaultValue)
 {
 	string  value = GetString(request, name, "");
@@ -60,7 +62,7 @@ void HttpTool::EscapeUrlString(char* psz)
 			int ret = sscanf(ps, "%02x", &ch);
 			if (ret != 1)
 			{
-				DW("fail sscanf,ret=%d", ret);
+				LogW(TAG,"fail sscanf,ret=%d,sz=[%s]", ret,psz);
 			}
 
 			psz[dst++] = (BYTE)ch;
