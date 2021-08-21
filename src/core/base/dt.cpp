@@ -361,8 +361,143 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 	len = strlen(p);
 	_snprintf(p + len, sizeof(szMsg) - len - 1,
 		"%s%s#[%s]"
+		, header
+		, tag
+		, buf
+	);
+
+	bool align = true;//when save log file,maybe disable align
+
+#if defined _CONFIG_ANDROID || defined __APPLE__
+	align = false;
+#endif
+
+	if (align)
+	{
+		int maxBodyLen = 100;
+		//maxBodyLen = 70;
+		auto bodyLen = (int)strlen(szMsg);
+		for (int i = 0; i < maxBodyLen - bodyLen; i++)
+		{
+			len = strlen(p);
+			_snprintf(p + len, sizeof(szMsg) - len - 1,
+				" "
+			);
+		}
+	}
+	len = strlen(p);
+	_snprintf(p + len, sizeof(szMsg) - len - 1,
+		"%s",
+		tail
+	);
+
+#ifdef _CONFIG_ANDROID
+	{
+		android_LogPriority p = ANDROID_LOG_INFO;
+		if (nLevel == DT_VERBOSE)
+			p = ANDROID_LOG_INFO;
+		if (nLevel == DT_WARN)
+			p = ANDROID_LOG_WARN;
+		else if (nLevel == DT_ERROR)
+		{
+			p = ANDROID_LOG_ERROR;
+
+			//LogE("Bear/jni", "%s", szMsg);
+		}
+
+		{
+			//android studio logcat有bug,只能打印一行
+			string info(szMsg);
+			//info.Replace('\r','~');
+			//info.Replace('\n', '`');
+			string Tag = StringTool::Format("Bear/jni#%s", tag);
+			__android_log_print(p, Tag.c_str(), "%s", szMsg);
+
+			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
+
+		}
+	}
+#else
+	printf("%s\n", szMsg);
+
+	if (gLogCB)
+	{
+		/*
+		const char *tag,const char *msg,int level,DWORD threadId,const tagTimeMs& t
+		*/
+		gLogCB(tag, buf, m_nLevel, ShellTool::GetCurrentThreadId(), t);
+	}
+
+#endif
+
+
+	errno = errSave;
+	return 0;
+}
+
+int CLog::operator()(const string& tag, const char* lpszFormat, ...)
+{
+	/*
+	if (!mEnabled)
+	{
+		return 0;
+	}
+	//*/
+
+	int errSave = errno;//save for restore.DebugTrace do NOT change errno
+
+	const int nLevel = m_nLevel;
+	const char* pszFile = m_lpszFile;
+	int nLine = m_nLine;
+
+	//char szFormat[1024*sizeof(char)];
+	char szMsg[1024 * 32 * sizeof(char)];
+	char buf[1024 * 32 * sizeof(char)];
+	memset(szMsg, 0, sizeof(szMsg));
+	memset(buf, 0, sizeof(buf));
+
+	char header[100];
+	header[0] = 0;
+	if (nLevel == DT_WARN)
+	{
+		strcat(header, "###Warning");
+	}
+	else if (nLevel == DT_ERROR)
+	{
+		strcat(header, "###Error  ");
+	}
+
+#ifdef _CONFIG_ANDROID
+	//AndroidStudio自带时间，所以这里不再添加时间
+	auto len = 0;
+#else
+	tagTimeMs t = ShellTool::GetCurrentTimeMs();
+	auto len = strlen(header);
+	_snprintf(header + len, sizeof(header) - len - 1,
+		"[%04d.%02d.%02d %02d:%02d:%02d.%03u#%04u]"
+		, t.year, t.month, t.day, t.hour, t.minute, t.second, t.ms
+		, ShellTool::GetCurrentThreadId()
+	);
+#endif
+
+	char tail[256];
+	tail[0] = 0;
+	_snprintf(tail, sizeof(tail) - 1, "(%s:%d)", pszFile, nLine);
+
+
+	va_list varargs;
+	va_start(varargs, lpszFormat);
+	vsnprintf(buf, sizeof(buf) - 1, lpszFormat, varargs);
+	va_end(varargs);
+
+	char* p = szMsg;
+	p[0] = 0;
+
+	len = strlen(p);
+	_snprintf(p + len, sizeof(szMsg) - len - 1,
+		"%s%s#[%s]"
 		,header
-		,tag
+		,tag.c_str()
 		,buf
 	);
 
@@ -410,7 +545,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 			string info(szMsg);
 			//info.Replace('\r','~');
 			//info.Replace('\n', '`');
-			string Tag = StringTool::Format("Bear/jni#%s",tag);
+			string Tag = StringTool::Format("Bear/jni#%s",tag.c_str());
 			__android_log_print(p, Tag.c_str(), "%s", szMsg);
 
 			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
@@ -425,7 +560,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 		/*
 		const char *tag,const char *msg,int level,DWORD threadId,const tagTimeMs& t
 		*/
-		gLogCB(tag,buf, m_nLevel, ShellTool::GetCurrentThreadId(),t);
+		gLogCB(tag.c_str(),buf, m_nLevel, ShellTool::GetCurrentThreadId(),t);
 	}
 
 #endif
