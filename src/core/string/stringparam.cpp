@@ -6,6 +6,38 @@ namespace Bear {
 namespace Core
 {
 
+unordered_map<string, string> StringParam::ParseItemsEx(const string& items, const char* itemSeperator, const char* sign)
+{
+	unordered_map<string, string> ack;
+
+	TextSeparator obj2(items.c_str(), itemSeperator);
+	string nv;
+	while (1)
+	{
+		int ret = obj2.GetNext(nv);
+		if (ret)
+		{
+			break;
+		}
+
+		string name, value;
+		auto pos = nv.find(sign);
+		if (pos != string::npos)
+		{
+			name = nv.substr(0, pos);
+			value = nv.substr(pos + 1);
+		}
+		else
+		{
+			name = nv;
+		}
+
+		ack[name] = value;
+	}
+
+	return ack;
+}
+
 //items格式item1,item2,item3,
 //每个item格式:name=value
 map<string, string> StringParam::ParseItems(const string& items, const char *itemSeperator, const char *sign)
