@@ -50,7 +50,7 @@ int SerialPort_Linux::Send(LPVOID data, int dataLen)
 	//++idx;
 	if (ret != dataLen)
 	{
-		LogW(TAG,"fail write,len=%d,ret=%d", dataLen,ret);
+		LogW(GetObjectName(),"fail write,len=%d,ret=%d,error=%d(%s)", dataLen,ret,errno,strerror(errno));
 	}
 	return ret;
 }
