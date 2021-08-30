@@ -144,7 +144,7 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(eTimerTest);
 
-#ifdef _DEBUGx
+#ifdef _DEBUG
 		enum
 		{
 			styleNotice = 88,
