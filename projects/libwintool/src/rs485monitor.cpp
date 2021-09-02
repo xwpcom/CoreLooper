@@ -95,25 +95,23 @@ void RS485Monitor::OnParsedFrame(LPBYTE frame, int bytes)
 
 void RS485Monitor::Input(LPBYTE d, int bytes)
 {
-    if (Crc16::CrcMatched(d, bytes))
-    {
-        /* 最有可能 */
-    }
-    else
-    {
-        ByteBuffer box;
-        box.Write((LPVOID)d, bytes);
+    ByteBuffer box;
+    box.Write((LPVOID)d, bytes);
 
-        while (1)
+    while (1)
+    {
+        auto bytes = box.length();
+        ParseBox(box);
+
+        if (bytes == box.length())
         {
-            auto bytes = box.length();
-            ParseBox(box);
-
-            if (bytes == box.length())
-            {
-                break;
-            }
+            break;
         }
+    }
+
+    if (!box.empty())
+    {
+        OnParsedUnknown(box.data(), box.length());
     }
 }
 

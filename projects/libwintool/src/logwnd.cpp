@@ -45,7 +45,7 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		//SendMessage(SCI_STYLESETBACK, STYLE_LINENUMBER, RGB(0x00, 0x00, 0x00));
 		SendMessage(SCI_STYLESETFORE, STYLE_LINENUMBER
-			, RGB(122, 145, 175)
+			, RGB(0xab, 0xab, 0xab)
 			//, RGB(122, 217, 255)
 		);
 	}
