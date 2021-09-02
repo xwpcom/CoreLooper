@@ -95,3 +95,16 @@ unsigned short Crc16::Crc16Ex(unsigned char* pData, int bytes, unsigned short* c
 	*crcInitValue = CRC;
 	return CRC;
 }
+
+bool Crc16::CrcMatched(LPBYTE d, int bytes)
+{
+	if (bytes <= 2)
+	{
+		return false;
+	}
+	unsigned short crc = 0xFFFF;
+	Crc16Ex(d, bytes - 2, &crc);
+	BYTE b1=(crc >> 8) & 0xFF;
+	BYTE b2 = crc & 0xFF;
+	return d[bytes - 2] == b2 && d[bytes - 1] == b1;
+}

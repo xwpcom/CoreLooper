@@ -53,14 +53,15 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SendMessage(SCI_SETFONTQUALITY, SC_EFF_QUALITY_LCD_OPTIMIZED);
 
 	//SendMessage(SCI_SETCARETLINEVISIBLEALWAYS, true);
-
-	//https://www.scintilla.org/ScintillaDoc.html#SCI_SETCODEPAGE
-	//Code page can be set to 65001 (UTF-8), 
-	//932 (Japanese Shift-JIS), 
-	//936 (Simplified Chinese GBK), 
-	//949 (Korean Unified Hangul Code), 
-	//950 (Traditional Chinese Big5),
-	//1361 (Korean Johab).
+	/*
+	https://www.scintilla.org/ScintillaDoc.html#SCI_SETCODEPAGE
+	Code page can be set to 65001 (UTF-8), 
+	932 (Japanese Shift-JIS), 
+	936 (Simplified Chinese GBK), 
+	949 (Korean Unified Hangul Code), 
+	950 (Traditional Chinese Big5),
+	1361 (Korean Johab).
+	*/
 	//SendMessage(SCI_SETCODEPAGE,SC_CP_UTF8);
 	SendMessage(SCI_SETCODEPAGE,936);//解决app为unicode版时中文乱码问题
 
@@ -70,7 +71,7 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SendMessage(SCI_STYLESETCHARACTERSET, SCE_C_USERLITERAL, SC_CHARSET_GB2312);
 	*/
 #ifdef _DEBUG
-	SetTimer(eTimerTest, 1*10, nullptr);
+	//SetTimer(eTimerTest, 1*10, nullptr);
 #endif
 	/*
 	{
@@ -118,8 +119,8 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		auto anchor=SendMessage(SCI_GETANCHOR);
 
 		bool hasSelect = (anchor != pos);
-		LogV(TAG,"line:%d/%d",currentLine,lineCount);
-		LogV(TAG,"anchor:%d,pos=%d,len=%d", anchor,pos,len);
+		//LogV(TAG,"line:%d/%d",currentLine,lineCount);
+		//LogV(TAG,"anchor:%d,pos=%d,len=%d", anchor,pos,len);
 
 		/*
 		//SCI_MOVECARETINSIDEVIEW
@@ -144,15 +145,18 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(eTimerTest);
 
-#ifdef _DEBUG
+#if 0
 		enum
 		{
 			styleNotice = 88,
+			styleGray,
 			styleError,
 			styleAnnotation,
 		};
 
 		SendMessage(SCI_STYLESETFORE, styleNotice, RGB(0, 0, 255));
+		SendMessage(SCI_STYLESETFORE, styleGray, RGB(0x80, 0x80, 0x80));
+		//SendMessage(SCI_STYLESETBACK, styleGray, RGB(0xff, 0x0, 0xff));//test ok
 		SendMessage(SCI_STYLESETFORE, styleError, RGB(255, 0, 0));
 
 		SendMessage(SCI_STYLESETFORE, styleAnnotation, RGB(128, 128, 128));
@@ -160,30 +164,32 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		SendMessage(SCI_STYLESETSIZE, styleAnnotation, 16);
 		//SendMessage(SCI_STYLESETSIZE, styleAnnotation, 24);
 		SendMessage(SCI_ANNOTATIONSETVISIBLE, ANNOTATION_STANDARD);
-
-		for (int i = 0; i < 10; i++)
 		{
-			auto text = StringTool::Format("this is  a test line to show style demo,idx=%04d\r\n",i);
-			auto line=AddLog(text);
-
-			if(line==3)
+			for (int i = 0; i < 10; i++)
 			{
-				SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+				auto text = StringTool::Format("this is  a test line to show style demo,idx=%04d\r\n", i);
+				auto line = AddLog(text);
 
-				auto msg = StringTool::Format(u8"标注测试 %04d",line);
-				auto text = Utf8Tool::UTF_8ToGB2312(msg);
-				SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+				if (line == 3)
+				{
+					SendMessage(SCI_ANNOTATIONSETSTYLE, line, styleAnnotation);
+
+					auto msg = StringTool::Format(u8"标注测试 %04d", line);
+					auto text = Utf8Tool::UTF_8ToGB2312(msg);
+					SendMessage(SCI_ANNOTATIONSETTEXT, line, (LPARAM)text.c_str());
+				}
 			}
+
+
+			SendMessage(SCI_STARTSTYLING, 0, 0);
+			SendMessage(SCI_SETSTYLING, 10, styleNotice);
+
+			SendMessage(SCI_STARTSTYLING, 20, 0);
+			SendMessage(SCI_SETSTYLING, 30, styleError);
+
+			auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
 		}
 
-
-		SendMessage(SCI_STARTSTYLING, 0, 0);
-		SendMessage(SCI_SETSTYLING, 10, styleNotice);
-
-		SendMessage(SCI_STARTSTYLING, 20, 0);
-		SendMessage(SCI_SETSTYLING, 30, styleError);
-
-		auto v = SendMessage(SCI_STYLEGETSIZE, STYLE_LINENUMBER);
 		//SendMessage(SCI_STYLESETSIZE, STYLE_LINENUMBER,v*10);//not work
 		//SendMessage(SCI_STYLESETBOLD, STYLE_LINENUMBER,true);//not work
 
@@ -199,8 +205,6 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		}
 		*/
 
-#endif
-
 		/*
 		AddLog("item1\r\n");
 		
@@ -208,7 +212,6 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 		break;
 		*/
 
-		if(0)
 		{
 			/*
 			SCI_APPENDTEXT(position length, const char *text)
@@ -233,6 +236,7 @@ void LogWnd::OnTimer(UINT_PTR nIDEvent)
 			}
 			SendMessage(SCI_SETREADONLY, 1);
 		}
+#endif
 		break;
 	}
 	}

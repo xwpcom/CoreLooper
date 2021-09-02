@@ -15,6 +15,25 @@ ScintillaWnd::~ScintillaWnd()
 {
 }
 
+int ScintillaWnd::SetStyle(int style, long start, long length)
+{
+	SendMessage(SCI_STARTSTYLING, start, 0);
+	return SendMessage(SCI_SETSTYLING, length, style);
+}
+
+void ScintillaWnd::clearStyle()
+{
+	SendMessage(SCI_STYLECLEARALL);
+	mNextStyleId = 88;
+}
+
+int ScintillaWnd::RegisterStyle(COLORREF textColor, COLORREF backColor)
+{
+	auto id = mNextStyleId++;
+	SendMessage(SCI_STYLESETFORE, id, textColor);
+	SendMessage(SCI_STYLESETBACK, id, backColor);//test ok
+	return id;
+}
 
 BEGIN_MESSAGE_MAP(ScintillaWnd, CWnd)
 	ON_WM_CREATE()
@@ -69,3 +88,15 @@ void ScintillaWnd::SetReadOnly(bool readOnly)
 {
 	SendMessage(SCI_SETREADONLY, readOnly);
 }
+
+long ScintillaWnd::currentPos()
+{
+	return SendMessage(SCI_GETCURRENTPOS);
+}
+
+long ScintillaWnd::textLength()
+{
+	return SendMessage(SCI_GETTEXTLENGTH);
+}
+
+

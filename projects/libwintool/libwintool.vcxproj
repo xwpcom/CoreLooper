@@ -99,12 +99,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;$(VCInstallDir)Auxiliary\vs\UnitTest\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>.\libwintool.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -148,7 +149,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;%(PreprocessorDefinitions);_WIN_TOOL_DLL;</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;..\..\include\libcrypt\;..\..\depends\scintilla420\scintilla\include;$(VCInstallDir)Auxiliary\vs\UnitTest\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -156,6 +157,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>.\libwintool.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -199,7 +201,9 @@
     <ClCompile Include="src\basepage.cpp" />
     <ClCompile Include="src\CategoryPage.cpp" />
     <ClCompile Include="src\logwnd.cpp" />
+    <ClCompile Include="src\rs485monitor.cpp" />
     <ClCompile Include="src\ScintillaWnd.cpp" />
+    <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\ToastWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -217,6 +221,7 @@
     <ClInclude Include="include\basepage.h" />
     <ClInclude Include="include\CategoryPage.h" />
     <ClInclude Include="include\logwnd.h" />
+    <ClInclude Include="include\rs485monitor.h" />
     <ClInclude Include="include\ScintillaWnd.h" />
     <ClInclude Include="include\ToastWnd.h" />
     <ClInclude Include="libwintool.h" />
