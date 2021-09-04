@@ -111,7 +111,6 @@ string StringParam::ToString(const map<string, string>& items, const char* itemS
 	return ack;
 }
 
-//合并并清除value为空的field
 string StringParam::MergeFields(const string& src, const string& fields, const char *itemSeperator, const char *sign)
 {
 	map<string, string> items1 = ParseItems(src);
@@ -129,8 +128,11 @@ string StringParam::MergeFields(const string& src, const string& fields, const c
 
 	for (map<string, string>::iterator iter = items2.begin(); iter != items2.end(); ++iter)
 	{
-		//约定默认为0,所以0不需要保存
-		if (iter->second.empty() || iter->second == "0")
+		//约定默认为0,所以0不需要保存 */
+		//2021.09.03 0或空也要保存并传给设备，否则当设备上配置有数据时，没法清为0
+
+		/*
+		if (iter->second.empty())// || iter->second == "0")
 		{
 			map<string, string>::iterator it = items.find(iter->first);
 			if (it != items.end())
@@ -139,6 +141,7 @@ string StringParam::MergeFields(const string& src, const string& fields, const c
 			}
 		}
 		else
+		*/
 		{
 			items[iter->first] = iter->second;
 		}
