@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "looper/handler.h"
+#include "core/looper/handler.h"
 #include "auth/authman.h"
 #include "file/virtualfolder.h"
 namespace Bear {
