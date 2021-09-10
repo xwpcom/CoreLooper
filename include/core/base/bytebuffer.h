@@ -242,12 +242,15 @@ public:
 		m_nData = 0;
 	}
 
+	/*
+	写入string和char时,大概率会把.data()当字符串，所以自动保证以\0结尾
+	*/
 	int Write(const std::string& str)
 	{
 		AssertNotLocked();
 
 		int ret = Write((LPVOID)str.c_str(), (int)str.length());
-		//MakeSureEndWithNull();
+		MakeSureEndWithNull();
 		return ret;
 	}
 
@@ -261,6 +264,7 @@ public:
 		}
 
 		int ret = Write((LPVOID)str, (int)strlen(str));
+		MakeSureEndWithNull();
 		return ret;
 	}
 
