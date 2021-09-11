@@ -1918,6 +1918,13 @@ void tagTimeMs::from_time_t(time_t t)
 	ms = 0;
 }
 
+/* 对接第三方平台时经常用到，标准日期时间字符串 */
+string tagTimeMs::stdDateTimeText()
+{
+	string text = StringTool::Format("%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
+	return text;
+}
+
 string tagTimeMs::toText()
 {
 	string text = StringTool::Format("%04d.%02d.%02d %02d:%02d:%02d", year, month, day, hour, minute, second);

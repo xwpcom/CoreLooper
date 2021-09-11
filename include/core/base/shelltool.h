@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 //#include "stringex.h"
 namespace Bear {
 namespace Core
@@ -76,6 +76,7 @@ struct CORE_EXPORT tagTimeMs
 
 	static int String2TimeMs(const string& text, tagTimeMs& ms);
 	string toText();
+	string stdDateTimeText();
 };
 
 class CORE_EXPORT ShellTool

@@ -660,7 +660,7 @@ int File::Dump(const LPVOID pBuf, int nBuf, const char *pszFile)
 }
 
 //有返回数据时，保证数据以\0结尾,便于字符串解析
-int File::ReadFile(const char *szFile, ByteBuffer& box)
+int File::ReadFile(const char *szFile, ByteBuffer& box, bool autoRemoveUtf8BOM)
 {
 	box.clear();
 	FILE *hFile = File::fopen(szFile, "rb");
@@ -677,6 +677,20 @@ int File::ReadFile(const char *szFile, ByteBuffer& box)
 				{
 					box.WriteDirect(len);
 					box.MakeSureEndWithNull();//便于把box data当作const char*
+
+					if (autoRemoveUtf8BOM)
+					{
+						/* 很多代码都不支持BOM,所以在这里去掉 */
+						if (len > 3)
+						{
+							auto d = box.data();
+							if (d[0] == 0xEF && d[1] == 0xBB && d[2] == 0xBF)
+							{
+								box.Eat(3);
+							}
+						}
+
+					}
 				}
 			}
 		}

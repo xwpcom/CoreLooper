@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //#include "base/stringex.h"
 #include "core/base/bytebuffer.h"
@@ -136,10 +136,10 @@ public:
 	static int remove_file(const char *path, int flags);
 #endif
 
-	static int ReadFile(const char *szFile, ByteBuffer& box);
-	static int ReadFile(const std::string& szFile, ByteBuffer& box)
+	static int ReadFile(const char *szFile, ByteBuffer& box, bool autoRemoveUtf8BOM=true);
+	static int ReadFile(const std::string& szFile, ByteBuffer& box,bool autoRemoveUtf8BOM=true)
 	{
-		return ReadFile(szFile.c_str(), box);
+		return ReadFile(szFile.c_str(), box, autoRemoveUtf8BOM);
 	}
 	static void RemoveTailPathSplitChar(char *file);
 	static BOOL IsPathSplitChar(char ch)
