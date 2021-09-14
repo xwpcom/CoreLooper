@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "httppost.h"
 #include "net/tcpclient.h"
 #include "mime.h"
@@ -221,7 +221,9 @@ int HttpPost::PackData()
 	req.Append(body);
 	req.Write(tail);
 
+#ifdef _MSC_VER_DEBUG
 	File::Dump(req, "G:/test/hz/httppost.bear.txt");
+#endif
 
 	SwitchStage(eSendHeader);
 	return 0;

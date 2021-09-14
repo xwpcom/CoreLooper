@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "net/simpleconnect.h"
 
@@ -24,6 +24,10 @@ public:
 	HttpPost();
 	~HttpPost();
 
+	void SetBoundary(const string& boundary)
+	{
+		mBoundary = boundary;
+	}
 	void SetAckHandler(shared_ptr<HttpPostAckHandler> handler)
 	{
 		mPostAckHandler = handler;
