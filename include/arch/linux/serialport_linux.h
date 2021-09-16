@@ -55,6 +55,8 @@ protected:
 	virtual void OnSend();
 	virtual void OnClose();
 
+	void Open();
+
 	static int SetComSpeed(int fd, unsigned int baud_rate);
 
 	string  mDeviceName;//dev/ttyS0...

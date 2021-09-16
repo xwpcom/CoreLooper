@@ -50,7 +50,16 @@ int SerialPort_Linux::Send(LPVOID data, int dataLen)
 	//++idx;
 	if (ret != dataLen)
 	{
-		LogW(GetObjectName(),"fail write,len=%d,ret=%d,error=%d(%s)", dataLen,ret,errno,strerror(errno));
+		LogW(GetObjectName(),"[%s]fail write,len=%d,ret=%d,error=%d(%s),try reopen"
+			, mDeviceName.c_str(),dataLen,ret,errno,strerror(errno));
+
+		/*
+		[/dev/ttyS1]fail write,len=12,ret=-1,error=5(Input/output error)
+		*/
+
+		Close();
+		Open();
+
 	}
 	return ret;
 }
@@ -292,6 +301,11 @@ void SerialPort_Linux::OnCreate()
 {
 	__super::OnCreate();
 
+	Open();
+}
+
+void SerialPort_Linux::Open()
+{
 	string  filePath;
 
 	if (mDeviceName.empty())
