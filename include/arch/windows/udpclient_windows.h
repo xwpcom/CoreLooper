@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "net/channel.h"
 namespace Bear {
 namespace Core
@@ -6,6 +6,7 @@ namespace Core
 namespace Net {
 
 //XiongWanPing 2018.02.21
+/* 项目中还没用到udp,没真正实现 */
 class UdpClient_Windows :public Channel
 {
 public:

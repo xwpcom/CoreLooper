@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "udpclient_windows.h"
 namespace Bear {
 namespace Core
@@ -7,7 +7,7 @@ namespace Net {
 
 UdpClient_Windows::UdpClient_Windows()
 {
-
+	SetObjectName("UdpClient");
 }
 
 UdpClient_Windows::~UdpClient_Windows()

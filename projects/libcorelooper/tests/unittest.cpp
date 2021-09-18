@@ -6,6 +6,8 @@
 #include <atomic> 
 #include <functional>
 #include <mutex>  
+#include "net/udpserver.h"
+#include "arch/windows/udpclient_windows.h"
 
 class Demo
 {
@@ -3720,6 +3722,32 @@ TEST_CLASS(STL)
 		string text = "hello";
 		string sz = std::move(text);
 		int x = 0;
+	}
+};
+
+TEST_CLASS(_Udp)
+{
+public:
+	TEST_METHOD(udpServer)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				{
+					auto obj = make_shared<UdpServer>();
+					obj->StartServer(2021);
+				}
+				{
+					auto client = make_shared<UdpClient_Windows>();
+					//client->
+				}
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
 	}
 };
 
