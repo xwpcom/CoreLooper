@@ -1,96 +1,101 @@
+# 2021.09.22
+LogPage::OnCopyAll()ä¸­åœ¨loopä¸­è°ƒç”¨T2Aå¯å¯¼è‡´stack overflow
+//å·²æ”¹
+
+
 # 2021.01.10
 todo:
-.ÔÚ¼ÒÀïµÄµçÄÔÉÏÃæ,È¨ÏŞÃ»ÎÊÌâ£¬µ«OpenFileGotoLineÒ²ÊÇ²»ÄÜ¶¨Î»
- ÓĞ´ıÑĞ¾¿
+.åœ¨å®¶é‡Œçš„ç”µè„‘ä¸Šé¢,æƒé™æ²¡é—®é¢˜ï¼Œä½†OpenFileGotoLineä¹Ÿæ˜¯ä¸èƒ½å®šä½
+ æœ‰å¾…ç ”ç©¶
 
 # 2021.01.07
 
-½ñÌìÔÚ²âÊÔocxÊ±,vsĞèÒª¹ÜÀíÔ±È¨ÏŞ²ÅÄÜ³É¹¦×¢²áocx
+ä»Šå¤©åœ¨æµ‹è¯•ocxæ—¶,vséœ€è¦ç®¡ç†å‘˜æƒé™æ‰èƒ½æˆåŠŸæ³¨å†Œocx
 
-·¢ÏÖ´ËÊ±DT½ÓÊÕ²»µ½¹ÜÀíÔ±¼¶±ğµÄÏûÏ¢£¬Ë«»÷ÈÕÖ¾Ò²²»ÄÜÔÚvsÖĞ¶¨Î»µ½´úÂëĞĞ
+å‘ç°æ­¤æ—¶DTæ¥æ”¶ä¸åˆ°ç®¡ç†å‘˜çº§åˆ«çš„æ¶ˆæ¯ï¼ŒåŒå‡»æ—¥å¿—ä¹Ÿä¸èƒ½åœ¨vsä¸­å®šä½åˆ°ä»£ç è¡Œ
 
-DTÒ²²ÉÓÃ¹ÜÀíÔ±È¨ÏŞÔËĞĞºó£¬¾ÍÄÜÕı³£½ÓÊÕºÍ¶¨Î»µ½´úÂëĞĞÁË
+DTä¹Ÿé‡‡ç”¨ç®¡ç†å‘˜æƒé™è¿è¡Œåï¼Œå°±èƒ½æ­£å¸¸æ¥æ”¶å’Œå®šä½åˆ°ä»£ç è¡Œäº†
 
-ºóÃæĞèÒªÑĞ¾¿Ò»ÏÂÈ¨ÏŞÎÊÌâ
+åé¢éœ€è¦ç ”ç©¶ä¸€ä¸‹æƒé™é—®é¢˜
 
 
 
 # 2020.12.23
 
 changes:
-.¹´ÉÏAutoScrollºó£¬µ±ListCtrlÖĞÓĞmouse,keyboard²Ù×÷Ê±£¬ÉèAutoScrollÎªÈıÌ¬£¬²¢ÔÚAutoScrollÅÔ±ß¸ãÒ»¸öµ¹¼ÆÊ±£¬³¬Ê±²ÅÕæÕıscroll
+.å‹¾ä¸ŠAutoScrollåï¼Œå½“ListCtrlä¸­æœ‰mouse,keyboardæ“ä½œæ—¶ï¼Œè®¾AutoScrollä¸ºä¸‰æ€ï¼Œå¹¶åœ¨AutoScrollæ—è¾¹æä¸€ä¸ªå€’è®¡æ—¶ï¼Œè¶…æ—¶æ‰çœŸæ­£scroll
 
 # 2020.12.16
-LogV 10KÌõ
-ConsolePage::OnCopyDataReadyÖĞLogParser::InputÔ¼547 ms
-·¢ÏÖCListCtrl virtual listµÄSetItemCountExºÜÂı£¬·²ÊÇ¿ÉÄÜÆµ·±µ÷ÓÃµ½SetItemCountExµÄµØ·½¶¼ĞèÒªÓÅ»¯
+LogV 10Kæ¡
+ConsolePage::OnCopyDataReadyä¸­LogParser::Inputçº¦547 ms
+å‘ç°CListCtrl virtual listçš„SetItemCountExå¾ˆæ…¢ï¼Œå‡¡æ˜¯å¯èƒ½é¢‘ç¹è°ƒç”¨åˆ°SetItemCountExçš„åœ°æ–¹éƒ½éœ€è¦ä¼˜åŒ–
 
 changes:
-.Ôö¼ÓÁËListCtrl virtualÒÔÌá¸ßĞÔÄÜ
-.Ôö¼Óauto scroll checkbox,ÊÖ¹¤¿ØÖÆ¸ü·½±ã
+.å¢åŠ äº†ListCtrl virtualä»¥æé«˜æ€§èƒ½
+.å¢åŠ auto scroll checkbox,æ‰‹å·¥æ§åˆ¶æ›´æ–¹ä¾¿
 
 todo:
-.tag²¿·ÖÆ¥ÅäÒ²ÒªÏÔÊ¾³öÀ´
-.ribbonÉÏ×ö¸öcombox,¿ÉÑ¡Ôñ³£ÓÃµÄfilter
- ¿Éadd,edit,remove filter
+.tagéƒ¨åˆ†åŒ¹é…ä¹Ÿè¦æ˜¾ç¤ºå‡ºæ¥
+.ribbonä¸Šåšä¸ªcombox,å¯é€‰æ‹©å¸¸ç”¨çš„filter
+ å¯add,edit,remove filter
 
 # 2020.12.15
-·¢ÏÖdtÓĞÊ±Ã»ÏìÓ¦£¬²»ÊÇbug,¶øÊÇfilter¸Ä¶¯ºó´¦ÀíµÄÌ«Âı£¬¼±Ğèvirtual list¸Ä½ø
+å‘ç°dtæœ‰æ—¶æ²¡å“åº”ï¼Œä¸æ˜¯bug,è€Œæ˜¯filteræ”¹åŠ¨åå¤„ç†çš„å¤ªæ…¢ï¼Œæ€¥éœ€virtual listæ”¹è¿›
 https://www.codeguru.com/cpp/controls/listview/advanced/article.php/c4151/MFC-Virtual-List-Control.htm
 
 # 2020.11.26
-- ²ÉÓÃCListCtrl virtualÀ´¼ÓËÙ
+- é‡‡ç”¨CListCtrl virtualæ¥åŠ é€Ÿ
 https://blog.csdn.net/business122/article/details/78336945?utm_source=blogxgwz3
 
 # 2020.07.14
-- ²ÉÓÃ±È½Ï±¿µÄ°ì·¨»Ø±ÜÁËLogPageÖĞlist.GetNextItem(-1, LVNI_SELECTED);Òì³£ÎÊÌâ
+- é‡‡ç”¨æ¯”è¾ƒç¬¨çš„åŠæ³•å›é¿äº†LogPageä¸­list.GetNextItem(-1, LVNI_SELECTED);å¼‚å¸¸é—®é¢˜
 
 
 # 2020.07.07
 - bug
-LogPage::OnTimerÖĞÓĞ²»±ØÒªµÄË¢ĞÂ£¬Ô­ÒòÊÇÌí¼ÓĞÂitemÊ±list.GetNextItem(-1, LVNI_SELECTED);·µ»ØÊıÖµÓĞ±ä»¯
+LogPage::OnTimerä¸­æœ‰ä¸å¿…è¦çš„åˆ·æ–°ï¼ŒåŸå› æ˜¯æ·»åŠ æ–°itemæ—¶list.GetNextItem(-1, LVNI_SELECTED);è¿”å›æ•°å€¼æœ‰å˜åŒ–
 
-Ô­Òò´ı²é
+åŸå› å¾…æŸ¥
 
 
 # 2020.07.05
-.Ç¿ÖÆÒªÇótextÈ«²¿²ÉÓÃutf8±àÂë£¬·½±ãÔÚlistÖĞÕıÈ·½âÂëÏÔÊ¾ÖĞÎÄ
+.å¼ºåˆ¶è¦æ±‚textå…¨éƒ¨é‡‡ç”¨utf8ç¼–ç ï¼Œæ–¹ä¾¿åœ¨listä¸­æ­£ç¡®è§£ç æ˜¾ç¤ºä¸­æ–‡
 
 
 # 2020.06.19
 todo:
 
-- ÏÂÃæµÄÏêÇéÒ³Ãæ¸ÄÓÃpane,·½±ã×ÔĞĞµ÷Õû´°¿Ú³ß´ç
+- ä¸‹é¢çš„è¯¦æƒ…é¡µé¢æ”¹ç”¨pane,æ–¹ä¾¿è‡ªè¡Œè°ƒæ•´çª—å£å°ºå¯¸
 
 # 2020.02.09
-- Ôö¼ÓÁËÏŞÖÆ×î´óÌõÊımMaxLogCount
+- å¢åŠ äº†é™åˆ¶æœ€å¤§æ¡æ•°mMaxLogCount
 
 # 2020.02.08
 changes:
-- ÊµÏÖÁËlog list ctrlÓÒ¼ü²Ëµ¥µÄ¹¦ÄÜ:open file and goto line,open folder,copy full path
-- app,tag filterÍê³É
-- ÍêÉÆÁËItemPage
-- Ôö¼ÓÁËlevel combo
+- å®ç°äº†log list ctrlå³é”®èœå•çš„åŠŸèƒ½:open file and goto line,open folder,copy full path
+- app,tag filterå®Œæˆ
+- å®Œå–„äº†ItemPage
+- å¢åŠ äº†level combo
 
 todo:
-- ÊµÏÖCtrl+TabÇĞ»»
-- ÓÃ¹²ÏíÄÚ´æÀ´ÓÅ»¯£¬ÈÃÈÕÖ¾¾¡Á¿ÉÙÕ¼ÓÃappµÄÊ±¼ä
+- å®ç°Ctrl+Tabåˆ‡æ¢
+- ç”¨å…±äº«å†…å­˜æ¥ä¼˜åŒ–ï¼Œè®©æ—¥å¿—å°½é‡å°‘å ç”¨appçš„æ—¶é—´
 
-¹¹ÏëÈçÏÂ:
-- appĞ´ÈÕÖ¾µ½¹²ÏíÄÚ´æ
-- ×ö¸öLogServer,ºÍappÔËĞĞÔÚÍ¬Ò»Ö÷»ú,LogServer¸ºÔğ²É¼¯ÈÕÖ¾,ÓÃwebsocketÌá¹©ÈÕÖ¾·şÎñ
-- clientÓÃwebsocket»ñÈ¡ÈÕÖ¾
-- ÒÔÄÚ´æ»»È¡appĞÔÄÜ
+æ„æƒ³å¦‚ä¸‹:
+- appå†™æ—¥å¿—åˆ°å…±äº«å†…å­˜
+- åšä¸ªLogServer,å’Œappè¿è¡Œåœ¨åŒä¸€ä¸»æœº,LogServerè´Ÿè´£é‡‡é›†æ—¥å¿—,ç”¨websocketæä¾›æ—¥å¿—æœåŠ¡
+- clientç”¨websocketè·å–æ—¥å¿—
+- ä»¥å†…å­˜æ¢å–appæ€§èƒ½
 
-Ä¿Ç°²»ĞèÒªÕâÃ´¸ßµÄĞÔÄÜ£¬ºóÃæÓĞĞèÒªÁËÔÙËµ
+ç›®å‰ä¸éœ€è¦è¿™ä¹ˆé«˜çš„æ€§èƒ½ï¼Œåé¢æœ‰éœ€è¦äº†å†è¯´
 
 # 2020.02.07
 
 changes:
-- Ôö¼ÓÁËopen file goto line ¹¦ÄÜ
+- å¢åŠ äº†open file goto line åŠŸèƒ½
   
 
-goto lineÊÇ²ÉÓÃc#¹¤³ÌCoreLooper\tools\OpenFileGotoLineÀ´×öµÄ
+goto lineæ˜¯é‡‡ç”¨c#å·¥ç¨‹CoreLooper\tools\OpenFileGotoLineæ¥åšçš„
 
 <pre>
 https://stackoverflow.com/questions/350323/open-a-file-in-visual-studio-at-a-specific-line-number
@@ -102,56 +107,56 @@ https://docs.microsoft.com/en-us/visualstudio/ide/reference/go-to-command?view=v
 devenv "Path\To\Your\Solution" /edit "Path\To\Your\File" /command "Edit.GoTo 123"
 
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe"  /edit "d:\t.cpp" /Command "Edit.GoTo 12"
-Ö»ÄÜ´ò¿ªÎÄ¼ş£¬²»ÄÜ¶¨Î»µ½ĞĞ
+åªèƒ½æ‰“å¼€æ–‡ä»¶ï¼Œä¸èƒ½å®šä½åˆ°è¡Œ
 
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe" "D:\CoreLooper\projects\dt\dt.sln"  /edit "D:\CoreLooper\projects\dt\src\Consolepage.cpp" /Command "Edit.GoTo 12"
-ÒÔÎÄ±¾·½Ê½´ò¿ªÁËdt.sln²¢ÄÜ¶¨Î»µ½ĞĞ
+ä»¥æ–‡æœ¬æ–¹å¼æ‰“å¼€äº†dt.slnå¹¶èƒ½å®šä½åˆ°è¡Œ
 
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe" "D:\CoreLooper\projects\dt\src\Consolepage.cpp"  /edit  /Command "Edit.GoTo 12"
 
 
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe" "D:\CoreLooper\projects\dt\src\Consolepage.cpp"    /Command "Edit.GoTo 12"
-ÔÚĞÂµÄvsÖĞÄÜ¶¨Î»µ½ĞĞ
+åœ¨æ–°çš„vsä¸­èƒ½å®šä½åˆ°è¡Œ
 
 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe" "D:\CoreLooper\projects\dt\src\Consolepage.cpp"  /edit "D:\CoreLooper\projects\dt\src\Consolepage.cpp" /Command "Edit.GoTo 12"
 
 </pre>
 
 # 2020.02.05
-filter¹æÔò
-- ¶à¸öÌõ¼şÖ®¼ä²ÉÓÃ¶ººÅ·Ö¸ô
+filterè§„åˆ™
+- å¤šä¸ªæ¡ä»¶ä¹‹é—´é‡‡ç”¨é€—å·åˆ†éš”
 
-±ÈÈçapp=BearStudio,IotPlatform
+æ¯”å¦‚app=BearStudio,IotPlatform
 
-ÎªÁËÊµÏÖ·½±ãºÍÌá¸ßĞÔÄÜ,×Ö¶ÎÇø·Ö´óĞ¡Ğ´
+ä¸ºäº†å®ç°æ–¹ä¾¿å’Œæé«˜æ€§èƒ½,å­—æ®µåŒºåˆ†å¤§å°å†™
 
-- Ö§³Ö! ±ÈÈçappÖĞÓĞ!PlatformServerÊ±£¬ÆÁ±ÎPlatformServerµÄÈÕÖ¾
+- æ”¯æŒ! æ¯”å¦‚appä¸­æœ‰!PlatformServeræ—¶ï¼Œå±è”½PlatformServerçš„æ—¥å¿—
 
 
 
 
 
 # 2020.02.04
-·¢ÏÖÄ¿Ç°µÄDTÃ»·¨Âú×ãĞèÒªÁË,Ö÷ÒªÊÇÈ±ÉÙÈçÏÂ¹¦ÄÜ
+å‘ç°ç›®å‰çš„DTæ²¡æ³•æ»¡è¶³éœ€è¦äº†,ä¸»è¦æ˜¯ç¼ºå°‘å¦‚ä¸‹åŠŸèƒ½
 
-- ·ÖÀë¶à¸ö½ø³ÌµÄÈÕÖ¾
-   Í¬Ê±ÔËĞĞ¶à¸ö½ø³Ì¶¼ÏòDTÊä³öÏûÏ¢Ê±£¬ÓĞÊ±Ö»ĞèÒª¹Ø×¢Ä³¸ö½ø³Ì
+- åˆ†ç¦»å¤šä¸ªè¿›ç¨‹çš„æ—¥å¿—
+   åŒæ—¶è¿è¡Œå¤šä¸ªè¿›ç¨‹éƒ½å‘DTè¾“å‡ºæ¶ˆæ¯æ—¶ï¼Œæœ‰æ—¶åªéœ€è¦å…³æ³¨æŸä¸ªè¿›ç¨‹
 
-¾ö¶¨Éı¼¶DT¹¤¾ß,ÒªÖ§³ÖÈçÏÂ¹¦ÄÜµã
+å†³å®šå‡çº§DTå·¥å…·,è¦æ”¯æŒå¦‚ä¸‹åŠŸèƒ½ç‚¹
 
-- ¼æÈİ¾ÉµÄdt
-- Ôö¼ÓtabÒ³Ãæ£¬Ã¿¸ö½ø³ÌµÄÈÕÖ¾¿ÉÏÔÊ¾ÔÚ¸÷×ÔµÄtabÉÏÃæ£¬±ãÓÚµ÷ÊÔ¶à¸öapp,»¥²»Ó°Ïì
+- å…¼å®¹æ—§çš„dt
+- å¢åŠ tabé¡µé¢ï¼Œæ¯ä¸ªè¿›ç¨‹çš„æ—¥å¿—å¯æ˜¾ç¤ºåœ¨å„è‡ªçš„tabä¸Šé¢ï¼Œä¾¿äºè°ƒè¯•å¤šä¸ªapp,äº’ä¸å½±å“
 
-Ã¿ÌõÈÕÖ¾°üº¬ÈçÏÂĞÅÏ¢
+æ¯æ¡æ—¥å¿—åŒ…å«å¦‚ä¸‹ä¿¡æ¯
 - appName(exeName),pid,tid
 - tag
 - message
 - log level:verbose,debug,warning,error...
 - source file,line
 
-## ¹¦ÄÜÉè¼Æ
-- ¿É¸ù¾İ¸÷ÖÖ²ÎÊı¹ıÂË
-- ÓÅ»¯WM_COPYDATAÊı¾İ¸ñÊ½£¬²ÉÓÃTLV±àÂë
+## åŠŸèƒ½è®¾è®¡
+- å¯æ ¹æ®å„ç§å‚æ•°è¿‡æ»¤
+- ä¼˜åŒ–WM_COPYDATAæ•°æ®æ ¼å¼ï¼Œé‡‡ç”¨TLVç¼–ç 
 
-## UI²¼¾Ö
-ÓĞÒ»¸ö×Ütab
+## UIå¸ƒå±€
+æœ‰ä¸€ä¸ªæ€»tab

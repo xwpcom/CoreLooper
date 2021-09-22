@@ -263,9 +263,6 @@
     <ClInclude Include="..\..\include\libhttp\wshandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\textparser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\openssl\SSLBox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -408,6 +405,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\libhttp\postjsonmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\libhttp\textparser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

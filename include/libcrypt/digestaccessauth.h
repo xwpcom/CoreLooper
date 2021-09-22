@@ -10,6 +10,9 @@ typedef char HASHHEX[HASHHEXLEN + 1];
 
 //XiongWanPing 2015.11.08
 //HTTP digest access auth
+/*
+https://en.wikipedia.org/wiki/Digest_access_authentication
+*/
 class CRYPT_EXT_CLASS DigestAccessAuth
 {
 public:

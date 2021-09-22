@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace Bear {
 namespace Core
@@ -15,6 +15,15 @@ public:
 	// 参数: pInputBuf 用于进行计算的数据指针, nLen 数据长度
 	void	Update(unsigned char *pInputBuf, unsigned int nLen);
 	static string MD5(const string& text);
+	static string md5(const string& text);
+	static string Encode(const string& text)
+	{
+		return MD5(text);
+	}
+	static string encode(const string& text)
+	{
+		return md5(text);
+	}
 	// ***********************
 	// 说明: 获取当前的MD5值
 	// 参数: pDigest 输出的MD5值, 大小为16字节的字符串类型

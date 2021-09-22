@@ -79,12 +79,13 @@ protected:
 		shared_ptr<LogItem> item;
 		bool virtualReady=false;
 		void makeReady();
-		CString msg;
-		CString time;
-		CString fileLine;
-		CString pid;
-		CString tag;
-		CString app;
+		string msg;
+		string time;
+		string fileLine;
+		string pid;
+		string tag;
+		string app;
+		CString CStringCache;
 	}VirtualItem;
 	vector<shared_ptr<VirtualItem>> mVirtualItems;/* mLogItems中满足filter后的items */
 #endif

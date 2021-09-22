@@ -350,3 +350,12 @@ string CMD5::MD5(const string& text)
 	StringTool::MakeUpper(ack);
 	return ack;
 }
+
+string CMD5::md5(const string& text)
+{
+	CMD5 obj;
+	obj.Update((LPBYTE)text.c_str(), text.length());
+	auto ack = obj.GetResult();
+	StringTool::MakeLower(ack);
+	return ack;
+}

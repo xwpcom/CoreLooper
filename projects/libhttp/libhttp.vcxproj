@@ -278,6 +278,7 @@
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadvideo.h" />
     <ClInclude Include="..\..\include\libhttp\postjsonmanager.h" />
     <ClInclude Include="..\..\include\libhttp\procmanager.h" />
+    <ClInclude Include="..\..\include\libhttp\textparser.h" />
     <ClInclude Include="..\..\include\libhttp\websockethandler.h" />
     <ClInclude Include="..\..\include\libhttp\websocketsplitter.h" />
     <ClInclude Include="..\..\include\libhttp\wshandler.h" />
@@ -291,7 +292,6 @@
     <ClInclude Include="src\ajax_tree.h" />
     <ClInclude Include="src\openssl\SSLBox.h" />
     <ClInclude Include="src\openssl\SSLUtil.h" />
-    <ClInclude Include="src\textparser.h" />
     <ClInclude Include="src\zltoolkit\Network\Buffer.h" />
     <ClInclude Include="src\zltoolkit\Network\Socket.h" />
     <ClInclude Include="src\zltoolkit\Network\sockutil.h" />

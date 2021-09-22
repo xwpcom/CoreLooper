@@ -7,12 +7,12 @@ namespace Http {
 //XiongWanPing 2019.05.30
 //用于解析http,rtsp等常见的文本协议字段
 
-class TextParser
+class HTTP_EXPORT TextParser
 {
 public:
 	TextParser();
 	void Parse(const string& text);
-
+	string mText;
 	Bundle mBundle;
 	string mCommand;
 	string mUrl;

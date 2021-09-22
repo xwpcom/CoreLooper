@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "nettool.h"
 #include "base/stringtool.h"
 
@@ -25,6 +25,8 @@ namespace Core
 {
 using namespace FileSystem;
 namespace Net {
+
+static const char* TAG = "NetTool";
 
 //判断是否为有效的mac地址
 //
@@ -117,7 +119,7 @@ string NetTool::GetLanIP(string eth)
 			StringTool::AppendFormat(mac, "%.2X", (int)adapter->Address[i]);
 		}
 
-		DV("Adapter [%s] desc=[%s],mac=[%s]", adapter->AdapterName, adapter->Description, mac.c_str());
+		LogV(TAG,"Adapter [%s] desc=[%s],mac=[%s]", adapter->AdapterName, adapter->Description, mac.c_str());
 #endif
 
 		for (auto item = &adapter->IpAddressList; item; item = item->Next)
@@ -128,7 +130,7 @@ string NetTool::GetLanIP(string eth)
 				continue;
 			}
 
-			DV("IP Address: %s", ip.c_str());
+			LogV(TAG,"IP Address: %s", ip.c_str());
 			ips.push_back(ip);
 		}
 	}
@@ -177,7 +179,7 @@ string NetTool::GetLanIP(string eth)
 			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
 			if (eth == ifa->ifa_name)
 			{
-				//DV("%s IP Address %s", ifa->ifa_name, addressBuffer); 
+				//LogV(TAG,"%s IP Address %s", ifa->ifa_name, addressBuffer); 
 				szIP = addressBuffer;
 				break;
 			}
@@ -213,7 +215,7 @@ int GetMacList(vector<string>& items)
 	pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(sizeof(IP_ADAPTER_INFO));
 	if (pAdapterInfo == NULL)
 	{
-		DV("Error allocating memory needed to call GetAdaptersinfo\n");
+		LogV(TAG,"Error allocating memory needed to call GetAdaptersinfo\n");
 		return -1;
 	}
 
@@ -223,7 +225,7 @@ int GetMacList(vector<string>& items)
 		pAdapterInfo = (IP_ADAPTER_INFO *)MALLOC(ulOutBufLen);
 		if (pAdapterInfo == NULL)
 		{
-			DV("Error allocating memory needed to call GetAdaptersinfo\n");
+			LogV(TAG,"Error allocating memory needed to call GetAdaptersinfo\n");
 			return -1;
 		}
 	}
@@ -243,43 +245,43 @@ int GetMacList(vector<string>& items)
 
 			items.push_back(mac);
 
-			//DV("Adapter[%s],mac=[%s],desc[%s]", pAdapter->AdapterName, mac.c_str(), pAdapter->Description);
-			//DV("Type: ");
+			//LogV(TAG,"Adapter[%s],mac=[%s],desc[%s]", pAdapter->AdapterName, mac.c_str(), pAdapter->Description);
+			//LogV(TAG,"Type: ");
 			/*
 			switch (pAdapter->Type) {
 			case MIB_IF_TYPE_OTHER:
-			DV("Other\n");
+			LogV(TAG,"Other\n");
 			break;
 			case MIB_IF_TYPE_ETHERNET:
-			DV("Ethernet\n");
+			LogV(TAG,"Ethernet\n");
 			break;
 			case MIB_IF_TYPE_TOKENRING:
-			DV("Token Ring\n");
+			LogV(TAG,"Token Ring\n");
 			break;
 			case MIB_IF_TYPE_FDDI:
-			DV("FDDI\n");
+			LogV(TAG,"FDDI\n");
 			break;
 			case MIB_IF_TYPE_PPP:
-			DV("PPP\n");
+			LogV(TAG,"PPP\n");
 			break;
 			case MIB_IF_TYPE_LOOPBACK:
-			DV("Lookback\n");
+			LogV(TAG,"Lookback\n");
 			break;
 			case MIB_IF_TYPE_SLIP:
-			DV("Slip\n");
+			LogV(TAG,"Slip\n");
 			break;
 			default:
-			DV("Unknown type %ld\n", pAdapter->Type);
+			LogV(TAG,"Unknown type %ld\n", pAdapter->Type);
 			break;
 			}
 
-			DV("IP Address:%s", pAdapter->IpAddressList.IpAddress.String);
+			LogV(TAG,"IP Address:%s", pAdapter->IpAddressList.IpAddress.String);
 			//*/
 			pAdapter = pAdapter->Next;
 		}
 	}
 	else {
-		DV("GetAdaptersInfo failed with error: %d\n", dwRetVal);
+		LogV(TAG,"GetAdaptersInfo failed with error: %d\n", dwRetVal);
 
 	}
 	if (pAdapterInfo)
@@ -347,17 +349,17 @@ string NetTool::GetMac(string eth)
 				IP_ADAPTER_INFO *pi = &AdapterInfo[i];
 				memcpy(macAddr, pi->Address, 6);//先复制了再说,后面找到最合适的时，会再次复制
 
-				DT("AdapterName=[%s]----------------------------", pi->AdapterName);
-				DT("Description=[%s]", pi->Description);
-				DT("AddressLen =[%d]", pi->AddressLength);
-				DT("Type =[%d]", pi->Type);
+				LogV(TAG,"AdapterName=[%s]----------------------------", pi->AdapterName);
+				LogV(TAG,"Description=[%s]", pi->Description);
+				LogV(TAG,"AddressLen =[%d]", pi->AddressLength);
+				LogV(TAG,"Type =[%d]", pi->Type);
 
 				if (pi->Type == MIB_IF_TYPE_ETHERNET)
 				{
 					string desc = pi->Description;
 					StringTool::MakeUpper(desc);
 
-					//DV("eth desc=[%s]", desc.c_str());
+					//LogV(TAG,"eth desc=[%s]", desc.c_str());
 					//int pos = desc.Find("pci");
 					if (
 						//pos != -1 && 
@@ -391,7 +393,7 @@ string NetTool::GetMac(string eth)
 		}
 		else
 		{
-			DW("fail GetAdaptersInfo");
+			LogW(TAG,"fail GetAdaptersInfo");
 		}
 	}
 #elif defined __APPLE__
@@ -418,12 +420,12 @@ string NetTool::GetMac(string eth)
 		}
 		else
 		{
-			DW("fail SIOCGIFHWADDR,error=%d(%s)", errno, strerror(errno));
+			LogW(TAG,"fail SIOCGIFHWADDR,error=%d(%s)", errno, strerror(errno));
 		}
 	}
 	else
 	{
-		DW("fd=%d", fd);
+		LogW(TAG,"fd=%d", fd);
 	}
 #endif
 
@@ -467,7 +469,7 @@ string NetTool::GetGateWay(string ifName)
 			{
 				unsigned long ip = defaultRoutePara[0];
 				ack=StringTool::Format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8) & 0xff, (ip >> 16) & 0xff, (ip >> 24) & 0xff);
-				//DV("gateway=%s", ack.c_str());
+				//LogV(TAG,"gateway=%s", ack.c_str());
 				break;
 			}
 		}
@@ -504,7 +506,7 @@ string NetTool::GetInterfaceName()
 		int i = 0;
 		while (info[i].if_index != 0) {
 			string v = info[i].if_name;
-			//DV("[%s]\r\n",v.c_str());
+			//LogV(TAG,"[%s]\r\n",v.c_str());
 			if (!v.empty() && v != "lo")
 			{
 				name = v;

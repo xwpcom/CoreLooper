@@ -51,6 +51,7 @@ CSeq: 1
 	void TextParser::Parse(const string & input)
 {
 	clear();
+	mText = input;
 
 	string text;
 	auto pos = input.find("\r\n\r\n");

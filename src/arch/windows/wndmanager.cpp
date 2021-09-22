@@ -38,6 +38,10 @@ WndManager::WndManager()
 	gInstance = nullptr;
 }
 
+WndManager::~WndManager()
+{
+
+}
 void WndManager::Create()
 {
 	if (GetSafeHwnd())
@@ -69,6 +73,7 @@ void WndManager::DestroyInstance()
 	if (gInstance)
 	{
 		gInstance->DestroyWindow();
+		delete gInstance;
 		gInstance = nullptr;
 	}
 }

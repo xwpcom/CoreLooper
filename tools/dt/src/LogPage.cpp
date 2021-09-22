@@ -281,17 +281,6 @@ void LogPage::AddItem(shared_ptr<LogItem>& item)
 		mVirtualItems.push_back(obj);
 	}
 
-	//int count = (int)mVirtualItems.size();
-	//list.SetItemCountEx(count);
-	/*
-	int n = list.GetTopIndex();
-	int nLast = n + list.GetCountPerPage();
-	if (count >= n && count <= nLast + 1)
-	{
-		//list.RedrawItems(count - 1, count - 1);
-	}
-	*/
-
 #else
 	string time;
 	//仅在hour为0或23时添加date,否则只显示time,hhmmssMMM
@@ -781,7 +770,7 @@ void LogPage::OnCopyAll()
 		auto& item = itemA->item;
 
 		StringTool::AppendFormat(text,"%s[%c][%s]%s\r\n"
-			, T2A(itemA->time)
+			, itemA->time.c_str()
 			, level[item->level]
 			,item->tag.c_str()
 			,item->msg.c_str()
@@ -868,7 +857,7 @@ void LogPage::VirtualItem::makeReady()
 		StringTool::Replace(data, "\n", "~");
 		StringTool::Replace(data, "\t", "`");
 
-		msg = Utf8Tool::UTF8_to_UNICODE(data.c_str(), data.length());
+		msg = data;// Utf8Tool::UTF8_to_UNICODE(data.c_str(), data.length());
 	}
 	{
 		string time;
@@ -889,20 +878,20 @@ void LogPage::VirtualItem::makeReady()
 			StringTool::AppendFormat(time, "%02d:%02d:%02d.%03d", hour, minute, second, ms);
 		}
 
-		this->time=A2T(time.c_str());
+		this->time = time;// A2T(time.c_str());
 	}
 	{
 		auto text = StringTool::Format("%s(%d)", item->file.c_str(), item->line);
-		fileLine=A2T(text.c_str());
+		fileLine = text;// A2T(text.c_str());
 	}
 	
 	{
 		auto text = StringTool::Format("%d/%d", item->pid, item->tid);
-		pid=A2T(text.c_str());
+		pid = text;// A2T(text.c_str());
 	}
 	
-	tag=A2T(item->tag.c_str());
-	app=A2T(item->appName.c_str());
+	tag = item->tag;// A2T(item->tag.c_str());
+	app = item->appName;// A2T(item->appName.c_str());
 }
 
 void LogPage::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
@@ -919,35 +908,46 @@ void LogPage::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 	//LPSTR_TEXTCALLBACK;
 	if (item && pItem->mask & LVIF_TEXT) //valid text buffer?
 	{
+		auto& text = item->CStringCache;
 		const auto col = pItem->iSubItem;
+		USES_CONVERSION;
 		if (col == mArrIdx[eIdxMsg])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->msg;
+			text = Utf8Tool::UTF8_to_UNICODE(item->msg.c_str(), item->msg.length());
+			//dst = (LPWSTR)(LPCTSTR)item->msg;
 		}
 		else if (col == mArrIdx[eIdxTime])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->time;
+			text = A2T(item->time.c_str());
+			//dst = (LPWSTR)(LPCTSTR)item->time;
 		}
 		else if (col == mArrIdx[eIdxFileLine])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->fileLine;
+			text = A2T(item->fileLine.c_str());
+			//dst = (LPWSTR)(LPCTSTR)item->fileLine;
 		}
 		else if (col == mArrIdx[eIdxPid])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->pid;
+			text = A2T(item->pid.c_str());
+			//dst = (LPWSTR)(LPCTSTR)item->pid;
 		}
 		else if (col == mArrIdx[eIdxTag])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->tag;
+			text = A2T(item->tag.c_str());
+			//dst = (LPWSTR)(LPCTSTR)item->tag;
 		}
 		else if (col == mArrIdx[eIdxApp])
 		{
-			dst = (LPWSTR)(LPCTSTR)item->app;
+			text = A2T(item->app.c_str());
+			//dst = (LPWSTR)(LPCTSTR)item->app;
 		}
 		else
 		{
 			ASSERT(FALSE);
 		}
+
+		dst = (LPWSTR)(LPCTSTR)item->CStringCache;
+
 	}
 
 	*pResult = 0;

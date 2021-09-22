@@ -18,6 +18,7 @@ public:
 
 protected:
 	WndManager();
+	~WndManager();
 	void Create();
 
 	DECLARE_MESSAGE_MAP()

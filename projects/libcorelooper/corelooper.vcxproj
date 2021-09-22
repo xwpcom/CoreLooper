@@ -256,7 +256,7 @@
       <ModuleDefinitionFile>.\corelooper.def</ModuleDefinitionFile>
       <AdditionalLibraryDirectories>$(VCInstallDir)Auxiliary\VS\UnitTest\lib;..\..\depends\openssl\lib.static;</AdditionalLibraryDirectories>
       <AdditionalDependencies>legacy_stdio_definitions.lib</AdditionalDependencies>
-      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
