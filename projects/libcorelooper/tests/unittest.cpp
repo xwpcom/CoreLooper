@@ -3507,6 +3507,17 @@ TEST_CLASS(StringTool_UnitTest)
 {
 	TEST_METHOD(Format)
 	{
+
+		{
+			string value = "123";
+			int dots = 0;
+			auto pos = value.find(".");/* 小数点后位数 */
+			if (pos != string::npos)
+			{
+				dots = value.length() - pos-1;
+			}
+			int x = 0;
+		}
 		auto text = StringTool::Format(
 			"hello,this is a very long text,value=%d",1000
 		);
