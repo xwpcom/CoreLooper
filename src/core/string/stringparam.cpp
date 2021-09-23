@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "stringparam.h"
 using namespace std;
 
@@ -38,9 +38,9 @@ unordered_map<string, string> StringParam::ParseItemsEx(const string& items, con
 	return ack;
 }
 
-//items¸ñÊ½item1,item2,item3,
-//Ã¿¸öitem¸ñÊ½:name=value
-map<string, string> StringParam::ParseItems(const string& items, const char *itemSeperator, const char *sign)
+//itemsæ ¼å¼item1,item2,item3,
+//æ¯ä¸ªitemæ ¼å¼:name=value
+map<string, string> StringParam::ParseItems(const string& items, const char *itemSeperator, const char *sign, bool trim)
 {
 	map<string, string> ack;
 
@@ -64,6 +64,12 @@ map<string, string> StringParam::ParseItems(const string& items, const char *ite
 		else
 		{
 			name = nv;
+		}
+
+		if (trim)
+		{
+			StringTool::Trim(name);
+			StringTool::Trim(value);
 		}
 
 		ack[name] = value;
@@ -128,8 +134,8 @@ string StringParam::MergeFields(const string& src, const string& fields, const c
 
 	for (map<string, string>::iterator iter = items2.begin(); iter != items2.end(); ++iter)
 	{
-		//Ô¼¶¨Ä¬ÈÏÎª0,ËùÒÔ0²»ĞèÒª±£´æ */
-		//2021.09.03 0»ò¿ÕÒ²Òª±£´æ²¢´«¸øÉè±¸£¬·ñÔòµ±Éè±¸ÉÏÅäÖÃÓĞÊı¾İÊ±£¬Ã»·¨ÇåÎª0
+		//çº¦å®šé»˜è®¤ä¸º0,æ‰€ä»¥0ä¸éœ€è¦ä¿å­˜ */
+		//2021.09.03 0æˆ–ç©ºä¹Ÿè¦ä¿å­˜å¹¶ä¼ ç»™è®¾å¤‡ï¼Œå¦åˆ™å½“è®¾å¤‡ä¸Šé…ç½®æœ‰æ•°æ®æ—¶ï¼Œæ²¡æ³•æ¸…ä¸º0
 
 		/*
 		if (iter->second.empty())// || iter->second == "0")
