@@ -60,7 +60,7 @@ struct CORE_EXPORT tagTimeMs
 		return hour * 10000 + minute * 100 + second;
 	}
 
-	time_t to_time_t();
+	time_t to_time_t()const;
 	void from_time_t(time_t t);
 
 	int laterDays(const tagTimeMs& obj);

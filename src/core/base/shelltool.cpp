@@ -1870,7 +1870,7 @@ time_t DateTime::time()
 #endif
 }
 
-time_t tagTimeMs::to_time_t()
+time_t tagTimeMs::to_time_t()const
 {
 	tm tm1 = { 0 };
 	tm1.tm_year = year - 1900;
