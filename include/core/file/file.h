@@ -132,7 +132,10 @@ public:
 	}
 	static bool PathIsDirectory(const char *psz);
 	static char *concat_path_file(const char *path, const char *filename, char *outbuf, int cbOutBuf);
-#ifndef _MSC_VER
+#ifdef _MSC_VER
+	static int GetFileWriteTime(const string& filePath, tagTimeMs& t);
+	
+#else
 	static int remove_file(const char *path, int flags);
 #endif
 

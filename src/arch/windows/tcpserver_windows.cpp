@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "tcpserver_windows.h"
 #include "net/tcpserver.h"
 #include "net/tcpclient.h"
@@ -237,7 +237,7 @@ int TcpServer_Windows::OnAccept(SOCKET s)
 
 	int ret = -1;
 
-	//有可能mSock已经被关闭
+	//有可能mSock已经被关闭//
 	ret = setsockopt(s, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&mSocket, sizeof(mSocket));
 	if (ret)
 	{

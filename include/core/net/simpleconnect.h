@@ -19,6 +19,11 @@ public:
 		mVerbose = true;
 	}
 
+	const string& address()const
+	{
+		return mAddress;
+	}
+
 	void DisableVerbose()
 	{
 		mVerbose = false;

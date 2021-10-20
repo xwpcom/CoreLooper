@@ -1200,6 +1200,49 @@ int File::Delete(const string& filePath, bool recursive)
 
 }
 
+#ifdef _MSC_VER
+int File::GetFileWriteTime(const string& filePath, tagTimeMs& t)
+{
+	int ret = -1;
+
+	HANDLE hFile = ::CreateFileA(filePath.c_str(), GENERIC_READ | GENERIC_WRITE,
+		FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
+		NULL);
+	if (hFile != INVALID_HANDLE_VALUE)
+	{
+		FILETIME writeTime = { 0 };
+		::GetFileTime(hFile, nullptr, nullptr, &writeTime);
+		SYSTEMTIME stUTC, stLocal;
+		DWORD dwRet;
+
+		FileTimeToSystemTime(&writeTime, &stUTC);
+		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+		/*
+		// Build a string showing the date and time.
+		LogV(TAG, "%04d.%02d.%02d %02d:%02d"
+			, stLocal.wYear, stLocal.wMonth, stLocal.wDay
+			, stLocal.wHour, stLocal.wMinute
+		);
+		*/
+
+		t.year = stLocal.wYear;
+		t.month = stLocal.wMonth;
+		t.day = stLocal.wDay;
+		t.hour = stLocal.wHour;
+		t.minute = stLocal.wMinute;
+		t.second = stLocal.wSecond;
+	
+		CloseHandle(hFile);
+		hFile = INVALID_HANDLE_VALUE;
+
+		ret = 0;
+	}
+
+	return ret;
+}
+#endif
+
+
 
 }
 }
