@@ -25,7 +25,7 @@ HttpRequest::HttpRequest()
 	m_outbox = NULL;
 	m_httpRequestTransform = NULL;
 	m_userAuth = this;
-
+	m_outboxPending.SetBufferSize(16 * 1024, 1024 * 1024 * 32);
 	Reset();
 }
 

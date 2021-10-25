@@ -9,6 +9,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "httpRequest";
+
 HttpRequestHandler::HttpRequestHandler()
 {
 	m_httpRequest = NULL;
@@ -56,7 +58,7 @@ int HttpRequestHandler::Output(LPBYTE pData, int cbData)
 {
 	if (!m_outbox)
 	{
-		DW("fail Output,m_outbox is NULL");
+		LogW(TAG,"fail Output,m_outbox is NULL");
 		ASSERT(FALSE);
 		return -1;
 	}
@@ -64,7 +66,7 @@ int HttpRequestHandler::Output(LPBYTE pData, int cbData)
 	int ret = m_outbox->Write(pData, cbData);
 	if (ret != cbData)
 	{
-		DW("fail Output,cbData=%d,ret=%d", cbData, ret);
+		LogW(TAG,"fail Output,cbData=%d,ret=%d", cbData, ret);
 		ASSERT(FALSE);
 	}
 

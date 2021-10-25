@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ajax_proc.h"
 
 using namespace Bear::Core;
@@ -50,6 +50,10 @@ string Ajax_Proc::Process(const NameValue& params)
 	string ack=StringTool::Format("<Result><Error>0</Error>%s</Result>"
 		,xml.c_str()
 	);
+
+#ifdef _DEBUG
+	File::Dump(ack, "d:/proc.xml");
+#endif
 
 	return ack;
 }
