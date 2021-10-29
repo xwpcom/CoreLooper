@@ -27,6 +27,11 @@ void SCTP_Create(tagSCTP* obj)
 	memset(obj, 0, sizeof(*obj));
 }
 
+void SCTP_Enable485Verbose(tagSCTP* obj)
+{
+	obj->m485Verbose = 1;
+}
+
 void SCTP_clear(struct tagSCTP *obj)
 {
 	obj->mSeq = 0;
@@ -118,7 +123,9 @@ int SCTP_Parse(tagSCTP *obj)
 		while (body[0] && body < end)
 		{
 			char* d = body;
-			if (!isalpha(d[0]))// != 'c' || d[1] != 'm' || d[2] != 'd' || d[3] != '=')
+			if (!isalpha(d[0]) 
+				|| (obj->m485Verbose && (d[0] != 'c' || d[1] != 'm' || d[2] != 'd' || d[3] != '='))
+				)
 			{
 				body++;
 			}

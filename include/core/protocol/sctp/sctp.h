@@ -35,6 +35,7 @@ public:
 
 	void Create();
 	void clear();
+	void Enable485VerboseMode();
 
 	//receiver专用,parser
 	int  InputString(char *text);

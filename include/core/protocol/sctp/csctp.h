@@ -1,4 +1,4 @@
-//c51不支持#pragma once
+﻿//c51不支持#pragma once
 
 #ifndef _CTP_H
 #define _CTP_H
@@ -35,17 +35,20 @@ typedef struct tagSCTP
 	tagBundle		mOutboxBundle;
 	unsigned short	mSeq;
 	unsigned char	mDisableSeq : 1;
+	unsigned char	m485Verbose: 1;//增加模式,过滤485总线上的杂乱数据 //
 #ifndef __C51__
 	//c51上不支持成员函数指针，会报error C212: indirect call: parameters do not fit within registers
 	//所以采用强制转换
 	void			*mOnRecvCommandCB;
 	void			*mOnErrorCB;
 #endif
+
 }tagSCTP;
 
 //common
 void SCTP_Create(tagSCTP* obj);
 void SCTP_clear(tagSCTP *obj);
+void SCTP_Enable485Verbose(tagSCTP* obj);
 
 //receiver专用,parser
 int  SCTP_InputString(tagSCTP *obj, char *text);

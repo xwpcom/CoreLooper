@@ -71,6 +71,11 @@ void Sctp::Create()
 	mObject.mOnErrorCB = (void*)SCTP_OnErrorCB_;
 }
 
+void Sctp::Enable485VerboseMode()
+{
+	SCTP_Enable485Verbose(&mObject);
+}
+
 void Sctp::clear()
 {
 	SCTP_clear(&mObject);
