@@ -7,6 +7,7 @@ extern void SCTP_SetError(tagSCTP* obj, const char * desc);
 extern void SCTP_OnRecvCommandCB(tagSCTP *obj, const char *cmd, tagBundle *bundle);
 extern void SCTP_OnCrcError(const char *body,int bytes);
 #else
+#include <ctype.h>
 //c51上不支持成员函数指针，会报error C212: indirect call: parameters do not fit within registers
 typedef void(*SCTP_OnRecvCommandCB)(tagSCTP *obj, const char *cmd, tagBundle *bundle);
 typedef void(*STCP_OnError)(tagSCTP *obj, const char *desc);
@@ -110,6 +111,22 @@ int SCTP_Parse(tagSCTP *obj)
 		end[2] = 0;//去掉一个\r\n
 
 		Bundle_clear(&obj->mInboxBundle);
+
+		/*
+		sctp中可能混杂485总线数据,清除所有不匹配的字符，直到遇到cmd=
+		*/
+		while (body[0] && body < end)
+		{
+			char* d = body;
+			if (!isalpha(d[0]))// != 'c' || d[1] != 'm' || d[2] != 'd' || d[3] != '=')
+			{
+				body++;
+			}
+			else
+			{
+				break;
+			}
+		}
 
 		//提取出所有字段
 		while (body[0])

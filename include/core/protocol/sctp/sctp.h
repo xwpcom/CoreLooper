@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 extern "C"
 {
 #include "csctp.h"
@@ -60,7 +60,7 @@ protected:
 	static void SCTP_OnErrorCB_(tagSCTP *obj, const char *desc);
 
 	void OnRecvCommand(const char *cmd, tagBundle *bundle);
-	void OnError(const char *desc);
+	void OnError(tagSCTP* obj,const char *desc);
 	int  CheckCrc();
 	
 	tagSCTP mObject;

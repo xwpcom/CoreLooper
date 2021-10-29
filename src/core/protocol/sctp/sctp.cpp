@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "protocol/sctp/sctp.h"
 
 namespace SCTP
@@ -31,7 +31,7 @@ void Sctp::SCTP_OnRecvCommandCB_(tagSCTP *obj, const char *cmd, tagBundle *bundl
 void Sctp::SCTP_OnErrorCB_(tagSCTP *obj, const char *desc)
 {
 	Sctp *context = CONTAINING_RECORD(obj, Sctp, mObject);
-	context->OnError(desc);
+	context->OnError(obj,desc);
 }
 
 void Sctp::OnRecvCommand(const char *cmd, tagBundle *bundle)
@@ -39,9 +39,19 @@ void Sctp::OnRecvCommand(const char *cmd, tagBundle *bundle)
 	SignalOnRecvCommand(this,cmd, bundle);
 }
 
-void Sctp::OnError(const char *desc)
+void Sctp::OnError(tagSCTP* obj,const char *desc)
 {
-	LogV(TAG,"%s,%s", __func__, desc);
+	LogV(TAG,"%s,%s,#begin", __func__, desc);
+
+	auto bundle = &obj->mInboxBundle;
+	for (int i = 0; i < bundle->mCount; ++i)
+	{
+		const char* name = bundle->mItems[i].name;
+		const char* value = bundle->mItems[i].value;
+		LogV(TAG, "[%d][%s]=[%s]",i,name,value);
+	}
+
+	LogV(TAG, "%s,%s,#end", __func__, desc);
 }
 
 void Sctp::Create()
