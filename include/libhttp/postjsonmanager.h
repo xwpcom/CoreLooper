@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 namespace Bear {
 namespace Core {
@@ -7,8 +7,8 @@ namespace Http {
 
 /*
 XiongWanPing 2020.11.30
-¸ºÔğÏìÓ¦http post jsonÃüÁî,Ö»Ö§³ÖÒ»´ÎĞÔÏìÓ¦
-ºóĞøÖØ¹¹libhttpÊ±²ÅÓĞÊ±¼ä¿¼ÂÇÍêÉÆ
+è´Ÿè´£å“åº”http post jsonå‘½ä»¤,åªæ”¯æŒä¸€æ¬¡æ€§å“åº”
+åç»­é‡æ„libhttpæ—¶æ‰æœ‰æ—¶é—´è€ƒè™‘å®Œå–„
 */
 
 class HTTP_EXPORT PostJsonHandler :public Handler
@@ -26,7 +26,24 @@ class HTTP_EXPORT PostJsonManager :public Handler
 
 public:
 	PostJsonManager();
-	virtual shared_ptr<PostJsonHandler> CreatePostJsonHandler(const string& name) { return nullptr; }
+	virtual shared_ptr<PostJsonHandler> CreatePostJsonHandler(const string& name) 
+	{
+		auto it = mJsonItems.find(name);
+		if (it != mJsonItems.end())
+		{
+			auto obj = it->second();
+			return obj;
+		}
+
+		return nullptr; 
+	}
+
+	void BindJson(const string& name, std::function<shared_ptr<PostJsonHandler>()> fn)
+	{
+		mJsonItems[name] = fn;
+	}
+protected:
+	unordered_map<string, std::function<shared_ptr<PostJsonHandler>()>> mJsonItems;
 
 };
 

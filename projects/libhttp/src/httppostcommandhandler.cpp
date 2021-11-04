@@ -176,7 +176,6 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 					string jsonText;
 					json.printTo(jsonText);
 
-					//string jsonText = "{\"error\":-1,\"desc\":\"no found json handler\"}";
 					mAck = StringTool::Format(
 						"HTTP/1.1 200\r\n"
 						"Content-Type: application/json;charset=UTF-8\r\n"

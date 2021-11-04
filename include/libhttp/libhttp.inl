@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "../../include/core/base/base.inl"
 #include "../../include/libcrypt/libcrypt.inl"
@@ -27,3 +27,4 @@
 #include "httppost.h"
 #include "httpget.h"
 #include "httpacker.h"
+#include "postjsonmanager.h"

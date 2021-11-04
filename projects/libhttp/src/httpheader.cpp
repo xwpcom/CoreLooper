@@ -33,7 +33,12 @@ int HttpHeader::ParseStartLine(const string & line)
 			mInfo.mUrl = line.substr(pos + 1, pos2 - pos - 1);
 
 			HttpTool::ParseUrlParam(mInfo.mUrl, mInfo.mUri, mInfo.mUrlParams);
-			StringTool::Replace(mInfo.mUri, "/", "");
+
+			if (!mInfo.mUri.empty() && mInfo.mUri.at(0)=='/')
+			{
+				mInfo.mUri = mInfo.mUri.substr(1);//remove first /,是为了方便后续处理,兼容已存在的代码 //
+				//StringTool::Replace(mInfo.mUri, "/", "");
+			}
 		}
 	}
 
