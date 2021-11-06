@@ -153,6 +153,10 @@ public:
 	static FILE* fopen(const char *pszFile, const char *pszMode);
 	static size_t GetFileLength(FILE *hFile);
 	static size_t GetFileLength(const char *pszFile);
+	static size_t Length(const string& filePath)
+	{
+		return GetFileLength(filePath.c_str());
+	}
 	static int Delete(const string& filePath, bool recursive = false);
 	static int DeleteFile(const char *pszFile);
 	static int DeleteFolder(const char *pszFile, bool recursive=false);
