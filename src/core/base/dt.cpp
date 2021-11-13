@@ -89,17 +89,34 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 
 		if (hwnd)
 		{
+			string msg;
 
-			char szMsg[1024 * 64 * sizeof(char)];
+			va_list ap;
+			va_start(ap, lpszFormat);
+			{
+				char szMsg[16*1024];
+				int bytes = sizeof(szMsg);
+				char* psz = szMsg;
+				bool useStack = true;
+				auto ret = _vscprintf(lpszFormat, ap);
+				if (ret >= sizeof(szMsg)) 
+				{
+					useStack = false;
+					bytes = ret + 1;
+					psz = new char[bytes]; 
+				}
+				vsprintf_s(psz, bytes, lpszFormat, ap);
+				msg=psz;
+				if (!useStack) {
+					delete[]psz;
+				}
+			}
 
-			va_list argList;
-			va_start(argList, lpszFormat);
-			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
-			va_end(argList);
+			va_end(ap);
 
 			tagLogInfo info;
 			info.hwnd = hwnd;
-			info.msg = szMsg;
+			info.msg = msg.c_str();
 			info.mFile = m_lpszFile;
 			info.mLevel = m_nLevel;
 			info.mLine = m_nLine;
@@ -124,17 +141,33 @@ int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 
 		if (hwnd)
 		{
+			string msg;
+			va_list ap;
+			va_start(ap, lpszFormat);
+			{
+				char szMsg[16 * 1024];
+				int bytes = sizeof(szMsg);
+				char* psz = szMsg;
+				bool useStack = true;
+				auto ret = _vscprintf(lpszFormat, ap);
+				if (ret >= sizeof(szMsg))
+				{
+					useStack = false;
+					bytes = ret + 1;
+					psz = new char[bytes];
+				}
+				vsprintf_s(psz, bytes, lpszFormat, ap);
+				msg = psz;
+				if (!useStack) {
+					delete[]psz;
+				}
+			}
 
-			char szMsg[1024 * 64 * sizeof(char)];
+			va_end(ap);
 
-			va_list argList;
-			va_start(argList, lpszFormat);
-			vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
-			va_end(argList);
-			
 			tagLogInfo info;
 			info.hwnd = hwnd;
-			info.msg = szMsg;
+			info.msg = msg.c_str();
 			info.mFile = m_lpszFile;
 			info.mLevel = m_nLevel;
 			info.mLine = m_nLine;
@@ -269,26 +302,37 @@ int CDT::operator()( const char* lpszFormat, ... )
 		{
 			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
 		}
-
+	
 		if (hwnd)
 		{
+			string msg;
 
-			char szMsg[1024 * 64 * sizeof(char)];
-
-			va_list argList;
-			va_start(argList, lpszFormat);
-			try {
-				vsprintf_s(szMsg, sizeof(szMsg) - 1, (char*)lpszFormat, argList);
-			}
-			catch (...)
+			va_list ap;
+			va_start(ap, lpszFormat);
 			{
-				szMsg[0] = 0;
+				char szMsg[16 * 1024];
+				int bytes = sizeof(szMsg);
+				char* psz = szMsg;
+				bool useStack = true;
+				auto ret = _vscprintf(lpszFormat, ap);
+				if (ret >= sizeof(szMsg))
+				{
+					useStack = false;
+					bytes = ret + 1;
+					psz = new char[bytes];
+				}
+				vsprintf_s(psz, bytes, lpszFormat, ap);
+				msg = psz;
+				if (!useStack) {
+					delete[]psz;
+				}
 			}
-			va_end(argList);
+
+			va_end(ap);
 
 			tagLogInfo info;
 			info.hwnd = hwnd;
-			info.msg = szMsg;
+			info.msg = msg.c_str();
 			info.mFile = m_lpszFile;
 			info.mLevel = m_nLevel;
 			info.mLine = m_nLine;
