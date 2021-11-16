@@ -1919,13 +1919,13 @@ void tagTimeMs::from_time_t(time_t t)
 }
 
 /* 对接第三方平台时经常用到，标准日期时间字符串 */
-string tagTimeMs::stdDateTimeText()
+string tagTimeMs::stdDateTimeText()const
 {
 	string text = StringTool::Format("%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
 	return text;
 }
 
-string tagTimeMs::toText()
+string tagTimeMs::toText()const
 {
 	string text = StringTool::Format("%04d.%02d.%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
 	return text;

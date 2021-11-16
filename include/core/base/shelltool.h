@@ -75,8 +75,8 @@ struct CORE_EXPORT tagTimeMs
 	}
 
 	static int String2TimeMs(const string& text, tagTimeMs& ms);
-	string toText();
-	string stdDateTimeText();
+	string toText()const;
+	string stdDateTimeText()const;
 };
 
 class CORE_EXPORT ShellTool

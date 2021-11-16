@@ -174,6 +174,9 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
         return nullptr;
     }
 
+#ifdef _MSC_VER_DEBUG
+#define _CONFIG_DEBUG_WIRESHARK
+#endif
 #ifdef _CONFIG_DEBUG_WIRESHARK
     //Wireshark抓包并解析SSL数据
     //https://www.jianshu.com/p/13d96afb47ce
@@ -184,7 +187,7 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
     public:
         static void SslKeyLogFunc(const SSL* ssl, const char* line)
         {
-            auto fd = fopen("c:/test/sslkey.log", "a+b");
+            auto fd = fopen("d:/test/sslkey.log", "a+b");
             if (fd)
             {
                 fwrite(line, 1, strlen(line), fd);

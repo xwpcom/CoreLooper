@@ -319,3 +319,17 @@ void LogWnd::CheckUpdateMarginWidth()
 	const WPARAM pixelWidth = 4 + SendMessage(SCI_TEXTWIDTH, STYLE_LINENUMBER, (LPARAM)nNines.c_str());
 	SendMessage(SCI_SETMARGINWIDTHN, 0, pixelWidth);
 }
+
+void LogWnd::SetUtf8()
+{
+	LogV(TAG, "%s", __func__);
+	SendMessage(SCI_SETCODEPAGE, SC_CP_UTF8);
+}
+
+void LogWnd::SetGB()
+{
+	LogV(TAG, "%s", __func__);
+	SendMessage(SCI_SETCODEPAGE, 936);//解决app为unicode版时中文乱码问题
+}
+
+

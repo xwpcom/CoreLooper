@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ScintillaWnd.h"
 
 //XiongWanPing 2019.09.17
@@ -10,6 +10,8 @@ public:
 	int AddLog(const string& line);
 	void clear();
 	void CopyAll();
+	void SetUtf8();
+	void SetGB();
 	void CheckUpdateMarginWidth();
 protected:
 	DECLARE_MESSAGE_MAP()
