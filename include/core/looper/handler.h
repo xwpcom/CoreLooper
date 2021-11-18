@@ -208,15 +208,7 @@ public:
 	{
 		return post(t,ms);
 	}
-	virtual LOOPER_SAFE void post(TaskEntry t,UINT ms=0)
-	{
-		//LogV(TAG, "%s", __func__);
-
-		auto obj = make_shared<TaskRunnable>();
-		obj->mTask = t;
-		this->postDelayedRunnable(obj,ms);
-	}
-
+	virtual LOOPER_SAFE void post(TaskEntry t, UINT ms = 0);
 	bool LOOPER_SAFE IsMyselfThread()const
 	{
 		DWORD tid = ShellTool::GetCurrentThreadId();

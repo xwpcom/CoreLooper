@@ -431,6 +431,42 @@ public:
 TEST_CLASS(Handler_)
 {
 public:
+	TEST_METHOD(testPost)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				class Worker :public Handler
+				{
+				public:
+					void func()
+					{
+						LogV(TAG, "%s",__func__);
+						post([&]() {
+							delayApi(123);
+							},5000);
+					}
+
+					void delayApi(int v)
+					{
+						LogV(TAG, "%s", __func__);
+					}
+				};
+
+				auto obj = make_shared<Worker>();
+				AddChild(obj);
+				obj->func();
+				obj->Destroy();
+
+				DelayExit(3000);
+
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
+	}
 	TEST_METHOD(TestCopyFile)
 	{
 		class MainLooper :public MainLooper_

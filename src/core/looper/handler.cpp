@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "looper/handler.h"
 #include "looper/looper.h"
 #include "string/textseparator.h"
@@ -156,6 +156,26 @@ LRESULT Handler::postMessage(shared_ptr<Message> obj)
 	}
 	return ret;
 }
+
+/*
+框架保证TaskEntry执行时handler是有效的
+析构handler之前会取消所有未决的TaskEntry
+
+比如:
+post([&]() {
+	//运行到此时handler保证有效
+	},100);
+
+*/
+void Handler::post(TaskEntry t, UINT ms)
+{
+	//LogV(TAG, "%s", __func__);
+
+	auto obj = make_shared<TaskRunnable>();
+	obj->mTask = t;
+	this->postDelayedRunnable(obj, ms);
+}
+
 
 LRESULT Handler::sendRunnable(const std::function<void()>& fn)
 {
