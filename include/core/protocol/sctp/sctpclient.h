@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 extern "C"
 {
 #include "protocol/sctp/cbundle.h"
@@ -36,7 +36,7 @@ protected:
 	void OnCreate();
 
 	virtual void ParseInbox();
-	void OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* params);
+	virtual void OnRecvCommand(Sctp* obj, const char* szCommand, tagBundle* params);
 
 	weak_ptr<Sctp> mProtocol;
 
