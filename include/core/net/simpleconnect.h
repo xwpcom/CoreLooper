@@ -13,6 +13,11 @@ class CORE_EXPORT SimpleConnect :public Handler
 public:
 	SimpleConnect();
 	virtual ~SimpleConnect();
+
+	void SetTimeout(int seconds)
+	{
+		mTimeOutSecond = seconds;
+	}
 	
 	void EnableVerbose()
 	{

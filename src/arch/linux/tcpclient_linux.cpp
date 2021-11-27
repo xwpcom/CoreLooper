@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "tcpclient_linux.h"
 #include "looper/handler.h"
 #include "tcpserver_linux.h"
@@ -327,7 +327,7 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 
 	if (!buf || bufLen <= 0)
 	{
-		DW("buf=0x%08x,bufLen=%d", buf, bufLen);
+		LogW(TAG,"buf=0x%08x,bufLen=%d", buf, bufLen);
 		return -1;
 	}
 

@@ -20,7 +20,7 @@ Channel::Channel()
 #ifdef _DEBUG
 	mDataTimeout = 0;
 #else
-	mDataTimeout = 5 * 60 * 1000;
+	mDataTimeout = 10 * 60 * 1000;
 #endif
 
 	SetObjectName("Channel");

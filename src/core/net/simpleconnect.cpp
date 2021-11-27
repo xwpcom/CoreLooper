@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "net/simpleconnect.h"
 #include "net/tcpclient.h"
 
@@ -10,6 +10,7 @@ namespace Net {
 
 SimpleConnect::SimpleConnect()
 {
+	SetObjectName("SimpleConnect");
 	mTimeOutSecond = 90;
 	//LogV(TAG, "%s,this=%p", __func__, this);
 }
