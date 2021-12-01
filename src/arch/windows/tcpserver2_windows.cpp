@@ -71,7 +71,7 @@ https://www.myssl.cn/tools/check-server-cert.html
 int TcpServer2_Windows::InitSSL(const string& filePath)
 {
 	Logger::Instance().add(std::make_shared<ConsoleChannel>());
-	//Logger::Instance().add(std::make_shared<FileChannel>("FileChannel", folder + "log/"));
+	//Logger::Instance().add(std::make_shared<FileChannel>("FileChannel", ShellTool::GetAppPath() + "/log/"));
 	Logger::Instance().setWriter(std::make_shared<AsyncLogWriter>());
 
 	//加载证书，证书包含公钥和私钥

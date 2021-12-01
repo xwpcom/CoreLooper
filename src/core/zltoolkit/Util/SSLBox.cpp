@@ -1,4 +1,6 @@
 ﻿#include "stdafx.h"
+using namespace Bear::Core;
+static const char* TAG = "sslBox";
 /*
  * MIT License
  *
@@ -90,6 +92,13 @@ SSL_Initor::SSL_Initor() {
 	SSL_load_error_strings();
 	OpenSSL_add_all_digests();
 	OpenSSL_add_all_ciphers();
+
+#if defined  _MSC_VER_DEBUG
+	{
+		//LogV(TAG, "openssl version=%08x", OPENSSL_VERSION_NUMBER);
+	}
+#endif
+
 	OpenSSL_add_all_algorithms();
 	CRYPTO_set_locking_callback([](int mode,int n,
 			const char *file,int line) {
@@ -218,7 +227,9 @@ void SSL_Initor::setupCtx(SSL_CTX *ctx) {
 	
 	//SSL_CTX_set_cipher_list(ctx, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	//https://myssl.com/bear.jjyip.com?domain=bear.jjyip.com&port=443&status=success
-	SSL_CTX_set_cipher_list(ctx, "ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4:!DH:!DHE");
+	SSL_CTX_set_cipher_list(ctx, 
+		"ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4:!DH:!DHE"
+	);
 
     SSL_CTX_set_verify_depth(ctx, 9);
     SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
@@ -348,6 +359,7 @@ void SSL_Box::onSend(const Buffer::Ptr &buffer) {
 		}
 		return;
 	}
+
 #if defined(ENABLE_OPENSSL)
     if (!_serverMode && !_sendHandshake) {
 		_sendHandshake = true;
