@@ -18,6 +18,7 @@ public:
 	void clearStyle();
 	int RegisterStyle(COLORREF textColor,COLORREF backColor=RGB(255,255,255));
 	int SetStyle(int style,long start, long length);
+	string body();
 protected:
 	DECLARE_MESSAGE_MAP()
 	int mNextStyleId = 88;

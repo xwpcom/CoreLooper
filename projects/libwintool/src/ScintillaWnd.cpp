@@ -99,4 +99,17 @@ long ScintillaWnd::textLength()
 	return SendMessage(SCI_GETTEXTLENGTH);
 }
 
+string ScintillaWnd::body()
+{
+	string text;
+	auto bytes = textLength();
+	if (bytes > 0)
+	{
+		text.reserve(bytes+1);
+		text.resize(bytes);
+		SendMessage(SCI_GETTEXT, bytes, (LPARAM)(char*)text.data());
+	}
+
+	return text;
+}
 
