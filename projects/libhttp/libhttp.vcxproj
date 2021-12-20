@@ -202,6 +202,7 @@
     <ClCompile Include="src\ajax_listajaxcommand.cpp" />
     <ClCompile Include="src\ajax_proc.cpp" />
     <ClCompile Include="src\ajax_tree.cpp" />
+    <ClCompile Include="src\FileUploadManager.cpp" />
     <ClCompile Include="src\httpacker.cpp" />
     <ClCompile Include="src\httpackheader.cpp" />
     <ClCompile Include="src\httpackparser.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="..\..\include\core\auth\userman.h" />
     <ClInclude Include="..\..\include\libhttp\ajaxcommandhandler.h" />
     <ClInclude Include="..\..\include\libhttp\ajaxhandler.h" />
+    <ClInclude Include="..\..\include\libhttp\FileUploadManager.h" />
     <ClInclude Include="..\..\include\libhttp\httpacker.h" />
     <ClInclude Include="..\..\include\libhttp\httpchunkparser.h" />
     <ClInclude Include="..\..\include\libhttp\httpget.h" />

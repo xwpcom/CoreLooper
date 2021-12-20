@@ -63,6 +63,9 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 
 	if (tag == "cameraSnap")
 	{
+		obj->params().Set("tag", tag);
+		obj->params().Set("uid", uid);
+
 		auto date= params.GetString("date");// yyyymmdd
 		//auto time = params.GetString("time");//hhMMss
 		LogV(TAG, "uid=%s", uid.c_str());

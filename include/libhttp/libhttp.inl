@@ -28,3 +28,4 @@
 #include "httpget.h"
 #include "httpacker.h"
 #include "postjsonmanager.h"
+#include "FileUploadManager.h"

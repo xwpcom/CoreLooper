@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "httpformfield_file.h"
+#include "FileUploadManager.h"
 using namespace Bear::Core;
 
 namespace Bear {
@@ -36,6 +37,14 @@ void HttpFormField_File::Close()
 			}
 
 			File::rename(mFilePathTmp.c_str(), mFilePath.c_str());
+
+			{
+				auto obj = _Object(FileUploadManager, "FileUploadManager");
+				if (obj)
+				{
+					obj->OnUploadFile(mFilePath, mParams);
+				}
+			}
 		}
 		else
 		{

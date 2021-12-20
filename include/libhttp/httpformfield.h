@@ -54,6 +54,11 @@ public:
 	{
 	}
 
+	Bundle& params()
+	{
+		return mParams;
+	}
+
 protected:
 	virtual int Input(LPBYTE data, int dataLen);
 protected:
@@ -68,6 +73,8 @@ protected:
 	ByteBuffer	mDataBox;
 
 	std::shared_ptr<tagWebServerConfig> mWebConfig;
+
+	Bundle mParams;
 };
 }
 }
