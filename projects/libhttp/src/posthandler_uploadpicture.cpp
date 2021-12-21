@@ -70,12 +70,15 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		//auto time = params.GetString("time");//hhMMss
 		LogV(TAG, "uid=%s", uid.c_str());
 
-		auto dateFolder = StringTool::Format("%s-%s", date.substr(0,4).c_str(), date.substr(4, 2).c_str());
-		folder = StringTool::Format("%s/%s/%s/%s/%s"
+		auto dateFolder = StringTool::Format("%s-%s-%s"
+			, date.substr(0,4).c_str() 
+			,date.substr(4, 2).c_str()
+			, date.substr(6, 2).c_str()
+		);
+		folder = StringTool::Format("%s/%s/%s"
 			, mWebConfig->mMediaRootPath.c_str()
-			, tag.c_str(),uid.c_str()
+			,uid.c_str()
 			,dateFolder.c_str()
-			,date.substr(6,2).c_str()
 		);
 
 		auto fileName = params.GetString("fileName");
