@@ -98,7 +98,7 @@ int SCTP_Parse(tagSCTP *obj)
 	//buffer中可能包含多条命令
 	const char *tail = "\r\n\r\n";
 	const char *CRLF = "\r\n";
-		
+
 	while (!ByteBuffer_empty(&obj->mInbox))
 	{
 		char *body = ByteBuffer_GetData(&obj->mInbox);
@@ -184,6 +184,8 @@ int SCTP_Parse(tagSCTP *obj)
 				cb(obj, cmd, &obj->mInboxBundle);
 			}
 #endif
+
+			Bundle_clear(&obj->mInboxBundle);
 		}
 
 		ByteBuffer_Eat(&obj->mInbox, (unsigned short)eatBytes);
@@ -203,7 +205,7 @@ int SCTP_InputData(tagSCTP *obj, unsigned char *text, unsigned short textBytes)
 		{
 			if (p[i] == 0)
 			{
-				p[i] = 0xCD;
+				p[i] = '$';
 				hasZero = 1;
 			}
 		}

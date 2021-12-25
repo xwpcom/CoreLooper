@@ -443,10 +443,15 @@ int	File::rename(const char *oldname, const char *newname)
 
 string File::GetUpperFolder(const char *pszFile)
 {
+	if (!pszFile || !pszFile[0])
+	{
+		return "";
+	}
+
 	char szDir[MAX_PATH];
 	memset(szDir, 0, sizeof(szDir));
 	strncpy(szDir, pszFile, sizeof(szDir) - 1);
-	szDir[sizeof(szDir) - 1] = 0;
+	
 	int len = (int)strlen(szDir);
 	for (int i = len - 1; i > 0; i--)
 	{

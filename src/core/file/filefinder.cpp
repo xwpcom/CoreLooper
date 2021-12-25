@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "file/filefinder.h"
 #include "base/stringtool.h"
 using namespace std;
@@ -64,9 +64,11 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 			continue;
 		}
 
-		string pathfile = T2A(finder.GetFilePath());
+		CString szFile = finder.GetFilePath();
+		string pathfile = T2A(szFile);
 		struct _stat32 dstat;
-		int ret = _stat32(pathfile.c_str(), &dstat);
+		int ret = _wstat32(szFile, &dstat);
+		//int ret = _stat32(pathfile.c_str(), &dstat);
 		if (ret == 0)
 		{
 			if (tagFileFindItem::IsDirectory(dstat) || ext.empty())
@@ -84,9 +86,14 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 
 			//tagFileFindItem* pItem=new tagFileFindItem;
 			tagFileFindItem item;
-			item.mName = T2A(finder.GetFileName());
+			auto fileName = finder.GetFileName();
+			item.mName = W2A(fileName);
 			item.mStat = dstat;
 			mItems.push_back(item);
+		}
+		else
+		{
+			int x = 0;
 		}
 	}
 #else

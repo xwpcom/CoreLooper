@@ -43,6 +43,21 @@ void Sctp::OnError(tagSCTP* obj,const char *desc)
 {
 	LogV(TAG,"%s,%s,#begin", __func__, desc);
 
+	{
+		auto& inbox=obj->mInbox;
+		if (inbox.mBytes > 0)
+		{
+			ByteBuffer box;
+			box.Write(ByteBuffer_GetData(&inbox), ByteBuffer_GetBytes(&inbox));
+			box.MakeSureEndWithNull();
+
+			auto hex=ByteTool::ByteToHexChar(box.data(), box.length());
+			LogV(TAG, "offset=%d,bytes=%d",(int)inbox.mOffset,(int)inbox.mBytes);
+			LogV(TAG, "string=[%s]", box.data());
+			LogV(TAG, "hex=[%s]", hex.c_str());
+		}
+	}
+
 	auto bundle = &obj->mInboxBundle;
 	for (int i = 0; i < bundle->mCount; ++i)
 	{

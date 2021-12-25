@@ -34,12 +34,17 @@ int ByteBuffer_Input(struct tagByteBuffer* obj, const unsigned char *text, unsig
 	}
 
 	ByteBuffer_MoveToHead(obj);
-
+	obj->mOffset = 0;
 	{
 		unsigned short eatBytes = MIN(bytes, freeBytes);
-		memcpy(obj->mBuf + obj->mOffset + obj->mBytes, text, eatBytes);
+		memcpy(obj->mBuf + obj->mBytes, text, eatBytes);
 		obj->mBytes += eatBytes;
-		obj->mBuf[obj->mOffset + obj->mBytes] = 0;
+		
+		if (obj->mBytes < obj->mTotalBytes)
+		{
+			int bytes = obj->mTotalBytes - obj->mBytes;
+			memset(obj->mBuf + obj->mBytes, 0, bytes);//清0方便调试 //
+		}
 
 		return eatBytes;
 	}

@@ -14,10 +14,7 @@ public:
 	SimpleConnect();
 	virtual ~SimpleConnect();
 
-	void SetTimeout(int seconds)
-	{
-		mTimeOutSecond = seconds;
-	}
+	void SetTimeout(int seconds);
 	
 	void EnableVerbose()
 	{

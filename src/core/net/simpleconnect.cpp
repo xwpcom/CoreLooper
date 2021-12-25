@@ -64,7 +64,11 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 
 	mAddress = bundle.GetString("address") + ":" + bundle.GetString("port");
 
-	SetTimer(mTimer_AutoClose, mTimeOutSecond * 1000);
+	if (mTimeOutSecond > 0)
+	{
+		SetTimer(mTimer_AutoClose, mTimeOutSecond * 1000);
+	}
+
 	return 0;
 }
 
@@ -210,6 +214,23 @@ void SimpleConnect::DelayAutoClose(int ms)
 		SetTimer(mTimer_AutoClose, ms);
 	}
 }
+
+//seconds为0时禁用超时
+void SimpleConnect::SetTimeout(int seconds)
+{
+	mTimeOutSecond = seconds;
+
+	KillTimer(mTimer_AutoClose);
+
+	if (IsCreated())
+	{
+		if (mTimeOutSecond > 0)
+		{
+			SetTimer(mTimer_AutoClose, mTimeOutSecond * 1000);
+		}
+	}
+}
+
 
 }
 }
