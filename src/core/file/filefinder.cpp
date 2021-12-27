@@ -1,6 +1,8 @@
 ﻿#include "stdafx.h"
 #include "file/filefinder.h"
 #include "base/stringtool.h"
+#include "string/utf8tool.h"
+
 using namespace std;
 
 namespace Bear {
@@ -65,7 +67,14 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 		}
 
 		CString szFile = finder.GetFilePath();
-		string pathfile = T2A(szFile);
+		{
+			//auto fileName = finder.GetFileName();
+
+			//string file = Utf8Tool::UNICODE_to_UTF8(fileName);
+			//string file = W2A(psz);
+			//LogV("file", "file=%s", file.c_str());
+			//int x = 0;
+		}
 		struct _stat32 dstat;
 		int ret = _wstat32(szFile, &dstat);
 		//int ret = _stat32(pathfile.c_str(), &dstat);
@@ -87,7 +96,13 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 			//tagFileFindItem* pItem=new tagFileFindItem;
 			tagFileFindItem item;
 			auto fileName = finder.GetFileName();
-			item.mName = W2A(fileName);
+			//item.mName = W2A(fileName);
+			{
+				string file = Utf8Tool::UNICODE_to_UTF8(fileName);
+				//LogV("file", "%s", file.c_str());
+				item.mName = file;
+			}
+
 			item.mStat = dstat;
 			mItems.push_back(item);
 		}

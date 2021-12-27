@@ -2,6 +2,8 @@
 #include "httprequesthandler_file.h"
 #include "file/virtualfolder.h"
 #include "httptool.h"
+#include "string/utf8tool.h"
+
 using namespace Bear::Core;
 
 namespace Bear {

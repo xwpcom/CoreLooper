@@ -7,6 +7,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include "string/utf8tool.h"
 #ifndef _CONFIG_ANDROID
 #include <sys/timeb.h>
 #endif
@@ -41,6 +42,12 @@ FILE* File::fopen(const char *pszFile, const char *pszMode)
 		return NULL;
 
 	FILE *hFile = ::fopen(pszFile, pszMode);
+	if (!hFile)
+	{
+		auto file = Utf8Tool::UTF_8ToGB2312(pszFile);
+		hFile = ::fopen(file.c_str(), pszMode);
+	}
+
 	if (!hFile)
 	{
 #ifdef _MSC_VER
