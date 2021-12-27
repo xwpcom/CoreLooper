@@ -87,6 +87,14 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 		return -1;
 	}
 
+#ifdef _DEBUG
+	{
+		auto con = m_pMySql;
+		//LogV(TAG, "mysql_get_server_info=[%s]", mysql_get_server_info(con));
+		//LogV(TAG, "mysql_get_client_info=[%s]", mysql_get_client_info());//5.0.21
+	}
+#endif
+
 	//http://dev.mysql.com/doc/refman/5.0/en/mysql-affected-rows.html
 	//the CLIENT_FOUND_ROWS flag to mysql_real_connect() when connecting to mysqld, 
 	//the affected-rows value is the number of rows “found”; that is, matched by the WHERE clause. 
