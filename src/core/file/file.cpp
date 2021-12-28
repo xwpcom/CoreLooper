@@ -44,8 +44,10 @@ FILE* File::fopen(const char *pszFile, const char *pszMode)
 	FILE *hFile = ::fopen(pszFile, pszMode);
 	if (!hFile)
 	{
+	#ifdef _MSC_VER
 		auto file = Utf8Tool::UTF_8ToGB2312(pszFile);
 		hFile = ::fopen(file.c_str(), pszMode);
+	#endif
 	}
 
 	if (!hFile)

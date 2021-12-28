@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+
 /*
  * MIT License
  *
