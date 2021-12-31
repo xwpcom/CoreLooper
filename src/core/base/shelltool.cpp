@@ -1705,6 +1705,10 @@ bool ShellTool::IsChinaServer()
 #endif
 
 //从stcapp c51工程引入
+// XiongWanPing 2021.12.31
+//来源 https://www.cnblogs.com/hiker-blogs/p/C51.html  
+//注意: 这个网文的代码有bug,有几处>要改为>=,否则会出现2021-12-32 00:00:00类似的非法日期
+
 class DateTime
 {
 public:
@@ -1769,20 +1773,21 @@ void DateTime::localtime(time_t tim, tm* pT)
 	uint16_t index = 0;
 
 	//memset(pT, 0, sizeof(*pT));
+	tim += gGmtSecondOffset;
 
 #if 1
   //year initialization
-	if (tim > 0x5685C180L)            // 2016-1-1 0:0:0
+	if (tim >= 0x5685C180L)            // 2016-1-1 0:0:0
 	{
 		pT->tm_year = 2016;
 		tim -= 0x5685C180L;
 	}
-	else if (tim > 0x4B3D3B00L)       // 2010-1-1 0:0:0
+	else if (tim >= 0x4B3D3B00L)       // 2010-1-1 0:0:0
 	{
 		pT->tm_year = 2010;
 		tim -= 0x4B3D3B00L;
 	}
-	else if (tim > 0x386D4380L)       // 2000-1-1 0:0:0
+	else if (tim >= 0x386D4380L)       // 2000-1-1 0:0:0
 	{
 		pT->tm_year = 2000;
 		tim -= 0x386D4380L;
@@ -1805,7 +1810,7 @@ void DateTime::localtime(time_t tim, tm* pT)
 
 	// then 365 * 24 * 60 * 60 < tim < 366 * 24 * 60 * 60
 	if (!(((pT->tm_year % 4 == 0) && ((pT->tm_year % 100 != 0) || (pT->tm_year % 400 == 0))))
-		&& (tim > 365L * 24 * 60 * 60))
+		&& (tim >= 365L * 24 * 60 * 60))
 	{
 		tim -= 365L * 24 * 60 * 60;
 		pT->tm_year++;
@@ -1818,9 +1823,8 @@ void DateTime::localtime(time_t tim, tm* pT)
 		pDays = mon_list;
 
 	pT->tm_mon = 0;
-	tim += gGmtSecondOffset;
 	// now have mon
-	while (tim > pDays[index] * 24L * 60 * 60)
+	while (tim >= pDays[index] * 24L * 60 * 60)
 	{
 		tim -= pDays[index] * 24L * 60 * 60;
 		index++;
