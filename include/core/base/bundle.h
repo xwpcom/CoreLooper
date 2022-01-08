@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <map>
 #include <string>
 #include <sstream>
@@ -35,7 +35,12 @@ public:
 			return defaultValue;
 		}
 
-		return atoi(GetString(name).c_str()) != 0;
+		auto v = GetString(name);
+		if (v.empty())
+		{
+			return defaultValue;
+		}
+		return atoi(v.c_str()) != 0;
 	}
 
 	int GetInt(const string&name, int defaultValue = 0)const
@@ -45,7 +50,12 @@ public:
 			return defaultValue;
 		}
 
-		return atoi(GetString(name).c_str());
+		auto v = GetString(name);
+		if (v.empty())
+		{
+			return defaultValue;
+		}
+		return atoi(v.c_str());
 	}
 
 	long GetLong(const string&name, long defaultValue = 0)const
@@ -55,7 +65,12 @@ public:
 			return defaultValue;
 		}
 
-		return atol(GetString(name).c_str());
+		auto v = GetString(name);
+		if (v.empty())
+		{
+			return defaultValue;
+		}
+		return atol(v.c_str());
 	}
 
 	double GetDouble(const string&name, double defaultValue = 0)const
@@ -65,7 +80,12 @@ public:
 			return defaultValue;
 		}
 
-		return atof(GetString(name).c_str());
+		auto v = GetString(name);
+		if (v.empty())
+		{
+			return defaultValue;
+		}
+		return atof(v.c_str());
 	}
 
 	LONGLONG GetLongLong(const string&name, LONGLONG defaultValue = 0)const
@@ -75,7 +95,12 @@ public:
 			return defaultValue;
 		}
 
-		return atoll(GetString(name).c_str());
+		auto v = GetString(name);
+		if (v.empty())
+		{
+			return defaultValue;
+		}
+		return atoll(v.c_str());
 	}
 
 	const string GetString(const string&name, const char *defaultValue = "")const
