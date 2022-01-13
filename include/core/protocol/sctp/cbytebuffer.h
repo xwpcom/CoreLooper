@@ -1,4 +1,4 @@
-#ifndef _BYTE_BUFFER_H
+﻿#ifndef _BYTE_BUFFER_H
 #define _BYTE_BUFFER_H
 
 #include <string.h>

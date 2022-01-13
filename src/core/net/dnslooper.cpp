@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "dnslooper.h"
 #ifdef _MSC_VER
 #pragma comment(lib,"Iphlpapi.lib")
@@ -233,7 +233,10 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			}
 			else
 			{
-				LogW(TAG,"getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
+				if (mDns[0])
+				{
+					LogV(TAG, "getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
+				}
 			}
 
 			//DT("freeaddrinfo#begin,result=0x%08x", result);

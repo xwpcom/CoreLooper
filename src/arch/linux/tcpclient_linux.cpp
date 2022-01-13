@@ -298,7 +298,7 @@ LRESULT TcpClient_Linux::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 	{
 		string dns = (const char*)wp;
 		string ip = (const char *)lp;
-		LogV(TAG,"dnsAck,%s=[%s]", dns.c_str(), ip.c_str());
+		LogV(TAG,"dnsAck[%s]=[%s]", dns.c_str(), ip.c_str());
 		if (dns == mBundle.GetString("address") && mSock == INVALID_SOCKET)
 		{
 			ConnectHelper(ip);
