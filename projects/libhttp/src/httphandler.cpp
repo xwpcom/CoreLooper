@@ -188,6 +188,20 @@ void HttpHandler::ParseInbox()
 		{
 			break;
 		}
+
+		if (!mChannel)
+		{
+			/*
+			2022.01.13
+			bug:
+			.出现过HttpHandler已destroy(),但调用到HttpHandler::ParseInbox()
+			如下语句访问到空的mChannel导致crash
+			mHttpRequest->SetPeerAddr(mChannel->GetPeerDesc());
+			原因待查
+			*/
+			return;
+		}
+
 		if (!mHttpRequest)
 		{
 			mHttpRequest = make_shared<HttpRequest>();
