@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "asynctasklooper.h"
 #include "message.inl"
 
@@ -12,12 +12,12 @@ enum
 {
 	BM_ADD_TASK,
 };
-
+static const char* TAG = "AsyncTaskLooper";
 AsyncTaskLooper::AsyncTaskLooper()
 {
 	SetObjectName("AsyncTaskLooper");
 	mThreadName = GetObjectName();
-	//DV("%s,this=%p",__func__,this);
+	//LogV(TAG,"%s,this=%p",__func__,this);
 }
 
 AsyncTaskLooper::~AsyncTaskLooper()
@@ -28,7 +28,7 @@ void AsyncTaskLooper::DoTask(shared_ptr<tagAddTaskInfo> info)
 {
 	mBusying = true;
 	auto task = info->mTask;
-	//DV("AsyncTaskLooper#begin task:%s", task->GetObjectName().c_str());
+	//LogV(TAG,"AsyncTaskLooper#begin task:%s", task->GetObjectName().c_str());
 
 	if (info->mEnablePreExecute)
 	{
@@ -47,7 +47,7 @@ void AsyncTaskLooper::DoTask(shared_ptr<tagAddTaskInfo> info)
 		task->Destroy();
 	}
 
-	//DV("AsyncTaskLooper#end task:%s", task->GetObjectName().c_str());
+	//LogV(TAG,"AsyncTaskLooper#end task:%s", task->GetObjectName().c_str());
 	info->mSelf = nullptr;
 	mBusying = false;
 }
@@ -70,7 +70,7 @@ LRESULT AsyncTaskLooper::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 
 			if (mTasks.size() >= 3)
 			{
-				DV("mTasks.size=%d", mTasks.size());
+				LogV(TAG,"mTasks.size=%d", mTasks.size());
 			}
 			return 0;
 		}
