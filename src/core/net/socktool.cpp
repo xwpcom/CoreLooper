@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "socktool.h"
 #include "base/stringtool.h"
 #include "bindwrapper.h"
@@ -587,7 +587,7 @@ BOOL SockTool::SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut)
 
 #else
 	{
-		struct timeval timeo = { 10,0 };
+		struct timeval timeo = { nSendTimeOut,0 };
 		socklen_t len = sizeof(timeo);
 		timeo.tv_sec = nSendTimeOut;
 		int ret = setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, &timeo, len);
@@ -602,7 +602,7 @@ BOOL SockTool::SetTimeOut(SOCKET s, int nSendTimeOut, int nRecvTimeOut)
 		nRecvTimeOut = nSendTimeOut;
 
 	{
-		struct timeval timeo = { 10,0 };
+		struct timeval timeo = { nRecvTimeOut,0 };
 		socklen_t len = sizeof(timeo);
 		timeo.tv_sec = nRecvTimeOut;
 		int ret = setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeo, len);
