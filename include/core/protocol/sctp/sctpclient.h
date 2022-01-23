@@ -32,6 +32,10 @@ public:
 	}
 	int AddCommand(const string& cmd, Bundle& bundle);
 	sigslot::signal3<Handler*, const string&, JsonObject&> SignalOnCommand;
+	void EnableDumpCommand(bool enable=true)
+	{
+		mDumpCommand = enable;
+	}
 protected:
 	void OnCreate();
 
