@@ -1,4 +1,4 @@
-#ifndef _CBUNDLE_H
+﻿#ifndef _CBUNDLE_H
 #define _CBUNDLE_H
 #include "cbytebuffer.h"
 
@@ -21,6 +21,7 @@ typedef struct tagBundle
 
 void Bundle_Create(tagBundle* obj, tagKeyValue *items,unsigned char totalCount);
 const char* Bundle_GetString(tagBundle* obj, const char *name);
+int Bundle_SetString(tagBundle* obj, const char* name,const char* value);
 int Bundle_GetInt(tagBundle* obj, const char *name);
 unsigned int  Bundle_GetUInt(tagBundle* obj, const char* name);
 unsigned char Bundle_GetByte(tagBundle* obj, const char *name);

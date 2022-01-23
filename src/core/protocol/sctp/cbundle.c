@@ -70,6 +70,21 @@ void Bundle_Create(tagBundle* obj, tagKeyValue *items, unsigned char totalCount)
 	obj->mTotalCount= totalCount;
 }
 
+int Bundle_SetString(tagBundle* obj, const char* name, const char* value)
+{
+	for (int i = 0; i < obj->mCount; i++)
+	{
+		tagKeyValue* item = &obj->mItems[i];
+		if (strcmp(name, item->name) == 0)
+		{
+			item->value = value;
+			return 0;
+		}
+	}
+
+	return Bundle_Push(obj, name, value);
+}
+
 int Bundle_Push(tagBundle* obj, const char *name, const char *value)
 {
 	if (obj->mCount >= obj->mTotalCount)
