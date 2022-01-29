@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "libhttp.inl"
 #include "libhttp/httpget.h"
 #include "libhttp/httppost.h"
@@ -106,7 +106,7 @@ public:
 		DV("name=%s", obj["name"].c_str());
 		DV("player=%s", obj["player"].c_str());
 		
-		//map<string,string> //ÓÃmapÄÜÊµÏÖ´óĞ¡Ğ´ÎŞ¹ØÂğ£¬ÓĞ´ı²âÊÔ
+		//map<string,string> //ç”¨mapèƒ½å®ç°å¤§å°å†™æ— å…³å—ï¼Œæœ‰å¾…æµ‹è¯•
 	}
 
 	TEST_METHOD(ParseUrl)
@@ -152,7 +152,7 @@ public:
 
 				{
 					auto crtFile = "D:/bear/server/bin/bear.jjyip.com.p12";
-					//auto crtFile = "D:/bear/server/bin/xwpcom.tpddns.cn.p12";//Õâ¸öÃ»±¸°¸£¬²»ÄÜÔÚÎ¢ĞÅĞ¡³ÌĞòÖĞÊ¹ÓÃ
+					//auto crtFile = "D:/bear/server/bin/xwpcom.tpddns.cn.p12";//è¿™ä¸ªæ²¡å¤‡æ¡ˆï¼Œä¸èƒ½åœ¨å¾®ä¿¡å°ç¨‹åºä¸­ä½¿ç”¨
 					TcpServer_Windows::InitSSL(crtFile);
 
 					for(int i=0;i<2;i++)
@@ -260,7 +260,7 @@ public:
 	
 	TEST_METHOD(HttpDownload)
 	{
-		//²âÊÔhttpÏÂÔØËÙ¶È,¿ÉÓÃÀ´²âÊÔÉè±¸ºÍµçÄÔÖ®¼äµÄÍøÂçÁ¬½ÓËÙ¶È£¬ÎÈ¶¨ĞÔµÈÖ¸±ê
+		//æµ‹è¯•httpä¸‹è½½é€Ÿåº¦,å¯ç”¨æ¥æµ‹è¯•è®¾å¤‡å’Œç”µè„‘ä¹‹é—´çš„ç½‘ç»œè¿æ¥é€Ÿåº¦ï¼Œç¨³å®šæ€§ç­‰æŒ‡æ ‡
 		class MainLooper :public MainLooper_
 		{
 			void OnCreate()
@@ -366,7 +366,7 @@ public:
 	TEST_METHOD(websocket)
 	{
 		//http://www.blue-zero.com/WebSocket/
-		//×¢ÒâÒªÔÚÂ·ÓÉÆ÷×ö¶Ë¿ÚÓ³Éä£¬È»ºó²ÉÓÃwan ip,²»ÄÜÊ¹ÓÃlan/local ip
+		//æ³¨æ„è¦åœ¨è·¯ç”±å™¨åšç«¯å£æ˜ å°„ï¼Œç„¶åé‡‡ç”¨wan ip,ä¸èƒ½ä½¿ç”¨lan/local ip
 		//ws://219.133.68.41:8080
 		class MainLooper :public MainLooper_
 		{
@@ -448,7 +448,7 @@ public:
 				"Content-Length: 5\r\n"
 				"\r\n"
 				"Hello"
-				"extraData"//¹ÊÒâÔö¼ÓÆäËûÊı¾İ
+				"extraData"//æ•…æ„å¢åŠ å…¶ä»–æ•°æ®
 			);
 
 			auto& body = obj.body();
@@ -495,7 +495,7 @@ public:
 	{
 		/*
 		2021.01.11
-		×î½ü·¢ÏÖiot¾­³£crashÔÚlibhttp.dll,call stackºÄ¾¡£¬µ¼ÖÂÃ»·¨Éú³É.dmpÎÄ¼ş
+		æœ€è¿‘å‘ç°iotç»å¸¸crashåœ¨libhttp.dll,call stackè€—å°½ï¼Œå¯¼è‡´æ²¡æ³•ç”Ÿæˆ.dmpæ–‡ä»¶
 		*/
 
 		class MainLooper :public MainLooper_
@@ -591,7 +591,7 @@ public:
 
 			}
 
-			/* ÏÂÔØ³¬´óÎÄ¼ş£¬×¢Òâ²»Òª±£´æÔÚssd */
+			/* ä¸‹è½½è¶…å¤§æ–‡ä»¶ï¼Œæ³¨æ„ä¸è¦ä¿å­˜åœ¨ssd */
 			void TestDownloadFile()
 			{
 				static int idx = -1;
@@ -618,7 +618,7 @@ public:
 				auto obj = dynamic_cast<HttpGet*>(handler);
 				if (error == 0)
 				{
-					LogV(TAG, "download success,speed=%.1f KB/S", obj->GetSpeed());	/* ±¾»úÔ¼50MB/s */
+					LogV(TAG, "download success,speed=%.1f KB/S", obj->GetSpeed());	/* æœ¬æœºçº¦50MB/s */
 				}
 				else
 				{
@@ -643,7 +643,7 @@ public:
 				//string fileName = "2013.10.02.zip";
 				//string filePath = "F:/Picture&Video/" + fileName;
 
-				string fileName = "c++.zip";
+				string fileName = "x.txt";
 				string filePath = "d:/" + fileName;
 
 				auto obj = make_shared<HttpPost>();
@@ -663,8 +663,10 @@ public:
 				noise = StringTool::Format("%d", 123);
 				string uid = "00000EMU";
 
-				obj->SetServerPort("127.0.0.1", 8889);
-				obj->AddFile("2021-07-12_161900.jpg", filePath);
+				obj->SetServerPort(
+					"iot.jjyip.com"//127.0.0.1"
+					, 80);
+				obj->AddFile("logFile", filePath);
 
 				class AckHandler :public HttpPostAckHandler
 				{
@@ -682,7 +684,7 @@ public:
 
 					void OnAck(int error)
 					{
-						LogV(TAG, error == 0 ? u8"ÉÏ´«ÎÄ¼ş³É¹¦" : u8"ÉÏ´«ÎÄ¼şÊ§°Ü");
+						LogV(TAG, error == 0 ? u8"ä¸Šä¼ æ–‡ä»¶æˆåŠŸ" : u8"ä¸Šä¼ æ–‡ä»¶å¤±è´¥");
 
 						GetMainLooper()->PostQuitMessage();
 					}
@@ -695,7 +697,8 @@ public:
 				handler->mManager = shared_from_this();
 				obj->SetAckHandler(handler);
 
-				obj->Start("/uploadFile?tag=upload&uid=00000EMU&date=20210712&fileName=" + fileName);
+				obj->Start("/uploadFile?tag=mcuLog&uid=00000EMU&fileName=" + fileName);
+				//obj->Start("/uploadFile?tag=mcuLog&uid=00000EMU");
 			}
 		};
 
@@ -760,7 +763,7 @@ int main()
 
 				void OnAck(int error)
 				{
-					LogV(TAG, error == 0 ? u8"ÉÏ´«ÎÄ¼ş³É¹¦" : u8"ÉÏ´«ÎÄ¼şÊ§°Ü");
+					LogV(TAG, error == 0 ? u8"ä¸Šä¼ æ–‡ä»¶æˆåŠŸ" : u8"ä¸Šä¼ æ–‡ä»¶å¤±è´¥");
 
 					GetMainLooper()->PostQuitMessage();
 				}

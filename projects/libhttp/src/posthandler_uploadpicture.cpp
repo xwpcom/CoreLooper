@@ -84,6 +84,12 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		auto fileName = params.GetString("fileName");
 		obj->SetFileName(fileName);
 	}
+	else if (tag == "mcuLog")
+	{
+		folder = StringTool::Format("C:/iot/web/firmware/mcu/mcuLog/%s", uid.c_str());
+		auto fileName = params.GetString("fileName");
+		obj->SetFileName(fileName);
+	}
 	else
 	{
 		folder = StringTool::Format("%s/pictures/%s", mWebConfig->mMediaRootPath.c_str(), uid.c_str());

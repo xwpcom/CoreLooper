@@ -1947,6 +1947,15 @@ int tagTimeMs::String2TimeMs(const string& text, tagTimeMs& ms)
 		return 0;
 	}
 
+	ret = sscanf(text.c_str(), "%04d-%02d-%02d %02d:%02d:%02d"
+		, &t.year, &t.month, &t.day, &t.hour, &t.minute, &t.second
+	);
+
+	if (ret == 6)
+	{
+		return 0;
+	}
+
 	LogV(TAG, "fail %s,text=%s", __func__, text.c_str());
 	return -1;
 }
