@@ -61,10 +61,16 @@ int HttpRequest::Input(ByteBuffer& inbox)
 
 		if (mHttpPostHandler->IsDone())
 		{
-			Output(
-				"HTTP/1.1 200 OK\r\n"
-				"\r\n"
-			);
+			auto ack = mHttpPostHandler->GetAck();
+			if (ack.empty())
+			{
+				ack=
+					"HTTP/1.1 200 OK\r\n"
+					"\r\n"
+				;
+			}
+
+			Output(ack);
 
 			SetStatus(eHttpRequestStatus_Done);
 		}
@@ -333,15 +339,13 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 			auto ack = mHttpPostHandler->GetAck();
 			if (ack.empty())
 			{
-				Output(
+				ack =
 					"HTTP/1.1 200 OK\r\n"
 					"\r\n"
-				);
+					;
 			}
-			else
-			{
-				Output(ack);
-			}
+
+			Output(ack);
 
 			SetStatus(eHttpRequestStatus_Done);
 		}

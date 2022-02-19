@@ -12,6 +12,7 @@ static const char* TAG = "HttpPostCommandHandler";
 
 HttpPostCommandHandler::HttpPostCommandHandler()
 {
+	mInboxBody.SetBufferSize(16 * 1024, 1024 * 1024 * 16);
 }
 
 HttpPostCommandHandler::~HttpPostCommandHandler()
@@ -97,6 +98,7 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 		auto bytes = inbox.length();
 		
 		int eat = MAX(0,mContentLength - mInboxBody.length());
+		eat = MIN(bytes, eat);
 		if (eat > 0)
 		{
 			mInboxBody.Write(data, eat);
@@ -143,9 +145,17 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 							//LogV(TAG, "%s#4", __func__);
 							obj->AddChild(handler);
 
+						#ifdef _MSC_VER_DEBUGx
+							if (mInboxBody.length() > 100 * 1024)
+							{
+								File::Dump(mInboxBody, "d:/test.bin");
+							}
+						#endif
+
 							DynamicJsonBuffer jBuffer;
 							auto& json = jBuffer.parseObject(mInboxBody.data());
-							
+							auto ok = json.success();
+
 							string ackJson = handler->ProcessJson(json);
 							if (!ackJson.empty())
 							{
