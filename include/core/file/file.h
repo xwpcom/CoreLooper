@@ -144,6 +144,11 @@ public:
 	{
 		return ReadFile(szFile.c_str(), box, autoRemoveUtf8BOM);
 	}
+	static int ReadRawFile(const std::string& szFile, ByteBuffer& box)
+	{
+		bool autoRemoveUtf8BOM = false;
+		return ReadFile(szFile.c_str(), box, autoRemoveUtf8BOM);
+	}
 	static void RemoveTailPathSplitChar(char *file);
 	static BOOL IsPathSplitChar(char ch)
 	{

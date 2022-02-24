@@ -140,11 +140,27 @@ int HttpPost::PackData()
 
 		if (items.find("Host") == items.end())
 		{
-			header += StringTool::Format(
-				"Host: %s:%d\r\n"
-				, mServer.c_str()
-				, mPort
-			);
+			bool addPort = true;
+			if ( (mUseTls && mPort == 443) || (!mUseTls && mPort == 80))
+			{
+				addPort = false;
+			}
+
+			if (addPort)
+			{
+				header += StringTool::Format(
+					"Host: %s:%d\r\n"
+					, mServer.c_str()
+					, mPort
+				);
+			}
+			else
+			{
+				header += StringTool::Format(
+					"Host: %s\r\n"
+					, mServer.c_str()
+				);
+			}
 		}
 
 		if (items.find("Connection") == items.end())
@@ -237,11 +253,9 @@ int HttpPost::PrepareData()
 	ByteBuffer body;
 	const auto& boundary = mBoundary;
 	{
-		string prefix;
-
 		header += StringTool::Format(
-			"POST %s%s HTTP/1.1\r\n"
-			, prefix.c_str()
+			"%s %s HTTP/1.1\r\n"
+			, mHttpMethod.c_str()
 			, mUrl.c_str()
 		);
 
@@ -270,11 +284,27 @@ int HttpPost::PrepareData()
 
 		if (items.find("Host") == items.end())
 		{
-			header += StringTool::Format(
-				"Host: %s:%d\r\n"
-				, mServer.c_str()
-				, mPort
-			);
+			bool addPort = true;
+			if ((mUseTls && mPort == 443) || (!mUseTls && mPort == 80))
+			{
+				addPort = false;
+			}
+
+			if (addPort)
+			{
+				header += StringTool::Format(
+					"Host: %s:%d\r\n"
+					, mServer.c_str()
+					, mPort
+				);
+			}
+			else
+			{
+				header += StringTool::Format(
+					"Host: %s\r\n"
+					, mServer.c_str()
+				);
+			}
 		}
 
 		if (items.find("cache-control") == items.end())

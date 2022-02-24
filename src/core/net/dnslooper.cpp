@@ -226,6 +226,9 @@ void* DnsLooper::_DnsThreadCB(void *p)
 					//LogV(TAG,"Canonical name: %s,ipThis=%s", ptr->ai_canonname,ipThis);
 					if (ipThis)
 					{
+					#ifdef _MSC_VER_DEBUG
+						LogV(TAG, "[%s]=[%s]", mDns, ipThis);
+					#endif
 						strncpy(mIP, ipThis, sizeof(mIP) - 1);
 						break;
 					}

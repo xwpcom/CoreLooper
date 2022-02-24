@@ -23,6 +23,10 @@ class HTTP_EXPORT HttpPost :public SimpleConnect
 public:
 	HttpPost();
 	~HttpPost();
+	void SetHttpMethod(const string& method)
+	{
+		mHttpMethod= method;
+	}
 
 	void SetBoundary(const string& boundary)
 	{
@@ -107,6 +111,7 @@ protected:
 	}
 
 	ByteBuffer mBodyRawData;
+	string mHttpMethod = "POST";//POST,PUT...
 };
 
 }
