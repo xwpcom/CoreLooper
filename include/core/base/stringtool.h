@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/base/win32.h"
 #include <stdlib.h>
 #include "core/base/dt.h"
@@ -23,7 +23,8 @@ public:
 	static std::string xml(std::string sz);
 	static std::string Format(const char* lpszFormat, ...);
 	static std::string& AppendFormat(std::string& obj, const char* lpszFormat, ...);
-	static bool EndWith(const std::string&obj, const std::string& tail);
+	static bool StartWith(const std::string&obj, const std::string& key);
+	static bool EndWith(const std::string& obj, const std::string& tail);
 	static int CompareNoCase(const std::string&obj1, const std::string& obj2);
 	static int stricmp(const std::string&obj1, const std::string& obj2)
 	{

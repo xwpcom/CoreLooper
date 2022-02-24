@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "stringtool.h"
 #include <stdarg.h>
 using namespace std;
@@ -72,6 +72,17 @@ string& StringTool::AppendFormat(string& obj, const char* fmt, ...)
 
 	obj += result;
 	return obj;
+}
+
+bool StringTool::StartWith(const std::string& obj, const std::string& key)
+{
+	if (obj.empty() || key.empty())
+	{
+		return false;
+	}
+
+	auto ret = strncmp(obj.c_str(), key.c_str(),key.length());
+	return ret == 0;
 }
 
 bool StringTool::EndWith(const string&obj, const string& tail)
