@@ -56,7 +56,7 @@ public:
 	int Append(const ByteBuffer& src, bool makeSureEndNull = true);
 
 	//指定缓冲初始和最大尺寸
-	int SetBufferSize(UINT nInitSize = 32, UINT nMaxSize = 512 * 1024);
+	int SetBufferSize(UINT nInitSize = 32, UINT nMaxSize = 16*1024 * 1024);
 	int PrepareBuf(UINT minSize, bool zero = false);
 
 	int MakeSureEndWithNull();

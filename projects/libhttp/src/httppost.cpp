@@ -774,6 +774,7 @@ void HttpPost::OnRecvHttpAckDone()
 void HttpPost::SetBodyRawData(const ByteBuffer& box)
 {
 	mBodyRawData.clear();
+	mBodyRawData.SetBufferSize(16 * 1024, box.length() + 1);
 	mBodyRawData.Append(box);
 	mBodyRawData.MakeSureEndWithNull();
 }
