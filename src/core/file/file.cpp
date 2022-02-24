@@ -686,11 +686,12 @@ int File::ReadFile(const char *szFile, ByteBuffer& box, bool autoRemoveUtf8BOM)
 			auto ret = box.PrepareBuf(len + 1);
 			if (ret == 0)
 			{
+				box.MakeSureEndWithNull();
+
 				int bytes = (int)fread(box.GetNewDataPointer(), 1, len, hFile);
 				if (bytes == len)
 				{
 					box.WriteDirect(len);
-					box.MakeSureEndWithNull();//便于把box data当作const char*
 
 					if (autoRemoveUtf8BOM)
 					{
@@ -705,6 +706,8 @@ int File::ReadFile(const char *szFile, ByteBuffer& box, bool autoRemoveUtf8BOM)
 						}
 
 					}
+
+					box.MakeSureEndWithNull();//便于把box data当作const char*
 				}
 			}
 		}
