@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "hmac_sha1.h"
 #include <string>
 #include <cmath>
@@ -12,8 +12,8 @@ unsigned long Rol(unsigned long x, int y);
 unsigned long Ror(unsigned long x, int y);
 unsigned long f(unsigned long B, unsigned long C, unsigned long D, int t);
 
-//ÔÚÍøÒ³ÑéÖ¤ok https://www.sojson.com/hash.html
-//µÚ2¸ötab,¹şÏ£,¹´ÉÏHmacSha1,Ìá¹©textºÍkey
+//åœ¨ç½‘é¡µéªŒè¯ok https://www.sojson.com/hash.html
+//ç¬¬2ä¸ªtab,å“ˆå¸Œ,å‹¾ä¸ŠHmacSha1,æä¾›textå’Œkey
 string Crypt::HmacSha1(const string& text, const string& key)
 {
 	string ack;

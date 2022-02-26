@@ -141,7 +141,11 @@ int HttpPost::PackData()
 		if (items.find("Host") == items.end())
 		{
 			bool addPort = true;
-			if ( (mUseTls && mPort == 443) || (!mUseTls && mPort == 80))
+			bool useTls = false;
+		#ifdef _MSC_VER
+			useTls = mUseTls;
+		#endif
+			if ((useTls && mPort == 443) ||(!useTls && mPort == 80))
 			{
 				addPort = false;
 			}
@@ -285,7 +289,12 @@ int HttpPost::PrepareData()
 		if (items.find("Host") == items.end())
 		{
 			bool addPort = true;
-			if ((mUseTls && mPort == 443) || (!mUseTls && mPort == 80))
+			bool useTls = false;
+
+		#ifdef _MSC_VER
+			useTls = mUseTls;
+		#endif
+			if ((useTls && mPort == 443) || (!useTls && mPort == 80))
 			{
 				addPort = false;
 			}
