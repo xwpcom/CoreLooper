@@ -17,6 +17,7 @@ public:
 
 //XiongWanPing 2018.07.06
 //用http post数据和文件到服务器
+//todo:在嵌入式上传大文件时，要分块读取到内存再上传
 class HTTP_EXPORT HttpPost :public SimpleConnect
 {
 	SUPER(SimpleConnect)
@@ -44,6 +45,10 @@ public:
 	int AddFile(string name, string filePath);
 	void SetBodyRawData(const ByteBuffer& box);
 	void SetBody(const string& text);
+	
+	//会忽略SetBody和SetBodyRawData
+	void SetBodyBigFile(const string& filePath);//2022.03.02华为云上报大文件用到
+
 	int Start(string url);
 protected:
 	void OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundle* extraInfo);
@@ -112,6 +117,8 @@ protected:
 
 	ByteBuffer mBodyRawData;
 	string mHttpMethod = "POST";//POST,PUT...
+	string mBodyBigFilePath;//只支持一个文件
+	shared_ptr<FILE> mBigFile;
 };
 
 }

@@ -347,8 +347,14 @@ int HttpPost::PrepareData()
 
 	ASSERT(!(json && postFields));
 	int contentLength = 0;
-
-	if (json || !mBodyRawData.empty())
+	if (!mBodyBigFilePath.empty())
+	{
+		FILE* file = fopen(mBodyBigFilePath.c_str(), "rb");
+		auto obj = shared_ptr<FILE>(file, ::fclose);
+		mBigFile = obj;
+		contentLength = (int)File::GetFileLength(file);
+	}
+	else if (json || !mBodyRawData.empty())
 	{
 		contentLength = mBodyRawData.GetDataLength();
 	}
@@ -433,7 +439,7 @@ int HttpPost::PrepareData()
 
 void HttpPost::SwitchStage(HttpPost::eSendStage stage)
 {
-	if (mInfo.mStage == stage)
+	if (stage!= eSendBodyRaw && mInfo.mStage == stage)
 	{
 		return;
 	}
@@ -605,8 +611,26 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 	}
 	case eSendBodyRaw:
 	{
-		mOutbox.Append(mBodyRawData);
-		mBodyRawData.clear();
+		if (mBigFile)
+		{
+			auto bytes = mOutbox.GetTailFreeSize();
+			if (bytes > 0)
+			{
+				auto p = mOutbox.GetNewDataPointer();
+				auto ret = fread(p, 1, bytes, mBigFile.get());
+				if (ret > 0)
+				{
+					//LogV(TAG,"fread bytes =%d",ret);
+					mOutbox.WriteDirect(ret);
+					CheckSend();
+				}
+			}
+		}
+		else if(mBodyBigFilePath.empty())
+		{
+			mOutbox.Append(mBodyRawData);
+			mBodyRawData.clear();
+		}
 		break;
 	}
 	}
@@ -664,11 +688,25 @@ void HttpPost::PostStage(eSendStage stage)
 	case eSendTail:
 	case eSendBodyRaw:
 	{
+		if (mBigFile)
+		{
+			if (!feof(mBigFile.get()))
+			{
+				SwitchStage(eSendBodyRaw);
+				return;
+			}
+		}
+
 		SwitchStage(eSendFinish);
 		break;
 	}
 	case eSendFinish:
 	{
+		if (mBigFile)
+		{
+			mBigFile = nullptr;
+		}
+
 		break;
 	}
 	}
@@ -794,6 +832,13 @@ void HttpPost::SetBody(const string& text)
 	mBodyRawData.Write(text);
 	mBodyRawData.MakeSureEndWithNull();
 }
+
+//2022.03.02华为云上报大文件用到
+void HttpPost::SetBodyBigFile(const string& filePath)
+{
+	mBodyBigFilePath = filePath;
+}
+
 
 }
 }
