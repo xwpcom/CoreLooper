@@ -352,9 +352,12 @@ int HttpPost::PrepareData()
 	if (!mBodyBigFilePath.empty())
 	{
 		FILE* file = fopen(mBodyBigFilePath.c_str(), "rb");
-		auto obj = shared_ptr<FILE>(file, ::fclose);
-		mBigFile = obj;
-		contentLength = (int)File::GetFileLength(file);
+		if (file)
+		{
+			auto obj = shared_ptr<FILE>(file, ::fclose);
+			mBigFile = obj;
+			contentLength = (int)File::GetFileLength(file);
+		}
 	}
 	else if (json || !mBodyRawData.empty())
 	{
