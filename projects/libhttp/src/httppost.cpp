@@ -12,6 +12,8 @@ using namespace Core;
 
 static const char* TAG = "HttpPost";
 
+//static int gBigFrameIndex = 0;
+
 HttpPost::HttpPost()
 {
 	//LogW(TAG,"%s,this=%p", __func__, this);
@@ -470,6 +472,7 @@ const char* HttpPost::GetStageDesc(HttpPost::eSendStage v)
 		ITEM(eSendFileBody),//file data
 		ITEM(eSendFileCRLF),//file结尾的\r\n
 		ITEM(eSendTail),
+		ITEM(eSendBodyRaw),
 		ITEM(eSendFinish),
 #undef ITEM
 	};
@@ -489,6 +492,8 @@ const char* HttpPost::GetStageDesc(HttpPost::eSendStage v)
 //当outbox中的数据发送完成，可提交要写的新数据时会调用本接口
 void HttpPost::OnOutboxWritable()
 {
+	//LogV(TAG, "%s",__func__);
+
 	ASSERT(mOutbox.GetActualDataLength() == 0);
 
 	if (mInfo.mStage != eSendFinish)
@@ -582,15 +587,16 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 			{
 				//LogV(TAG,"fread bytes =%d",ret);
 				mOutbox.WriteDirect(ret);
-				CheckSend();
 			}
 			else if (ret <= 0)
 			{
 				mInfo.mFile = nullptr;
 				SwitchStage(eSendFileCRLF);
+				return;
 			}
 		}
 
+		CheckSend();
 		break;
 	}
 	case eSendFileCRLF:
@@ -620,9 +626,26 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 				auto ret = fread(p, 1, bytes, mBigFile.get());
 				if (ret > 0)
 				{
-					//LogV(TAG,"fread bytes =%d",ret);
+					/*
+					{
+						++gBigFrameIndex;
+						LogV(TAG, "[%04d]fread bytes =%d,pos=%d,remainingBytes=%d"
+							, gBigFrameIndex,ret, ftell(mBigFile.get())
+							,File::GetFileLength(mBigFile.get()) - ftell(mBigFile.get())
+						);
+					}
+					*/
+
 					mOutbox.WriteDirect(ret);
 					CheckSend();
+				}
+				else
+				{
+					if (feof(mBigFile.get()))
+					{
+						LogV(TAG, "bigFile reach end");
+						SwitchStage(eSendFinish);
+					}
 				}
 			}
 		}

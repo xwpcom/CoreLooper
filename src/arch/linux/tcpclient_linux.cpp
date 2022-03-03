@@ -19,7 +19,7 @@ enum
 static const char* TAG = "TcpClient";
 TcpClient_Linux::TcpClient_Linux()
 {
-	//DV("%s,this=0x%x", __func__, this);
+	//LogV(TAG,"%s,this=0x%x", __func__, this);
 	mSock = INVALID_SOCKET;
 	mServerSide = true;
 	mWaitFirstEvent = true;
@@ -30,7 +30,7 @@ TcpClient_Linux::TcpClient_Linux()
 TcpClient_Linux::~TcpClient_Linux()
 {
 	{
-		//DV("%s,this=0x%x,name=%s,mSock=%d", __func__, this, GetObjectName().c_str(),mSock);
+		//LogV(TAG,"%s,this=0x%x,name=%s,mSock=%d", __func__, this, GetObjectName().c_str(),mSock);
 	}
 	ASSERT(mSock == -1);
 	SockTool::CLOSE_SOCKET(mSock);
@@ -80,7 +80,7 @@ int TcpClient_Linux::ConnectHelper(string ip)
 	}
 
 #ifdef _CONFIG_ANDROID
-	DV("connect ret=%d,error=%d(%s),sock=%d",ret,errno,strerror(errno),mSock);
+	LogV(TAG,"connect ret=%d,error=%d(%s),sock=%d",ret,errno,strerror(errno),mSock);
 #endif
 
 	return ret;
@@ -168,11 +168,11 @@ int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 		evt.data.ptr = (EpollProxy*)this;
 		ret = epoll_ctl((int)handle, EPOLL_CTL_ADD, (int)s, &evt);
 #endif
-		//DV("epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
+		//LogV(TAG,"epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
 		//ASSERT(ret == 0);
 		if (ret)
 		{
-			DW("handler bind event fail,error=%d(%s)",errno,strerror(errno));
+			LogW(TAG,"handler bind event fail,error=%d(%s)",errno,strerror(errno));
 		}
 	}
 	else
@@ -197,7 +197,7 @@ void TcpClient_Linux::Close()
 			unsigned long handle = (unsigned long)(LONGLONG)GetLooperHandle();
 			int ret = -1;
 #ifdef __APPLE__
-			DW("todo?");
+			LogW(TAG,"todo?");
 #else
 			struct epoll_event evt = { 0 };
 			ret = epoll_ctl((int)handle, EPOLL_CTL_DEL, (int)mSock, &evt);//remove all events
@@ -205,7 +205,7 @@ void TcpClient_Linux::Close()
 
 			if (ret)
 			{
-				DW("fail");
+				LogW(TAG,"fail");
 			}
 		}
 
@@ -225,14 +225,13 @@ void TcpClient_Linux::Close()
 
 void TcpClient_Linux::OnReceive()
 {
-	//DV("%s", __func__);
 	SignalOnReceive(this);
 }
 
 //返回成功提交的字节数
 int TcpClient_Linux::Send(LPVOID data, int dataLen)
 {
-	//DV("%s,dataLen=%d", __func__,dataLen);
+	//LogV(TAG,"%s,dataLen=%d", __func__,dataLen);
 	if (mSock == -1)
 	{
 		return 0;
@@ -240,6 +239,8 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 
 	ASSERT(IsMyselfThread());
 	int ret = (int)send(mSock, (char*)data, dataLen, 0);
+	const int err = errno;
+
 	if (ret > 0)
 	{
 		UpdateSendTick();
@@ -247,7 +248,11 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 
 	if (ret != dataLen)
 	{
-		int err = errno;
+		//2022.03.02
+		//发现ingenic t21上面返回errno为2 ENOENT时也要侦听writable,为稳妥起见，直接全部侦听 
+		EnableListenWritable();
+
+		/*
 		bool again = (err == EAGAIN || err == EWOULDBLOCK || err == EINPROGRESS || err == WSAEWOULDBLOCK);
 		if (again)
 		{
@@ -261,21 +266,27 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 #endif
 			if ((idx % interval) == 0)
 			{
-				DV("send only partial,err=%d(%s),this=%p", err, strerror(err), this);
+				//LogV(TAG,"send only partial,err=%d(%s),this=%p", err, strerror(err), this);
 			}
 
-			EnableListenWritable();
+			//EnableListenWritable();
 		}
 		else
 		{
+			/*
+			//LogV(TAG, "send fail,sock=%d,err=%d(%s)", mSock, err,strerror(err));
+			LogV(TAG, "sendFail(%p),sock=%d,len=%4d,ret=%4d,error=%d(%s)"
+				, this, mSock, dataLen, ret, err, strerror(err));
+
 			if (err != 32)//broken pipe
 			{
 				if (ret <= 0)
 				{
-					DV("###send fail,this=%p,mSock=%d,data=0x%08x,dataLen=%4d,ret=%4d,error=%d(%s)", this, mSock, data, dataLen, ret, err, strerror(err));
+					LogV(TAG,"###send fail,this=%p,mSock=%d,data=0x%08x,dataLen=%4d,ret=%4d,error=%d(%s)", this, mSock, data, dataLen, ret, err, strerror(err));
 				}
 			}
 		}
+		*/
 	}
 
 	return ret;
@@ -323,7 +334,7 @@ void TcpClient_Linux::OnClose()
 //返回接收到的字节数
 int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 {
-	//DV("%s",__func__);
+	//LogV(TAG,"%s",__func__);
 
 	if (!buf || bufLen <= 0)
 	{
@@ -342,14 +353,14 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 //当可写时会调用本接口
 void TcpClient_Linux::OnSend()
 {
-	//DV("%s", __func__);
+	//LogV(TAG,"%s", __func__);
 
 	SignalOnSend(this);
 }
 
 void TcpClient_Linux::OnEvent(DWORD events)
 {
-	//DV("%s,mSock=%d,events=0x%02x",__func__,mSock,events);
+	//LogV(TAG,"%s,mSock=%d,events=0x%02x",__func__,mSock,events);
 
 	if (mWaitFirstEvent)
 	{
@@ -408,7 +419,7 @@ void TcpClient_Linux::OnEvent(DWORD events)
 
 	if (events & EPOLLOUT)
 	{
-		//DV("EPOLLOUT,this=%p",this);
+		//LogV(TAG,"EPOLLOUT,this=%p",this);
 		if (mListenWritable)
 		{
 			DisableListenWritable();
@@ -427,6 +438,8 @@ void TcpClient_Linux::OnEvent(DWORD events)
 
 void TcpClient_Linux::EnableListenWritable()
 {
+	//LogV(TAG, "%s(%p),sock=%d", __func__, this, mSock);
+
 	mListenWritable = true;
 
 	SOCKET& s = mSock;
@@ -448,17 +461,19 @@ void TcpClient_Linux::EnableListenWritable()
 
 	evt.data.ptr = (EpollProxy*)this;
 	ret = epoll_ctl((int)handle, EPOLL_CTL_MOD, (int)s, &evt);
-	//DV("epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
+	//LogV(TAG,"epoll_ctl,handle=%d,s=%d,ret=%d", handle, s, ret);
 #endif
 	ASSERT(ret == 0);
 	if (ret)
 	{
-		DW("%s fail",__func__);
+		LogW(TAG,"%s fail",__func__);
 	}
 }
 
 void TcpClient_Linux::DisableListenWritable()
 {
+	//LogV(TAG, "%s(%p),sock=%d", __func__, this, mSock);
+
 	mListenWritable = false;
 
 	SOCKET& s = mSock;
@@ -484,7 +499,7 @@ void TcpClient_Linux::DisableListenWritable()
 
 	if (ret)
 	{
-		DW("epoll_ctl,handle=%d,s=%d,ret=%d,error=%d(%s)", handle, s, ret, errno, strerror(errno));
+		LogW(TAG,"epoll_ctl,handle=%d,s=%d,ret=%d,error=%d(%s)", handle, s, ret, errno, strerror(errno));
 	}
 
 }

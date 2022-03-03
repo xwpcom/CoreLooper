@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "looper/looperimpl.h"
 
 #ifdef _MSC_VER
@@ -85,11 +85,7 @@ public:
 	virtual ~EpollProxy()
 	{
 	}
-
-	virtual void OnEvent(DWORD events)
-	{
-		DV("this=0x%08x,%s,sock=%d,events = 0x%x", this, __func__, mSock, events);
-	}
+	virtual void OnEvent(DWORD events);
 protected:
 	SOCKET mSock = -1;
 };

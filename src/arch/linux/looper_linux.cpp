@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "looper_linux.h"
 #include "looper/looper.h"
 #include "../../core/looper/timermanager.h"
@@ -51,7 +51,7 @@ public:
 #if defined  _MSC_VER
 long epoll_create(int)
 {
-	DV("epoll_create");
+	LogV(TAG,"epoll_create");
 	return 1;
 }
 long epoll_ctl(int epfd, int op, int sock, epoll_event *) { return 0; }
@@ -60,16 +60,21 @@ long epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout
 #define __super LooperImpl
 #endif
 
+void EpollProxy::OnEvent(DWORD events)
+{
+	LogV("EpollProxy", "this=0x%08x,%s, sock=%d, events=0x%x", this, __func__, mSock, events);
+}
+
 Looper_Linux::Looper_Linux()
 {
 	SetObjectName("Looper_Linux");
 	mThreadName = GetObjectName();
-	//DV("%s,this=0x%x", __func__,this);
+	//LogV(TAG,"%s,this=0x%x", __func__,this);
 }
 
 Looper_Linux::~Looper_Linux()
 {
-	//DV("%s", __func__);
+	//LogV(TAG,"%s", __func__);
 }
 
 void Looper_Linux::OnCreate()
@@ -83,7 +88,7 @@ void Looper_Linux::OnCreate()
 
 int Looper_Linux::StartHelper(bool newThread)
 {
-	//DV("%s", __func__);
+	//LogV(TAG,"%s", __func__);
 	if (mLooperInternalData->mLooperRunning)
 	{
 		ASSERT(FALSE);
@@ -268,7 +273,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 						name = msg.mHandler->GetName();
 					}
 
-					//DV("mMessageList.pop_front %s.msg=%d", name.c_str(), msg.mMsg);
+					//LogV(TAG,"mMessageList.pop_front %s.msg=%d", name.c_str(), msg.mMsg);
 
 					//消息太多，导致一直没有机会处理timer?
 					auto tickNow = ShellTool::GetTickCount64();
@@ -321,7 +326,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 		{
 			//static int idx = -1;
 			//++idx;
-			//DV("%s,idx=%04d",__func__,idx);
+			//LogV(TAG,"%s,idx=%04d",__func__,idx);
 		}
 
 		DWORD minMS = 1;
@@ -368,7 +373,7 @@ int Looper_Linux::getMessage(tagLoopMessageInternal& msg)
 				if (!handler)
 				{
 					//在xcode中调试时,暂停的时间稍长,再运行时就会收到几个handler为nullptr的信号,
-					DV("handler is nullptr,events=%d", events);
+					LogV(TAG,"handler is nullptr,events=%d", events);
 					continue;
 				}
 
@@ -475,7 +480,7 @@ bool Looper_Linux::PostQueuedCompletionStatus(HANDLE handle, DWORD bytes, ULONG_
 
 int Looper_Linux::CreateSocketPair()
 {
-	//DV("%s",__func__);
+	//LogV(TAG,"%s",__func__);
 	ASSERT(!mSockPairSendProxy);
 	ASSERT(!mSockPairReceiveProxy);
 

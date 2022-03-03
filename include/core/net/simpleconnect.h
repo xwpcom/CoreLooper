@@ -77,7 +77,7 @@ protected:
 	void OnDestroy();
 	void OnTimer(long id);
 
-	void CheckSend();
+	virtual void CheckSend();
 	void Close();
 
 	shared_ptr<Channel> mChannel;//todo:采用weak_ptr,或者把channel移到其他节点下,避免强引用child
