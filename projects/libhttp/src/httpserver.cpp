@@ -20,7 +20,7 @@ HttpServer::~HttpServer()
 std::shared_ptr<Channel> HttpServer::CreateChannel()
 {
 	auto client(make_shared<Net::TcpClient>());
-#ifdef _CONFIG_OPENSSL
+#if defined _CONFIG_OPENSSL && defined _MSC_VER
 	if (mUseTls)
 	{
 		client->EnableTls();

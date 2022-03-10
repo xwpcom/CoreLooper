@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 
-#ifdef _MSC_VER
+#if defined _MSC_VER //|| defined _CONFIG_INGENIC
 #define _CONFIG_OPENSSL //2019.12,用来支持https做微信小程序
 #define ENABLE_OPENSSL //for zltoolkit
 #endif
