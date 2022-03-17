@@ -373,7 +373,8 @@ void TcpClient_Linux::OnEvent(DWORD events)
 		{
 			//128,Network is unreachable
 			//134(Transport endpoint is not connected)
-			if (error != 128 && error != 134)
+			//148 no route to host
+			if (error != 128 && error != 134 && error!=148)
 			{
 				LogW(TAG,"%s,addr=[%s],mSock=%d,events=0x%02x,peer(%s:%d)error=%d,%s",
 					__func__
