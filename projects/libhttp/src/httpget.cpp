@@ -19,19 +19,23 @@ HttpGet::~HttpGet()
 {
 }
 
-int HttpGet::Execute(string url, string saveAsFilePath)
+int HttpGet::Execute(string url, string saveAsFilePath, std::function<void(const string& url, int error, ByteBuffer& box)> fn)
 {
 	ASSERT(IsMyselfThread());
+	mCB = fn;
 
-	if (File::FileExists(saveAsFilePath))
+	if (!saveAsFilePath.empty())
 	{
-		File::DeleteFile(saveAsFilePath.c_str());
-	}
+		if (File::FileExists(saveAsFilePath))
+		{
+			File::DeleteFile(saveAsFilePath.c_str());
+		}
 
-	if (File::FileExists(saveAsFilePath))
-	{
-		Destroy();
-		return -1;
+		if (File::FileExists(saveAsFilePath))
+		{
+			Destroy();
+			return -1;
+		}
 	}
 
 	mSignaled = false;
@@ -78,6 +82,10 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		if (!mSignaled)
 		{
 			mSignaled = true;
+			if (mCB)
+			{
+				mCB(mUrl, -1, mAckInfo.mAckBody);
+			}
 			SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 		}
 
@@ -106,6 +114,10 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 				if (!mSignaled)
 				{
 					mSignaled = true;
+					if (mCB)
+					{
+						mCB(mUrl, -1, mAckInfo.mAckBody);
+					}
 					SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 				}
 				return;
@@ -168,6 +180,10 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		else
 		{
 			mSignaled = true;
+			if (mCB)
+			{
+				mCB(mUrl, -1, mAckInfo.mAckBody);
+			}
 			SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 			Destroy();
 		}
@@ -446,6 +462,10 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 		{
 			mSignaled = true;
 
+			if (mCB)
+			{
+				mCB(mUrl, 0, mAckInfo.mAckBody);
+			}
 			SignalHttpGetAck(this, mUrl, 0, mAckInfo.mAckBody);
 		}
 
@@ -466,6 +486,11 @@ void HttpGet::OnDestroy()
 	if (!mSignaled)
 	{
 		mSignaled = true;
+		if (mCB)
+		{
+			mCB(mUrl, -1, mAckInfo.mAckBody);
+		}
+
 		SignalHttpGetAck(this, mUrl, -1, mAckInfo.mAckBody);
 	}
 }

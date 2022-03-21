@@ -17,7 +17,7 @@ public:
 	virtual ~HttpGet();
 
 	//url可以为http url,比如网页或文件
-	virtual int Execute(string url, string saveAsFilePath = "");
+	virtual int Execute(string url, string saveAsFilePath = "", std::function<void(const string& url,int error,ByteBuffer& box)> fn=nullptr);
 	sigslot::signal4<Handler*, string&, int, ByteBuffer&>	SignalHttpGetAck;
 	sigslot::signal2 < Handler*, const string&> SignalDownloadFileDone;
 
@@ -110,6 +110,8 @@ protected:
 	string mHttpAction = "GET";
 	ByteBuffer mBodyRawData;
 	unordered_map<string, string>  mHeaders;
+
+	std::function<void(const string& url, int error, ByteBuffer& box)> mCB;
 };
 
 }
