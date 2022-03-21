@@ -14,6 +14,7 @@ public:
 	static unsigned short Crc16Ex(unsigned char* pData, int bytes, unsigned short* crc);
 
 	static bool CrcMatched(LPBYTE d, int bytes);
+	static int  FillCrc(LPBYTE d, int bytes);
 
 };
 }

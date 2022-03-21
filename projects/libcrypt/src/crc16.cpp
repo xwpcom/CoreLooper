@@ -108,3 +108,21 @@ bool Crc16::CrcMatched(LPBYTE d, int bytes)
 	BYTE b2 = crc & 0xFF;
 	return d[bytes - 2] == b2 && d[bytes - 1] == b1;
 }
+
+int Crc16::FillCrc(LPBYTE d, int bytes)
+{
+	if (bytes <= 2)
+	{
+		return -1;
+	}
+
+	unsigned short crcInitValue = 0xFFFF;
+	WORD crcValue = Crc16Ex((unsigned char*)d, bytes - 2, &crcInitValue);
+	BYTE low = crcValue & 0xFF;
+	BYTE high = (crcValue >> 8) & 0xFF;
+	d[bytes - 1] = high;
+	d[bytes - 2] = low;
+
+	return 0;
+}
+
