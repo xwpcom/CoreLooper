@@ -100,6 +100,8 @@ DnsLooper::~DnsLooper()
 
 int DnsLooper::AddRequest(string dns, weak_ptr<Handler> handler, UINT msg)
 {
+	LogV(TAG, "%s(%s)",__func__,dns.c_str());
+
 	tagItemInfo info;
 	info.mDns = dns;
 	info.mHandler = handler;

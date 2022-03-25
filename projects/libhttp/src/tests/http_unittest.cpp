@@ -664,7 +664,7 @@ public:
 				string uid = "00000EMU";
 
 				obj->SetServerPort(
-					"iot.jjyip.com"//127.0.0.1"
+					"iot.jjyip.com"
 					, 80);
 				obj->AddFile("logFile", filePath);
 
