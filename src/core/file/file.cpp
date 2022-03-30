@@ -661,15 +661,18 @@ int File::Dump(const LPVOID pBuf, int nBuf, const char *pszFile)
 		{
 			//LogW(TAG,"fail dump[%s],invalid param,nBuf=%d",pszFile,nBuf);
 		}
-
+	#ifndef _MSC_VER
+		fsync(fileno(hFile));
+	#endif
 		fclose(hFile);
 		hFile = NULL;
+		File::sync();
 	}
 	else
 	{
 		LogW(TAG,"fail dump [%s],error=%d(%s)", pszFile, errno, strerror(errno));
 	}
-
+	
 	return ret;
 }
 
