@@ -60,7 +60,7 @@ int HttpPost::AddFile(string name, string filePath)
 {
 	if (!File::FileExists(filePath.c_str()))
 	{
-		LogW(TAG, "skip AddFile(%s,%s),file no found:", name.c_str(), filePath.c_str());
+		LogW(TAG, "skip AddFile(%s,%s),file no found", name.c_str(), filePath.c_str());
 		//ASSERT(FALSE);
 		return -1;
 	}

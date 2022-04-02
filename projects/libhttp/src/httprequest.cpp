@@ -450,9 +450,9 @@ int HttpRequest::ParseHeader()
 			char szFmt[128];
 			CLR_BUF(szFmt);
 			_snprintf(szFmt, sizeof(szFmt) - 1, "%%%u[^ ] %%%u[^ ] %%%u[^ \r]",
-				(long)sizeof(szReq) - 1,
-				(long)sizeof(szUrl) - 1,
-				(long)sizeof(szHttpVer) - 1
+				(int)sizeof(szReq) - 1,
+				(int)sizeof(szUrl) - 1,
+				(int)sizeof(szHttpVer) - 1
 			);
 			szFmt[sizeof(szFmt) - 1] = 0;
 			ret = sscanf(request, szFmt, szReq, szUrl, szHttpVer);
@@ -597,8 +597,8 @@ int HttpRequest::ParseHeader()
 
 						char szFmt[64];
 						_snprintf(szFmt, sizeof(szFmt) - 1, "%%%u[^=]=%%%u[^&]&",
-							(long)sizeof(szName) - 1,
-							(long)sizeof(szValue) - 1
+							(int)sizeof(szName) - 1,
+							(int)sizeof(szValue) - 1
 						);
 						ret = sscanf(pszParams, szFmt, szName, szValue);
 						if (ret == 0)
