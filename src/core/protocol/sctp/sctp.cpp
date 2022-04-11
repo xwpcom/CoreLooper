@@ -4,8 +4,6 @@
 namespace SCTP
 {
 
-static const char* TAG = "sctp";
-
 Sctp::Sctp()
 {
 	memset(&mObject, 0, sizeof(mObject));
@@ -41,7 +39,7 @@ void Sctp::OnRecvCommand(const char *cmd, tagBundle *bundle)
 
 void Sctp::OnError(tagSCTP* obj,const char *desc)
 {
-	LogV(TAG,"%s,%s,#begin", __func__, desc);
+	LogV(mTag,"%s,%s,#begin", __func__, desc);
 
 	{
 		auto& inbox=obj->mInbox;
@@ -52,9 +50,9 @@ void Sctp::OnError(tagSCTP* obj,const char *desc)
 			box.MakeSureEndWithNull();
 
 			auto hex=ByteTool::ByteToHexChar(box.data(), box.length());
-			LogV(TAG, "offset=%d,bytes=%d",(int)inbox.mOffset,(int)inbox.mBytes);
-			LogV(TAG, "string=[%s]", box.data());
-			LogV(TAG, "hex=[%s]", hex.c_str());
+			LogV(mTag, "offset=%d,bytes=%d",(int)inbox.mOffset,(int)inbox.mBytes);
+			LogV(mTag, "string=[%s]", box.data());
+			LogV(mTag, "hex=[%s]", hex.c_str());
 		}
 	}
 
@@ -63,10 +61,10 @@ void Sctp::OnError(tagSCTP* obj,const char *desc)
 	{
 		const char* name = bundle->mItems[i].name;
 		const char* value = bundle->mItems[i].value;
-		LogV(TAG, "[%d][%s]=[%s]",i,name,value);
+		LogV(mTag, "[%d][%s]=[%s]",i,name,value);
 	}
 
-	LogV(TAG, "%s,%s,#end", __func__, desc);
+	LogV(mTag, "%s,%s,#end", __func__, desc);
 }
 
 void Sctp::Create()
@@ -116,7 +114,7 @@ int Sctp::AddField(const char *name, const char *value)
 	int ret=Bundle_Push(&mObject.mOutboxBundle, name, value);
 	if (ret < 0)
 	{
-		LogW(TAG,"###fail AddField(name=%s,value=%s)",name,value);
+		LogW(mTag,"###fail AddField(name=%s,value=%s)",name,value);
 	}
 	return ret;
 }
@@ -137,7 +135,7 @@ const tagByteBuffer& Sctp::CreateAckOutboxData(tagBundle * activeBundle)
 		{
 			if (Bundle_Exists(bundle, "seq"))
 			{
-				LogW(TAG,"seq should add only by sctp");
+				LogW(mTag,"seq should add only by sctp");
 			}
 
 			//自动添加seq
@@ -146,7 +144,7 @@ const tagByteBuffer& Sctp::CreateAckOutboxData(tagBundle * activeBundle)
 	}
 	else
 	{
-		//LogW(TAG,"###missing seq for %s", cmd);
+		//LogW(mTag,"###missing seq for %s", cmd);
 	}
 
 	return CreateOutboxData();

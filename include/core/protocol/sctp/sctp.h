@@ -22,6 +22,10 @@ class
 	SUPER(Handler)
 public:
 	Sctp();
+	void setTag(const string& tag)
+	{
+		mTag = tag;
+	}
 
 	void EnableSeq()
 	{
@@ -74,6 +78,7 @@ protected:
 	tagKeyValue		mOutboxItems[16];
 
 	bool mEnableSeq;
+	string mTag = "sctp";
 };
 
 #ifdef _MSC_VER
