@@ -119,7 +119,7 @@ string NetTool::GetLanIP(string eth)
 			StringTool::AppendFormat(mac, "%.2X", (int)adapter->Address[i]);
 		}
 
-		LogV(TAG,"Adapter [%s] desc=[%s],mac=[%s]", adapter->AdapterName, adapter->Description, mac.c_str());
+		//LogV(TAG,"Adapter [%s] desc=[%s],mac=[%s]", adapter->AdapterName, adapter->Description, mac.c_str());
 #endif
 
 		for (auto item = &adapter->IpAddressList; item; item = item->Next)
@@ -130,7 +130,7 @@ string NetTool::GetLanIP(string eth)
 				continue;
 			}
 
-			LogV(TAG,"IP Address: %s", ip.c_str());
+			//LogV(TAG,"IP Address: %s", ip.c_str());
 			ips.push_back(ip);
 		}
 	}
@@ -349,10 +349,10 @@ string NetTool::GetMac(string eth)
 				IP_ADAPTER_INFO *pi = &AdapterInfo[i];
 				memcpy(macAddr, pi->Address, 6);//先复制了再说,后面找到最合适的时，会再次复制
 
-				LogV(TAG,"AdapterName=[%s]----------------------------", pi->AdapterName);
-				LogV(TAG,"Description=[%s]", pi->Description);
-				LogV(TAG,"AddressLen =[%d]", pi->AddressLength);
-				LogV(TAG,"Type =[%d]", pi->Type);
+				//LogV(TAG,"AdapterName=[%s]----------------------------", pi->AdapterName);
+				//LogV(TAG,"Description=[%s]", pi->Description);
+				//LogV(TAG,"AddressLen =[%d]", pi->AddressLength);
+				//LogV(TAG,"Type =[%d]", pi->Type);
 
 				if (pi->Type == MIB_IF_TYPE_ETHERNET)
 				{

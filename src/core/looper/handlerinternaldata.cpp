@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "handler.h"
 #include "timernode.h"
 #include "timermanager.h"
@@ -355,9 +355,33 @@ shared_ptr<Handler> tagHandlerInternalData::FindObject_Impl(const string& url)
 {
 	ASSERT(mHandler->IsMyselfThread());
 
+	bool directChild = false;
+	{
+		//只缓存直接child
+		auto pos = url.find('/');
+		if (pos == string::npos)
+		{
+			directChild = true;
+
+			if (mCacheChilds)
+			{
+				auto it = mCacheChilds->find(url);
+				if (it != mCacheChilds->end())
+				{
+					auto obj=it->second.lock();
+					if (obj && obj->GetObjectName() == url)
+					{
+						return obj;
+					}
+				}
+			}
+		}
+	}
+
 	string item;
 	shared_ptr<Handler> obj;
 	TextSeparator demux(url.c_str(), "/");
+	int level = 0;
 	while (1)
 	{
 		int ret = demux.GetNext(item);
@@ -365,6 +389,7 @@ shared_ptr<Handler> tagHandlerInternalData::FindObject_Impl(const string& url)
 		{
 			break;
 		}
+		++level;
 
 		if (!obj)
 		{
@@ -410,6 +435,16 @@ shared_ptr<Handler> tagHandlerInternalData::FindObject_Impl(const string& url)
 		}
 
 		obj = child;
+	}
+
+	if (directChild && obj)
+	{
+		if (!mCacheChilds)
+		{
+			mCacheChilds = make_shared<unordered_map<string, weak_ptr<Handler>>>();
+		}
+
+		(*mCacheChilds)[url] = obj;
 	}
 
 	return obj;

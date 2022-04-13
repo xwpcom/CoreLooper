@@ -1,7 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include "handler.h"
 
-#define _CONFIG_MONITOR_HANDLER	//ÓÃÀ´²âÊÔobject leaks
+#define _CONFIG_MONITOR_HANDLER	//ç”¨æ¥æµ‹è¯•object leaks
 
 namespace Bear {
 namespace Core
@@ -13,10 +13,10 @@ struct tagHandlerInternalData
 	tagHandlerInternalData(Handler* handler);
 	~tagHandlerInternalData();
 	
-	//Ê²Ã´Ê±ºòĞèÒªµ÷ÓÃ±¾½Ó¿Ú:
-	//µ±Ò»¸öobject±¾ÉíÃ»ÓĞÎ´¾öÒµÎñµÄ¸ÅÄî£¬²¢ÇÒÆächildÒ²¿ÉÄÜÃ»ÓĞ£¬ÔòĞèÒªµ÷ÓÃ±¾½Ó¿ÚÀ´±£»î
-	//±¾ÖÊÊÇÖÁÉÙ²ÉÓÃÒ»¸öshared_ptrÀ´±£»îobject
-	//active objectÊÇÖ¸ÓĞÎ´¾öÒµÎñµÄ¶ÔÏó£¬²¢ÇÒµ±ËùÓĞÒµÎñÍê½áÊ±×Ô¶¯Ïú»Ù
+	//ä»€ä¹ˆæ—¶å€™éœ€è¦è°ƒç”¨æœ¬æ¥å£:
+	//å½“ä¸€ä¸ªobjectæœ¬èº«æ²¡æœ‰æœªå†³ä¸šåŠ¡çš„æ¦‚å¿µï¼Œå¹¶ä¸”å…¶childä¹Ÿå¯èƒ½æ²¡æœ‰ï¼Œåˆ™éœ€è¦è°ƒç”¨æœ¬æ¥å£æ¥ä¿æ´»
+	//æœ¬è´¨æ˜¯è‡³å°‘é‡‡ç”¨ä¸€ä¸ªshared_ptræ¥ä¿æ´»object
+	//active objectæ˜¯æŒ‡æœ‰æœªå†³ä¸šåŠ¡çš„å¯¹è±¡ï¼Œå¹¶ä¸”å½“æ‰€æœ‰ä¸šåŠ¡å®Œç»“æ—¶è‡ªåŠ¨é”€æ¯
 	void SetActiveObject()
 	{
 		mPassive = false;
@@ -41,36 +41,36 @@ struct tagHandlerInternalData
 	virtual void Dump(int level, bool includingChild = true);
 	void OnPrepareDestructor();
 
-	shared_ptr<Looper> mLooper;//½öÔÚCreate³É¹¦Ö®ºó²ÅÓĞĞ§£¬·ñÔòÎªnullptr
+	shared_ptr<Looper> mLooper;//ä»…åœ¨CreateæˆåŠŸä¹‹åæ‰æœ‰æ•ˆï¼Œå¦åˆ™ä¸ºnullptr
 	Handler* mHandler = nullptr;
 	string mObjectName;
-	LONGLONG mTickDestroy = 0;//ÓÃÀ´¼ÆËã´Ëhandler´ÓÊÕµ½OnDestroy()µ½Îö¹¹µÄÊ±¼ä
+	LONGLONG mTickDestroy = 0;//ç”¨æ¥è®¡ç®—æ­¤handlerä»æ”¶åˆ°OnDestroy()åˆ°ææ„çš„æ—¶é—´
 
-	shared_ptr<Handler> mSelfRef;	//È·±£ÔÚÔËĞĞÊ±thisÖ¸ÕëÓĞĞ§,ÓÃÓÚlooperºÍ±»¶¯ĞÍobject
+	shared_ptr<Handler> mSelfRef;	//ç¡®ä¿åœ¨è¿è¡Œæ—¶thisæŒ‡é’ˆæœ‰æ•ˆ,ç”¨äºlooperå’Œè¢«åŠ¨å‹object
 	unordered_map<long*, weak_ptr<Handler>> mChildren;
 	shared_ptr<unordered_map<string, weak_ptr<Handler>>> mShortcuts;
 
 	shared_ptr<Handler> mParent;
-	LONG_PTR mId = 0;//¿ÉÓÃÀ´±ê¼ÇÌØ¶¨handler,»òÕß´æ·ÅcontextĞÅÏ¢
-	bool mPassive : 1;// = true;//±»¶¯ĞÍobject,±»¶¯ĞÍÊÇÖ¸¿É¶ÔÍâÌá¹©·şÎñ£¬µ«Ã»ÓĞÎ´¾öÒµÎñÕâ¸ö¸ÅÄî,ĞèÒª²ÉÓÃmSelfRef±£»î
-					  //±»¶¯ĞÍobjectĞèÒªµ÷ÓÃAddChild¹ÒÔÚparentÉÏÃæ²ÅÄÜÊÕµ½BM_DESTROYÀ´Ïú»Ù
-					  //¶øÖ÷¶¯ĞÍAddChildÊÇ¿ÉÑ¡µÄ,ÒµÎñÍê½áÊ±ËüÄÜ×Ô¶¯Ïú»Ù
-	bool mCreated : 1;// = false;//c++11²»Ö§³Ö,c++20²ÅÖ§³Ö
+	LONG_PTR mId = 0;//å¯ç”¨æ¥æ ‡è®°ç‰¹å®šhandler,æˆ–è€…å­˜æ”¾contextä¿¡æ¯
+	bool mPassive : 1;// = true;//è¢«åŠ¨å‹object,è¢«åŠ¨å‹æ˜¯æŒ‡å¯å¯¹å¤–æä¾›æœåŠ¡ï¼Œä½†æ²¡æœ‰æœªå†³ä¸šåŠ¡è¿™ä¸ªæ¦‚å¿µ,éœ€è¦é‡‡ç”¨mSelfRefä¿æ´»
+					  //è¢«åŠ¨å‹objectéœ€è¦è°ƒç”¨AddChildæŒ‚åœ¨parentä¸Šé¢æ‰èƒ½æ”¶åˆ°BM_DESTROYæ¥é”€æ¯
+					  //è€Œä¸»åŠ¨å‹AddChildæ˜¯å¯é€‰çš„,ä¸šåŠ¡å®Œç»“æ—¶å®ƒèƒ½è‡ªåŠ¨é”€æ¯
+	bool mCreated : 1;// = false;//c++11ä¸æ”¯æŒ,c++20æ‰æ”¯æŒ
 	bool mOnCreateCalled : 1;//=false
 	bool mDestroy : 1;// = false;
 	bool mDestroyMarkCalled : 1;
 	bool mOnDestroyCalled : 1;//=false
 	bool mIsLooper : 1;// = false;
 	bool mMaybeLongBlock : 1;//=false
-	bool mTimerIdRewind : 1;//µ±mNextTimerId»ØÈÆºó·ÖÅäĞÂmNextTimerIdÊ±Òª¼ì²â³åÍ»
+	bool mTimerIdRewind : 1;//å½“mNextTimerIdå›ç»•ååˆ†é…æ–°mNextTimerIdæ—¶è¦æ£€æµ‹å†²çª
 	long mNextTimerId = 0;
 
 	shared_ptr<unordered_map<long, shared_ptr<tagTimerNode>>> mTimerMap;
 	long NextTimerId();
 	void RemoveAllTimer();
 
-	shared_ptr<TimerManager> mTimerManager;//µ±ÉèÖÃtimerÊ±ÒªÒıÓÃlooperÖĞµÄTimerManager,ÊÇÎªÁË±£Ö¤ÔÚÎö¹¹Ê±TimerManagerÊÇÓĞĞ§µÄ
-
+	shared_ptr<TimerManager> mTimerManager;//å½“è®¾ç½®timeræ—¶è¦å¼•ç”¨looperä¸­çš„TimerManager,æ˜¯ä¸ºäº†ä¿è¯åœ¨ææ„æ—¶TimerManageræ˜¯æœ‰æ•ˆçš„
+	shared_ptr<unordered_map<string,weak_ptr<Handler>>> mCacheChilds;
 	void TestContestSleep();
 
 #ifdef _CONFIG_MONITOR_HANDLER
