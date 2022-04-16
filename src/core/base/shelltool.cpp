@@ -1956,6 +1956,30 @@ int tagTimeMs::String2TimeMs(const string& text, tagTimeMs& ms)
 		return 0;
 	}
 
+	if (text.length() == strlen("20220416160000"))
+	{
+		int off = 0;
+		t.year = atoi(text.substr(off,4).c_str());
+		off += 4;
+
+		t.month = atoi(text.substr(off, 2).c_str());
+		off += 2;
+
+		t.day = atoi(text.substr(off, 2).c_str());
+		off += 2;
+
+		t.hour = atoi(text.substr(off, 2).c_str());
+		off += 2;
+
+		t.minute = atoi(text.substr(off, 2).c_str());
+		off += 2;
+
+		t.second = atoi(text.substr(off, 2).c_str());
+		off += 2;
+
+		return 0;
+	}
+
 	LogV(TAG, "fail %s,text=%s", __func__, text.c_str());
 	return -1;
 }
