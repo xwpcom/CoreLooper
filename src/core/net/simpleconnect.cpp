@@ -197,7 +197,7 @@ void SimpleConnect::OnTimer(long id)
 {
 	if (id == mTimer_AutoClose)
 	{
-		LogW(TAG,"timeout auto close,this=%p", this);
+		LogV(TAG,"%s timeout auto close,this=%p", GetObjectName().c_str(),this);
 		Destroy();
 		return;
 	}
