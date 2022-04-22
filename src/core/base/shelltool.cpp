@@ -1908,6 +1908,17 @@ int tagTimeMs::laterDays(const tagTimeMs& obj)
 	return days;
 }
 
+void tagTimeMs::from_dt(int date, int time)
+{
+	year = date / 10000;
+	month = (date / 100) % 100;
+	day = date % 100;
+	hour = time / 10000;
+	minute = (time/100)%100;
+	second = time % 100;
+	ms = 0;
+}
+
 void tagTimeMs::from_time_t(time_t t)
 {
 	tm time = { 0 };

@@ -62,6 +62,7 @@ struct CORE_EXPORT tagTimeMs
 
 	time_t to_time_t()const;
 	void from_time_t(time_t t);
+	void from_dt(int date,int time);
 
 	int laterDays(const tagTimeMs& obj);
 	static int time2Seconds(int time)
