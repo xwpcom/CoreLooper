@@ -213,6 +213,17 @@ void HttpHandler::ParseInbox()
 
 		bytes = inbox->length();
 		auto ret = mHttpRequest->Input(*inbox);
+		if (ret == -1)
+		{
+			if (mChannel)
+			{
+				mChannel->Close();
+				mChannel = nullptr;
+			}
+
+			Destroy();
+			return;
+		}
 		CheckSend();
 		if (mHttpRequest && mHttpRequest->IsWebSocket())
 		{
