@@ -65,6 +65,10 @@ struct CORE_EXPORT tagTimeMs
 	void from_dt(int date,int time);
 
 	int laterDays(const tagTimeMs& obj);
+	int currentDaySeconds()
+	{
+		return hour * 3600 + minute * 60 + second;
+	}
 	static int time2Seconds(int time)
 	{
 		//time格式:hhmmss
@@ -78,6 +82,7 @@ struct CORE_EXPORT tagTimeMs
 	static int String2TimeMs(const string& text, tagTimeMs& ms);
 	string toText()const;
 	string stdDateTimeText()const;
+	static tagTimeMs now();
 };
 
 class CORE_EXPORT ShellTool

@@ -294,7 +294,6 @@ struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
 }
 #endif
 
-
 struct tagTimeMs ShellTool::GetCurrentTimeMs()
 {
 #ifdef _MSC_VER
@@ -1872,6 +1871,11 @@ time_t DateTime::time()
 #else
 	return (ShellTool::GetTickCount() / 1000) + gBaseTime;
 #endif
+}
+
+tagTimeMs tagTimeMs::now()
+{
+	return ShellTool::GetCurrentTimeMs();
 }
 
 time_t tagTimeMs::to_time_t()const
