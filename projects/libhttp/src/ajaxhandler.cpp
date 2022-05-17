@@ -34,7 +34,7 @@ AjaxClassInit::AjaxClassInit(AjaxRuntimeClass* pData)
 	map<string, AjaxRuntimeClass*>& mapPackClass = *pd->m_mapPackClass;
 	if (mapPackClass[pData->mCommandName] != nullptr)
 	{
-		DW("item exits:%s,please check IMPLEMENT_AJAX_CLASS use unique command name", pData->mCommandName.c_str());
+		LogW(TAG,"item exits:%s,please check IMPLEMENT_AJAX_CLASS use unique command name", pData->mCommandName.c_str());
 		ASSERT(FALSE);
 	}
 	mapPackClass[pData->mCommandName] = pData;
@@ -73,7 +73,7 @@ AjaxHandler* AjaxHandler::CreateInstance(string commandName)
 
 	if (!pd->m_mapPackClass)
 	{
-		DW("no found:%s", commandName.c_str());
+		LogW(TAG,"no found:%s", commandName.c_str());
 		//ASSERT(FALSE);
 		return NULL;
 	}
