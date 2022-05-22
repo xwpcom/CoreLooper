@@ -49,7 +49,7 @@ public:
 	//会忽略SetBody和SetBodyRawData
 	void SetBodyBigFile(const string& filePath);//2022.03.02华为云上报大文件用到
 
-	int Start(string url);
+	int Start(string url, std::function<void(const string& url, int error, const string& ack)> fn=nullptr);
 protected:
 	void OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundle* extraInfo);
 
@@ -119,6 +119,7 @@ protected:
 	string mHttpMethod = "POST";//POST,PUT...
 	string mBodyBigFilePath;//只支持一个文件
 	shared_ptr<FILE> mBigFile;
+	std::function<void(const string& url, int error, const string& ack)> mCB;
 };
 
 }

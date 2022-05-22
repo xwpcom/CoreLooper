@@ -32,6 +32,11 @@ HttpPost::~HttpPost()
 		{
 			mPostAckHandler->OnPostFail(-1, "");
 		}
+
+		if (mCB)
+		{
+			mCB(mUrl,-1, "");
+		}
 	}
 }
 
@@ -78,10 +83,11 @@ int HttpPost::AddFile(string name, string filePath)
 	return 0;
 }
 
-int HttpPost::Start(string url)
+int HttpPost::Start(string url, std::function<void(const string& url, int error, const string& ack)> fn)
 {
 	ASSERT(!mChannel && !mConnected);
 	mUrl = url;
+	mCB = fn;
 
 	Bundle info;
 	info.Set("address", mServer);
@@ -836,12 +842,22 @@ void HttpPost::ParseInbox()
 void HttpPost::OnRecvHttpAckDone()
 {
 	//LOGV(TAG,"%s", __func__);
+	if (mInbox.empty())
+	{
+		mInbox.WriteByte(0);
+	}
 
 	if (mPostAckHandler)
 	{
 		string ack = (const char*)mInbox.GetDataPointer();
 		mPostAckHandler->OnPostAck(ack);
 	}
+
+	if (mCB)
+	{
+		mCB(mUrl, 0, (char*)mInbox.GetDataPointer());
+	}
+
 }
 
 void HttpPost::SetBodyRawData(const ByteBuffer& box)

@@ -1233,7 +1233,7 @@ int File::GetFileWriteTime(const string& filePath, tagTimeMs& t)
 		FILETIME writeTime = { 0 };
 		::GetFileTime(hFile, nullptr, nullptr, &writeTime);
 		SYSTEMTIME stUTC, stLocal;
-		DWORD dwRet;
+		//DWORD dwRet;
 
 		FileTimeToSystemTime(&writeTime, &stUTC);
 		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);

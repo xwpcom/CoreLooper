@@ -29,6 +29,20 @@ typedef struct GUID {
 
 #define CLAMP(minValue,value,maxValue) do {if(value < minValue) value=minValue;if(value>maxValue) value=maxValue; }while(0)
 
+//从stcapp c51工程引入
+// XiongWanPing 2021.12.31
+//来源 https://www.cnblogs.com/hiker-blogs/p/C51.html  
+//注意: 这个网文的代码有bug,有几处>要改为>=,否则会出现2021-12-32 00:00:00类似的非法日期
+
+class CORE_EXPORT DateTime
+{
+public:
+	static time_t time();
+	static time_t mktime(tm* pT);
+	static void localtime(time_t tim, tm* pT);
+	static int spanDays(const tm& tm1, const tm& tm2);
+};
+
 //time accurate to ms
 struct CORE_EXPORT tagTimeMs
 {

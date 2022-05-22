@@ -1703,20 +1703,6 @@ bool ShellTool::IsChinaServer()
 
 #endif
 
-//从stcapp c51工程引入
-// XiongWanPing 2021.12.31
-//来源 https://www.cnblogs.com/hiker-blogs/p/C51.html  
-//注意: 这个网文的代码有bug,有几处>要改为>=,否则会出现2021-12-32 00:00:00类似的非法日期
-
-class DateTime
-{
-public:
-	static time_t time();
-	static time_t mktime(tm* pT);
-	static void localtime(time_t tim, tm* pT);
-	static int spanDays(const tm& tm1, const tm& tm2);
-};
-
 static ULONG gGmtSecondOffset = 8 * 3600;//时区偏移秒数,默认为中国时区GMT+08:00
 static const char mon_list[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 static const char leap_mon_list[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
