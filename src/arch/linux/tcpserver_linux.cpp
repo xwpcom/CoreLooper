@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "tcpserver_linux.h"
 #include "looper/looper.h"
 #include "tcpclient_linux.h"
@@ -129,7 +129,7 @@ int TcpServer_Linux::OnAccept()
 	}
 	else if (acceptCount == 0)
 	{
-		DW("accept no more client");
+		LogW(TAG,"accept no more client");
 	}
 
 	return 0;
@@ -165,14 +165,14 @@ void TcpServer_Linux::Stop()
 			auto handle = GetLooperHandle();
 			int ret = -1;
 #ifdef __APPLE__
-			DW("todo?");
+			LogW(TAG,"todo?");
 #else
 			struct epoll_event evt = { 0 };
 			ret = epoll_ctl((int)(LRESULT)handle, EPOLL_CTL_DEL, (int)s, &evt);//remove all events
 #endif
 			if (ret)
 			{
-				DW("Fail %s", __func__);
+				LogW(TAG,"Fail %s", __func__);
 			}
 		}
 
@@ -193,7 +193,7 @@ void TcpServer_Linux::OnEvent(DWORD events)
 	}
 	else
 	{
-		DW("todo:events=0x%08x", events);
+		LogW(TAG,"todo:events=0x%08x", events);
 	}
 }
 }

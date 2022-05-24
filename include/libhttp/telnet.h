@@ -19,6 +19,20 @@ class HTTP_EXPORT TelnetServer:public TcpServer
 public:
 	TelnetServer();
 	int setUid(const string& uid);
+	void setDeviceMode()
+	{
+		mDeviceMode = true;
+	}
+
+	void setBuddy(weak_ptr< TelnetServer> obj)
+	{
+		mBuddy = obj;
+	}
+
+	bool deviceMode()const
+	{
+		return mDeviceMode;
+	}
 protected:
 	void OnCreate();
 	void OnTimer(long id);
@@ -30,6 +44,8 @@ protected:
 	string mTag = "telnetServer";
 	string mUid;
 	long mTimer_uidTimeout = 0;
+	bool mDeviceMode = false;//为true表示供master设备端连接，为false表示供secureCRT进行telnet正向连接
+	weak_ptr< TelnetServer> mBuddy;
 };
 
 class HTTP_EXPORT TelnetClient :public SimpleConnect
