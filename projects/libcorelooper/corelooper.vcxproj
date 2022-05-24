@@ -386,6 +386,9 @@
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctphandler2.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver.cpp" />
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpserver2.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.client.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.protocol.cpp" />
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.test.cpp" />
     <ClCompile Include="..\..\src\core\protocol\sctp\cbundle.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -561,6 +564,8 @@
     <ClInclude Include="..\..\include\core\protocol\ctp\ctphandler2.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver.h" />
     <ClInclude Include="..\..\include\core\protocol\ctp\ctpserver2.h" />
+    <ClInclude Include="..\..\include\core\protocol\jcp\jcp.client.h" />
+    <ClInclude Include="..\..\include\core\protocol\jcp\jcp.protocol.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\cbundle.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\cbytebuffer.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\ccrc.h" />

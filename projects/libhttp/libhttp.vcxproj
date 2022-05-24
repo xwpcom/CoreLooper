@@ -230,6 +230,8 @@
     <ClCompile Include="src\posthandler_uploadvideo.cpp" />
     <ClCompile Include="src\postjsonmanager.cpp" />
     <ClCompile Include="src\procmanager.cpp" />
+    <ClCompile Include="src\telnet.cpp" />
+    <ClCompile Include="src\telnet.handler.cpp" />
     <ClCompile Include="src\tests\http_unittest.cpp" />
     <ClCompile Include="src\textparser.cpp" />
     <ClCompile Include="src\userinfo.cpp" />
@@ -280,6 +282,8 @@
     <ClInclude Include="..\..\include\libhttp\posthandler_uploadvideo.h" />
     <ClInclude Include="..\..\include\libhttp\postjsonmanager.h" />
     <ClInclude Include="..\..\include\libhttp\procmanager.h" />
+    <ClInclude Include="..\..\include\libhttp\telnet.h" />
+    <ClInclude Include="..\..\include\libhttp\telnet.handler.h" />
     <ClInclude Include="..\..\include\libhttp\textparser.h" />
     <ClInclude Include="..\..\include\libhttp\websockethandler.h" />
     <ClInclude Include="..\..\include\libhttp\websocketsplitter.h" />

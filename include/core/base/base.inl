@@ -45,6 +45,8 @@
 #define CPP_SP std
 #endif
 
+#define _CONFIG_JCP
+
 #ifdef _MSC_VER
 #else
 

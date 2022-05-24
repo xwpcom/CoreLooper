@@ -6,18 +6,18 @@
 #include "parser_unittest.h"
 #include "libhttp/httpacker.h"
 #include "string/stringparam.h"
+#include "libhttp/telnet.h"
 
 #include "CppUnitTest.h"
 #define new DEBUG_NEW
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-#endif
 
 using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;
 using namespace Bear::Core::Net;
 using namespace Bear::Core::Net::Http;
+using namespace Bear::Telnet;
 
-#ifdef _MSC_VER
 using namespace mediakit;
 
 namespace mediakit {
@@ -708,80 +708,35 @@ public:
 };
 
 
-}
-#else
-static const char* TAG = "httpTest";
-int main()
+TEST_CLASS(Telnet_)
 {
-	class MainLooper :public MainLooper_
+	TEST_METHOD(telnetConnect)
 	{
-		SUPER(MainLooper_);
-
-		void OnCreate()
+		class MainLooper :public MainLooper_
 		{
-			__super::OnCreate();
-
-			//string fileName = "2013.10.02.zip";
-			//string filePath = "F:/Picture&Video/" + fileName;
-
-			string fileName = "ai.zip";
-			string filePath = ShellTool::GetAppPath()+"/" + fileName;
-
-			auto obj = make_shared<HttpPost>();
-			AddChild(obj);
-
-			auto t = ShellTool::GetCurrentTimeMs();
-			auto time = StringTool::Format("%04d.%02d.%02d_%02d.%02d.%02d"
-				, t.year
-				, t.month
-				, t.day
-				, t.hour
-				, t.minute
-				, t.second
-			);
-
-			string noise;
-			noise = StringTool::Format("%d", 123);
-			string uid = "00000EMU";
-
-			obj->SetServerPort("4g.jjyip.com", 8889);
-			obj->AddFile("2021-07-12_161900.jpg", filePath);
-
-			class AckHandler :public HttpPostAckHandler
+			void OnCreate()
 			{
-				void OnPostAck(const string& ack)
-				{
-					LogV(TAG, "%s,ack=[%s]", __func__, ack.c_str());
-					OnAck(0);
-				}
+				__super::OnCreate();
 
-				void OnPostFail(int error, string desc)
-				{
-					LogV(TAG, "%s,desc=[%s]", __func__, desc.c_str());
-					OnAck(error);
-				}
+				auto obj = make_shared<TelnetClient>();
+				AddChild(obj);
 
-				void OnAck(int error)
-				{
-					LogV(TAG, error == 0 ? u8"上传文件成功" : u8"上传文件失败");
-
-					GetMainLooper()->PostQuitMessage();
-				}
-
-			public:
-				weak_ptr<Handler> mManager;
-			};
-
-			auto handler = make_shared<AckHandler>();
-			handler->mManager = shared_from_this();
-			obj->SetAckHandler(handler);
-
-			obj->Start("/uploadFile?tag=upload&uid=00000EMU&date=20210712&fileName=" + fileName);
-		}
+				Bundle bundle;
+				bundle.Set("address", "192.160.1.101");
+				bundle.Set("port", 23);
+				obj->StartConnect(bundle);
+			}
 		};
 
-	make_shared<MainLooper>()->StartRun();
+		make_shared<MainLooper>()->StartRun();
+	}
+};
 
+}
+#else
+int main()
+{
 	return 0;
 }
 #endif
+

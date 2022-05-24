@@ -391,6 +391,15 @@
     <ClCompile Include="..\..\src\core\base\fieldtracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.protocol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\jcp\jcp.test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -895,6 +904,12 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\base\fieldtracker.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\jcp\jcp.client.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\protocol\jcp\jcp.protocol.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>
