@@ -9,10 +9,13 @@ static const char* TAG = "TelnetHandler";
 TelnetHandler::TelnetHandler()
 {
 	SetObjectName("TelnetHandler");
+
+	LogV(mTag, "%s(%p)", __func__, this);
 }
 
 TelnetHandler::~TelnetHandler()
 {
+	LogV(mTag, "%s(%p)", __func__, this);
 }
 
 void TelnetHandler::OnCreate()
@@ -22,6 +25,17 @@ void TelnetHandler::OnCreate()
 	mOutbox.PrepareBuf(1024 * 16);
 
 	UpdateTickAlive();
+}
+
+void TelnetHandler::OnDestroy()
+{
+	__super::OnDestroy();
+
+	auto obj = mBuddy.lock();
+	if (obj)
+	{
+		obj->Destroy();
+	}
 }
 
 void TelnetHandler::OnClose(Channel*)
@@ -47,6 +61,18 @@ void TelnetHandler::OnReceive(Channel*)
 		}
 
 		buf[ret] = 0;
+
+		auto bytes = mInbox.Write(buf, ret);
+		if (bytes != ret)
+		{
+			LogW(TAG, "mInbox.len=%d overflow,ret=%d,bytes=%d,", mInbox.GetDataLength(), ret, bytes);
+			Destroy();
+			return;
+		}
+
+		mInbox.MakeSureEndWithNull();
+		ParseInbox();
+
 		UpdateTickAlive();
 	}
 }
@@ -55,6 +81,8 @@ void TelnetHandler::OnConnect(Channel*, long error, Bundle*)
 {
 	if (error == 0)
 	{
+		mConnected = true;
+
 		int second = 60;
 		SetTimer(mTimer_CheckAlive, second * 1000);
 		UpdateTickAlive();
@@ -115,6 +143,87 @@ void TelnetHandler::OnTimer(long id)
 	}
 
 	__super::OnTimer(id);
+}
+
+int TelnetHandler::sendData(LPBYTE data, int bytes)
+{
+	auto ret = mOutbox.Write(data, bytes);
+	if (ret != bytes)
+	{
+		LogW(mTag, "%s fail,bytes=%d,ret=%d", __func__, bytes, ret);
+		Destroy();
+		return ret;
+	}
+
+	CheckSend();
+
+	return ret;
+}
+
+void TelnetHandler::setBuddy(weak_ptr< TelnetHandler> wobj)
+{
+	mBuddy = wobj;
+
+	auto obj = wobj.lock();
+	if (obj)
+	{
+		obj->checkSendCacheData();
+	}
+}
+
+void TelnetHandler::ParseInbox()
+{
+	auto obj = mBuddy.lock();
+	if (obj && obj->IsConnected())
+	{
+		checkSendCacheData();
+
+		const auto bytes = mInbox.length();
+		auto ret = obj->sendData(mInbox.data(), bytes);
+		if (ret != bytes)
+		{
+			mInbox.clear();
+			Destroy();
+			return;
+		}
+	}
+	else
+	{
+		const auto bytes = mInbox.length();
+		auto ret = mInboxCache.Append(mInbox);
+		if (ret != mInbox.length())
+		{
+			LogW(mTag, "%s fail,bytes=%d,ret=%d", __func__, bytes, ret);
+			mInbox.clear();
+			Destroy();
+			return;
+		}
+	}
+
+	mInbox.clear();
+}
+
+void TelnetHandler::checkSendCacheData()
+{
+	if (!mInboxCache.empty())
+	{
+		auto obj = mBuddy.lock();
+		if (obj && obj->IsConnected())
+		{
+			const auto bytes = mInboxCache.length();
+			auto ret = obj->sendData(mInboxCache.data(), bytes);
+			if (ret == bytes)
+			{
+				mInboxCache.clear();
+			}
+			else
+			{
+				mInbox.clear();
+				Destroy();
+				return;
+			}
+		}
+	}
 }
 
 

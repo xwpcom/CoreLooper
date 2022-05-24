@@ -81,8 +81,45 @@ shared_ptr<TelnetHandler> TelnetServer::CreateHandler()
 	return handler;
 }
 
+void TelnetServer::setBuddy(weak_ptr< TelnetServer> wobj)
+{
+	mBuddy = wobj;
+
+	auto obj = wobj.lock();
+	if (obj)
+	{
+		
+	}
+}
+
+void TelnetServer::onBuddyConnectReady(shared_ptr<TelnetHandler> obj)
+{
+	auto buddy = mBuddy.lock();
+	if (buddy)
+	{
+		auto con = fetchCacheHandler();
+		if (con)
+		{
+			obj->setBuddy(con);
+			con->setBuddy(obj);
+		}
+	}
+}
+
 void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bundle* extraInfo)
 {
+	if (deviceMode())
+	{
+		//from device master
+		int x = 0;
+
+	}
+	else
+	{
+		//from secureCRT
+		int x = 0;
+	}
+
 	TcpClient* client = (TcpClient*)endPoint;
 	client->SignalOnConnect.disconnect(this);
 
@@ -97,17 +134,16 @@ void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bu
 	AddChild(handler);
 
 	handler->OnConnect(endPoint, error, extraInfo);
-}
 
+	mCacheHandler = handler;
 
-TelnetClient::TelnetClient()
-{
-	SetObjectName("TelnetClient");
-}
-
-void TelnetClient::OnCreate()
-{
-	__super::OnCreate();
+	{
+		auto buddy = mBuddy.lock();
+		if (buddy)
+		{
+			buddy->onBuddyConnectReady(handler);
+		}
+	}
 }
 
 }

@@ -24,14 +24,18 @@ public:
 		mDeviceMode = true;
 	}
 
-	void setBuddy(weak_ptr< TelnetServer> obj)
-	{
-		mBuddy = obj;
-	}
+	void setBuddy(weak_ptr< TelnetServer> obj);
 
 	bool deviceMode()const
 	{
 		return mDeviceMode;
+	}
+	void onBuddyConnectReady(shared_ptr<TelnetHandler> obj);
+	shared_ptr<TelnetHandler> fetchCacheHandler()
+	{
+		auto obj = mCacheHandler.lock();
+		mCacheHandler.reset();
+		return obj;
 	}
 protected:
 	void OnCreate();
@@ -46,19 +50,9 @@ protected:
 	long mTimer_uidTimeout = 0;
 	bool mDeviceMode = false;//为true表示供master设备端连接，为false表示供secureCRT进行telnet正向连接
 	weak_ptr< TelnetServer> mBuddy;
+
+	weak_ptr<TelnetHandler> mCacheHandler;
 };
-
-class HTTP_EXPORT TelnetClient :public SimpleConnect
-{
-	SUPER(SimpleConnect);
-public:
-	TelnetClient();
-protected:
-	void OnCreate();
-
-	string mTag = "telnetClient";
-};
-
 
 }
 }
