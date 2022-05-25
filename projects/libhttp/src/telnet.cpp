@@ -117,11 +117,11 @@ void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bu
 
 			//mBuddy.reset();
 		}
-		else
+		
 		{
 			if (!deviceMode())
 			{
-				//SignalTelentClientConnect(this);
+				SignalTelentClientConnect(this);
 			}
 		}
 	}
