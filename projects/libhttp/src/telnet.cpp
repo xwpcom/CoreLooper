@@ -115,7 +115,7 @@ void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bu
 		{
 			buddy->onBuddyConnectReady(handler);
 
-			mBuddy.reset();
+			//mBuddy.reset();
 		}
 		else
 		{
