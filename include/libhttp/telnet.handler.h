@@ -6,6 +6,11 @@ namespace Telnet {
 using namespace Bear::Core;
 using namespace Bear::Core::Net;
 
+/*
+XiongWanPing 2022.05.24
+反向telnet
+*/
+
 class HTTP_EXPORT TelnetHandler :public Handler
 {
 	SUPER(Handler);

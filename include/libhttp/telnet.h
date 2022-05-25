@@ -9,6 +9,8 @@ using namespace Bear::Core::Net;
 /*
 XiongWanPing 2022.05.24
 为方便远程管理iot设备，需要用到反向telnet
+TelnetServer运行在平台端
+接收两个连接，一个是设备上报telnetd的数据,另一个为telnet客户端(比如secureCRT)到平台
 */
 
 class TelnetHandler;
