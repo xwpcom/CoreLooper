@@ -718,6 +718,7 @@ TEST_CLASS(Telnet_)
 			{
 				__super::OnCreate();
 
+				/*
 				auto obj = make_shared<TelnetClient>();
 				AddChild(obj);
 
@@ -725,6 +726,7 @@ TEST_CLASS(Telnet_)
 				bundle.Set("address", "192.160.1.101");
 				bundle.Set("port", 23);
 				obj->StartConnect(bundle);
+				*/
 			}
 		};
 

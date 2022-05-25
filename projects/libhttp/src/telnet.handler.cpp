@@ -129,7 +129,7 @@ void TelnetHandler::OnTimer(long id)
 	if(id == mTimer_CheckAlive)
 	{
 		auto tickNow = ShellTool::GetTickCount64();
-		int second = 180;
+		int second = 60*2;
 
 		if (tickNow > mTickAlive + second * 1000)
 		{
@@ -173,9 +173,17 @@ void TelnetHandler::setBuddy(weak_ptr< TelnetHandler> wobj)
 
 void TelnetHandler::ParseInbox()
 {
+	if (mInbox.empty())
+	{
+		return;
+	}
+
+	UpdateTickAlive();
+
 	auto obj = mBuddy.lock();
 	if (obj && obj->IsConnected())
 	{
+		obj->UpdateTickAlive();
 		checkSendCacheData();
 
 		const auto bytes = mInbox.length();

@@ -36,36 +36,7 @@ void TelnetServer::OnCreate()
 
 void TelnetServer::OnTimer(long id)
 {
-	if (id == mTimer_uidTimeout)
-	{
-		KillTimer(mTimer_uidTimeout);
-
-		LogW(mTag, "uid[%s] timeout",mUid.c_str());
-		mUid.clear();
-
-		return;
-	}
-
 	__super::OnTimer(id);
-}
-
-int TelnetServer::setUid(const string& uid)
-{
-	/*
-	每次只能绑定一个uid
-	*/
-
-	if (mUid.empty())
-	{
-		mUid = uid;
-		LogV(mTag, "%s(%s) ok", __func__, uid.c_str());
-
-		SetTimer(mTimer_uidTimeout, 10 * 1000);
-		return 0;
-	}
-
-	LogW(mTag, "fail %s(%s) due to busying",__func__,uid.c_str());
-	return -1;
 }
 
 shared_ptr<Channel> TelnetServer::CreateChannel()
@@ -85,11 +56,12 @@ void TelnetServer::setBuddy(weak_ptr< TelnetServer> wobj)
 {
 	mBuddy = wobj;
 
+	/*
 	auto obj = wobj.lock();
 	if (obj)
 	{
-		
 	}
+	*/
 }
 
 void TelnetServer::onBuddyConnectReady(shared_ptr<TelnetHandler> obj)
@@ -142,6 +114,15 @@ void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bu
 		if (buddy)
 		{
 			buddy->onBuddyConnectReady(handler);
+
+			mBuddy.reset();
+		}
+		else
+		{
+			if (!deviceMode())
+			{
+				SignalTelentClientConnect(this);
+			}
 		}
 	}
 }

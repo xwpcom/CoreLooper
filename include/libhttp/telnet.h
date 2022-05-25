@@ -18,7 +18,7 @@ class HTTP_EXPORT TelnetServer:public TcpServer
 	SUPER(TcpServer);
 public:
 	TelnetServer();
-	int setUid(const string& uid);
+	sigslot::signal1<Handler*>SignalTelentClientConnect;
 	void setDeviceMode()
 	{
 		mDeviceMode = true;
@@ -46,8 +46,6 @@ protected:
 	virtual void OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bundle* extraInfo);
 
 	string mTag = "telnetServer";
-	string mUid;
-	long mTimer_uidTimeout = 0;
 	bool mDeviceMode = false;//为true表示供master设备端连接，为false表示供secureCRT进行telnet正向连接
 	weak_ptr< TelnetServer> mBuddy;
 
