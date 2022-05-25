@@ -121,7 +121,7 @@ void TelnetServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bu
 		{
 			if (!deviceMode())
 			{
-				SignalTelentClientConnect(this);
+				//SignalTelentClientConnect(this);
 			}
 		}
 	}
