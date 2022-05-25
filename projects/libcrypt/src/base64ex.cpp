@@ -156,7 +156,11 @@ base64_encode_EX (const char *src,
 string  Base64::Encode(LPBYTE data, int dataLen)
 {
 	char *psz=base64Encode((char*)data,dataLen);
-	string  sz(psz);
+	string  sz;
+	if (psz)
+	{
+		sz = psz;
+	}
 	delete[]psz;
 	return sz;
 }
