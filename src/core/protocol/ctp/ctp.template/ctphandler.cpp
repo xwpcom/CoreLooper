@@ -111,13 +111,14 @@ void CtpHandler::OnError(CommonTextProtocol* obj, int error, const string& desc)
 void CtpHandler::Output(CommonTextProtocol* obj, const ByteBuffer& data)
 {
 	int ret = mOutbox.Append(data);
-	if (ret != data.GetActualDataLength())
+	if (ret != data.length())
 	{
-		LogW(TAG,"fail append data");
+		LogW(TAG,"fail append data(%s)",GetObjectName().c_str());
 		if (mDataEndPoint)
 		{
 			mDataEndPoint->Close();
 		}
+		Destroy();
 	}
 	CheckSend();
 
