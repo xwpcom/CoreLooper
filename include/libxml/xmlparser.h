@@ -18,6 +18,7 @@ public:
 	static int Test();
 
 	int Parse(const std::string& xml);
+	int Parse(const char *text);
 
 	int GetInt(std::string path, int defaultValue = 0);
 	bool GetBool(pugi::xml_node node, std::string path, bool defaultValue = false);

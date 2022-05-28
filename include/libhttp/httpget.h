@@ -17,7 +17,8 @@ public:
 	virtual ~HttpGet();
 
 	//url可以为http url,比如网页或文件
-	virtual int Execute(string url, string saveAsFilePath = "", std::function<void(const string& url,int error,ByteBuffer& box)> fn=nullptr);
+	virtual int Execute(const string& url, const string& saveAsFilePath, std::function<void(const string& url,int error,ByteBuffer& box)> fn=nullptr);
+	virtual int Execute(const string& url, std::function<void(const string& url, int error, ByteBuffer& box)> fn = nullptr);
 	sigslot::signal4<Handler*, string&, int, ByteBuffer&>	SignalHttpGetAck;
 	sigslot::signal2 < Handler*, const string&> SignalDownloadFileDone;
 
@@ -29,6 +30,7 @@ public:
 	}
 	void AddHeader(const string& name, const string& value);
 	void SetBodyRawData(const ByteBuffer& box);
+	void SetBody(const string& body);
 
 	//返回下载速度,单位:KB/S,仅在下载成功后有意义
 	double GetSpeed()const

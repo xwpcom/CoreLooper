@@ -19,7 +19,13 @@ HttpGet::~HttpGet()
 {
 }
 
-int HttpGet::Execute(string url, string saveAsFilePath, std::function<void(const string& url, int error, ByteBuffer& box)> fn)
+int HttpGet::Execute(const string& url, std::function<void(const string& url, int error, ByteBuffer& box)> fn)
+{
+	string saveAsFilePath;
+	return Execute(url, saveAsFilePath, fn);
+}
+
+int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::function<void(const string& url, int error, ByteBuffer& box)> fn)
 {
 	ASSERT(IsMyselfThread());
 	mCB = fn;
@@ -498,6 +504,12 @@ void HttpGet::OnDestroy()
 void HttpGet::AddHeader(const string& name, const string& value)
 {
 	mHeaders[name] = value;
+}
+
+void HttpGet::SetBody(const string& body)
+{
+	mBodyRawData.clear();
+	mBodyRawData.Write(body);
 }
 
 void HttpGet::SetBodyRawData(const ByteBuffer& box)

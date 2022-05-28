@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "XmlParser.h"
 
 using namespace std;
@@ -14,6 +14,17 @@ XmlParser::XmlParser()
 
 XmlParser::~XmlParser()
 {
+}
+
+int XmlParser::Parse(const char* text)
+{
+	if (!text)
+	{
+		return -1;
+	}
+
+	string xml(text);
+	return Parse(xml);
 }
 
 int XmlParser::Parse(const string& xml)
