@@ -8,8 +8,6 @@ namespace Core {
 namespace Net {
 namespace Http {
 
-static const char* TAG = "httpGet";
-
 HttpGet::HttpGet()
 {
 	mAckInfo.mAckBody.MakeSureEndWithNull();
@@ -68,6 +66,11 @@ int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::funct
 	mReqInfo.mHost = host;
 	mReqInfo.mPort = port;
 
+	if (mVerbose)
+	{
+		LogV(mTag, "%s(%s:%d)", __func__, host.c_str(),port);
+	}
+
 	Bundle bundle;
 	bundle.Set("address", host);
 	bundle.Set("port", port);
@@ -80,6 +83,11 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 	__super::OnConnect(endPoint, error, pBox, extraInfo);
 
 	//已测试,windows iocp connect 20秒自动超时
+
+	if (mVerbose)
+	{
+		LogV(mTag, "%s(error=%d)",__func__,error);
+	}
 
 	if (error)
 	{
@@ -99,8 +107,6 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 	}
 	else
 	{
-		//LogV(TAG,"%s,connect ok", __func__);
-
 		mAckInfo.mStartTick = ShellTool::GetTickCount64();
 
 		long startPos = 0;
@@ -174,7 +180,10 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 			req += string((char*)mBodyRawData.data(), mBodyRawData.length());
 		}
 
-		//LogV(TAG,"C=>S %s", req.c_str());
+		if (mVerbose)
+		{
+			LogV(mTag, "C=>S %s", req.c_str());
+		}
 
 		//在android下面，有时网络不正常，但connect返回连接成功，此时send时会以EPIPE失败
 		auto len = req.length();
@@ -185,6 +194,8 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		}
 		else
 		{
+			LogW(mTag, "fail send");
+
 			mSignaled = true;
 			if (mCB)
 			{
@@ -199,6 +210,11 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 void HttpGet::ParseInbox()
 {
 	KeepAlive();
+
+	if(mVerbose && !mInbox.empty())
+	{
+		//LogV(mTag, "%s(%s)",__func__,(char*)mInbox.data());
+	}
 	
 	switch (mAckInfo.mHttpAckStatus)
 	{
@@ -320,7 +336,12 @@ void HttpGet::ParseInbox()
 		mInbox.Eat((int)(end-data)+2);
 		mAckInfo.mChunkedTotalBytes = bodyBytes;
 		mAckInfo.mChunkedReceivedBytes = 0;
-		LogV(TAG,"chunked.bytes=%d", bodyBytes);
+		
+		if (mVerbose)
+		{
+			LogV(mTag, "chunked.bytes=%d", bodyBytes);
+		}
+		
 		SwitchStatus(eHttpAckStatus_ReceivingChunkedBody);
 		break;
 	}
@@ -337,11 +358,15 @@ void HttpGet::ParseInbox()
 			mAckInfo.mChunkedReceivedBytes += eatBytes;
 
 			auto pendingBytes = mAckInfo.mChunkedTotalBytes - mAckInfo.mChunkedReceivedBytes;
-			LogV(TAG,"chunked=%d / %d,pending %d"
-				, mAckInfo.mChunkedReceivedBytes
-				, mAckInfo.mChunkedTotalBytes
-				, pendingBytes
-			);
+			
+			if (mVerbose)
+			{
+				LogV(mTag, "chunked=%d / %d,pending %d"
+					, mAckInfo.mChunkedReceivedBytes
+					, mAckInfo.mChunkedTotalBytes
+					, pendingBytes
+				);
+			}
 
 			if (pendingBytes == 0)
 			{
@@ -410,7 +435,12 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 		if (!mAckInfo.mChunked)
 		{
 			long len = ftell(mAckInfo.mFile);
-			//LogV(TAG,"len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
+			
+			if (mVerbose)
+			{
+				LogV(mTag, "len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
+			}
+
 			if (len == mAckInfo.mContentLength)
 			{
 				SwitchStatus(eHttpAckStatus_Done);

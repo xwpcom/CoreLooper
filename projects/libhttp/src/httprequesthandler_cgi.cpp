@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "httprequesthandler_cgi.h"
 #include "httptool.h"
 using namespace Bear::Core;
@@ -6,7 +6,7 @@ namespace Bear {
 namespace Core {
 namespace Net {
 namespace Http {
-
+static const char* TAG = "cgiHandler";
 HttpRequestHandler_CGI::HttpRequestHandler_CGI()
 {
 }
@@ -28,10 +28,17 @@ int HttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
 	SetStatus(eHttpHandlerStatus_Processing);
 
 	string  cgiAck;
-	ProcessCgi(cgiAck);
+	auto ackCode = ProcessCgi(cgiAck);
 
 	HttpAckHeader httpAckHeader;
-	httpAckHeader.SetStatusCode("200 OK");
+	if (ackCode == 200)
+	{
+		httpAckHeader.SetStatusCode("200 OK");
+	}
+	else
+	{
+		httpAckHeader.SetStatusCode("501 not implement"); 
+	}
 	httpAckHeader.SetCacheControl("no-cache,no-store,must-revalidate");
 	httpAckHeader.SetContentLength((int)cgiAck.length());
 	httpAckHeader.SetContentType("text/plain");
@@ -63,6 +70,7 @@ int HttpRequestHandler_CGI::Start(tagHttpHeaderInfo *headerInfo)
 //
 int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 {
+	int ackCode = 200;
 	string  szUri = m_headerInfo->m_uri;
 	ack = "";
 
@@ -72,7 +80,7 @@ int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 		BOOL CanConfig = IsAuthAction("devcfg");
 		if (CanConfig)
 		{
-			DW("reboot.cgi reboot");
+			LogW(TAG,"reboot.cgi reboot");
 			ASSERT(FALSE);
 			//g_pApp->SetDelayReboot();
 			ack = "[ok]\r\n";
@@ -83,7 +91,7 @@ int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 		BOOL CanConfig = IsAuthAction("devcfg");
 		if (CanConfig)
 		{
-			DW("restore_factory.cgi reboot");
+			LogW(TAG,"restore_factory.cgi reboot");
 			//g_pApp->m_ini.SetInt(IDS_APP,"reset",1);
 			//g_pApp->RestoreFactoryConfig();
 			//g_pApp->SetDelayReboot();
@@ -109,9 +117,10 @@ int HttpRequestHandler_CGI::ProcessCgi(string & ack)
 	else
 	{
 		ack = StringTool::Format("[error]:unknown cgi cmd:[%s]\r\n", szUri.c_str());
+		ackCode = 404;
 	}
 
-	return 0;
+	return ackCode;
 }
 
 }
