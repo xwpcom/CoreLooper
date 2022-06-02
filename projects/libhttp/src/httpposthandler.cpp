@@ -57,7 +57,8 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 		if (mState == eState_Done)
 		{
 			LogV(TAG, "state is done");
-			ASSERT(FALSE);
+			//Destroy();
+			//ASSERT(FALSE);
 			return -1;
 		}
 

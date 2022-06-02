@@ -9,6 +9,7 @@
 
 using namespace Bear::Core;
 namespace Database {
+static const char* TAG = "sqlRes";
 
 MySqlRes::MySqlRes(MYSQL_RES* pMySQLRes)
 {
@@ -572,6 +573,47 @@ int MySqlRes::GetFieldLength(const char* pszFieldName)
 	}
 
 	return 0;
+}
+
+void MySqlRes::dump()
+{
+	auto row = mysql_num_rows(m_pMySQLRes);
+	auto col = mysql_num_fields(m_pMySQLRes);
+
+	vector<string> fieldNames;
+	{
+		MYSQL_FIELD* fields = NULL;
+		mysql_field_seek(m_pMySQLRes, 0);
+		fields = mysql_fetch_fields(m_pMySQLRes);
+
+		if (fields)
+		{
+			for (int i = 0; i < col; i++)
+			{
+				auto item = fields[i];
+				fieldNames.push_back(item.name);
+			}
+		}
+	}
+
+	MoveFirst();
+
+
+	while (!IsEOF())
+	{
+		string text;
+		for (auto& name : fieldNames)
+		{
+			text += GetField(name.c_str());
+			text += ",";
+		}
+
+		LogV(TAG,"%s",text.c_str());
+
+		MoveNext();
+	}
+
+	MoveFirst();
 }
 
 }

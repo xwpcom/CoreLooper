@@ -28,15 +28,6 @@ MySql::~MySql()
 	Disconnect();
 }
 
-// **************************************************************
-// Function	  : IsConnect
-// Description: 查看是否已连接到数据库
-// Parameters : void
-// Return	  : true已连接
-// Author	  : Yuncai Yan
-// Date		  : 2011-2-11
-// Revisions  : 
-// **************************************************************
 bool MySql::IsConnect()
 {
 	if (!m_pMySql)
@@ -63,18 +54,6 @@ bool MySql::IsConnect()
 	return (NULL != m_pMySql);
 }
 
-// **************************************************************
-// Function	  : connect
-// Description: 连接MYSQL数据库
-// Parameters : server 服务器IP
-// Parameters : user 用户名
-// Parameters : password 密码
-// Parameters : database 数据库
-// Return	  : 成功返回0
-// Author	  : Yuncai Yan
-// Date		  : 2011-2-10
-// Revisions  : 
-// **************************************************************
 int MySql::Connect(const char* server, const char* user, const char* password, const char* database, int port)
 {
 	ASSERT(m_pMySql == NULL);
@@ -85,6 +64,19 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 	{
 		LogW(TAG,"fail mysql_init");
 		return -1;
+	}
+
+
+	{
+		//https://dev.mysql.com/doc/refman/8.0/en/charset-connection.html
+
+		auto ret = mysql_options(m_pMySql, MYSQL_SET_CHARSET_NAME, "utf8");
+		mysql_options(m_pMySql, MYSQL_INIT_COMMAND,"SET NAMES utf8;");
+		//SetUtf8();
+		//	mysql_set_character_set(m_pMySql,"utf8");
+
+		char reconnectArg = 1;
+		mysql_options(m_pMySql, MYSQL_OPT_RECONNECT, (char*)&reconnectArg);
 	}
 
 #ifdef _DEBUG
@@ -113,7 +105,7 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 		auto ret = mysql_options(m_pMySql, MYSQL_SET_CHARSET_NAME, "utf8");
 		SetUtf8();
 		//	mysql_set_character_set(m_pMySql,"utf8");
-
+		mysql_options(m_pMySql, MYSQL_INIT_COMMAND, "SET NAMES utf8;");
 		char reconnectArg = 1;
 		mysql_options(m_pMySql, MYSQL_OPT_RECONNECT, (char*)& reconnectArg);
 	}

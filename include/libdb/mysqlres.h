@@ -14,6 +14,7 @@ public:
 		Attach(pMySQLRes);
 		return *this;
 	}
+	void dump();
 
 	~MySqlRes();
 
