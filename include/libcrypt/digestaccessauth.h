@@ -16,7 +16,7 @@ https://en.wikipedia.org/wiki/Digest_access_authentication
 class CRYPT_EXT_CLASS DigestAccessAuth
 {
 public:
-	string  CreateResponse(const string& realm, const string& qop, const string& nonce, const string& cnonce, const string& cmd,
+	static string  CreateResponse(const string& realm, const string& qop, const string& nonce, const string& cnonce, const string& cmd,
 		const string& uri, const string& user, const string& password);
 
 #define IN

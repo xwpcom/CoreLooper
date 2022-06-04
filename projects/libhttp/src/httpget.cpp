@@ -236,6 +236,11 @@ void HttpGet::ParseInbox()
 
 			string header(ps, pEnd - ps);
 
+			if (mVerbose)
+			{
+				LogV(mTag, "recv http header(%s)",header.c_str());
+			}
+
 			{
 				HttpAckParser parser(header);
 				const HttpAckParser::tagHttpAckInfo& info = parser.GetAckInfo();
