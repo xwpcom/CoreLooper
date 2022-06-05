@@ -172,7 +172,6 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 			req += StringTool::Format("Content-Length: %d\r\n", (int)mBodyRawData.length());
 		}
 
-
 		req += "\r\n";
 
 		if (mBodyRawData.length() > 0)
@@ -443,7 +442,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 			
 			if (mVerbose)
 			{
-				LogV(mTag, "len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
+				//LogV(mTag, "len=%d,pending %d bytes", len, mAckInfo.mContentLength - len);
 			}
 
 			if (len == mAckInfo.mContentLength)
@@ -522,6 +521,11 @@ void HttpGet::SwitchStatus(HttpGet::eHttpAckStatus status)
 
 void HttpGet::OnDestroy()
 {
+	if (mVerbose)
+	{
+		LogV(mTag, "%s(%p)", __func__, this);
+	}
+
 	__super::OnDestroy();
 
 	if (!mSignaled)

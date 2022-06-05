@@ -42,7 +42,7 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 	//*
 	if (mState == eState_Done)
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 		return -1;
 	}
 	//*/
