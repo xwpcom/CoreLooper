@@ -212,7 +212,7 @@ bool MySqlRes::GetFieldByte(const char* pszFieldName, BYTE& iFieldVal)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		iFieldVal = -1;
 	}
 
@@ -230,7 +230,7 @@ bool MySqlRes::GetFieldBool(const char* pszFieldName, bool& iFieldVal)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		iFieldVal = false;
 	}
 
@@ -248,7 +248,7 @@ bool MySqlRes::GetField(const char* pszFieldName, int& value)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		value = 0;
 	}
 
@@ -266,7 +266,7 @@ bool MySqlRes::GetField(const char* pszFieldName, string& value)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		value.clear();
 	}
 
@@ -293,7 +293,7 @@ bool MySqlRes::GetFieldInt(const char* pszFieldName, int& iFieldVal)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		iFieldVal = 0;
 	}
 
@@ -367,7 +367,7 @@ bool MySqlRes::GetFieldLong(const char* pszFieldName, long& lFieldVal)const
 	}
 	else
 	{
-		DW("no find field value[%s]", pszFieldName);
+		LogW(TAG,"no find field value[%s]", pszFieldName);
 		lFieldVal = 0;
 	}
 	return false;
@@ -421,7 +421,7 @@ bool MySqlRes::GetFieldTime(const char* pszFieldName, CTime& tFiledVal)const
 		}
 		catch (...)
 		{
-			DW("invalid time format for field[%s]", pszFieldName);
+			LogW(TAG,"invalid time format for field[%s]", pszFieldName);
 		}
 	}
 	return false;
@@ -478,7 +478,7 @@ bool MySqlRes::GetFieldTime(const char* pszFieldName, COleDateTime& tm)const
 		}
 		catch (...)
 		{
-			DW("invalid COleDateTime");
+			LogW(TAG,"invalid COleDateTime");
 		}
 	}
 
