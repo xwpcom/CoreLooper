@@ -575,7 +575,7 @@ int MySqlRes::GetFieldLength(const char* pszFieldName)
 	return 0;
 }
 
-void MySqlRes::dump()
+void MySqlRes::dumpX()
 {
 	auto row = mysql_num_rows(m_pMySQLRes);
 	auto col = mysql_num_fields(m_pMySQLRes);
