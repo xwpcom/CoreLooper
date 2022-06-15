@@ -193,7 +193,7 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		}
 		else
 		{
-			LogW(mTag, "fail send");
+			LogW(mTag, "fail send,len=%d,ret=%d",len,ret);
 
 			mSignaled = true;
 			if (mCB)

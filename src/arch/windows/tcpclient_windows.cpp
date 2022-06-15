@@ -605,7 +605,10 @@ void TcpClient_Windows::ConfigCacheBox()
 		//后续改进
 		mOutbox.SetBufferSize(4 * 1024, 16*1024 * 1024);
 
-		mOutbox.PrepareBuf(4 * 1024);
+		/*
+		2022.06.15 海康摄像机修改参数时xml长达6KB,为支持HttpGet,这里加大outbox
+		*/
+		mOutbox.PrepareBuf(8 * 1024);
 
 		IoContext& context = mIoContextSend;
 		context.mType = IoContextType_Send;
