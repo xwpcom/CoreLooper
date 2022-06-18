@@ -45,6 +45,10 @@ PostHandler_UploadFile::~PostHandler_UploadFile()
 {
 }
 
+/*
+2022.06.17
+todo:这个要做成可扩展的
+*/
 shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fieldName)
 {
 	/*
@@ -93,6 +97,15 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 	else if (tag == "file")
 	{
 		folder = StringTool::Format("C:/iot/file/%s", uid.c_str());
+		auto fileName = params.GetString("fileName");
+		obj->SetFileName(fileName);
+	}
+	else if (tag == "rtspSnap")
+	{
+		obj->params().Set("tag", tag);
+		obj->params().Set("uid", uid);
+
+		folder = StringTool::Format("C:/iot/rtspSnap/%s", uid.c_str());
 		auto fileName = params.GetString("fileName");
 		obj->SetFileName(fileName);
 	}
