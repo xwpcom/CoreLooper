@@ -213,7 +213,7 @@ private:
 	bool _serverMode;
 	bool _sendHandshake;
 	shared_ptr<SSL> _ssl;
-	BIO *_read_bio, *_write_bio;
+	BIO *_read_bio=nullptr, *_write_bio = nullptr;
 	function<void(const Buffer::Ptr &)> _onDec;
 	function<void(const Buffer::Ptr &)> _onEnc;
 	List<Buffer::Ptr> _bufferOut;

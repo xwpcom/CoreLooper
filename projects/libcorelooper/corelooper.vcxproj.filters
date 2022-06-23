@@ -400,6 +400,9 @@
     <ClCompile Include="..\..\src\core\protocol\jcp\jcp.test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLinit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">

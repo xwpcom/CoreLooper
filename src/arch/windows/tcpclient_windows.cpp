@@ -279,7 +279,6 @@ int TcpClient_Windows::Send(LPVOID data, int dataLen)
 #ifdef _CONFIG_OPENSSL
 	if (mTlsInfo)
 	{
-		//mTlsInfo->mOutBuffer->assign((char*)data, dataLen);
 		auto outBuffer = make_shared<BufferRaw>();
 		outBuffer->assign((char*)data, dataLen);
 		if (mTlsInfo->mSslBox)

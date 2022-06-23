@@ -451,6 +451,7 @@
     <ClCompile Include="..\..\src\core\zltoolkit\Util\SHA1.cpp" />
     <ClCompile Include="..\..\src\core\zltoolkit\Util\SqlPool.cpp" />
     <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLBox.cpp" />
+    <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLinit.cpp" />
     <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLUtil.cpp" />
     <ClCompile Include="..\..\src\core\zltoolkit\Util\util.cpp" />
     <ClCompile Include="..\..\src\core\zltoolkit\Util\uv_errno.cpp" />
