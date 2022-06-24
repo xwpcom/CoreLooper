@@ -35,3 +35,4 @@ app-*.apk
 .cxx
 /projects/libcorelooper.as/libcorelooper/*.aar
 /projects/libxml/*.aps
+/bin.pclinux

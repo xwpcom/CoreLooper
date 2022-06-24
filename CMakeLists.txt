@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(corelooper CXX)
+project(corelooper LANGUAGES CXX C)
 
 enable_testing()
 
@@ -73,7 +73,8 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})
 
 add_subdirectory(src)
-
+#add_subdirectory(projects/libhttp)
+add_subdirectory(src/arch/linux/wolfssl)
 if(CMAKE_BUILD_EXAMPLES)
   add_subdirectory(demo)
 endif()

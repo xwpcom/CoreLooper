@@ -2,6 +2,9 @@
 #include "libhttp.inl"
 #include "libhttp/httpget.h"
 #include "libhttp/httppost.h"
+
+static const char* TAG = "Http";
+
 #ifdef _MSC_VER
 #include "parser_unittest.h"
 #include "libhttp/httpacker.h"
@@ -86,8 +89,6 @@ protected:
 };
 
 IMPLEMENT_AJAX_CLASS(Ajax_Info, "Info", "")
-
-static const char* TAG = "Http";
 
 TEST_CLASS(Http)
 {
@@ -736,8 +737,10 @@ TEST_CLASS(Telnet_)
 
 }
 #else
+using namespace Bear::Core;
 int main()
 {
+	LogV(TAG, "%s",__func__);
 	return 0;
 }
 #endif

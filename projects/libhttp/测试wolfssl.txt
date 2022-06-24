@@ -1,0 +1,11 @@
+.在ubuntu下测试wolfssl
+cd /mnt/corelooper/CoreLooper.git/bin.pclinux 
+make
+
+编译生成的http_unittest放在~/work/nfs下面
+cd ~/work/nfs
+./http_unittest
+运行效果如下
+bear@bear-ubuntu22:~/work/nfs$ ./http_unittest 
+[2022.06.23 16:42:31.556#31620]Http#[main]                                                          (/mnt/corelooper/CoreLooper.git/projects/libhttp/src/tests/http_unittest.cpp:743)
+bear@bear-ubuntu22:~/work/nfs$ 

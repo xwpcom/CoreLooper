@@ -1,4 +1,4 @@
-﻿AUX_SOURCE_DIRECTORY(. SRC)
+AUX_SOURCE_DIRECTORY(. SRC)
 AUX_SOURCE_DIRECTORY(arch/linux SRC)
 AUX_SOURCE_DIRECTORY(core/base SRC)
 AUX_SOURCE_DIRECTORY(core/file SRC)
@@ -9,6 +9,7 @@ AUX_SOURCE_DIRECTORY(core/thread SRC)
 AUX_SOURCE_DIRECTORY(core/protocol/ctp SRC)
 AUX_SOURCE_DIRECTORY(core/protocol/sctp SRC)
 AUX_SOURCE_DIRECTORY(core/protocol/ctp/ctp.template SRC)
+#AUX_SOURCE_DIRECTORY(arch/linux/wolfssl/wolfssl-3.15.3/wolfcrypt/src SRC)
 
 add_library(corelooper ${SRC})
 target_link_libraries(corelooper pthread rt)
@@ -23,7 +24,12 @@ INCLUDE_DIRECTORIES(${INCLUDE_ROOT}/arch/linux)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE})
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core/base)
-INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core/looper)
+INCLUDE_DIRECTORIES(${INCLUDE_CORE}/core/looper
+#INCLUDE_DIRECTORIES(${SRC_DIR}/arch/linux/wolfssl/platforms/include)
+#INCLUDE_DIRECTORIES(${SRC_DIR}/arch/linux/wolfssl/port)
+#INCLUDE_DIRECTORIES(${SRC_DIR}/arch/linux/wolfssl/wolfssl-3.15.3)
+
+)
 
 install(TARGETS corelooper DESTINATION lib)
 
