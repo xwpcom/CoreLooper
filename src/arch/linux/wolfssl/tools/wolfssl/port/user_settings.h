@@ -1,4 +1,4 @@
-/* user_settings.h
+﻿/* user_settings.h
  *
  * Copyright (C) 2006-2017 wolfSSL Inc.  All rights reserved.
  * Additions Copyright 2018 Espressif Systems (Shanghai) PTE LTD.
@@ -19,7 +19,9 @@
 
 #define NO_WRITEV
 #define NO_WOLFSSL_DIR
+#ifndef NO_INLINE
 #define NO_INLINE
+#endif
 #define NO_WOLFSSL_MEMORY
 #define HAVE_PK_CALLBACKS
 #define WOLFSSL_KEY_GEN

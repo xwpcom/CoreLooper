@@ -61,6 +61,13 @@ INCLUDE_DIRECTORIES(${INCLUDE_CORE}/string)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/thread)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/xml)
 
+SET(WOLFSSL_DIR ${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/tools/wolfssl/wolfssl-3.15.3)
+#message (${WOLFSSL_DIR})
+INCLUDE_DIRECTORIES(${WOLFSSL_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/platforms/include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl)
+
+
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 #find_package(Boost REQUIRED)
@@ -73,7 +80,11 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
 message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_TYPE}})
 
 add_subdirectory(src)
-#add_subdirectory(projects/libhttp)
+if(_CONFIG_INGENIC)
+else(_CONFIG_INGENIC)
+add_subdirectory(projects/libhttp)
+endif(_CONFIG_INGENIC)
+
 add_subdirectory(src/arch/linux/wolfssl)
 if(CMAKE_BUILD_EXAMPLES)
   add_subdirectory(demo)

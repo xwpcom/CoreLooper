@@ -139,7 +139,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_SDK_DLL;WIN32;_WINDOWS;_DEBUG;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;../../depends/jdk/include;../../depends/jdk/include/win32;../../depends/openssl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;../../include;../../include/core;../../include/core/base;../../include/core/file;../../include/core/looper;../../include/core/net;../../include/core/string;../../include/core/thread;../../src/core/zltoolkit;../../include/arch/windows;../../include/arch/linux;$(VCInstallDir)Auxiliary\vs\UnitTest\include;../../depends/jdk/include;../../depends/jdk/include/win32;../../depends/openssl/include;D:\corelooper\study\wolfssl\wolfssl</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -308,6 +308,7 @@
     <ClCompile Include="..\..\src\arch\android\jni_entry.cpp" />
     <ClCompile Include="..\..\src\arch\linux\looper_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\serialport_linux.cpp" />
+    <ClCompile Include="..\..\src\arch\linux\sslfilter.cpp" />
     <ClCompile Include="..\..\src\arch\linux\tcpclient_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\tcpserver_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\udpclient_linux.cpp" />
@@ -491,6 +492,7 @@
     <ClInclude Include="..\..\include\arch\android\jnilooper.h" />
     <ClInclude Include="..\..\include\arch\android\jnimainlooper.h" />
     <ClInclude Include="..\..\include\arch\linux\serialport_linux.h" />
+    <ClInclude Include="..\..\include\arch\linux\sslfilter.h" />
     <ClInclude Include="..\..\include\arch\linux\tcpclient_linux.h" />
     <ClInclude Include="..\..\include\arch\linux\tcpserver_linux.h" />
     <ClInclude Include="..\..\include\arch\linux\udpclient_linux.h" />

@@ -403,6 +403,9 @@
     <ClCompile Include="..\..\src\core\zltoolkit\Util\SSLinit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\arch\linux\sslfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -913,6 +916,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\core\protocol\jcp\jcp.protocol.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\linux\sslfilter.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

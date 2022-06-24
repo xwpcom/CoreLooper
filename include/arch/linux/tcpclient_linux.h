@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "looper_linux.h"
 #include "net/channel.h"
 
@@ -10,7 +10,7 @@ namespace Bear {
 namespace Core
 {
 namespace Net {
-
+class SslFilter;
 class Loop;
 class CORE_EXPORT TcpClient_Linux :public Channel, public EpollProxy
 {
@@ -70,7 +70,8 @@ protected:
 	bool	mMarkEndOfSend = false;
 	Bundle	mBundle;
 
-	std::string mAddress;
+	string mAddress;
+	shared_ptr<SslFilter> mSslFilter;
 };
 }
 }

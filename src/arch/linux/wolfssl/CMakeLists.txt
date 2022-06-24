@@ -59,7 +59,7 @@ add_subdirectory(tools/wolfssl)
 #add_subdirectory(protocols/mqtt/paho-mqtt)
 #add_subdirectory(protocols/http)
 #add_subdirectory(security)
-#add_subdirectory(common)
+add_subdirectory(common)
 #add_subdirectory(services/ota)
 
 LINK_LIBRARIES(-lpthread -lm)

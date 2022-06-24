@@ -4,12 +4,13 @@
 #include "tcpserver_linux.h"
 #include "net/dnslooper.h"
 #include "../../core/looper/message.inl"
+#include "sslfilter.h"
+
 using namespace std;
 using namespace Bear::Core;
 
 namespace Bear {
-namespace Core
-{
+namespace Core{
 namespace Net {
 
 enum
@@ -25,6 +26,18 @@ TcpClient_Linux::TcpClient_Linux()
 	mWaitFirstEvent = true;
 	mListenWritable = false;
 	SetObjectName("TcpClient_Linux");
+
+#ifdef _CONFIG_WOLFSSL
+	{
+		static bool first = true;
+		if (first)
+		{
+			auto ret = wolfSSL_Init();
+			first = false;
+			LogV(TAG, "wolfSSL_Init ret=%d",ret);
+		}
+	}
+#endif
 }
 
 TcpClient_Linux::~TcpClient_Linux()

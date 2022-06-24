@@ -737,10 +737,26 @@ TEST_CLASS(Telnet_)
 
 }
 #else
+
+#include "wolfssl/ssl.h"
+#include <cyassl/ssl.h>
+
 using namespace Bear::Core;
 int main()
 {
 	LogV(TAG, "%s",__func__);
+
+	{
+		static bool first = true;
+		if (first)
+		{
+			auto ret=wolfSSL_Init();
+			first = false;
+
+			LogV(TAG, "wolfSSL_Init=%d",ret);
+		}
+	}
+
 	return 0;
 }
 #endif
