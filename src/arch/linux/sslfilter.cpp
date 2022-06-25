@@ -3,6 +3,30 @@
 
 #if defined _CONFIG_WOLFSSL
 
+#define BIO_s_mem                       wolfSSL_BIO_s_mem
+#define BIO_new                         wolfSSL_BIO_new
+#define BIO_free                        wolfSSL_BIO_free
+#define BIO_method_type                 wolfSSL_BIO_method_type
+#define BIO_set_ssl                     wolfSSL_BIO_set_ssl
+#define BIO_get_ssl                     wolfSSL_BIO_get_ssl
+#define BIO_new_ssl_connect             wolfSSL_BIO_new_ssl_connect
+#define BIO_set_conn_hostname           wolfSSL_BIO_set_conn_hostname
+
+#define SSL_new                         wolfSSL_new
+#define SSL_set_fd                      wolfSSL_set_fd
+#define SSL_get_fd                      wolfSSL_get_fd
+#define SSL_connect                     wolfSSL_connect
+#define SSL_clear                       wolfSSL_clear
+#define SSL_set_bio                     wolfSSL_set_bio
+#define SSL_do_handshake                wolfSSL_SSL_do_handshake
+#define SSL_set_shutdown                wolfSSL_set_shutdown
+#define SSL_set_session_id_context      wolfSSL_set_session_id_context
+#define SSL_set_connect_state           wolfSSL_set_connect_state
+#define SSL_set_accept_state            wolfSSL_set_accept_state
+
+
+typedef WOLFSSL          SSL;
+
 namespace Bear {
 namespace Core {
 namespace Net {
@@ -14,24 +38,35 @@ static bool mVerbose = true;//为true时打印调试信息
 
 SslFilter::~SslFilter() {}
 
-SslFilter::SslFilter(bool serverMode, int buffSize) {
-#if defined(ENABLE_OPENSSL)
+SslFilter::SslFilter()
+{
+}
+
+void SslFilter::init()
+{
+	bool serverMode = false;
+
+#if defined(_CONFIG_WOLFSSL)
 	_read_bio = BIO_new(BIO_s_mem());
 	mServerMode = serverMode;
 	{
 		WOLFSSL_CTX* ctx = NULL;
 		ctx = wolfSSL_CTX_new(wolfTLSv1_2_client_method());
 		{
+			wolfSSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0); //不验证
+
+			/*
 			auto ret = wolfSSL_CTX_load_verify_locations(ctx, "D:/iot.jjyip.com.p12"
 				//, 0
 				, R"(D:\os\wolfssl\certs\external)"
 			);
 			LogV(TAG, "wolfSSL_CTX_load_verify_locations ret=%d", ret);
+			*/
 		}
 
 		auto ssl = SSL_new(ctx);
 		mSSL = shared_ptr<SSL>(ssl, [](SSL* ptr) {
-			SSL_free(ptr);
+			wolfSSL_free(ptr);
 			});
 
 	}
@@ -44,14 +79,14 @@ SslFilter::SslFilter(bool serverMode, int buffSize) {
 		LogW(TAG, "ssl disabled!");
 	}
 	mSendHandshake = false;
-	mBufSize = buffSize;
+	//mBufSize = buffSize;
 #endif 
 }
 
 void SslFilter::shutdown() {
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	_bufferOut.clear();
-	int ret = SSL_shutdown(mSSL.get());
+	int ret = wolfSSL_shutdown(mSSL.get());
 	if (ret != 1) {
 		LogW(TAG, "SSL shutdown failed:");// << SSLUtil::getLastError();
 	}
@@ -71,10 +106,10 @@ void SslFilter::onRecv(shared_ptr<ByteBuffer> buffer) {
 		}
 		return;
 	}
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	uint32_t offset = 0;
 	while (offset < buffer->length()) {
-		auto nwrite = BIO_write(_read_bio, buffer->data() + offset, buffer->length() - offset);
+		auto nwrite = wolfSSL_BIO_write(_read_bio, buffer->data() + offset, buffer->length() - offset);
 		if (nwrite > 0) {
 			//部分或全部写入bio完毕
 			offset += nwrite;
@@ -100,10 +135,11 @@ void SslFilter::onSend(shared_ptr<ByteBuffer> buffer) {
 		return;
 	}
 
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	if (!mServerMode && !mSendHandshake) {
 		mSendHandshake = true;
-		SSL_do_handshake(mSSL.get());
+		//SSL_do_handshake(mSSL.get());
+		wolfSSL_connect(mSSL.get());
 	}
 	_bufferOut.emplace_back(buffer);
 	flush();
@@ -111,14 +147,14 @@ void SslFilter::onSend(shared_ptr<ByteBuffer> buffer) {
 }
 
 void SslFilter::flushWriteBio() {
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	int total = 0;
 	int nread = 0;
 	auto bufferBio = make_shared<ByteBuffer>();// _bufferPool.obtain();
 	bufferBio->PrepareBuf(mBufSize);
 	int buf_size = bufferBio->GetTailFreeSize() - 1;
 	do {
-		nread = BIO_read(_write_bio, bufferBio->data() + total, buf_size - total);
+		nread = wolfSSL_BIO_read(_write_bio, bufferBio->data() + total, buf_size - total);
 		if (nread > 0) {
 			total += nread;
 		}
@@ -144,14 +180,14 @@ void SslFilter::flushWriteBio() {
 }
 
 void SslFilter::flushReadBio() {
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	int total = 0;
 	int nread = 0;
 	auto bufferBio = make_shared<ByteBuffer>();// _bufferPool.obtain();
 	bufferBio->PrepareBuf(mBufSize);
 	int buf_size = bufferBio->GetTailFreeSize() - 1;
 	do {
-		nread = SSL_read(mSSL.get(), bufferBio->data() + total, buf_size - total);
+		nread = wolfSSL_read(mSSL.get(), bufferBio->data() + total, buf_size - total);
 		if (nread > 0) {
 			total += nread;
 		}
@@ -176,9 +212,9 @@ void SslFilter::flushReadBio() {
 #endif 
 }
 void SslFilter::flush() {
-#if defined(ENABLE_OPENSSL)
+#if defined(_CONFIG_WOLFSSL)
 	flushReadBio();
-	if (!SSL_is_init_finished(mSSL.get()) || _bufferOut.empty()) {
+	if (!wolfSSL_is_init_finished(mSSL.get()) || _bufferOut.empty()) {
 		//ssl未握手结束或没有需要发送的数据
 		flushWriteBio();
 		return;
@@ -189,7 +225,7 @@ void SslFilter::flush() {
 		auto& front = _bufferOut.front();
 		uint32_t offset = 0;
 		while (offset < front->length()) {
-			auto nwrite = SSL_write(mSSL.get(), front->data() + offset, front->length() - offset);
+			auto nwrite = wolfSSL_write(mSSL.get(), front->data() + offset, front->length() - offset);
 			if (nwrite > 0) {
 				//部分或全部写入完毕
 				offset += nwrite;
@@ -222,6 +258,11 @@ bool SslFilter::setHost(const char* host) {
 	return false;
 }
 
+//为clientMode时连接成功后调用本接口,要进行handshake操作
+void SslFilter::onConnect()
+{
+
+}
 
 }
 }

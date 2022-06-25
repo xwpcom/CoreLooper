@@ -21591,6 +21591,9 @@ int wolfSSL_RAND_bytes(unsigned char* buf, int num)
 
 int wolfSSL_RAND_poll()
 {
+	printf("skip %s\r\n",__func__);
+	return WOLFSSL_FAILURE;//XiongWanPing 2022.06.25 fix:undefined reference to `wc_GenerateSeed'
+	/*
     byte  entropy[16];
     int  ret = 0;
     word32 entropy_sz = 16;
@@ -21608,6 +21611,7 @@ int wolfSSL_RAND_poll()
         ret = WOLFSSL_SUCCESS;
 
     return ret;
+	*/
 }
 
 WOLFSSL_BN_CTX* wolfSSL_BN_CTX_new(void)

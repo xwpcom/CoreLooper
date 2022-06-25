@@ -24,11 +24,13 @@ using namespace std;
 
 //XiongWanPing 2022.06.23
 //SslFilter仿ZLMediaKit SSL_Box,目前只验证过clientMode,还没有用到serverMode为true的情况
+//嵌入式t21的linux flash空间很小,用openssl是不可能的,用wolfssl后剩余空间都只剩下68KB了,还需要精简其他组件
 class SslFilter {
 public:
-	SslFilter(bool serverMode = true, int buffSize = 32 * 1024);
+	SslFilter();
 	~SslFilter();
 
+	void onConnect();
 	/**
 	 * 收到密文后，调用此函数解密
 	 * @param buffer 收到的密文数据
@@ -62,10 +64,11 @@ public:
 	void flush();
 
 	bool setHost(const char* host);
-private:
+protected:
+	void init();
 	void flushWriteBio();
 	void flushReadBio();
-private:
+
 	bool mServerMode = false;
 	bool mSendHandshake = false;
 	shared_ptr<WOLFSSL> mSSL;

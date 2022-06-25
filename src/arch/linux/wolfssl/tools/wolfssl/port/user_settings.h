@@ -55,7 +55,7 @@
 //#define DEBUG_WOLFSSL
 //#define WOLFSSL_LOG_PRINTF
 
-#define NO_ASN_TIME
+//#define NO_ASN_TIME
 
 #define XTIME time
 #define SSL_CTX_use_certificate_ASN1(ctx,len,buf) wolfSSL_CTX_use_certificate_buffer(ctx,buf,len,WOLFSSL_FILETYPE_PEM)

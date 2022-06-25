@@ -1,7 +1,8 @@
-﻿//#define OPENSSL_EXTRA
+﻿//#define OPENSSL_ALL
+//#define OPENSSL_EXTRA
 //#define HAVE_SNI
-//#define OPENSSL_ALL
 //#define HAVE_TLS_EXTENSIONS
+//#define WOLFSSL_HAPROXY
 
 /* settings.h
  *

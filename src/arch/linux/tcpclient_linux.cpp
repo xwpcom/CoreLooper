@@ -187,6 +187,13 @@ int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 		{
 			LogW(TAG,"handler bind event fail,error=%d(%s)",errno,strerror(errno));
 		}
+
+	#ifdef _CONFIG_WOLFSSL
+		if (mClientMode && mSslFilter)
+		{
+			mSslFilter->onConnect();
+		}
+	#endif
 	}
 	else
 	{
@@ -528,6 +535,24 @@ void TcpClient_Linux::MarkEndOfSend()
 	mMarkEndOfSend = true;
 	shutdown(mSock, SD_SEND);
 }
+
+int TcpClient_Linux::EnableTls(bool clientMode)
+{
+	int ret = -1;
+
+	mClientMode = clientMode;
+
+#ifdef _CONFIG_WOLFSSL
+	if (!mSslFilter)
+	{
+		mSslFilter = make_shared<SslFilter>();
+	}
+	ret = 0;
+#endif
+
+	return ret;
+}
+
 
 }
 }

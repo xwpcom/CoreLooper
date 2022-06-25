@@ -34,8 +34,8 @@
 #include <wolfssl/wolfcrypt/random.h>
 #include <wolfssl/wolfcrypt/cpuid.h>
 
-
 #ifdef HAVE_FIPS
+#error xxx
 int wc_GenerateSeed(OS_Seed* os, byte* seed, word32 sz)
 {
     return GenerateSeed(os, seed, sz);

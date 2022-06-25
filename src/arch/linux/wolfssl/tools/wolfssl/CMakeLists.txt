@@ -22,6 +22,8 @@ target_sources(aio_tools_wolfssl
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/wolfcrypt/src/wc_port.c
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/wolfcrypt/src/misc.c
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/wolfcrypt/src/integer.c
+	${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/wolfcrypt/src/wc_encrypt.c
+	${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/wolfcrypt/src/logging.c
   )
 
 target_sources(aio_tools_wolfssl
@@ -33,6 +35,9 @@ target_sources(aio_tools_wolfssl
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/src/keys.c
   )
 if(_CONFIG_INGENIC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D OPENSSL_EXTRA")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D OPENSSL_EXTRA")
+
 else(_CONFIG_INGENIC)
 
 set(TM_SYS_TYPE "32-bit" CACHE INTERNAL "System Type")

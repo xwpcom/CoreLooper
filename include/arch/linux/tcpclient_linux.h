@@ -19,6 +19,7 @@ class CORE_EXPORT TcpClient_Linux :public Channel, public EpollProxy
 public:
 	TcpClient_Linux();
 	virtual ~TcpClient_Linux();
+	int EnableTls(bool clientMode=true);
 
 	virtual int Connect(Bundle& info);//bundle中传送连接所需的信息，比如ip,port,p2p id等
 	virtual void Close();
@@ -72,6 +73,7 @@ protected:
 
 	string mAddress;
 	shared_ptr<SslFilter> mSslFilter;
+	bool mClientMode = true;
 };
 }
 }
