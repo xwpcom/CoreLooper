@@ -67,13 +67,18 @@ protected:
 
 	bool	mServerSide;//为true被动连接,为false时表示主动连接
 	bool	mListenWritable;
-	bool    mWaitFirstEvent;
+	bool    mWaitFirstEvent=true;
 	bool	mMarkEndOfSend = false;
 	Bundle	mBundle;
 
 	string mAddress;
 	shared_ptr<SslFilter> mSslFilter;
-	bool mClientMode = true;
+	bool mEnableTls = false;
+	struct tagSslInfo
+	{
+		ByteBuffer mInbox;
+		ByteBuffer mOutbox;
+	}mSslInfo;
 };
 }
 }

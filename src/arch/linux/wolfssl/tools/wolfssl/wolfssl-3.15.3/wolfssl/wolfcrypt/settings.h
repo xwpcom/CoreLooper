@@ -1,10 +1,4 @@
-﻿//#define OPENSSL_ALL
-//#define OPENSSL_EXTRA
-//#define HAVE_SNI
-//#define HAVE_TLS_EXTENSIONS
-//#define WOLFSSL_HAPROXY
-
-/* settings.h
+﻿/* settings.h
  *
  * Copyright (C) 2006-2017 wolfSSL Inc.
  *

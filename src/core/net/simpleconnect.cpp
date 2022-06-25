@@ -35,12 +35,10 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 	}
 
 	auto obj(make_shared<TcpClient>());
-#ifdef _MSC_VER
 	if (mUseTls)
 	{
 		obj->EnableTls();
 	}
-#endif
 
 	obj->SignalOnConnect.connect(this, &SimpleConnect::OnConnect);
 	obj->SignalOnSend.connect(this, &SimpleConnect::OnSend);

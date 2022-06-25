@@ -25,6 +25,8 @@ int HttpGet::Execute(const string& url, std::function<void(const string& url, in
 
 int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::function<void(const string& url, int error, ByteBuffer& box)> fn)
 {
+	//LogV(mTag, "%s",__func__);
+
 	ASSERT(IsMyselfThread());
 	mCB = fn;
 
@@ -52,7 +54,6 @@ int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::funct
 	string pageUrl;
 	int ret = HttpTool::ParseUrl(url, host, port, pageUrl);
 
-#ifdef _MSC_VER
 	if (port == 80)
 	{
 		if (mUseTls)
@@ -60,7 +61,6 @@ int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::funct
 			port = 443;
 		}
 	}
-#endif
 
 	mReqInfo.mPageUrl = pageUrl;
 	mReqInfo.mHost = host;

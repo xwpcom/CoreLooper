@@ -31,13 +31,12 @@ public:
 		mVerbose = false;
 	}
 
-#ifdef _MSC_VER
 	//目前只有windows下做了openssl支持
+	//2022.06.25 t21 linux下测试wolfssl client
 	void EnableTls()
 	{
 		mUseTls = true;
 	}
-#endif
 
 	int StartConnect(Bundle& bundle);
 	void DelayAutoClose(int ms);
@@ -89,10 +88,7 @@ protected:
 
 	long mTimer_AutoClose = 0;
 
-#ifdef _MSC_VER
 	bool mUseTls = false;
-#endif
-
 	bool mVerbose = false;
 };
 

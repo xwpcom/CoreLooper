@@ -144,8 +144,11 @@ int TcpClient_Linux::Connect(Bundle& info)
 	return 0;
 }
 
+//当服务端收到accept后会触发本接口
 int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 {
+	//LogV(TAG, "%s",__func__);
+
 	SOCKET s = (SOCKET)handle;
 	if (mVerbose)
 	{
@@ -189,7 +192,7 @@ int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 		}
 
 	#ifdef _CONFIG_WOLFSSL
-		if (mClientMode && mSslFilter)
+		if (!mServerSide && mSslFilter)
 		{
 			mSslFilter->onConnect();
 		}
@@ -245,7 +248,36 @@ void TcpClient_Linux::Close()
 
 void TcpClient_Linux::OnReceive()
 {
-	SignalOnReceive(this);
+	static int idx = 0;
+	++idx;
+	LogV(TAG, "%s,idx=%04d",__func__,idx);
+
+	if (mEnableTls && mSslFilter)
+	{
+	#ifdef _CONFIG_WOLFSSL
+		while (1)
+		{
+			BYTE buf[4096];
+			int ret = (int)recv(mSock, (char*)buf, sizeof(buf)-1, 0);
+			if (ret > 0)
+			{
+				buf[ret] = 0;
+
+				auto frame = make_shared<ByteBuffer>();
+				frame->Write(buf, ret);
+				mSslFilter->onRecv(frame);
+			}
+			else
+			{
+				break;
+			}
+		}
+	#endif
+	}
+	else
+	{
+		SignalOnReceive(this);
+	}
 }
 
 //返回成功提交的字节数
@@ -258,7 +290,20 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 	}
 
 	ASSERT(IsMyselfThread());
-	int ret = (int)send(mSock, (char*)data, dataLen, 0);
+	int ret = -1;
+	if (mEnableTls && mSslFilter)
+	{
+	#ifdef _CONFIG_WOLFSSL
+		auto frame = make_shared<ByteBuffer>();
+		frame->Write(data, dataLen);
+		mSslFilter->onSend(frame);
+		ret = dataLen;
+	#endif
+	}
+	else
+	{
+		ret = (int)send(mSock, (char*)data, dataLen, 0);
+	}
 	const int err = errno;
 
 	if (ret > 0)
@@ -362,7 +407,27 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 		return -1;
 	}
 
-	int ret = (int)recv(mSock, (char*)buf, bufLen, 0);
+	int ret = 0;
+#ifdef _CONFIG_WOLFSSL
+	if (mEnableTls)
+	{
+		auto& inbox = mSslInfo.mInbox;
+		if (inbox.length() > 0)
+		{
+			ret = MIN(inbox.length(), bufLen);
+			if (ret > 0)
+			{
+				memcpy(buf, inbox.data(), ret);
+				inbox.Eat(ret);
+			}
+		}
+	}
+#else
+	{
+		ret = (int)recv(mSock, (char*)buf, bufLen, 0);
+	}
+#endif
+	
 	if (ret > 0)
 	{
 		UpdateRecvTick();
@@ -373,7 +438,7 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 //当可写时会调用本接口
 void TcpClient_Linux::OnSend()
 {
-	//LogV(TAG,"%s", __func__);
+	LogV(TAG,"%s,mEnableTls=%d", __func__, mEnableTls);
 
 	SignalOnSend(this);
 }
@@ -539,13 +604,58 @@ void TcpClient_Linux::MarkEndOfSend()
 int TcpClient_Linux::EnableTls(bool clientMode)
 {
 	int ret = -1;
+	LogV(TAG, "%s(clientMode=%d)",__func__,clientMode);
 
-	mClientMode = clientMode;
+	mEnableTls = true;
+	mServerSide = !clientMode;
 
 #ifdef _CONFIG_WOLFSSL
 	if (!mSslFilter)
 	{
 		mSslFilter = make_shared<SslFilter>();
+		mSslFilter->init();
+
+		mSslFilter->setOnDecData([this](shared_ptr<ByteBuffer> buffer) {
+			//收到解密之后的明文数据,是由对端发出来的
+
+			auto data = buffer->data();
+			auto bytes = buffer->length();
+			//LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes,data);
+
+			auto& inbox = mSslInfo.mInbox;
+			int ret = inbox.Write(data, bytes);
+			ASSERT(ret == bytes);
+			inbox.MakeSureEndWithNull();
+
+			SignalOnReceive(this);
+		});
+
+		mSslFilter->setOnEncData([this](shared_ptr<ByteBuffer> buffer) {
+			auto data = buffer->data();
+			auto bytes = buffer->length();
+
+			//收到加密后的数据,要发送给对端
+			auto& outbox = mSslInfo.mOutbox;
+			auto ret = outbox.Write(data, bytes);
+			ASSERT(ret == bytes);
+
+			const auto dataLen = outbox.length();
+			ret=(int)send(mSock, (char*)outbox.data(), dataLen, 0);
+			LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", bytes,ret);
+			if (ret > 0)
+			{
+				outbox.Eat(ret);
+			}
+
+			if (ret != dataLen)
+			{
+				//2022.03.02
+				//发现ingenic t21上面返回errno为2 ENOENT时也要侦听writable,为稳妥起见，直接全部侦听 
+				EnableListenWritable();
+			}
+
+		});
+
 	}
 	ret = 0;
 #endif

@@ -5,6 +5,11 @@
 
 static const char* TAG = "Http";
 
+using namespace Bear::Core;
+using namespace Bear::Core::FileSystem;
+using namespace Bear::Core::Net;
+using namespace Bear::Core::Net::Http;
+
 #ifdef _MSC_VER
 #include "parser_unittest.h"
 #include "libhttp/httpacker.h"
@@ -15,10 +20,6 @@ static const char* TAG = "Http";
 #define new DEBUG_NEW
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-using namespace Bear::Core;
-using namespace Bear::Core::FileSystem;
-using namespace Bear::Core::Net;
-using namespace Bear::Core::Net::Http;
 using namespace Bear::Telnet;
 
 using namespace mediakit;
@@ -746,17 +747,36 @@ int main()
 {
 	LogV(TAG, "%s",__func__);
 
+	class MainLooper :public MainLooper_
 	{
-		static bool first = true;
-		if (first)
+		SUPER(MainLooper_);
+
+		void OnCreate()
 		{
-			auto ret=wolfSSL_Init();
-			first = false;
+			__super::OnCreate();
 
-			LogV(TAG, "wolfSSL_Init=%d",ret);
+			auto obj = make_shared<HttpGet>();
+			AddChild(obj);
+			obj->EnableTls();
+			obj->setVerbose(true);
+
+			auto url = "https://163.com/index.htm";
+			obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
+			obj->Execute(url);
+
+			DelayExit(8000);
 		}
-	}
 
+		void OnHttpGetAck(Handler*, string& url, int error, ByteBuffer& box)
+		{
+			LogV(TAG, "%s,error=%d,data=[%s]",__func__,error,box.data());
+
+			PostQuitMessage();
+		}
+
+		};
+
+	make_shared<MainLooper>()->StartRun();
 	return 0;
 }
 #endif

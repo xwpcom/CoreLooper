@@ -7,20 +7,37 @@
 #ifdef _CONFIG_WOLFSSL
 #include "wolfssl/ssl.h"
 #include <cyassl/ssl.h>
-#endif
 
-#if defined OPENSSL_EXTRA
-//#error OPENSSL_EXTRA
-#else
-//#error not OPENSSL_EXTRA
-#endif
-
-#if defined _CONFIG_WOLFSSL
 namespace Bear {
 namespace Core {
 namespace Net {
 using namespace Bear::Core;
 using namespace std;
+
+#define BIO_s_mem                       wolfSSL_BIO_s_mem
+#define BIO_new                         wolfSSL_BIO_new
+#define BIO_free                        wolfSSL_BIO_free
+#define BIO_method_type                 wolfSSL_BIO_method_type
+#define BIO_set_ssl                     wolfSSL_BIO_set_ssl
+#define BIO_get_ssl                     wolfSSL_BIO_get_ssl
+#define BIO_new_ssl_connect             wolfSSL_BIO_new_ssl_connect
+#define BIO_set_conn_hostname           wolfSSL_BIO_set_conn_hostname
+
+#define SSL_new                         wolfSSL_new
+#define SSL_set_fd                      wolfSSL_set_fd
+#define SSL_get_fd                      wolfSSL_get_fd
+#define SSL_connect                     wolfSSL_connect
+#define SSL_clear                       wolfSSL_clear
+#define SSL_set_bio                     wolfSSL_set_bio
+#define SSL_do_handshake                wolfSSL_SSL_do_handshake
+#define SSL_set_shutdown                wolfSSL_set_shutdown
+#define SSL_set_session_id_context      wolfSSL_set_session_id_context
+#define SSL_set_connect_state           wolfSSL_set_connect_state
+#define SSL_set_accept_state            wolfSSL_set_accept_state
+
+
+typedef WOLFSSL          SSL;
+
 
 //XiongWanPing 2022.06.23
 //SslFilter仿ZLMediaKit SSL_Box,目前只验证过clientMode,还没有用到serverMode为true的情况
@@ -30,6 +47,7 @@ public:
 	SslFilter();
 	~SslFilter();
 
+	void init();
 	void onConnect();
 	/**
 	 * 收到密文后，调用此函数解密
@@ -65,7 +83,6 @@ public:
 
 	bool setHost(const char* host);
 protected:
-	void init();
 	void flushWriteBio();
 	void flushReadBio();
 
