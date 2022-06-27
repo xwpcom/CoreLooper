@@ -642,7 +642,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 			auto bytes = buffer->length();
 
 			//收到加密后的数据,要发送给对端
-			LogV(TAG, "setOnEncData");
+			LogV(TAG, "setOnEncData,bytes=%d",bytes);
 			auto& outbox = mSslInfo.mOutbox;
 			auto ret = outbox.Write(data, bytes);
 			ASSERT(ret == bytes);
@@ -661,13 +661,17 @@ void TcpClient_Linux::checkSend()
 {
 	if (!mEnableTls)
 	{
+		LogW(TAG, "skip %s for non tls",__func__);
 		return;
 	}
 
 	auto& outbox = mSslInfo.mOutbox;
 	const auto dataLen = outbox.length();
 	auto ret = (int)send(mSock, (char*)outbox.data(), dataLen, 0);
-	//LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", bytes, ret);
+	if (mVerbose)
+	{
+		LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", dataLen, ret);
+	}
 	if (ret > 0)
 	{
 		outbox.Eat(ret);

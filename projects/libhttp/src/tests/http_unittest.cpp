@@ -756,7 +756,8 @@ int main()
 
 			if (0)
 			{
-				string url = "https://iot.jjyip.com/reportDataEx.json?hello";
+				string url = "https://163.com/index.htm";//pclinux test ok
+				url = "https://iot.jjyip.com/reportDataEx.json?hello";//test fail
 				auto obj = make_shared<HttpPost>();
 				obj->EnableVerbose();
 				obj->EnableTls();
@@ -782,9 +783,15 @@ int main()
 					AddChild(obj);
 					obj->EnableTls();
 					obj->setVerbose(true);
+					obj->SetHttpAction("POST");
 
-					auto url = "https://163.com/index.htm";
-					//auto url = "https://iot.jjyip.com/index.htm";
+					string body = "{}";
+
+					obj->AddHeader("Content-Type", "application/json");
+					obj->SetBody(body);
+
+					//auto url = "https://163.com/index.htm";
+					auto url = "https://iot.jjyip.com/index.htm";
 					obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
 					obj->Execute(url);
 				}
