@@ -739,9 +739,6 @@ TEST_CLASS(Telnet_)
 }
 #else
 
-#include "wolfssl/ssl.h"
-#include <cyassl/ssl.h>
-
 using namespace Bear::Core;
 int main()
 {
@@ -750,28 +747,62 @@ int main()
 	class MainLooper :public MainLooper_
 	{
 		SUPER(MainLooper_);
+		int mCount = 1;
+		int mAcked = 0;
 
 		void OnCreate()
 		{
 			__super::OnCreate();
 
-			auto obj = make_shared<HttpGet>();
-			AddChild(obj);
-			obj->EnableTls();
-			obj->setVerbose(true);
+			if (0)
+			{
+				string url = "https://iot.jjyip.com/reportDataEx.json?hello";
+				auto obj = make_shared<HttpPost>();
+				obj->EnableVerbose();
+				obj->EnableTls();
+				AddChild(obj);
+				string body = "{}";
 
-			auto url = "https://163.com/index.htm";
-			obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
-			obj->Execute(url);
+				obj->AddHeader("Content-Type", "application/json");
+				obj->SetBody(body);
 
-			DelayExit(8000);
+				obj->Start(url, [this](const string& url, int error, const string& ack)
+					{
+						LogI(TAG, "%s", ack.c_str());
+						PostQuitMessage();
+					}
+				);
+
+			}
+			else
+			{
+				for (int i = 0; i < mCount; i++)
+				{
+					auto obj = make_shared<HttpGet>();
+					AddChild(obj);
+					obj->EnableTls();
+					obj->setVerbose(true);
+
+					auto url = "https://163.com/index.htm";
+					//auto url = "https://iot.jjyip.com/index.htm";
+					obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
+					obj->Execute(url);
+				}
+			}
+
+			DelayExit(120*1000);
 		}
 
 		void OnHttpGetAck(Handler*, string& url, int error, ByteBuffer& box)
 		{
 			LogV(TAG, "%s,error=%d,data=[%s]",__func__,error,box.data());
 
-			PostQuitMessage();
+			++mAcked;
+			LogV(TAG, "recv acked count=%d", mAcked);
+			if (mAcked == mCount)
+			{
+				PostQuitMessage();
+			}
 		}
 
 		};

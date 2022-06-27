@@ -38,7 +38,8 @@ public:
 	static bool CheckFileCache(std::string  szFileName, time_t if_modified_since, std::string & szLastModifiedTime);
 
 	static std::string  encodeURIComponent(std::string  value);
-	static int ParseUrl(const std::string & url, std::string & host, int& port, std::string & pageUrl);
+	static int ParseUrl(const std::string & url, std::string & host, int& port, std::string & pageUrl,bool *useHttps=nullptr);
+	static bool isHttps(const std::string& url);
 
 	static int Test();
 	static std::string  Mid(const std::string & sz, const std::string & after, const std::string & before);

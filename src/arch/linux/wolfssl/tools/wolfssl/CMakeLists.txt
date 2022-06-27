@@ -34,13 +34,13 @@ target_sources(aio_tools_wolfssl
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/src/ssl.c
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl-3.15.3/src/keys.c
   )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D OPENSSL_EXTRA")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D OPENSSL_EXTRA")
 if(_CONFIG_INGENIC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D OPENSSL_EXTRA")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D OPENSSL_EXTRA")
 
 else(_CONFIG_INGENIC)
 
-set(TM_SYS_TYPE "32-bit" CACHE INTERNAL "System Type")
+set(TM_SYS_TYPE "64-bit" CACHE INTERNAL "System Type")
 if(${TM_SYS_TYPE} STREQUAL "32-bit")
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")

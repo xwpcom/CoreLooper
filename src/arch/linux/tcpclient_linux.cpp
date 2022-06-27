@@ -283,7 +283,7 @@ void TcpClient_Linux::OnReceive()
 //返回成功提交的字节数
 int TcpClient_Linux::Send(LPVOID data, int dataLen)
 {
-	//LogV(TAG,"%s,dataLen=%d", __func__,dataLen);
+	LogV(TAG,"%s,dataLen=%d,mEnableTls=%d", __func__,dataLen, mEnableTls);
 	if (mSock == -1)
 	{
 		return 0;
@@ -304,7 +304,6 @@ int TcpClient_Linux::Send(LPVOID data, int dataLen)
 	{
 		ret = (int)send(mSock, (char*)data, dataLen, 0);
 	}
-	const int err = errno;
 
 	if (ret > 0)
 	{
@@ -399,7 +398,7 @@ void TcpClient_Linux::OnClose()
 //返回接收到的字节数
 int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 {
-	//LogV(TAG,"%s",__func__);
+	LogV(TAG,"%s",__func__);
 
 	if (!buf || bufLen <= 0)
 	{
@@ -417,6 +416,7 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 			ret = MIN(inbox.length(), bufLen);
 			if (ret > 0)
 			{
+				LogV(TAG, "sslInbox return data");
 				memcpy(buf, inbox.data(), ret);
 				inbox.Eat(ret);
 			}
@@ -627,7 +627,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 
 			auto data = buffer->data();
 			auto bytes = buffer->length();
-			//LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes,data);
+			LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes,data);
 
 			auto& inbox = mSslInfo.mInbox;
 			int ret = inbox.Write(data, bytes);
@@ -642,6 +642,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 			auto bytes = buffer->length();
 
 			//收到加密后的数据,要发送给对端
+			LogV(TAG, "setOnEncData");
 			auto& outbox = mSslInfo.mOutbox;
 			auto ret = outbox.Write(data, bytes);
 			ASSERT(ret == bytes);

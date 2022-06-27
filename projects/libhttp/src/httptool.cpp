@@ -695,15 +695,25 @@ int HttpTool::Test()
 	return 0;
 }
 
+bool HttpTool::isHttps(const std::string& url)
+{
+	auto p = StringTool::stristr(url.c_str(), "https://");
+	return p == url.c_str();
+}
+
 //从完整的url中解析出host,port和pageUrl
 //host可能为dns或ip
 //pageUrl一般以/开头
-int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & pageUrl)
+int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & pageUrl, bool* useHttps)
 {
 	string  szUrl(url);
 	szHost = "";
 	port = 80;
 	pageUrl = "";
+	if (useHttps)
+	{
+		*useHttps = false;
+	}
 
 	char host[256];
 	char page[4 * 1024];
@@ -711,6 +721,7 @@ int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & 
 	memset(host, 0, sizeof(host));
 	memset(page, 0, sizeof(page));
 
+	bool enableHttps = false;
 	//去掉可选的http:前缀和https:前缀
 	const char *p = StringTool::stristr(szUrl.c_str(), "http://");
 	if (p == szUrl.c_str())
@@ -722,6 +733,7 @@ int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & 
 		p=StringTool::stristr(szUrl.c_str(), "https://");
 		if (p == szUrl.c_str())
 		{
+			enableHttps = true;
 			szUrl = StringTool::Right(url, (int)(url.length() - strlen("https://")));
 		}
 	}
@@ -742,7 +754,7 @@ int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & 
 		pageUrl = StringTool::Right(szUrl, (long)(szUrl.length() - pos));
 	}
 
-	port = 80;
+	port = enableHttps?443:80;
 	//提取端口
 	char *psz = strchr(host, ':');
 	if (psz)
@@ -758,6 +770,12 @@ int HttpTool::ParseUrl(const string & url, string & szHost, int& port, string & 
 	else
 	{
 		szHost = host;
+	}
+
+
+	if (useHttps)
+	{
+		*useHttps = enableHttps;
 	}
 
 	if (host[0] == '\0')

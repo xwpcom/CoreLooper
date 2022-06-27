@@ -82,6 +82,7 @@ message(STATUS "CXX_FLAGS = " ${CMAKE_CXX_FLAGS} " " ${CMAKE_CXX_FLAGS_${BUILD_T
 add_subdirectory(src)
 if(_CONFIG_INGENIC)
 else(_CONFIG_INGENIC)
+add_subdirectory(projects/libcrypt)
 add_subdirectory(projects/libhttp)
 endif(_CONFIG_INGENIC)
 

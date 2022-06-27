@@ -151,6 +151,11 @@ void SimpleConnect::OnDestroy()
 
 void SimpleConnect::CheckSend()
 {
+	if (mVerbose)
+	{
+		LogV(TAG, "%s", __func__);
+	}
+
 	while (mChannel)
 	{
 		if (mOutbox.GetActualDataLength() == 0)

@@ -85,6 +85,39 @@ int HttpPost::AddFile(string name, string filePath)
 
 int HttpPost::Start(string url, std::function<void(const string& url, int error, const string& ack)> fn)
 {
+	/*
+	url有两种调用方式
+	1.老式设计,只包含pageUrl,此时pageUrl以/开头
+	2.新式,包含完整的http://或https:// url
+	*/
+	if(!url.empty())
+	{
+		if (url[0] == '/')
+		{
+			//老式
+		}
+		else
+		{
+			//url为完整
+			mFullUrl = url;
+
+			string host;
+			int port = 0;
+			string pageUrl;
+			bool useHttps = false;
+			HttpTool::ParseUrl(url, host, port, pageUrl,&useHttps);
+			SetServerPort(host, port);
+			
+			if(useHttps)
+			{
+				EnableTls();
+			}
+
+			url = pageUrl;
+		}
+	}
+
+
 	ASSERT(!mChannel && !mConnected);
 	mUrl = url;
 	mCB = fn;
@@ -93,7 +126,10 @@ int HttpPost::Start(string url, std::function<void(const string& url, int error,
 	info.Set("address", mServer);
 	info.Set("port", mPort);
 
-	//LOGI(TAG, "connect %s:%d",info.GetString("address").c_str(),info.GetInt("port"));
+	if (mVerbose)
+	{
+		LogV(TAG, "connect %s:%d", info.GetString("address").c_str(), info.GetInt("port"));
+	}
 
 	StartConnect(info);
 	return 0;
@@ -102,6 +138,11 @@ int HttpPost::Start(string url, std::function<void(const string& url, int error,
 void HttpPost::OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundle* extraInfo)
 {
 	__super::OnConnect(endPoint, error, box, extraInfo);
+
+	if (mVerbose)
+	{
+		LogV(TAG, "%s,error=%d",__func__,error);
+	}
 
 	if (error == 0)
 	{
@@ -260,6 +301,11 @@ int HttpPost::PackData()
 
 int HttpPost::PrepareData()
 {
+	if (mVerbose)
+	{
+		LogV(TAG, "%s", __func__);
+	}
+
 	string header;
 
 	ByteBuffer body;

@@ -9,6 +9,6 @@ INCLUDE_DIRECTORIES(${WOLFSSL_DIR})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/../../../../src/arch/linux/wolfssl/platforms/include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/../../../../src/arch/linux/wolfssl)
 
-target_link_libraries(http_unittest http crypt corelooper aio_tools_wolfssl aio_platforms)
+target_link_libraries(http_unittest crypt http crypt corelooper aio_tools_wolfssl aio_platforms crypt)
 
 set_target_properties(http_unittest PROPERTIES RUNTIME_OUTPUT_DIRECTORY /home/bear/work/nfs)

@@ -55,6 +55,7 @@ protected:
 
 	string	mServer;//ip or domain
 	int		mPort = 80;
+	string  mFullUrl;
 	string	mUrl;//要以/开头,示例 /hzndms/api/alarm/send
 
 	map<string, string>  mHeaders;

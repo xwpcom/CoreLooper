@@ -12,7 +12,28 @@ using namespace Bear::Core;
 static const char* TAG = "SslFilter";
 static bool mVerbose = true;//为true时打印调试信息
 
-SslFilter::~SslFilter() {}
+SslFilter::~SslFilter() {
+
+	/*
+	2022.06.27
+	在windows下free _read_bio和_write_bio时app能正常结束
+	在t21下面启用free _read_bio和_write_bio后app core dump,原因待查
+	zlmediakit中对openssl没有启用free bio
+	*/
+
+	/*
+	if (_read_bio)
+	{
+		LogV(TAG, "free _read_bio");
+		BIO_free(_read_bio);
+	}
+	if (_write_bio)
+	{
+		LogV(TAG, "free _write_bio#begin");
+		BIO_free(_write_bio);
+	}
+	//*/
+}
 
 SslFilter::SslFilter()
 {
@@ -21,7 +42,10 @@ SslFilter::SslFilter()
 
 void SslFilter::init()
 {
-	LogV(TAG, "%s(%p)", __func__, this);
+	if (mVerbose)
+	{
+		LogV(TAG, "%s(%p)", __func__, this);
+	}
 
 	bool serverMode = false;
 
@@ -56,7 +80,6 @@ void SslFilter::init()
 
 	mSendHandshake = false;
 	//mBufSize = buffSize;
-
 }
 
 void SslFilter::shutdown() {
@@ -101,6 +124,12 @@ void SslFilter::onRecv(shared_ptr<ByteBuffer> buffer) {
 }
 
 void SslFilter::onSend(shared_ptr<ByteBuffer> buffer) {
+
+	if (mVerbose)
+	{
+		LogV(TAG, "%s",__func__);
+	}
+
 	if (!buffer->length()) {
 		return;
 	}
@@ -114,6 +143,10 @@ void SslFilter::onSend(shared_ptr<ByteBuffer> buffer) {
 	if (!mServerMode && !mSendHandshake) {
 		mSendHandshake = true;
 		//SSL_do_handshake(mSSL.get());
+		if (mVerbose)
+		{
+			LogV(TAG, "wolfSSL_connect");
+		}
 		wolfSSL_connect(mSSL.get());
 	}
 	_bufferOut.emplace_back(buffer);
@@ -231,12 +264,18 @@ bool SslFilter::setHost(const char* host) {
 //为clientMode时连接成功后调用本接口,要进行handshake操作
 void SslFilter::onConnect()
 {
-	LogV(TAG, "%s(%p)", __func__, this);
+	if (mVerbose)
+	{
+		LogV(TAG, "%s(%p)", __func__, this);
+	}
 
 	if (!mSendHandshake)
 	{
 		auto ret = wolfSSL_connect(mSSL.get());
-		LogV(TAG, "wolfSSL_connect ret=%d", ret);
+		if (mVerbose)
+		{
+			LogV(TAG, "wolfSSL_connect ret=%d", ret);
+		}
 		mSendHandshake = true;
 
 		flush();

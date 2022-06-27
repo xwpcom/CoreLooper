@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #ifndef _MSC_VER
-#define _CONFIG_WOLFSSL
+//#define _CONFIG_WOLFSSL
 #endif
 
 #ifdef _CONFIG_WOLFSSL
@@ -46,6 +46,10 @@ class SslFilter {
 public:
 	SslFilter();
 	~SslFilter();
+	void setVerbose(bool verbose = true)
+	{
+		mVerbose = verbose;
+	}
 
 	void init();
 	void onConnect();
@@ -94,6 +98,7 @@ protected:
 	function<void(shared_ptr<ByteBuffer>)> _onEnc;
 	list<shared_ptr<ByteBuffer>> _bufferOut;
 	int mBufSize = 32 * 1024;
+	bool mVerbose = false;
 };
 
 }
