@@ -248,9 +248,9 @@ void TcpClient_Linux::Close()
 
 void TcpClient_Linux::OnReceive()
 {
-	static int idx = 0;
-	++idx;
-	LogV(TAG, "%s,idx=%04d",__func__,idx);
+	//static int idx = 0;
+	//++idx;
+	//LogV(TAG, "%s,idx=%04d",__func__,idx);
 
 	if (mEnableTls && mSslFilter)
 	{
@@ -408,9 +408,9 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 	}
 
 	int ret = 0;
-#ifdef _CONFIG_WOLFSSL
 	if (mEnableTls)
 	{
+	#ifdef _CONFIG_WOLFSSL
 		auto& inbox = mSslInfo.mInbox;
 		if (inbox.length() > 0)
 		{
@@ -421,12 +421,12 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 				inbox.Eat(ret);
 			}
 		}
+	#endif
 	}
-#else
+	else
 	{
 		ret = (int)recv(mSock, (char*)buf, bufLen, 0);
 	}
-#endif
 	
 	if (ret > 0)
 	{
@@ -438,9 +438,16 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 //当可写时会调用本接口
 void TcpClient_Linux::OnSend()
 {
-	LogV(TAG,"%s,mEnableTls=%d", __func__, mEnableTls);
-
-	SignalOnSend(this);
+	//LogV(TAG,"%s,mEnableTls=%d", __func__, mEnableTls);
+	if (mEnableTls && mSslFilter)
+	{
+		checkSend();
+		return;
+	}
+	else
+	{
+		SignalOnSend(this);
+	}
 }
 
 void TcpClient_Linux::OnEvent(DWORD events)
@@ -638,21 +645,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 			auto& outbox = mSslInfo.mOutbox;
 			auto ret = outbox.Write(data, bytes);
 			ASSERT(ret == bytes);
-
-			const auto dataLen = outbox.length();
-			ret=(int)send(mSock, (char*)outbox.data(), dataLen, 0);
-			LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", bytes,ret);
-			if (ret > 0)
-			{
-				outbox.Eat(ret);
-			}
-
-			if (ret != dataLen)
-			{
-				//2022.03.02
-				//发现ingenic t21上面返回errno为2 ENOENT时也要侦听writable,为稳妥起见，直接全部侦听 
-				EnableListenWritable();
-			}
+			checkSend();
 
 		});
 
@@ -663,6 +656,30 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 	return ret;
 }
 
+void TcpClient_Linux::checkSend()
+{
+	if (!mEnableTls)
+	{
+		return;
+	}
+
+	auto& outbox = mSslInfo.mOutbox;
+	const auto dataLen = outbox.length();
+	auto ret = (int)send(mSock, (char*)outbox.data(), dataLen, 0);
+	//LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", bytes, ret);
+	if (ret > 0)
+	{
+		outbox.Eat(ret);
+	}
+
+	if (ret != dataLen)
+	{
+		//2022.03.02
+		//发现ingenic t21上面返回errno为2 ENOENT时也要侦听writable,为稳妥起见，直接全部侦听 
+		EnableListenWritable();
+	}
+
+}
 
 }
 }

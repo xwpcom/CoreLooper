@@ -79,6 +79,7 @@ protected:
 		ByteBuffer mInbox;
 		ByteBuffer mOutbox;
 	}mSslInfo;
+	void checkSend();
 };
 }
 }
