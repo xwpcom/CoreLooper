@@ -52,14 +52,11 @@ int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::funct
 	string host;
 	int port = 0;
 	string pageUrl;
-	int ret = HttpTool::ParseUrl(url, host, port, pageUrl);
-
-	if (port == 80)
+	bool useHttps = false;
+	int ret = HttpTool::ParseUrl(url, host, port, pageUrl,&useHttps);
+	if (useHttps)
 	{
-		if (mUseTls)
-		{
-			port = 443;
-		}
+		EnableTls();
 	}
 
 	mReqInfo.mPageUrl = pageUrl;

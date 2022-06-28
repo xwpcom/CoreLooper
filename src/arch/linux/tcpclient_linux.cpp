@@ -283,7 +283,7 @@ void TcpClient_Linux::OnReceive()
 //返回成功提交的字节数
 int TcpClient_Linux::Send(LPVOID data, int dataLen)
 {
-	LogV(TAG,"%s,dataLen=%d,mEnableTls=%d", __func__,dataLen, mEnableTls);
+	//LogV(TAG,"%s,dataLen=%d,mEnableTls=%d", __func__,dataLen, mEnableTls);
 	if (mSock == -1)
 	{
 		return 0;
@@ -398,7 +398,7 @@ void TcpClient_Linux::OnClose()
 //返回接收到的字节数
 int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 {
-	LogV(TAG,"%s",__func__);
+	//LogV(TAG,"%s",__func__);
 
 	if (!buf || bufLen <= 0)
 	{
@@ -642,7 +642,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 			auto bytes = buffer->length();
 
 			//收到加密后的数据,要发送给对端
-			LogV(TAG, "setOnEncData,bytes=%d",bytes);
+			//LogV(TAG, "setOnEncData,bytes=%d",bytes);
 			auto& outbox = mSslInfo.mOutbox;
 			auto ret = outbox.Write(data, bytes);
 			ASSERT(ret == bytes);

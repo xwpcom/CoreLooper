@@ -19,10 +19,6 @@ public:
 	{
 		mTag = tag;
 	}
-	void setVerbose(bool verbose)
-	{
-		mVerbose = verbose;
-	}
 
 	//url可以为http url,比如网页或文件
 	virtual int Execute(const string& url, const string& saveAsFilePath, std::function<void(const string& url,int error,ByteBuffer& box)> fn=nullptr);
@@ -122,7 +118,6 @@ protected:
 	unordered_map<string, string>  mHeaders;
 
 	std::function<void(const string& url, int error, ByteBuffer& box)> mCB;
-	bool mVerbose = false;
 	string mTag = "HttpGet";
 };
 

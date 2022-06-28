@@ -782,7 +782,7 @@ int main()
 					auto obj = make_shared<HttpGet>();
 					AddChild(obj);
 					obj->EnableTls();
-					obj->setVerbose(true);
+					obj->EnableVerbose();
 					obj->SetHttpAction("POST");
 
 					string body = "{}";
