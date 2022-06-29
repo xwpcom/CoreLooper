@@ -416,7 +416,11 @@ int TcpClient_Linux::Receive(LPVOID buf, int bufLen)
 			ret = MIN(inbox.length(), bufLen);
 			if (ret > 0)
 			{
-				LogV(TAG, "sslInbox return data");
+				if (mVerbose)
+				{
+					LogV(TAG, "sslInbox return data");
+				}
+
 				memcpy(buf, inbox.data(), ret);
 				inbox.Eat(ret);
 			}
@@ -627,7 +631,10 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 
 			auto data = buffer->data();
 			auto bytes = buffer->length();
-			LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes,data);
+			if (mVerbose)
+			{
+				LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes, data);
+			}
 
 			auto& inbox = mSslInfo.mInbox;
 			int ret = inbox.Write(data, bytes);
