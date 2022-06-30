@@ -615,7 +615,7 @@ void TcpClient_Linux::MarkEndOfSend()
 int TcpClient_Linux::EnableTls(bool clientMode)
 {
 	int ret = -1;
-	LogV(TAG, "%s(clientMode=%d)",__func__,clientMode);
+	//LogV(TAG, "%s(clientMode=%d)",__func__,clientMode);
 
 	mEnableTls = true;
 	mServerSide = !clientMode;

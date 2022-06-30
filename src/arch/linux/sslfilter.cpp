@@ -37,7 +37,7 @@ SslFilter::~SslFilter() {
 
 SslFilter::SslFilter()
 {
-	LogV(TAG, "%s(%p)",__func__,this);
+	//LogV(TAG, "%s(%p)",__func__,this);
 }
 
 void SslFilter::init()
