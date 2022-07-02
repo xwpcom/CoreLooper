@@ -365,6 +365,38 @@ public:
 
 	}
 	
+	TEST_METHOD(HttpGet_)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto obj = make_shared<HttpGet>();
+				AddChild(obj);
+				obj->SetHttpAction("POST");
+
+				auto url = "http://cs.xqxyd.com/dimai.php";
+				obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
+				obj->Execute(url);
+
+				{
+					postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
+				}
+			}
+
+			void OnHttpGetAck(Handler*, string& url, int error, ByteBuffer& box)
+			{
+				int x = 0;
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
+	}
+
 	TEST_METHOD(websocket)
 	{
 		//http://www.blue-zero.com/WebSocket/

@@ -268,6 +268,24 @@ void HttpGet::ParseInbox()
 				{
 					auto eat = pEnd + strlen(key) - ps;
 					mInbox.Eat((int)eat);
+
+					auto data = mInbox.data();
+					//2022.07.02 hot fix#begin,临时紧急使用
+					{
+						auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+
+						if (recvFinish)
+						{
+							mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
+							mAckInfo.mAckBody.MakeSureEndWithNull();
+
+							//extract data from chunked format
+							SwitchStatus(eHttpAckStatus_Done);
+							return;
+						}
+					}
+					//2022.07.02 hot fix#end
+
 					SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
 					return;
 				}
