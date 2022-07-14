@@ -92,7 +92,7 @@ int HttpPost::Start(string url, std::function<void(const string& url, int error,
 	*/
 	if(!url.empty())
 	{
-		if (url[0] == '/')
+		if (url[0] == '/' || (url.find(".")==-1 && url.find("/") == -1))
 		{
 			//老式
 		}
