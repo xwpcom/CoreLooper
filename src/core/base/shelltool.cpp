@@ -1898,6 +1898,24 @@ int tagTimeMs::laterDays(const tagTimeMs& obj)
 	return days;
 }
 
+//支持的几种dt样本:
+// 20220716123456789,其中789是ms
+// 20220716123456
+// 20220716
+void tagTimeMs::from_dt(const string& dt)
+{
+	clear();
+	if (dt.length() >= strlen("20220716"))
+	{
+		int date = atoi(dt.substr(0,8).c_str());
+		int time = atoi(dt.substr(8,6).c_str());
+		int ms_ = atoi(dt.substr(14, 3).c_str());
+
+		from_dt(date, time);
+		ms = ms_;
+	}
+}
+
 void tagTimeMs::from_dt(int date, int time)
 {
 	year = date / 10000;

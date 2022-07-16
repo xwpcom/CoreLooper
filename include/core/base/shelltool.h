@@ -56,6 +56,11 @@ struct CORE_EXPORT tagTimeMs
 
 	tagTimeMs()
 	{
+		clear();
+	}
+	
+	void clear()
+	{
 		memset(this, 0, sizeof(*this));
 	}
 
@@ -77,6 +82,7 @@ struct CORE_EXPORT tagTimeMs
 	time_t to_time_t()const;
 	void from_time_t(time_t t);
 	void from_dt(int date,int time);
+	void from_dt(const string& dt);
 
 	int laterDays(const tagTimeMs& obj);
 	int currentDaySeconds()
