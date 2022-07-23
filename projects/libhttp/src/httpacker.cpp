@@ -28,7 +28,12 @@ int HttpAcker::Parse(const string& ack, bool onlyHeader)
 	auto posFirstLine = ack.find("\r\n");
 	if (posFirstLine == string::npos)
 	{
-		LogW(TAG, "invalid http ack");
+		static int idx = 0;
+		if (idx < 10)
+		{
+			++idx;
+			LogW(TAG, "invalid http ack");
+		}
 		//ASSERT(FALSE);
 		return -1;
 	}
@@ -41,7 +46,13 @@ int HttpAcker::Parse(const string& ack, bool onlyHeader)
 	}
 	else
 	{
-		LogW(TAG, "invalid http ack");
+		static int idx = 0;
+		if (idx < 10)
+		{
+			++idx;
+			LogW(TAG, "invalid http ack");
+		}
+
 		//ASSERT(FALSE);
 		return -1;
 	}
