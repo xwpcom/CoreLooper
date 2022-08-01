@@ -1,4 +1,4 @@
-// This MFC Samples source code demonstrates using MFC Microsoft Office Fluent User Interface 
+﻿// This MFC Samples source code demonstrates using MFC Microsoft Office Fluent User Interface 
 // (the "Fluent UI") and is provided only as referential material to supplement the 
 // Microsoft Foundation Classes Reference and related electronic documentation 
 // included with the MFC C++ library software.  
@@ -52,6 +52,11 @@ protected:  // control bar embedded members
 	bool mKeepTop = true;
 	void ApplyKeepTop();
 	void OnUpdateKeepTop(CCmdUI* pCmdUI);
+
+	void OnEnableIEProxy();
+	void OnUpdateIEProxy(CCmdUI* pCmdUI);
+	bool mEnableIEProxy = false;
+	void ApplyIEProxy();
 
 // Generated message map functions
 protected:

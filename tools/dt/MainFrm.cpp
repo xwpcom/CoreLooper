@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "framework.h"
 #include "dt.app.h"
 #include "resource.h"
@@ -22,6 +22,9 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &MainFrame::OnUpdateApplicationLook)
 	ON_COMMAND(ID_KEEP_TOP,OnKeepTop)
 	ON_UPDATE_COMMAND_UI(ID_KEEP_TOP,OnUpdateKeepTop)
+	ON_COMMAND(ID_ENABLE_IE_PROXY, OnEnableIEProxy)
+	ON_UPDATE_COMMAND_UI(ID_ENABLE_IE_PROXY, OnUpdateIEProxy)
+	
 	ON_COMMAND(ID_REFRESH_TASK_ICON,OnRefreshTaskIcon)
 	ON_COMMAND(ID_BACKUP_CFG, OnBackupCfg)
 	ON_WM_TIMER()
@@ -90,8 +93,10 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		auto app = (App*)AfxGetApp();
 		auto& ini = app->mIni;
 		mKeepTop=ini.GetBool(mSection.c_str(), "keepTop", true);
+		mEnableIEProxy = ini.GetBool(mSection.c_str(), "enableIEProxy", false);
 
 		ApplyKeepTop();
+		ApplyIEProxy();
 	}
 
 	return 0;
@@ -247,6 +252,42 @@ void MainFrame::OnTimer(UINT_PTR nIDEvent)
 	CFrameWndEx::OnTimer(nIDEvent);
 }
 
+#include <WinInet.h>
+
+void MainFrame::ApplyIEProxy()
+{
+	string mTag = "IEProxy";
+
+	/* æµ‹è¯•æ²¡æˆåŠŸï¼Œdisableå¯ä»¥ç”Ÿæ•ˆï¼Œä½†enableä¸èƒ½ç”Ÿæ•ˆ
+	* 
+	if (mEnableIEProxy)
+	{
+		DWORD flags = 0;
+		LPWSTR xx;
+		WCHAR connectionName[256];
+
+		InternetGetConnectedStateEx(&flags,connectionName,sizeof(connectionName),0);
+
+		auto ok = IEHttpProxy::SetConnectionOptions(connectionName, _T("127.0.0.1:1080")); LogV(mTag, "enable proxy ok = %d", ok);
+	}
+	else
+	{
+		auto ok = IEHttpProxy::DisableConnectionProxy(NULL);LogV(mTag, "disable proxy,return = %d", ok);
+	}
+	//*/
+}
+
+void MainFrame::OnEnableIEProxy()
+{
+	mEnableIEProxy = !mEnableIEProxy;
+
+	auto app = (App*)AfxGetApp();
+	auto& ini = app->mIni;
+	ini.SetBool(mSection.c_str(), "enableIEProxy", mEnableIEProxy);
+
+	ApplyIEProxy();
+	
+}
 void MainFrame::OnKeepTop()
 {
 	mKeepTop = !mKeepTop;
@@ -275,6 +316,10 @@ void MainFrame::OnUpdateKeepTop(CCmdUI *pCmdUI)
 	pCmdUI->SetCheck(mKeepTop);
 }
 
+void MainFrame::OnUpdateIEProxy(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(mEnableIEProxy);
+}
 
 void MainFrame::OnKillFocus(CWnd* pNewWnd)
 {
@@ -283,8 +328,8 @@ void MainFrame::OnKillFocus(CWnd* pNewWnd)
 	if (mKeepTop)
 	{
 		//https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
-		//ÓĞÊ±SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);Ã»ÓĞÆğ×÷ÓÃ
-		//ÔÚ´ËÖØÉèÒ»ÏÂ
+		//æœ‰æ—¶SetWindowPos(&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);æ²¡æœ‰èµ·ä½œç”¨
+		//åœ¨æ­¤é‡è®¾ä¸€ä¸‹
 
 		auto v = GetWindowLong(GetSafeHwnd(), GWL_EXSTYLE);
 		if (!(v & WS_EX_TOPMOST))
@@ -297,12 +342,12 @@ void MainFrame::OnKillFocus(CWnd* pNewWnd)
 
 //XiongWanPing 2019.11.07
 //https://blog.csdn.net/mfcing/article/details/50345193
-//ÓĞĞ©¹Ì¶¨ÔÚÈÎÎñÀ¸µÄappÊÇ°²×°ÔÚbitlocker¼ÓÃÜÅÌÀïÃæ£¬µ±¿ª»úÊ±windowsÎŞ·¨»ñÈ¡appÍ¼±ê
-//µ¼ÖÂÈÎÎñÀ¸ÉÏappÍ¼±êÎª¿Õ°×,²»·½±ãÊ¹ÓÃ
-//ËùÒÔÔÚDTÉÏÔö¼ÓË¢ĞÂÍ¼±êµÄ¹¦ÄÜ
+//æœ‰äº›å›ºå®šåœ¨ä»»åŠ¡æ çš„appæ˜¯å®‰è£…åœ¨bitlockeråŠ å¯†ç›˜é‡Œé¢ï¼Œå½“å¼€æœºæ—¶windowsæ— æ³•è·å–appå›¾æ ‡
+//å¯¼è‡´ä»»åŠ¡æ ä¸Šappå›¾æ ‡ä¸ºç©ºç™½,ä¸æ–¹ä¾¿ä½¿ç”¨
+//æ‰€ä»¥åœ¨DTä¸Šå¢åŠ åˆ·æ–°å›¾æ ‡çš„åŠŸèƒ½
 void MainFrame::OnRefreshTaskIcon()
 {
-	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);//Ë¢ĞÂÈÎÎñÀ¸icon,test ok
+	SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);//åˆ·æ–°ä»»åŠ¡æ icon,test ok
 
 	{
 		//starcraft title
@@ -323,4 +368,3 @@ void MainFrame::OnBackupCfg()
 	auto filePath = StringTool::Format("%s/backup/%s.ini", folder.c_str(),time.c_str());
 	theApp.mIni.Dump(filePath);
 }
-

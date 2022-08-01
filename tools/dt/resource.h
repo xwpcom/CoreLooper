@@ -1,4 +1,4 @@
-//{{NO_DEPENDENCIES}}
+﻿//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by dt.rc
 //
@@ -105,7 +105,7 @@
 #define ID_LOGLISTCONTEXTMENU_CODEPAGE  34025
 #define ID_CODEPAGE_UTF8                34026
 #define ID_CODEPAGE_CHINESE             34027
-
+#define ID_ENABLE_IE_PROXY              34028
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

@@ -200,6 +200,7 @@
     <ClCompile Include="libwintool.cpp" />
     <ClCompile Include="src\basepage.cpp" />
     <ClCompile Include="src\CategoryPage.cpp" />
+    <ClCompile Include="src\ieproxy.cpp" />
     <ClCompile Include="src\logwnd.cpp" />
     <ClCompile Include="src\rs485monitor.cpp" />
     <ClCompile Include="src\ScintillaWnd.cpp" />
@@ -220,6 +221,7 @@
   <ItemGroup>
     <ClInclude Include="include\basepage.h" />
     <ClInclude Include="include\CategoryPage.h" />
+    <ClInclude Include="include\ieproxy.h" />
     <ClInclude Include="include\logwnd.h" />
     <ClInclude Include="include\rs485monitor.h" />
     <ClInclude Include="include\ScintillaWnd.h" />

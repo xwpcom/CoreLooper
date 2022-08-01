@@ -4,6 +4,7 @@
 #include <functional>
 #include <mutex>  
 #include "include/rs485monitor.h"
+#include "include/libwintool.inl"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -32,6 +33,26 @@ public:
 		int bytes = sizeof(d);
 		obj.Input(d, bytes);
 	}
+};
+
+static string mTag = "HttpProxy";
+
+TEST_CLASS(HttpProxy)
+{
+public:
+	TEST_METHOD(proxyDemo)
+	{
+		
+		{
+			auto ok = IEHttpProxy::SetConnectionOptions(_T(""), _T("127.0.0.1:1080"));LogV(mTag, "enable proxy ok = %d", ok);
+		}
+
+		{
+			//auto ok = IEHttpProxy::DisableConnectionProxy(_T(""));LogV(mTag, "disable proxy,return = %d", ok);
+		}
+
+	}
+
 };
 
 }

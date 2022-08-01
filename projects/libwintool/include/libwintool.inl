@@ -14,5 +14,7 @@
 #include "basepage.h"
 #include "ToastWnd.h"
 #include "CategoryPage.h"
+#include "ieproxy.h"
+
 
 
