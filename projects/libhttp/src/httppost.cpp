@@ -45,6 +45,12 @@ void HttpPost::SetServerPort(string server, int port)
 	//LOGV(TAG,"%s(%s:%d)", __func__, server.c_str(), port);
 	mServer = server;
 	mPort = port;
+
+	bool useHttps = (server.find("https") != -1);
+	if (useHttps)
+	{
+		EnableTls();
+	}
 }
 
 void HttpPost::AddHeader(string name, string value)

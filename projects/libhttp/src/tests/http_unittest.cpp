@@ -312,7 +312,7 @@ public:
 				AddChild(obj);
 				obj->EnableTls();
 
-				auto url = "taobao.com:443/favicon.ico";
+				auto url = "https://gateway.shuiwutong.com.cn/flhiot/api/datacollect/http/haitian";
 				obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
 				obj->Execute(url);
 
