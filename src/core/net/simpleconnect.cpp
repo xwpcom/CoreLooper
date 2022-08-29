@@ -153,7 +153,7 @@ void SimpleConnect::CheckSend()
 {
 	if (mVerbose)
 	{
-		LogV(TAG, "%s", __func__);
+		//LogV(TAG, "%s", __func__);
 	}
 
 	while (mChannel)
