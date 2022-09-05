@@ -186,6 +186,11 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 
 void TcpClient_Windows::OnReceive()
 {
+	if (mSignalCloseHasFired)
+	{
+		return ;
+	}
+
 	bool fireEvent = true;
 
 #ifdef _CONFIG_OPENSSL
