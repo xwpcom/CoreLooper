@@ -8,6 +8,8 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+static const char* TAG = "HttpServer";
+
 HttpServer::HttpServer()
 {
 	SetObjectName("HttpServer");
@@ -36,15 +38,14 @@ void HttpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bund
 	client->SignalOnConnect.disconnect(this);
 
 	auto handler(make_shared<HttpHandler>());
-	handler->mChannel = dynamic_pointer_cast<TcpClient>(client->shared_from_this());
 	handler->SetConfig(mWebConfig);
 
-	client->SignalOnSend.connect(handler.get(), &HttpHandler::OnSend);
-	client->SignalOnReceive.connect(handler.get(), &HttpHandler::OnReceive);
-	client->SignalOnClose.connect(handler.get(), &HttpHandler::OnClose);
-
+	handler->AttachChannel(endPoint);
 	AddChild(handler);
 	handler->OnConnect(endPoint, error, extraInfo);
+
+	//LogV(TAG, "");
+
 }
 
 

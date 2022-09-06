@@ -424,8 +424,16 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		string* xml = (string*)wp;
 		if (xml)
 		{
+			auto tick = ShellTool::GetTickCount64();
+			
 			DWORD flags = (DWORD)(long)lp;
 			DumpProcData(*xml, flags);
+
+			tick = ShellTool::GetTickCount64() - tick;
+			if (tick > 200)
+			{
+				LogW( GetObjectName().c_str(), "tick=%lld", tick);
+			}
 		}
 		else
 		{

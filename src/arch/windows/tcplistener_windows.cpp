@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "tcplistener_windows.h"
 #include "../../core/looper/handlerinternaldata.h"
 
@@ -17,7 +17,7 @@ TcpListener_Windows::TcpListener_Windows()
 
 TcpListener_Windows::~TcpListener_Windows()
 {
-	LogV(TAG, "port=%d", mPort);
+	LogV(TAG, "%s,port=%d", __func__,mPort);
 
 	SockTool::CLOSE_SOCKET(mSock);
 }
@@ -27,8 +27,8 @@ int TcpListener_Windows::StartListener(int port)
 	if (!IsCreated())
 	{
 		/*
-		Èç¹û²»¼ÓÏŞÖÆ,ÏÂÃæµÄ´úÂë»áÓĞmemory leak
-		×î¼òµ¥µÄ°ì·¨ÊÇÇ¿ÖÆÒªÇóCreate()È»ºó²ÅÄÜStartServer
+		å¦‚æœä¸åŠ é™åˆ¶,ä¸‹é¢çš„ä»£ç ä¼šæœ‰memory leak
+		æœ€ç®€å•çš„åŠæ³•æ˜¯å¼ºåˆ¶è¦æ±‚Create()ç„¶åæ‰èƒ½StartServer
 		{
 			auto obj = make_shared<TcpServer>();
 			obj->StartServer(8081);
@@ -119,11 +119,11 @@ int TcpListener_Windows::StartListener(int port)
 
 		for (int i = 0; i < 2; i++)
 		{
-			IoContext* context = new IoContext;//Stop()ºó·µ»ØacceptÊ§°ÜÊ±delete
+			IoContext* context = new IoContext;//Stop()åè¿”å›acceptå¤±è´¥æ—¶delete
 			ret = PostAccept(context);
 			if (ret == 0)
 			{
-				//Ã¿¸ö³É¹¦Í¶µİµÄIoContext½öĞèÒªÒıÓÃÒ»´Î
+				//æ¯ä¸ªæˆåŠŸæŠ•é€’çš„IoContextä»…éœ€è¦å¼•ç”¨ä¸€æ¬¡
 				context->mBaseServer = dynamic_pointer_cast<TcpListener_Windows>(shared_from_this());
 			}
 			else
@@ -170,7 +170,7 @@ int TcpListener_Windows::PostAccept(IoContext* ioContext)
 
 int TcpListener_Windows::DispatchIoContext(IoContext* context, DWORD bytes)
 {
-	auto objThis = shared_from_this();//È·±£ÔÚDispatchIoContextÖ´ĞĞÆÚ¼ä²»±»É¾³ı
+	auto objThis = shared_from_this();//ç¡®ä¿åœ¨DispatchIoContextæ‰§è¡ŒæœŸé—´ä¸è¢«åˆ é™¤
 
 	IoContextType type = context->mType;
 	switch (type)
@@ -178,10 +178,10 @@ int TcpListener_Windows::DispatchIoContext(IoContext* context, DWORD bytes)
 	case IoContextType_Accept:
 		bool postAgain = false;
 		int ret = OnAccept(context->mSock);
-		//Èç¹ûsocketÃ»ÓĞ±»¹Ø±Õ£¬Ôò¼ÌĞøÕìÌı
+		//å¦‚æœsocketæ²¡æœ‰è¢«å…³é—­ï¼Œåˆ™ç»§ç»­ä¾¦å¬
 		if (ret == 0 && mSock != INVALID_SOCKET)
 		{
-			//ÖØÓÃcontext
+			//é‡ç”¨context
 			context->mSock = INVALID_SOCKET;
 			int ret = PostAccept(context);
 			if (ret == 0)
@@ -197,7 +197,7 @@ int TcpListener_Windows::DispatchIoContext(IoContext* context, DWORD bytes)
 
 		if (postAgain)
 		{
-			//context±£Áô×Å¶ÔTcpServer_WindowsµÄÒ»¸öÒıÓÃ
+			//contextä¿ç•™ç€å¯¹TcpServer_Windowsçš„ä¸€ä¸ªå¼•ç”¨
 			//do nothing here
 		}
 		else
@@ -218,7 +218,7 @@ int TcpListener_Windows::OnAccept(SOCKET s)
 
 	int ret = -1;
 
-	//ÓĞ¿ÉÄÜmSockÒÑ¾­±»¹Ø±Õ
+	//æœ‰å¯èƒ½mSockå·²ç»è¢«å…³é—­
 	
 	ret = setsockopt(s, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char*)&mSock, sizeof(mSock));
 	if (ret)

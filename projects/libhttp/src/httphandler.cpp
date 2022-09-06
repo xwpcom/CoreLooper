@@ -17,11 +17,13 @@ HttpHandler::HttpHandler()
 	SetObjectName("HttpHandler");
 
 	mOutbox.PrepareBuf(1024 * 16);
+
+	//LogV(TAG, "%s(%p)",__func__,this);
 }
 
 HttpHandler::~HttpHandler()
 {
-	
+	//LogV(TAG, "%s(%p)", __func__, this);
 }
 
 void HttpHandler::OnConnect(Channel*, long error, Bundle*)
@@ -31,11 +33,7 @@ void HttpHandler::OnConnect(Channel*, long error, Bundle*)
 
 void HttpHandler::OnClose(Channel*)
 {
-	if (mChannel)
-	{
-		mChannel->Destroy();
-		mChannel = nullptr;
-	}
+	LogV(TAG, "%s(%p)", __func__, this);
 
 	Destroy();
 }
@@ -43,6 +41,23 @@ void HttpHandler::OnClose(Channel*)
 void HttpHandler::OnSend(Channel*)
 {
 	CheckSend();
+}
+
+void HttpHandler::OnDestroy()
+{
+	__super::OnDestroy();
+
+	LogV(TAG, "%s(%p)", __func__, this);
+
+	if (mChannel)
+	{
+		DetachChannel();
+
+		mChannel->Destroy();
+		mChannel = nullptr;
+	}
+
+
 }
 
 void HttpHandler::CheckSend()
@@ -127,7 +142,7 @@ void HttpHandler::CheckSend()
 
 void HttpHandler::OnReceive(Channel*)
 {
-	
+	//LogV(TAG, "%s(%p)", __func__, this);
 
 	while (mChannel)
 	{
@@ -215,12 +230,6 @@ void HttpHandler::ParseInbox()
 		auto ret = mHttpRequest->Input(*inbox);
 		if (ret == -1)
 		{
-			if (mChannel)
-			{
-				mChannel->Close();
-				mChannel = nullptr;
-			}
-
 			Destroy();
 			return;
 		}
@@ -232,14 +241,12 @@ void HttpHandler::ParseInbox()
 
 			if (mWebConfig->mWSFacotry)
 			{
-				mChannel->SignalOnSend.disconnect(this);
-				mChannel->SignalOnReceive.disconnect(this);
-				mChannel->SignalOnClose.disconnect(this);
-
 				auto obj = mWebConfig->mWSFacotry->CreateWebSocketHandler(url);
 				if (obj)
 				{
 					AddChild(obj);
+
+					DetachChannel();
 					obj->Attach(mChannel);
 					mChannel = nullptr;
 
@@ -252,7 +259,6 @@ void HttpHandler::ParseInbox()
 				LogW(TAG,"no handler for websockt url:%s", url.c_str());
 
 				mChannel->Destroy();
-				mChannel = nullptr;
 				Destroy();
 				return;
 			}
@@ -262,6 +268,33 @@ void HttpHandler::ParseInbox()
 		{
 			break;
 		}
+	}
+}
+
+void HttpHandler::AttachChannel(Channel* obj)
+{
+	ASSERT(!mChannel);
+	mChannel = dynamic_pointer_cast<TcpClient>(obj->shared_from_this());
+	ASSERT(mChannel);
+
+	obj->SignalOnSend.connect(this, &HttpHandler::OnSend);
+	obj->SignalOnReceive.connect(this, &HttpHandler::OnReceive);
+	obj->SignalOnClose.connect(this, &HttpHandler::OnClose);
+}
+
+void HttpHandler::DetachChannel()
+{
+	if (mChannel)
+	{
+		LogV(TAG, "%s(%p)", __func__, this);
+
+		mChannel->SignalOnSend.disconnect(this);
+		mChannel->SignalOnReceive.disconnect(this);
+		mChannel->SignalOnClose.disconnect(this);
+	}
+	else
+	{
+		LogW(TAG, "%s(%p),channel is null", __func__, this);
 	}
 }
 

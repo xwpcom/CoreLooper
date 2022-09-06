@@ -7,6 +7,8 @@ HTTP_EXPORT void _avoidCompileRemove_proc()
 	LogV("compile", "%s",__func__);
 }
 
+static char* TAG = "proc";
+
 namespace Bear {
 namespace Core {
 using namespace FileSystem;
@@ -33,6 +35,8 @@ string Ajax_Proc::Process(const NameValue& params)
 		looper = Looper::CurrentLooper();
 	}
 
+	//auto tick = ShellTool::GetTickCount64();
+
 	auto url = params.GetString("url");
 	if (!url.empty())
 	{
@@ -51,8 +55,11 @@ string Ajax_Proc::Process(const NameValue& params)
 		,xml.c_str()
 	);
 
+	//tick = ShellTool::GetTickCount64()-tick;
+	//LogV(TAG, "tick=%lld",tick);
+
 #ifdef _DEBUG
-	File::Dump(ack, "d:/proc.xml");
+	//File::Dump(ack, "d:/proc.xml");
 #endif
 
 	return ack;

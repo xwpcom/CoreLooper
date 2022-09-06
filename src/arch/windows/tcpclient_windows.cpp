@@ -91,6 +91,8 @@ int TcpClient_Windows::OnRecv(IoContext *context, DWORD bytes)
 		mReceiveBusying = false;
 	}
 
+	ASSERT(!context->mBusying);
+
 	if (bytes > 0 && !context->mBusying)
 	{
 		inbox->MoveToHead();
@@ -251,6 +253,7 @@ int TcpClient_Windows::Receive(LPVOID buf, int bufLen)
 		memcpy(buf, mInbox.GetDataPointer(), bytes);
 		mInbox.Eat(bytes);
 
+		/*这里不能提交
 		if (!mIoContextRecv.mBusying)
 		{
 			int freeBytes = mInbox.GetTailFreeSize();
@@ -266,6 +269,7 @@ int TcpClient_Windows::Receive(LPVOID buf, int bufLen)
 				Close();
 			}
 		}
+		*/
 		return bytes;
 	}
 	else if (mSock == INVALID_SOCKET)

@@ -22,6 +22,7 @@ public:
 	{
 		mWebConfig = config;
 	}
+	void AttachChannel(Channel* obj);
 
 	std::shared_ptr<Channel> mChannel;
 protected:
@@ -30,6 +31,8 @@ protected:
 	virtual void OnReceive(Channel*);
 
 	virtual void OnConnect(Channel*, long, Bundle*);
+	void OnDestroy();
+	void DetachChannel();
 
 	void CheckSend();
 	virtual void ParseInbox();
