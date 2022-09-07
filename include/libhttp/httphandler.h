@@ -13,6 +13,8 @@ class HttpRequest;
 //代码来自cs::CHttpClient
 class HTTP_EXPORT HttpHandler :public Handler
 {
+	SUPER(Handler);
+
 	friend class HttpServer;
 public:
 	HttpHandler();
