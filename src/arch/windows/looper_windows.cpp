@@ -218,7 +218,6 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 		{
 			//ASSERT(msDelayNext);//如果为0，会形成busy loop,占用大量cpu
 
-#if 1
 			BOOL fAlertable = FALSE;
 			ULONG count = 0;
 			OVERLAPPED_ENTRY items[100];
@@ -277,49 +276,6 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 					}
 				}
 			}
-
-#else
-
-			BOOL ret = FALSE;
-
-			DWORD bytes = 0;
-			ULONG_PTR ptr = NULL;
-			LPOVERLAPPED ov = NULL;
-			ret = GetQueuedCompletionStatus(mLooperHandle, &bytes, &ptr, &ov, msDelayNext);
-			if (ptr && mTimerManager)
-			{
-				mLastIoTick = mLooperTick;
-			}
-			else
-			{
-				int x = 0;
-			}
-
-			if (ptr > 0xFFFF)
-			{
-				ASSERT(ov);
-
-				IocpObject *obj = (IocpObject *)ptr;
-				IoContext *context = CONTAINING_RECORD(ov, IoContext, mOV);
-				obj->DispatchIoContext(context, bytes);
-			}
-			else if (ptr && ptr <= 0xFFFF)
-			{
-				UINT msg = (UINT)ptr;
-				LPVOID info = (LPVOID)(ULONGLONG)bytes;
-				LPVOID obj = (LPVOID)ov;
-
-				if (obj > (LPVOID)0xFFFF)
-				{
-					IocpObject *iocpObject = (IocpObject *)obj;
-					iocpObject->OnCustomIocpMessage(msg, info);
-				}
-				else
-				{
-					//OnCustomIocpMessage(obj, msg, info);
-				}
-			}
-#endif
 
 			if (mLooperInternalData->mAttachThread)
 			{
