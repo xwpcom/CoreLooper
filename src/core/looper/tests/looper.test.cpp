@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "CppUnitTest.h"
 #include <atomic> 
 #include <functional>
@@ -24,9 +24,9 @@ using namespace Bear::Core::Net;
 
 /*
 XiongWanPing 2016~
-±¾µ¥Ôª²âÊÔÓÃÀ´²âÊÔ¸÷ÖÖ³¡¾°£¬°üÀ¨Õı³£³¡¾°ºÍ¹ÊÒâ¹¹ÔìµÄ¼«¶Ëµ÷ÓÃ³¡¾°,
-ÒÔ´ËÀ´±£Ö¤CoreLooper¿ò¼ÜÔÚ¸÷ÖÖµ÷ÓÃ³¡¾°µÄÎÈ¶¨ĞÔ
-.Ã¿¸ö²âÊÔ±ØĞëÄÜ¿ìËÙ½øĞĞ£¬ÒÔ±ã¿ìËÙµü´ú
+æœ¬å•å…ƒæµ‹è¯•ç”¨æ¥æµ‹è¯•å„ç§åœºæ™¯ï¼ŒåŒ…æ‹¬æ­£å¸¸åœºæ™¯å’Œæ•…æ„æ„é€ çš„æç«¯è°ƒç”¨åœºæ™¯,
+ä»¥æ­¤æ¥ä¿è¯CoreLooperæ¡†æ¶åœ¨å„ç§è°ƒç”¨åœºæ™¯çš„ç¨³å®šæ€§
+.æ¯ä¸ªæµ‹è¯•å¿…é¡»èƒ½å¿«é€Ÿè¿›è¡Œï¼Œä»¥ä¾¿å¿«é€Ÿè¿­ä»£
 */
 #include <algorithm>
 #include <iostream>
@@ -95,6 +95,125 @@ public:
 				}
 				}
 				return __super::OnMessage(msg, wp, lp);
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
+	}
+
+	//åˆ›å»ºä¸€äº›looper,æµ‹è¯•äº’å‘æ¶ˆæ¯
+	TEST_METHOD(sendMessage_)
+	{
+		static int gCount = 20;
+		static int gValue = 0;
+		class MainLooper :public MainLooper_
+		{
+			enum
+			{
+				BM_TEST = 1,
+				BM_ADD,
+			};
+
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				class WorkLooper :public Looper
+				{
+				public:
+					void bindBuddy(shared_ptr<WorkLooper> prev, shared_ptr<WorkLooper> next)
+					{
+						mPrevLooper = prev;
+						mNextLooper = next;
+					}
+
+				protected:
+					LRESULT OnMessage(UINT msg, WPARAM wp, LPARAM lp)
+					{
+						switch (msg)
+						{
+						case BM_TEST:
+						{
+							gValue++;
+
+							auto id = GetId();
+
+							if (id > 0)
+							{
+								auto obj = mPrevLooper.lock();
+								if (obj)
+								{
+									obj->sendMessage(BM_ADD);
+								}
+							}
+
+							auto obj = mNextLooper.lock();
+							if (obj)
+							{
+								obj->sendMessage(BM_TEST);
+							}
+							return 0;
+						}
+						case BM_ADD:
+						{
+							gValue++;
+
+							return 0;
+						}
+						}
+						return __super::OnMessage(msg, wp, lp);
+					}
+
+					weak_ptr<WorkLooper> mPrevLooper;
+					weak_ptr<WorkLooper> mNextLooper;
+				};
+
+				vector<shared_ptr<WorkLooper>> loopers;
+				for (int i = 0; i < gCount; i++)
+				{
+					auto obj = make_shared<WorkLooper>();
+					loopers.push_back(obj);
+
+					obj->SetId(i);
+					AddChild(obj);
+					obj->Start();
+				}
+				
+				for (int i = 0; i < gCount; i++)
+				{
+					if (i > 0 && i<gCount-1)
+					{
+						loopers[i]->bindBuddy(loopers[i-1], loopers[i+1]);
+					}
+					else if(i==0)
+					{
+						loopers[i]->bindBuddy(nullptr, loopers[i + 1]);
+					}
+					else if (i == gCount-1)
+					{
+						loopers[i]->bindBuddy(loopers[i - 1],nullptr);
+					}
+				}
+
+				loopers[0]->sendMessage(BM_TEST);
+
+				SetTimer(mTimeout,2000);
+			}
+
+			long mTimeout = 0;
+
+			void OnTimer(long id)
+			{
+				if (id == mTimeout)
+				{
+					LogI(TAG, "gValue = %d",gValue);
+					PostQuitMessage();
+					return;
+				}
+
+				__super::OnTimer(id);
 			}
 
 		};

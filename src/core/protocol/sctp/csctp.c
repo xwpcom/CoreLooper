@@ -2,6 +2,10 @@
 #include "protocol/sctp/ccrc.h"
 #include "stdio.h"
 
+#ifdef _MSC_VER
+#define strcasecmp _stricmp
+#endif
+
 #ifdef __C51__
 extern void SCTP_SetError(tagSCTP* obj, const char * desc);
 extern void SCTP_OnRecvCommandCB(tagSCTP *obj, const char *cmd, tagBundle *bundle);
@@ -83,7 +87,7 @@ int  SCTP_CheckCrc(tagBundle *bundle)
 			sprintf(buf, "%04X", (int)crc);
 #endif
 
-			if (strcmp(buf, crcCheck) == 0)
+			if (strcasecmp(buf, crcCheck) == 0)
 			{
 				return 0;
 			}
