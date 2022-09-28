@@ -190,6 +190,8 @@ void ToastWnd::Show(CWnd *wnd, CString text, DWORD msDisplay)
 
 	KillTimer(eTimerStartFadeOut);
 	KillTimer(eTimerFadeOut);
+	ShowWindow(SW_SHOW);
+	SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 	SetText(text);
 	SetAlpha(mBaseAlpha);
