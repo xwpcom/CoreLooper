@@ -117,9 +117,10 @@ void HttpHandler::CheckSend()
 		}
 
 		int ret = -1;
-		if (mChannel)
+		auto obj = mChannel;
+		if (obj)
 		{
-			ret = mChannel->Send(pData, len);
+			ret = obj->Send(pData, len);
 			if (ret > 0)
 			{
 				outbox->Eat(ret);
@@ -127,7 +128,7 @@ void HttpHandler::CheckSend()
 
 			//大数据流量管控,比如下载较大文件时
 			int maxCacheBytes = 8 * 1024;
-			if (outbox->length() > maxCacheBytes || mChannel->GetOutboxCacheBytes() > maxCacheBytes)
+			if (outbox->length() > maxCacheBytes || obj->GetOutboxCacheBytes() > maxCacheBytes)
 			{
 				return;
 			}
