@@ -492,7 +492,7 @@ public:
 		{
 			HttpAcker obj;
 			obj.Parse(
-				"HTTP/1.1 200\r\n"
+				"HTTP/1.1 200 OK\r\n"
 				"Transfer-Encoding: chunked\r\n"
 				"\r\n"
 				"74\r\n"
@@ -508,7 +508,7 @@ public:
 		{
 			HttpAcker obj;
 			obj.Parse(
-				"HTTP/1.1 200\r\n"
+				"HTTP/1.1 200 OK\r\n"
 				"Transfer-Encoding: chunked\r\n"
 				"\r\n"
 				"74\r\n"

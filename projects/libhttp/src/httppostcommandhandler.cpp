@@ -160,7 +160,7 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 							if (!ackJson.empty())
 							{
 								mAck = StringTool::Format(
-									"HTTP/1.1 200\r\n"
+									"HTTP/1.1 200 OK\r\n"
 									"Content-Type: application/json;charset=UTF-8\r\n"
 									"Content-Length: %d\r\n"
 									"\r\n"
@@ -187,7 +187,7 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 					json.printTo(jsonText);
 
 					mAck = StringTool::Format(
-						"HTTP/1.1 200\r\n"
+						"HTTP/1.1 200 OK\r\n"
 						"Content-Type: application/json;charset=UTF-8\r\n"
 						"Content-Length: %d\r\n"
 						"\r\n"
