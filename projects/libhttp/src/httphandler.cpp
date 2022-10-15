@@ -33,7 +33,7 @@ void HttpHandler::OnConnect(Channel*, long error, Bundle*)
 
 void HttpHandler::OnClose(Channel*)
 {
-	LogV(TAG, "%s(%p)", __func__, this);
+	//LogV(TAG, "%s(%p)", __func__, this);
 
 	Destroy();
 }
@@ -47,7 +47,7 @@ void HttpHandler::OnDestroy()
 {
 	__super::OnDestroy();
 
-	LogV(TAG, "%s(%p)", __func__, this);
+	//LogV(TAG, "%s(%p)", __func__, this);
 
 	if (mChannel)
 	{
@@ -287,7 +287,7 @@ void HttpHandler::DetachChannel()
 {
 	if (mChannel)
 	{
-		LogV(TAG, "%s(%p)", __func__, this);
+		//LogV(TAG, "%s(%p)", __func__, this);
 
 		mChannel->SignalOnSend.disconnect(this);
 		mChannel->SignalOnReceive.disconnect(this);
