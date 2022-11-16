@@ -48,10 +48,11 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 	}
 
 	USES_CONVERSION;
-	string target = mDir + filter;
+	auto target = mDir + filter.c_str();
 	StringTool::Replace(target,"/", "\\");
 	StringTool::Replace(target, "\\\\", "\\");
-	BOOL bOK = finder.FindFile(A2T(target.c_str()));
+	auto wDir = Utf8Tool::UTF8_to_UNICODE(target.c_str(), target.length());
+	BOOL bOK = finder.FindFile(wDir);
 	if (!bOK)
 	{
 		return FALSE;
