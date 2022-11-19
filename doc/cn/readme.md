@@ -56,14 +56,11 @@
 ``` cpp
 class MainLooper :public MainLooper_
 {
-	SUPER(MainLooper)
+	SUPER(MainLooper_)
 	
 	void OnCreate()
 	{
 		__super::OnCreate();
-
-		AddChild(make_shared<Handler>());
-		PostQuitMessage(2018);
 	}
 };
 
@@ -75,25 +72,10 @@ int main()
 作为一个代码洁癖患者，理想情况下,不管多么复杂的app,我们建议所有采用CoreLooper框架的app，其main()代码应该像上面这样只有一行(不能再多了),从这一细节也可以体现出CoreLooper框架的简洁之处。
 
 # CoreLooper授权
-CoreLooper是开源软件，但不是免费的，它采用灵活的授权方案。
-
-## 在中国内地使用corelooper的授权
-- 按C++开发人员收年费，每人每年100元(或一次性捐助1000元即可终生使用CoreLooper)
-- 对在校学生和无收入的用户每人每年0元,相当于免费使用
-- 自愿原则  
+CoreLooper是免费开源软件
 
 ## [捐助](donate.md)
 如果觉得CoreLooper对您有帮助，可以在自愿的基础上[捐助](donate.md)本项目
-
-
-
-
-## 在其他国家和地区使用CoreLooper的授权
-- 按C++开发人员收年费，每人每年50美元
-
-
-## CoreLooper授权收益会用来做什么
-CoreLooper远没有完善，还有很多计划在我们的todo列表中，所有这些工作都需要资源来实现。
 
 # CoreLooper为什么要开源
 
