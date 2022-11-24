@@ -1681,28 +1681,6 @@ int ShellTool::System(const char *szCmd)
 
 #endif
 
-#ifdef _MSC_VER
-bool ShellTool::IsDeveloperPC()
-{
-	bool ok = NetTool::MacExists("60-EE-5C-B3-D9-F3") || NetTool::MacExists("F8-32-E4-9D-00-9D");
-	return ok
-		;//bear pc
-}
-
-bool ShellTool::IsHongKongServer()
-{
-	static auto jjyHongKong = NetTool::MacExists("00-16-3E-01-02-7F");
-	return jjyHongKong;
-}
-
-bool ShellTool::IsChinaServer()
-{
-	static auto v = NetTool::MacExists("00-16-3E-04-CF-74");
-	return v;
-}
-
-#endif
-
 static ULONG gGmtSecondOffset = 8 * 3600;//时区偏移秒数,默认为中国时区GMT+08:00
 static const char mon_list[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 static const char leap_mon_list[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };

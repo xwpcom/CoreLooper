@@ -153,9 +153,6 @@ public:
 
 #ifdef _MSC_VER
 	static string RelativePath2FullPath(string relativePath);
-	static bool IsDeveloperPC();
-	static bool IsHongKongServer();
-	static bool IsChinaServer();
 #endif
 
 	static void ParseCommandLine(const char *cmdline, vector<string>& args);
