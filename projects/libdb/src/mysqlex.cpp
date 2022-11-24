@@ -143,7 +143,7 @@ void MySql::SetUtf8()
 }
 //调用者负责释放返回的数据
 //一般采用MySqlRes rs=MySql::Query()在MySqlRes析构时自动释放
-MYSQL_RES* MySql::Query(const char* sql)
+MYSQL_RES* MySql::Query(const char* sql, bool reportError)
 {
 	if (!m_pMySql)
 	{
@@ -161,7 +161,10 @@ MYSQL_RES* MySql::Query(const char* sql)
 		}
 		else
 		{
-			LogW(TAG,"mysql error=[%s],sql=[%s]", mysql_error(m_pMySql), sql);
+			if (reportError)
+			{
+				LogW(TAG, "mysql error=[%s],sql=[%s]", mysql_error(m_pMySql), sql);
+			}
 		}
 	}
 	catch (...)
@@ -175,9 +178,9 @@ MYSQL_RES* MySql::Query(const char* sql)
 }
 
 //Execute不返回数据,Query返回数据
-void MySql::Execute(const char* sql)
+void MySql::Execute(const char* sql, bool reportError)
 {
-	MySqlRes rs = Query(sql);
+	MySqlRes rs = Query(sql, reportError);
 }
 
 DWORD MySql::GetAffectedRows()

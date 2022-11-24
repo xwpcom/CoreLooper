@@ -54,11 +54,11 @@ public:
 	{
 		return Query(sql.c_str());
 	}
-	MYSQL_RES *Query(const char *sql);
-	void Execute(const char *sql);
-	void Execute(const std::string& sql)
+	MYSQL_RES *Query(const char *sql,bool reportError=true);
+	void Execute(const char *sql, bool reportError = true);
+	void Execute(const std::string& sql, bool reportError = true)
 	{
-		Execute(sql.c_str());
+		Execute(sql.c_str(),reportError);
 	}
 	DWORD GetAffectedRows();
 
