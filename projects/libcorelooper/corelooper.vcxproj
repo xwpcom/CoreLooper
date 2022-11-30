@@ -327,6 +327,12 @@
     <ClCompile Include="..\..\src\arch\windows\udpserver_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\iocontext.cpp" />
     <ClCompile Include="..\..\src\arch\windows\udpiocontext.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\wepoll\wepoll.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\wepoll\wepoll.test.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndhandler.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp" />
     <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
@@ -610,6 +616,7 @@
     <ClInclude Include="..\..\include\json\ArduinoJson\StaticJsonBuffer.hpp" />
     <ClInclude Include="..\..\include\json\ArduinoJson\version.hpp" />
     <ClInclude Include="..\..\include\json\jsonhelper.h" />
+    <ClInclude Include="..\..\src\arch\windows\wepoll\wepoll.h" />
     <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\timernode.h" />

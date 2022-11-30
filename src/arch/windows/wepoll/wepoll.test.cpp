@@ -346,7 +346,9 @@ void TcpClient::OnConnectAck(int error)
 
 /*
 XiongWanPing 2022.11.27
-测试wepoll
+测试wepoll,它用到了windows AFD
+发现网上找不到AFD相关资料，感觉是microsoft没有开放出来
+
 */
 TEST_CLASS(Wepoll_)
 {
