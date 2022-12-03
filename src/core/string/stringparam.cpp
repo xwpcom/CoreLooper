@@ -117,10 +117,10 @@ string StringParam::ToString(const map<string, string>& items, const char* itemS
 	return ack;
 }
 
-string StringParam::MergeFields(const string& src, const string& fields, const char *itemSeperator, const char *sign)
+string StringParam::MergeFields(const string& base, const string& newFields, const char *itemSeperator, const char *sign)
 {
-	map<string, string> items1 = ParseItems(src);
-	map<string, string> items2 = ParseItems(fields);
+	map<string, string> items1 = ParseItems(base);
+	map<string, string> items2 = ParseItems(newFields);
 
 	map<string, string> items;
 

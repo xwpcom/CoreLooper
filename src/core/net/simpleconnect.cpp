@@ -97,7 +97,11 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 
 void SimpleConnect::OnClose(Channel*)
 {
-	//DV("%s,this=%p", __func__, this);
+	if (mVerbose)
+	{
+		LogV(TAG, "%s,this=%p", __func__, this);
+	}
+
 	mConnected = false;
 	Destroy();
 }
@@ -135,7 +139,10 @@ void SimpleConnect::OnReceive(Channel*)
 
 void SimpleConnect::OnDestroy()
 {
-	//LogV(TAG,"%s,this=%p", __func__, this);
+	if (mVerbose)
+	{
+		LogV(TAG, "%s,this=%p", __func__, this);
+	}
 
 	if (mChannel)
 	{
@@ -189,6 +196,11 @@ void SimpleConnect::CheckSend()
 void SimpleConnect::Close()
 {
 	ASSERT(IsMyselfThread());
+
+	if (mVerbose)
+	{
+		LogV(TAG, "%s,this=%p", __func__, this);
+	}
 
 	if (mChannel)
 	{
