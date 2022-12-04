@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "speedhandler.h"
 
 namespace Bear {
@@ -44,9 +44,11 @@ void SpeedHandler::OnSend(Channel*)
 void SpeedHandler::OnReceive(Channel*)
 {
 	BYTE buf[4 * 1024];
-	while (mChannel)
+	auto channel = mChannel;
+
+	while (channel)
 	{
-		int ret = mChannel->Receive(buf, sizeof(buf) - 1);
+		int ret = channel->Receive(buf, sizeof(buf) - 1);
 		if (ret <= 0)
 		{
 			return;
@@ -79,7 +81,8 @@ void SpeedHandler::UpdateTickAlive()
 
 void SpeedHandler::CheckSend()
 {
-	while (mChannel)
+	auto channel = mChannel;
+	while (channel)
 	{
 		if (mOutbox.GetActualDataLength() == 0)
 		{
@@ -88,20 +91,20 @@ void SpeedHandler::CheckSend()
 
 		LPBYTE frame = mOutbox.GetDataPointer();
 		int frameLen = mOutbox.GetActualDataLength();
-		int ret = mChannel->Send(frame, frameLen);
+		int ret = channel->Send(frame, frameLen);
 		if (ret > 0)
 		{
 			mOutbox.Eat(ret);
 
 			if (ret < frameLen)
 			{
-				//Ö»·¢ÁËÒ»²¿·Ö,mOutboxÖÐÃ»·¢ÍêµÄÊý¾ÝÏÂ´Î»áÔÙ·¢ËÍ
+				//åªå‘äº†ä¸€éƒ¨åˆ†,mOutboxä¸­æ²¡å‘å®Œçš„æ•°æ®ä¸‹æ¬¡ä¼šå†å‘é€
 				return;
 			}
 		}
 		else
 		{
-			//·¢ËÍ³ö´í
+			//å‘é€å‡ºé”™
 			return;
 		}
 	}

@@ -113,10 +113,15 @@ void SimpleConnect::OnSend(Channel*)
 
 void SimpleConnect::OnReceive(Channel*)
 {
-	while (mChannel)
+	//在下面的ParseInbox可能导致清空mChannel,
+	//引入局部变量channel可保证channel在while循环中一直有效
+
+	auto channel = mChannel;
+
+	while (channel)
 	{
 		BYTE buf[1024*4];
-		int ret = mChannel->Receive(buf, sizeof(buf) - 1);
+		int ret = channel->Receive(buf, sizeof(buf) - 1);
 		if (ret <= 0)
 		{
 			break;
@@ -163,7 +168,9 @@ void SimpleConnect::CheckSend()
 		//LogV(TAG, "%s", __func__);
 	}
 
-	while (mChannel)
+	auto channel = mChannel;
+
+	while (channel)
 	{
 		if (mOutbox.GetActualDataLength() == 0)
 		{
@@ -173,7 +180,7 @@ void SimpleConnect::CheckSend()
 
 		LPBYTE frame = mOutbox.GetDataPointer();
 		int frameLen = mOutbox.GetActualDataLength();
-		int ret = mChannel->Send(frame, frameLen);
+		int ret = channel->Send(frame, frameLen);
 		if (ret > 0)
 		{
 			SignalSendOut(this, frame, frameLen);

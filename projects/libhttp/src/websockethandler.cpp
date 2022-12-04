@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "websockethandler.h"
 #include "net/channel.h"
 
@@ -93,8 +93,8 @@ void WebSocketHandler::OnSend(Channel*)
 	CheckSend();
 }
 
-//Ïòwebsocket·¢Êý¾ÝÖ®Ç°Òª´ò°ü
-//´ÓwebsocketÊÕµ½Êý¾ÝÖ®ºóÒª½â°ü
+//å‘websocketå‘æ•°æ®ä¹‹å‰è¦æ‰“åŒ…
+//ä»Žwebsocketæ”¶åˆ°æ•°æ®ä¹‹åŽè¦è§£åŒ…
 void WebSocketHandler::onWebSocketEncodeData(const uint8_t* ptr, uint64_t len)
 {
 	auto ret = mWebSocketOutbox.Write((LPBYTE)ptr, (int)len);
@@ -115,9 +115,9 @@ void WebSocketHandler::CheckSend()
 			WebSocketHeader header;
 			header._fin = true;
 			header._reserved = 0;
-			header._opcode = WebSocketHeader::TEXT;//ÕâÀïÒªÉèÖÃÎªTEXT,Èç¹ûÉèÖÃÎªBINARY,ÔòÎ¢ÐÅÐ¡³ÌÐòÖÐwebsocketÊÕµ½Êý¾ÝÊ±£¬Òª×ÔÐÐ×ªÎªstring
+			header._opcode = WebSocketHeader::TEXT;//è¿™é‡Œè¦è®¾ç½®ä¸ºTEXT,å¦‚æžœè®¾ç½®ä¸ºBINARY,åˆ™å¾®ä¿¡å°ç¨‹åºä¸­websocketæ”¶åˆ°æ•°æ®æ—¶ï¼Œè¦è‡ªè¡Œè½¬ä¸ºstring
 			header._mask_flag = false;
-			WebSocketSplitter::encode(header, (uint8_t*)pData, len);//±àÂëÊý¾Ý±£´æÔÚmWebSocketOutbox
+			WebSocketSplitter::encode(header, (uint8_t*)pData, len);//ç¼–ç æ•°æ®ä¿å­˜åœ¨mWebSocketOutbox
 			mOutbox.clear();
 		}
 	}
@@ -144,15 +144,15 @@ void WebSocketHandler::CheckSend()
 
 void WebSocketHandler::OnReceive(Channel*)
 {
-	while (mChannel)
+	auto channel = mChannel;
+	while (channel)
 	{
 		BYTE buf[1024 * 8];
 		int len = sizeof(buf) - 1;
-		int ret = mChannel->Receive(buf, len);
+		int ret = channel->Receive(buf, len);
 		if (ret == 0)
 		{
-			//DW("socket is broken by client");
-			mChannel->Close();
+			channel->Close();
 			return;
 		}
 

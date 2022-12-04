@@ -144,8 +144,8 @@ void HttpHandler::CheckSend()
 void HttpHandler::OnReceive(Channel*)
 {
 	//LogV(TAG, "%s(%p)", __func__, this);
-
-	while (mChannel)
+	auto channel = mChannel;
+	while (channel)
 	{
 		int freeSize = mInbox.GetFreeSize();
 		if (freeSize < 2)//for easy parse,end with '\0'
@@ -160,12 +160,12 @@ void HttpHandler::OnReceive(Channel*)
 
 		if (len > 0)
 		{
-			int ret = mChannel->Receive(buf, len);
+			int ret = channel->Receive(buf, len);
 			if (ret == 0)
 			{
 				//LogW(TAG,"socket is broken by client");
 
-				mChannel->Close();
+				channel->Close();
 				return;
 			}
 
@@ -196,6 +196,7 @@ void HttpHandler::ParseInbox()
 		return;
 	}
 
+	auto channel = mChannel;
 	while (1)
 	{
 		auto d = inbox->data();
@@ -205,7 +206,7 @@ void HttpHandler::ParseInbox()
 			break;
 		}
 
-		if (!mChannel)
+		if (!channel)
 		{
 			/*
 			2022.01.13
@@ -223,8 +224,8 @@ void HttpHandler::ParseInbox()
 			mHttpRequest = make_shared<HttpRequest>();
 			mHttpRequest->SetConfig(mWebConfig);
 			mHttpRequest->SetOutbox(&mOutbox);
-			mHttpRequest->SetPeerAddr(mChannel->GetPeerDesc());
-			mHttpRequest->SetLocalAddr(mChannel->GetLocalDesc());
+			mHttpRequest->SetPeerAddr(channel->GetPeerDesc());
+			mHttpRequest->SetLocalAddr(channel->GetLocalDesc());
 		}
 
 		bytes = inbox->length();
@@ -248,7 +249,7 @@ void HttpHandler::ParseInbox()
 					AddChild(obj);
 
 					DetachChannel();
-					obj->Attach(mChannel);
+					obj->Attach(channel);
 					mChannel = nullptr;
 
 					return;
