@@ -34,7 +34,7 @@ TcpClient_Linux::TcpClient_Linux()
 		{
 			auto ret = wolfSSL_Init();
 			first = false;
-			LogV(TAG, "wolfSSL_Init ret=%d",ret);
+			LogV(TAG, "wolfSSL_Init %s",(ret==1)?"ok":"fail");
 		}
 	}
 #endif
