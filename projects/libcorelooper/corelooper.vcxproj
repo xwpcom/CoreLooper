@@ -318,6 +318,7 @@
     <ClCompile Include="..\..\src\arch\windows\looper_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp" />
     <ClCompile Include="..\..\src\arch\windows\serialport_windows.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\StackWalker.cpp" />
     <ClCompile Include="..\..\src\arch\windows\tcpclient_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\tcplistener_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\tcpserver2_windows.cpp" />
@@ -508,6 +509,7 @@
     <ClInclude Include="..\..\include\arch\windows\iocpobject.h" />
     <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h" />
     <ClInclude Include="..\..\include\arch\windows\serialport_windows.h" />
+    <ClInclude Include="..\..\include\arch\windows\StackWalker.h" />
     <ClInclude Include="..\..\include\arch\windows\tcpclient_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\tcpserver2_windows.h" />
     <ClInclude Include="..\..\include\arch\windows\tcpserver_windows.h" />

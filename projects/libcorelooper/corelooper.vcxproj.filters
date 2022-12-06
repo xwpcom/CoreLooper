@@ -412,6 +412,9 @@
     <ClCompile Include="..\..\src\arch\windows\wepoll\wepoll.test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\StackWalker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -928,6 +931,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\arch\windows\wepoll\wepoll.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\StackWalker.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>
