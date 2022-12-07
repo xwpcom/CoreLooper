@@ -980,6 +980,8 @@ int File::ftruncateEx(int fd, off_t length)
 
 int File::CopyFile(const string& sourceFilePath, const string& destFilePath)
 {
+	File::CreateFolderForFile(destFilePath);
+
 	if (File::FileExists(destFilePath.c_str()))
 	{
 		File::DeleteFile(destFilePath.c_str());
