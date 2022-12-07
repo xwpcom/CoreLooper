@@ -221,24 +221,29 @@ void HttpHandler::ParseInbox()
 
 		if (!mHttpRequest)
 		{
-			mHttpRequest = make_shared<HttpRequest>();
-			mHttpRequest->SetConfig(mWebConfig);
-			mHttpRequest->SetOutbox(&mOutbox);
-			mHttpRequest->SetPeerAddr(channel->GetPeerDesc());
-			mHttpRequest->SetLocalAddr(channel->GetLocalDesc());
+			auto obj = make_shared<HttpRequest>();
+			obj->SetConfig(mWebConfig);
+			obj->SetOutbox(&mOutbox);
+			obj->SetPeerAddr(channel->GetPeerDesc());
+			obj->SetLocalAddr(channel->GetLocalDesc());
+			mHttpRequest = obj;
 		}
 
+		auto httpResult = mHttpRequest;
+
 		bytes = inbox->length();
-		auto ret = mHttpRequest->Input(*inbox);
+		auto ret = httpResult->Input(*inbox);
 		if (ret == -1)
 		{
 			Destroy();
 			return;
 		}
+
 		CheckSend();
-		if (mHttpRequest && mHttpRequest->IsWebSocket())
+
+		if (httpResult->IsWebSocket())
 		{
-			auto url = mHttpRequest->GetUrl();
+			auto url = httpResult->GetUrl();
 			mHttpRequest = nullptr;
 
 			if (mWebConfig->mWSFacotry)
@@ -256,11 +261,11 @@ void HttpHandler::ParseInbox()
 				}
 			}
 
-			if (mChannel)
+			if (channel)
 			{
 				LogW(TAG,"no handler for websockt url:%s", url.c_str());
 
-				mChannel->Destroy();
+				channel->Destroy();
 				Destroy();
 				return;
 			}
