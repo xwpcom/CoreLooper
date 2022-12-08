@@ -910,6 +910,17 @@ string File::GetPathFileName(string path)
 	return "";
 }
 
+string File::fileExt(const string& filePath)
+{
+	auto pos = filePath.rfind('.');
+	if (pos != string::npos)
+	{
+		return filePath.substr(pos);
+	}
+
+	return "";
+}
+
 const char * File::GetFileExt(const char *filepath)
 {
 	if (!filepath || filepath[0] == 0)

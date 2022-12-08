@@ -206,6 +206,7 @@ public:
 	}
 	static int Dump(std::string sz, const char *pszFile);
 	static const char *GetFileExt(const char *filepath);
+	static string fileExt(const string& filePath);
 	static std::string GetPathFileName(std::string path);
 	static std::string GetFileTitle(const char *filepath);
 	static ULONGLONG CalcFolderContentBytes(std::string folder);
