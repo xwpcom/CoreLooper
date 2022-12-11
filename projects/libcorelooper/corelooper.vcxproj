@@ -298,7 +298,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\include\core\base\crashdump.cpp" />
     <ClCompile Include="..\..\include\core\net\test\speedhandler.cpp" />
     <ClCompile Include="..\..\include\core\net\test\speedserver.cpp" />
     <ClCompile Include="..\..\include\core\net\test\unittest_speed.cpp" />
@@ -314,6 +313,8 @@
     <ClCompile Include="..\..\src\arch\linux\udpclient_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\udpserver_linux.cpp" />
     <ClCompile Include="..\..\src\arch\linux\linuxsignal.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\crashdump.cpp" />
+    <ClCompile Include="..\..\src\arch\windows\dbghelper.cpp" />
     <ClCompile Include="..\..\src\arch\windows\iocpobject.cpp" />
     <ClCompile Include="..\..\src\arch\windows\looper_windows.cpp" />
     <ClCompile Include="..\..\src\arch\windows\mfcmainlooper.cpp" />
@@ -506,6 +507,8 @@
     <ClInclude Include="..\..\include\arch\linux\udpserver_linux.h" />
     <ClInclude Include="..\..\include\arch\linux\linuxsignal.h" />
     <ClInclude Include="..\..\include\arch\linux\looper_linux.h" />
+    <ClInclude Include="..\..\include\arch\windows\crashdump.h" />
+    <ClInclude Include="..\..\include\arch\windows\dbghelper.h" />
     <ClInclude Include="..\..\include\arch\windows\iocpobject.h" />
     <ClInclude Include="..\..\include\arch\windows\mfcmainlooper.h" />
     <ClInclude Include="..\..\include\arch\windows\serialport_windows.h" />

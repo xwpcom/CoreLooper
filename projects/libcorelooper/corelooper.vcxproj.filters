@@ -340,9 +340,6 @@
     <ClCompile Include="..\..\src\core\file\tests\file.unittest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\core\base\crashdump.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\protocol\ctp\ctp.template\ctpclient2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -413,6 +410,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\arch\windows\StackWalker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\crashdump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\arch\windows\dbghelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -934,6 +937,12 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\arch\windows\StackWalker.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\crashdump.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\arch\windows\dbghelper.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

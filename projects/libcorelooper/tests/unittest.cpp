@@ -90,6 +90,65 @@ TEST_CLASS(_TestCPP11)
 			make_shared<MainLooper>()->StartRun();
 		}
 
+		TEST_METHOD(lambda_defer_call)
+		{
+			class Worker:public Handler
+			{
+				string mTag = "worker";
+				vector<TaskEntry> mPendingTaks;//等待在connected之后执行的任务
+			public:
+				void doCall()
+				{
+					for (auto& t : mPendingTaks)
+					{
+						t();
+					}
+
+					mPendingTaks.clear();
+				}
+
+				void ReportFlow(const string& value)
+				{
+					LogV(mTag, "%s(%s)", __func__, value.c_str());
+
+				}
+
+				void addDeferCall(const string& value)
+				{
+					mPendingTaks.push_back([this, value]() {
+						ReportFlow(value);
+						});
+				}
+			};
+
+			class MainLooper :public MainLooper_
+			{
+				void OnCreate()
+				{
+					__super::OnCreate();
+
+					auto obj = make_shared<Worker>();
+					AddChild(obj);
+
+					{
+						string value = "12";
+						obj->addDeferCall(value);
+					}
+					{
+						string value = "34";
+						obj->addDeferCall(value);
+					}
+
+					obj->doCall();
+
+					DelayExit(3000);
+
+				}
+			};
+
+			make_shared<MainLooper>()->StartRun();
+		}
+
 		TEST_METHOD(_lambda_base)
 		{
 			// Create a vector object that contains 10 elements.

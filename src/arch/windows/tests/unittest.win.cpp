@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "CppUnitTest.h"
 #include "core/looper/teststate.h"
 #include "core/net/tcpclient.h"
@@ -6,6 +6,7 @@
 #include <functional>
 #include <mutex>  
 #include "tcplistener_windows.h"
+#include "arch/windows/dbghelper.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -16,6 +17,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Bear::Core;
 using namespace Bear::Core::FileSystem;
 using namespace Bear::Core::Net;
+using namespace Windows;
 
 #include <algorithm>
 #include <iostream>
@@ -90,6 +92,13 @@ public:
 		};
 
 		make_shared<MainLooper>()->StartRun();
+	}
+
+	TEST_METHOD(tasks)
+	{
+		DbgHelper obj;
+		obj.test();
+
 	}
 
 };

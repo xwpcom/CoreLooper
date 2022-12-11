@@ -1,5 +1,5 @@
-#include "stdafx.h"
-#include "crashdump.h"
+ï»¿#include "stdafx.h"
+#include "arch/windows/crashdump.h"
 #include <string>
 using namespace std;
 #include "shelltool.h"
@@ -16,7 +16,7 @@ BOOL CCrashDump::m_bInstalled=FALSE;
 
 /*
 2021.01.03
-ÓÃÈçÏÂ´úÂë²âÊÔ·¢ÏÖ,stack overflowÊ±»áÔÚStartAutoDumpÖĞ±¨´íµ¼ÖÂÃ»·¨Éú³ÉdmpÎÄ¼ş
+ç”¨å¦‚ä¸‹ä»£ç æµ‹è¯•å‘ç°,stack overflowæ—¶ä¼šåœ¨StartAutoDumpä¸­æŠ¥é”™å¯¼è‡´æ²¡æ³•ç”Ÿæˆdmpæ–‡ä»¶
 
 	class FillStack
 	{
@@ -35,7 +35,7 @@ BOOL CCrashDump::m_bInstalled=FALSE;
 
 */
 
-//ÒÑ²âÊÔÈ·ÈÏ£¬release°æ²»¼ÓdebugĞÅÏ¢£¬Éú³ÉµÄ.dmpÎÄ¼şÒ²ÄÜ¶¨Î»µ½bug´úÂëĞĞ£¬Ç°ÌáÊÇÉú³É.exeºó´úÂëÃ»ĞŞ¸Ä¹ı
+//å·²æµ‹è¯•ç¡®è®¤ï¼Œreleaseç‰ˆä¸åŠ debugä¿¡æ¯ï¼Œç”Ÿæˆçš„.dmpæ–‡ä»¶ä¹Ÿèƒ½å®šä½åˆ°bugä»£ç è¡Œï¼Œå‰ææ˜¯ç”Ÿæˆ.exeåä»£ç æ²¡ä¿®æ”¹è¿‡
 long CCrashDump::StartAutoDump(struct _EXCEPTION_POINTERS *pep)
 {
 	char	szFileName[_MAX_PATH]	= {0};
