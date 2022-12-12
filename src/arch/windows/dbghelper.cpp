@@ -105,6 +105,7 @@ int DbgHelper::createMiniDump(const string& exeName, const string& dumpFilePath)
 
 	auto hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 
+	File::CreateFolderForFile(dumpFilePath);
 	HANDLE hFile = CreateFileA(dumpFilePath.c_str(), GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	MINIDUMP_TYPE mdt = static_cast<MINIDUMP_TYPE>(MiniDumpNormal 

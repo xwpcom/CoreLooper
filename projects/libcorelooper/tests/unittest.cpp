@@ -95,16 +95,16 @@ TEST_CLASS(_TestCPP11)
 			class Worker:public Handler
 			{
 				string mTag = "worker";
-				vector<TaskEntry> mPendingTaks;//等待在connected之后执行的任务
+				vector<TaskEntry> mPendingTasks;//等待在connected之后执行的任务
 			public:
 				void doCall()
 				{
-					for (auto& t : mPendingTaks)
+					for (auto& t : mPendingTasks)
 					{
 						t();
 					}
 
-					mPendingTaks.clear();
+					mPendingTasks.clear();
 				}
 
 				void ReportFlow(const string& value)
@@ -115,7 +115,7 @@ TEST_CLASS(_TestCPP11)
 
 				void addDeferCall(const string& value)
 				{
-					mPendingTaks.push_back([this, value]() {
+					mPendingTasks.push_back([this, value]() {
 						ReportFlow(value);
 						});
 				}
