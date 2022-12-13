@@ -51,7 +51,7 @@ protected:
 	//*
 	static bool		mThreadRunning;
 	static char		mDns[128];//工作线程输入
-	static char		mIP[16];//存放工作线程解析出的ip
+	static char		mIP[24];//存放工作线程解析出的ip
 	//*/
 };
 }

@@ -59,7 +59,7 @@ enum
 
 bool DnsLooper::mThreadRunning = false;
 char DnsLooper::mDns[128];
-char DnsLooper::mIP[16];
+char DnsLooper::mIP[24];
 
 static const char* TAG = "DnsLooper";
 
@@ -68,12 +68,6 @@ static const char* TAG = "DnsLooper";
 #else
 #define _TLS	__thread
 #endif
-
-/*
-static _TLS bool mThreadRunning = false;
-static _TLS char mDns[128];
-static _TLS char mIP[16];
-*/
 
 #ifdef _DEBUG
 //用来保证:同一app中只允许有一个DnsLooper实例
@@ -196,6 +190,8 @@ void* DnsLooper::_DnsThreadCB(void *p)
 	//ShellTool::Sleep(3 * 1000);//模拟网络较慢时的场景
 #endif
 	ShellTool::SetThreadName("_DnsThreadCB");
+
+	mIP[0] = 0;
 	{
 		if (strcmp(mDns, "localhost") == 0)
 		{
@@ -242,6 +238,13 @@ void* DnsLooper::_DnsThreadCB(void *p)
 				{
 					LogV(TAG, "getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
 				}
+			}
+
+			//出现过设备网络正常，但dns解析不成功的情况,为此内置平台ip
+			if (mIP[0] == 0 && strcmp(mDns, "iot.jjyip.com") == 0)
+			{
+				strncpy(mIP, "47.106.193.63", sizeof(mIP) - 1);
+				LogV(TAG, "getaddrinfo fail,use built-in iot.jjyip.com ip");
 			}
 
 			//DT("freeaddrinfo#begin,result=0x%08x", result);
