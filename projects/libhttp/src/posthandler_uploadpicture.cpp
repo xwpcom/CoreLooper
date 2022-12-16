@@ -71,6 +71,17 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		obj->params().Set("uid", uid);
 
 		auto date= params.GetString("date");// yyyymmdd
+		if (date.length() <  8)
+		{
+			LogW(TAG, "invalid date[%s]",date.c_str());
+			return nullptr;
+		}
+
+		/*
+		date为空时,date.substr(0,4)运行不会报错
+		而date.substr(4, 2)会导致crash
+		*/
+
 		//auto time = params.GetString("time");//hhMMss
 		LogV(TAG, "uid=%s", uid.c_str());
 
