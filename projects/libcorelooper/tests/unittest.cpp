@@ -3716,6 +3716,13 @@ TEST_CLASS(STL)
 		string sz = std::move(text);
 		int x = 0;
 	}
+
+	TEST_METHOD(type_size)
+	{
+
+		LogV(TAG, "sizeof(uint8_t)=%zu", sizeof(uint8_t));
+	}
+
 };
 
 TEST_CLASS(_Udp)
@@ -3743,11 +3750,6 @@ public:
 		make_shared<MainLooper>()->StartRun();
 	}
 
-	TEST_METHOD(type_size)
-	{
-
-		LogV(TAG, "sizoef(uint8_t)=%z",sizeof(uint8_t));
-	}
 };
 
 }
