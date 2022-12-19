@@ -1,4 +1,5 @@
 # CoreLooper¼ò½é
+
 CoreLooperÊÇÒ»¸ö»ùÓÚc++11µÄÍ¨ÓÃ×é¼þ¿ò¼Ü,Ö§³ÖÍ¨ÓÃÒµÎñºÍÍøÂçÍ¨Ñ¶¡£
 
 - ¿ò¼ÜÊÇÊ²Ã´  
@@ -25,8 +26,8 @@ CoreLooperÊÇÒ»¸ö»ùÓÚc++11µÄÍ¨ÓÃ×é¼þ¿ò¼Ü,Ö§³ÖÍ¨ÓÃÒµÎñºÍÍøÂçÍ¨Ñ¶¡£
  Í¨¹ýsendMessageºÍpostMessage,¶à¸öÏß³ÌÖÐµÄ×é¼þ¿É»¥Ïà·¢ËÍÏûÏ¢°²È«Í¨Ñ¶ 
 - ½â¾öÁË×é¼þÐèÒª¼ÓËø²ÅÄÜ±£Ö¤Ïß³Ì°²È«µÄÎÊÌâ  
  ÔÚ¶àÏß³ÌÓ¦ÓÃÖÐ£¬²»Í¬Ïß³ÌÖÐµÄ×é¼þ¾­³£ÐèÒª»¥Ïàµ÷ÓÃ£¬ÎªÁË±£Ö¤Ïß³Ì°²È«£¬¾­³£ÐèÒª¼ÓËøÍ¬²½£¬ËùÒÔÔÚÒ»°ãµÄappÔ´ÂëÖÐ¿ÉÒÔ¿´µ½´óÁ¿µÄ¼ÓËøµ÷ÓÃ¡£
-ÕâÆäÊµÊÇÒ»¸öºÜÑÏÖØµÄÎÊÌâ£¬ÔÚÒµÎñ¸´ÔÓÊ±£¬Ò»¸öËø¿ÉÄÜÍêÈ«²»¹»ÓÃ£¬¶ø¶à¸öËøºÜÈÝÒ×Ôì³ÉËÀËø£¬²¢ÇÒµ÷ÊÔÅÅ²é±È½ÏÀ§ÄÑ£¬Ò»µ©³öÎÊÌâÓÖÊÇÖÂÃüµÄ¡£
-CoreLooperÍêÈ«±ÜÃâÁËÕâÒ»¾½¾³£¬¸÷×é¼þ²»ÐèÒª×ÔÐÐ¼ÓËø£¬Ò»¸öËøÒ²²»Òª£¬¾ÍÄÜÊµÏÖ¿çÏß³Ì°²È«Í¨Ñ¶¡£
+ ÕâÆäÊµÊÇÒ»¸öºÜÑÏÖØµÄÎÊÌâ£¬ÔÚÒµÎñ¸´ÔÓÊ±£¬Ò»¸öËø¿ÉÄÜÍêÈ«²»¹»ÓÃ£¬¶ø¶à¸öËøºÜÈÝÒ×Ôì³ÉËÀËø£¬²¢ÇÒµ÷ÊÔÅÅ²é±È½ÏÀ§ÄÑ£¬Ò»µ©³öÎÊÌâÓÖÊÇÖÂÃüµÄ¡£
+ CoreLooperÍêÈ«±ÜÃâÁËÕâÒ»¾½¾³£¬¸÷×é¼þ²»ÐèÒª×ÔÐÐ¼ÓËø£¬Ò»¸öËøÒ²²»Òª£¬¾ÍÄÜÊµÏÖ¿çÏß³Ì°²È«Í¨Ñ¶¡£
 - ¶ÔÏóÉúÃüÖÜÆÚÈ«×Ô¶¯¹ÜÀí£¬±ÜÃâÁËÊÖ¹¤·ÖÅäºÍÊÍ·ÅÄÚ´æ  
  Õâ¸öÆäÊµÊÇc++11ÖÇÄÜÖ¸Õë×öµÄ£¬Ö®ËùÒÔÔÚÕâÀïÇ¿µ÷£¬ÊÇÒòÎªÄ¿Ç°¾ø´ó¶àÊý¿ªÔ´Èí¼þ²¢Ã»ÓÐÓÃµ½ÖÇÄÜÖ¸Õë£¬ÈÔÈ»ÊÇ²ÉÓÃÊÖ¹¤¹ÜÀí£¬Õâ»á´øÀ´ºÜ¶àÎÊÌâ¡£CoreLooper¿ò¼Ü´ó¹æÄ£Ó¦ÓÃÁËÖÇÄÜÖ¸Õë£¬¾­ÑéÖ¤·¢ÏÖÐ§¹ûºÜºÃ£¬ËùÒÔÔÚ´ËÇ¿ÁÒÍÆ¼ö
 - ¿ÉÊÓ»¯±à³Ì£¬¸ÄÉÆÁËµ÷ÊÔÅÅ²éappµÄÌåÑéºÍÐ§ÂÊ  
@@ -34,19 +35,21 @@ CoreLooperÍêÈ«±ÜÃâÁËÕâÒ»¾½¾³£¬¸÷×é¼þ²»ÐèÒª×ÔÐÐ¼ÓËø£¬Ò»¸öËøÒ²²»Òª£¬¾ÍÄÜÊµÏÖ¿çÏß³Ì
 ÔÚ¿ª·¢¹ý³ÌÖÐ£¬¾­³£ÐèÒª´òÈÕÖ¾À´¼ì²é±äÁ¿Êý¾Ý,´òÓ¡¶àÁË»á¸ÉÈÅÆäËû¹¦ÄÜµÄµ÷½Ú£¬´òÓ¡ÉÙÁËÓÐÊ±Ïë¿´µÄ±äÁ¿Ã»´òÓ¡³öÀ´£¬ÒªÐÞ¸Ä´úÂë£¬ÖØÐÂ±àÒëÔÙ²âÊÔ£¬ÓÐÊ±»¹²»·½±ãÖØÏÖ¡£
 ÎªÁË½â¾öÕâ¸öÎÊÌâ,BaseLooperÔÚÄÚÖÃµÄHTTP·þÎñÆ÷ÉÏÔö¼ÓÁËÒ»¸ö¿ÉÀ©Õ¹µÄajax¿ò¼Ü¡£¿ÉÒÔÓÃ´Ë¿ò¼ÜÀ´²é¿´ºÍÐÞ¸ÄÊý¾Ý£¬»¹ÌØÒâÔö¼ÓÁËÒ»¸öproc.xml½Ó¿Ú£¬¿ÉÒÔÍ¨¹ýä¯ÀÀÆ÷À´²é¿´×é¼þµÄÊµÊ±ÄÚ²¿×´Ì¬,ÄÜ°ïÖú¿ª·¢ÈËÔ±¿ìËÙ¶¨Î»bug¡£
 ## CoreLooperÌØ±ð¹Ø×¢ÁËÏÖÓÐÖªÃûÍøÂç¿ªÔ´¿âµÄÒ»Ð©Í´µã
+
 - muduo
- 
+
 - evpp
  evpp readmeÖÐÓÐÒ»¶Î»°ÈÃÎÒÓ¡ÏóÉî¿Ì,¼û: https://github.com/Qihoo360/evpp/blob/master/readme_cn.md
- Õª³­ÈçÏÂ:
+  Õª³­ÈçÏÂ:
 > ÎÒÃÇÊµÏÖ¹ý³ÌÖÐ¼«ÆäÖØÊÓÏß³Ì°²È«ÎÊÌâ£¬Ò»¸öÊÂ¼þÏà¹ØµÄ×ÊÔ´±ØÐëÔÚÆäËùÊôµÄ`EventLoop`£¨Ã¿¸ö`EventLoop`°ó¶¨Ò»¸öÏß³Ì£©ÖÐ³õÊ¼»¯ºÍÎö¹¹ÊÍ·Å£¬ÕâÑùÎÒÃÇÄÜ×î´óÏÞ¶ÈµÄ¼õÉÙ³ö´íµÄ¿ÉÄÜ¡£ÎªÁË´ïµ½Õâ¸öÄ¿±êÎÒÃÇÖØÔØ`event_add`ºÍ`event_del`µÈº¯Êý£¬Ã¿Ò»´Îµ÷ÓÃ`event_add`£¬¾ÍÔÚ¶ÔÓ¦µÄÏß³ÌË½ÓÐÊý¾ÝÖÐ¼ÇÂ¼¸Ã¶ÔÏó£¬ÔÚµ÷ÓÃ`event_del`Ê±£¬¼ì²éÖ®Ç°¸ÃÏß³ÌË½ÓÐÊý¾ÝÖÐÊÇ·ñÓµÓÐ¸Ã¶ÔÏó£¬È»ºóÔÚÕû¸ö³ÌÐòÍË³öÇ°£¬ÔÙÍêÕûµÄ¼ì²éËùÓÐÏß³ÌµÄË½ÓÐÊý¾Ý£¬¿´¿´ÊÇ·ñÈÔÈ»ÓÐ¶ÔÏóÃ»ÓÐÎö¹¹ÊÍ·Å¡£¾ßÌåÊµÏÖÉÔÓÐÇø±ð£¬ÏêÏ¸´úÂëÊµÏÖ¿ÉÒÔ²Î¿¼ [https://github.com/Qihoo360/evpp/blob/master/evpp/inner_pre.cc#L36~L87](https://github.com/Qihoo360/evpp/blob/master/evpp/inner_pre.cc#L36~L87)¡£ÎÒÃÇÈç´Ë¿Á¿ÌµÄ×·ÇóÏß³Ì°²È«£¬Ö»ÊÇÎªÁËÈÃÒ»¸ö³ÌÐòÄÜ**°²¾²µÄÆ½ÎÈµÄÍË³ö»òReload**£¬ÒòÎªÎÒÃÇÉî¿ÌµÄÀí½â¡°±àÐ´ÓÀÔ¶ÔËÐÐµÄÏµÍ³£¬ºÍ±àÐ´ÔËÐÐÒ»¶ÎÊ±¼äºóÆ½¾²¹Ø±ÕµÄÏµÍ³ÊÇÁ½ÂëÊÂ¡±£¬ºóÕßÒªÀ§ÄÑµÄ¶àµÃ¶à¡£
 
 ÔÚCoreLooper¿ò¼ÜÖÐ²ÉÓÃ½ÚµãÊ÷À´·Ç³£Ö±¹Û×ÔÈ»µÄÊµÏÖÁË°²È«ÍË³ö£¬evppÖÐËµµÄºÜÀ§ÄÑµÄÊÂÔÚCoreLooperÖÐÊÇ¸ö»ù±¾¹¦ÄÜ£¬²¢ÇÒºÜÈÝÒ×ÊµÏÖ¡£  
 [CoreLooper½ÚµãÊ÷](nodetree.md)
 
 
- 
+
 ##  CoreLooper¿ÉÒÔ×öÊ²Ã´
+
 - ¿ª·¢·þÎñÆ÷
 CoreLooper¿ÉÓÃÀ´¿ª·¢¸ßÐÔÄÜ·þÎñÆ÷£¬ËüÖ§³ÖTCP,UDPµÈÍøÂçÐ­Òé,²¢ÇÒÓÃ»§¿É×ÔÐÐ¹Ò¿¿ÆäËûÐÅºÅ»úÖÆµ½¿ò¼Ü¡£
 ÎÒÃÇÉîÖª¶¨Ê±Æ÷¶Ô·þÎñÆ÷À´ËµÊÇ±Ø²»¿ÉÉÙµÄ£¬ËùÒÔCoreLooperÔö¼ÓÁË¶Ô¸ßÐÔÄÜ¶¨Ê±Æ÷µÄÖ§³Ö£¬ËüÔÚ´´½¨£¬Ïú»ÙºÍµ÷¶È¶¨Ê±Æ÷µÄÊ±¼ä¸´ÔÓ¶È¶¼ÊÇO(1),ÄÜÓÃÓÚº£Á¿¿Í»§¶ËÁ¬½ÓµÄÒµÎñ´¦Àí¡£
@@ -95,15 +98,16 @@ CoreLooperÊÇÒ»¸ö»ùÓÚC++11µÄÈ«Æ½Ì¨Í¨ÓÃ»ù´¡¿ò¼Ü,Áé¸ÐÖ÷ÒªÀ´×ÔAndroidºÍWindows¡£
 - LooperÊÇHandler×ÓÀà
 - ²ÉÓÃÊ÷ÐÎ½á¹¹À´·Ö²ã¹ÜÀíHandler  
  ÄÚÖÃHttp ServerºÍajax¿ò¼Ü¿ÉÒÔÔÚä¯ÀÀÆ÷ÊÇ·½±ãµÄÕ¹Ê¾½á¹¹Ê÷ÐÅÏ¢  
- ÉúÃüÖÜÆÚÒ²ÌåÏÖÔÚ´Ë½á¹¹Ê÷ÖÐ£¬±£Ö¤×Ó½ÚµãÈ«²¿Îö¹¹ÁË²Å¿ÉÒÔÎö¹¹¸¸½Úµã,MainLooperÊ¼ÖÕ×îºóÎö¹¹  
- ÒÔ·Ç³£¼ò½àµÄ·½Ê½½â¾öÁË360¿ªÔ´ÏîÄ¿evppÖÐËµµÄ:  
- ÎÒÃÇÉî¿ÌµÄÀí½â¡°±àÐ´ÓÀÔ¶ÔËÐÐµÄÏµÍ³£¬ºÍ±àÐ´ÔËÐÐÒ»¶ÎÊ±¼äºóÆ½¾²¹Ø±ÕµÄÏµÍ³ÊÇÁ½ÂëÊÂ¡±£¬ºóÕßÒªÀ§ÄÑµÄ¶àµÃ¶à
+  ÉúÃüÖÜÆÚÒ²ÌåÏÖÔÚ´Ë½á¹¹Ê÷ÖÐ£¬±£Ö¤×Ó½ÚµãÈ«²¿Îö¹¹ÁË²Å¿ÉÒÔÎö¹¹¸¸½Úµã,MainLooperÊ¼ÖÕ×îºóÎö¹¹  
+  ÒÔ·Ç³£¼ò½àµÄ·½Ê½½â¾öÁË360¿ªÔ´ÏîÄ¿evppÖÐËµµÄ:  
+  ÎÒÃÇÉî¿ÌµÄÀí½â¡°±àÐ´ÓÀÔ¶ÔËÐÐµÄÏµÍ³£¬ºÍ±àÐ´ÔËÐÐÒ»¶ÎÊ±¼äºóÆ½¾²¹Ø±ÕµÄÏµÍ³ÊÇÁ½ÂëÊÂ¡±£¬ºóÕßÒªÀ§ÄÑµÄ¶àµÃ¶à
 - ²ÉÓÃsigslot½øÐÐÊÂ¼þ¹ÜÀí
 - ²ÉÓÃÊ±¼äÂÖÊµÏÖ¶¨Ê±Æ÷
 - ²ÉÓÃiocp/epoll/keventÊµÏÖÍøÂç¹¦ÄÜ
 - Ìá¹©ÍêÉÆµÄ»úÖÆÄÜºÍWindows,Android,ios,LinuxµÈÆ½Ì¨µÄÔ­Éú»òµÚÈý·½¿ò¼ÜÐ­Í¬¹¤×÷
 
 ## CoreLooperÉè¼ÆÀíÄî
+
 - KISS ±£³Ö¼òµ¥Ò×ÓÃ
 Ã¿¸ö½Ó¿Ú£¬°üÀ¨µ«²»ÏÞÓÚÃüÃû,²ÎÊý£¬·µ»ØÖµ£¬ÓïÒåµÈ¶¼¾­¹ý¾«ÐÄ¿¼ÂÇ
 - ¿íÈÝ
@@ -137,20 +141,20 @@ CoreLooper×÷ÎªÒ»¸ö¼ò½àµÄ»ù´¡¿ò¼Ü£¬¾ßÓÐÇ¿´óµÄ¿ÉÀ©Õ¹ÐÔ,¿ÉÓÃÔÚËùÓÐÖ§³ÖC++11µÄÁìÓò,°
  - ÓÎÏ·,ÒôÊÓÆµ
  - Ä£ÄâÆ÷
  - ËùÓÐÄÜÖ§³ÖC++11µÄ³¡¾°
- 
+
 ¿ÉÒÔ°Ñ CoreLooperµ±×÷Ò»¸ö»ùÊ¯,ÔÚ´Ë»ù´¡ÉÏ¼Ü½¨ËùÓÐµÄÓ¦ÓÃ  
 ±ÈÈç¿ÉÒÔÊµÏÖËùÓÐjava¿ªÔ´¿ò¼ÜµÄ¹¦ÄÜ£¬ÏñNetty,springÖ®Àà  
 ÏÖÓÐÖªÃûc/c++¿ªÔ´¿â,±ÈÈçlive555,Èç¹û²ÉÓÃCoreLooperÀ´ÖØ¹¹£¬¸Ð¾õ»á¼ò½àºÜ¶à  
-   
+
  Ä¿Ç°CoreLooper×¨×¢ÒµÎñºÍÍøÂç£¬Ã»ÓÐÖ±½Ó°üÀ¨UI¿ª·¢£¬µ«¿ÉÒÔºÍOS UIÏß³Ì¶Ô½ÓÐ­×÷¡£  
  ´ÓÀíÂÛÉÏÀ´Ëµ£¬ÔÚCoreLooper»ù´¡ÉÏÓÃOpenGL/DirectXÀ´¿ª·¢ÀàDirectUI¹¦ÄÜÊÇ¿ÉÐÐµÄ,Ö»ÊÇÄ¿Ç°»¹Ã»ÓÐÊ±¼äºÍ¾«Á¦À´×ö¡£
- 
+
 # ÖÂÐ»
 CoreLooperÖ÷Òª²Î¿¼ÁËAndroidºÍWindowsµÄË¼Â·À´Éè¼Æ,Í¬Ê±Ò²ÉîÊÜÒ»Ð©¿ªÔ´Ë¼ÏëµÄÓ°Ïì£¬ÌØ´Ë´ðÐ»¡£
 
 - ³ÂË¶µÄ"µ±Îö¹¹º¯ÊýÓöµ½¶àÏß³Ì©¤©¤ C++ ÖÐÏß³Ì°²È«µÄ¶ÔÏó»Øµ÷"  
  2016Äê¿´µ½ÕâÆªÎÄÕÂ²Å¿ªÊ¼Ê¹ÓÃÖÇÄÜÖ¸Õë²¢¿ªÊ¼±àÐ´CoreLooperµÄÇ°ÉíBaseLooper,Ç°¶ÎÊ±¼ä²ÅÖªµÀÕâÊÇÆä´ó×÷"Linux¶àÏß³Ì·þÎñ¶Ë±à³Ì"µÄµÚÒ»ÕÂ¡£  
- ÏÖÔÚ¿ÉÒÔËµ"ÔõÃ´½²µÄ¶¼ÊÇ³£Ê¶",ËûÄÇÆªÎÄÕÂµÄÄ¿µÄ´ïµ½ÁË!
+  ÏÖÔÚ¿ÉÒÔËµ"ÔõÃ´½²µÄ¶¼ÊÇ³£Ê¶",ËûÄÇÆªÎÄÕÂµÄÄ¿µÄ´ïµ½ÁË!
 - sendMessageµÄÊµÏÖÁé¸ÐÀ´×Ôgoogle¿ªÔ´µÄlibjingle  
   ×Ô´Ó¶àÄêÇ°½Ó´¥windows±à³ÌÒÔÀ´£¬Ò»Ö±ºÃÆæSendMessageÊÇÔõÃ´ÔÚµÈ´ý»Ø¸´Ê±¼ÌÐøÏìÓ¦ÆäËûÏß³Ì·¢À´µÄ´°¿ÚÏûÏ¢£¬ÕÒ¹ýreactos,miniguiµÈ¿ªÔ´¿âÎ´¹û£¬×îÖÕÔÚlibjingle·¢ÏÖ×î¼òµ¥µÄÊµÏÖ°ì·¨
 - sigslot¿ªÔ´¿â  
@@ -158,10 +162,4 @@ CoreLooperÖ÷Òª²Î¿¼ÁËAndroidºÍWindowsµÄË¼Â·À´Éè¼Æ,Í¬Ê±Ò²ÉîÊÜÒ»Ð©¿ªÔ´Ë¼ÏëµÄÓ°Ïì£¬Ì
   
 - timewheelÊ±¼äÂÖ  
 ¿ªÔ´Ê±¼äÂÖ´úÂëºÜ¶à£¬CoreLooper²ÉÓÃµÄÊÇ×î¼ò½àµÄÊµÏÖ  [https://github.com/ape2010/ape_cpp_server/tree/master/frame/common/](https://github.com/ape2010/ape_cpp_server/tree/master/frame/common/) 
- 
-# »¥Öú
-
-Ò»¸öºÃµÄ¿ªÔ´ÏîÄ¿Ö»Æ¾ÈÈÇéÊÇÃ»ÓÐ°ì·¨³¤¾Ã³ÖÐøµÄ¡£  
-ÏÂÃæÏ·ÑÔÒ»ÏÂ(Ä£·ÂÂí¶¡Â·µÂ½ðºÍ³ÂË¶):  
-ÎÒÓÐÒ»¸öÃÎÏë£¬CoreLooper±»¹ã·ºÊ¹ÓÃ£¬È»ºóÓÃ»§Ëµ"Bear,ÇëÊÕÏÂÎÒµÄÏ¥¸ÇºÍ¾èÖú",ÄÇÎÒ¿ªÔ´µÄÄ¿µÄ¾Í´ïµ½ÁË¡£
 

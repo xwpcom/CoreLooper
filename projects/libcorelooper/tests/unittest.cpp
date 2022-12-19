@@ -3742,6 +3742,12 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
+
+	TEST_METHOD(type_size)
+	{
+
+		LogV(TAG, "sizoef(uint8_t)=%z",sizeof(uint8_t));
+	}
 };
 
 }

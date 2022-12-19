@@ -337,6 +337,9 @@
     <ClCompile Include="..\..\src\arch\windows\wepoll\wepoll.test.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndhandler.cpp" />
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp" />
+    <ClCompile Include="..\..\src\core2\core2.test.cpp" />
+    <ClCompile Include="..\..\src\core2\handler2.cpp" />
+    <ClCompile Include="..\..\src\core2\looper2.cpp" />
     <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
     <ClCompile Include="..\..\src\core\base\memorylog.cpp" />
     <ClCompile Include="..\..\src\core\base\object.cpp" />
@@ -491,6 +494,7 @@
     <None Include="..\..\include\core\base\base.inl" />
     <None Include="..\..\include\core\looper\libcorelooper.inl" />
     <None Include="..\..\include\core\looper\looperimpl.inl" />
+    <None Include="..\..\src\core2\core2.inl" />
     <None Include="..\..\src\core\looper\message.inl" />
     <None Include="corelooper.def" />
     <None Include="res\corelooper.rc2" />
@@ -622,6 +626,8 @@
     <ClInclude Include="..\..\include\json\ArduinoJson\version.hpp" />
     <ClInclude Include="..\..\include\json\jsonhelper.h" />
     <ClInclude Include="..\..\src\arch\windows\wepoll\wepoll.h" />
+    <ClInclude Include="..\..\src\core2\handler2.h" />
+    <ClInclude Include="..\..\src\core2\looper2.h" />
     <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\timernode.h" />

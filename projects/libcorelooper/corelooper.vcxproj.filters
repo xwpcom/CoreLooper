@@ -418,6 +418,15 @@
     <ClCompile Include="..\..\src\arch\windows\dbghelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core2\core2.test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core2\handler2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core2\looper2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -945,6 +954,12 @@
     <ClInclude Include="..\..\include\arch\windows\dbghelper.h">
       <Filter>header files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core2\handler2.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core2\looper2.h">
+      <Filter>header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\doc\corelooper框架用户手册.docx" />
@@ -968,6 +983,9 @@
     </None>
     <None Include="..\..\doc\cn\log.md">
       <Filter>doc</Filter>
+    </None>
+    <None Include="..\..\src\core2\core2.inl">
+      <Filter>header files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
