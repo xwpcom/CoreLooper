@@ -1805,12 +1805,21 @@ time_t DateTime::time()
 //timeStr可为yyyymmddhhMMss，yyyy-mm-dd hh:MM:ss,yyyy.mm.dd hh:MM:ss
 int tagTimeMs::setTime(const string& timeStr, const string& desc)
 {
+	if (timeStr.empty())
+	{
+		return -1;
+	}
+
 #if defined _MSC_VER || defined _ANDROID || defined _CONFIG_PC_LINUX
 	LogV(TAG, "skip %s",__func__);
 	return 0;
 #else
 	tagTimeMs time;
-	String2TimeMs(timeStr, time);
+	if (String2TimeMs(timeStr, time))
+	{
+		return -1;
+	}
+
 	auto t = time.to_time_t();
 	int ret = stime(&t);
 	if (ret == 0)
