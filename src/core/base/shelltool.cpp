@@ -296,42 +296,7 @@ struct tagTimeMs ShellTool::GetRelativeTimeMs(int deltaDays)
 
 struct tagTimeMs ShellTool::GetCurrentTimeMs()
 {
-#ifdef _MSC_VER
-	SYSTEMTIME st;
-	::GetLocalTime(&st);
-	int year = st.wYear;
-	int month = st.wMonth;
-	int day = st.wDay;
-	int hour = st.wHour;
-	int minute = st.wMinute;
-	int second = st.wSecond;
-	int ms = st.wMilliseconds;
-#else
-	struct timeval tv = { 0 };
-	gettimeofday(&tv, nullptr);
-	time_t time = tv.tv_sec;
-	auto ms = (int)(tv.tv_usec / 1000);
-
-	struct tm tmNow;
-	localtime_r(&time, &tmNow);
-	int year = tmNow.tm_year + 1900;
-	int month = tmNow.tm_mon + 1;
-	int day = tmNow.tm_mday;
-	int hour = tmNow.tm_hour;
-	int minute = tmNow.tm_min;
-	int second = tmNow.tm_sec;
-#endif
-
-	tagTimeMs obj;
-	obj.year = year;
-	obj.month = month;
-	obj.day = day;
-	obj.hour = hour;
-	obj.minute = minute;
-	obj.second = second;
-	obj.ms = ms;
-	return obj;
-
+	return tagTimeMs::now();
 }
 
 BOOL ShellTool::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function, PVOID Context, ULONG Flags)
@@ -1837,9 +1802,76 @@ time_t DateTime::time()
 #endif
 }
 
+//timeStr可为yyyymmddhhMMss，yyyy-mm-dd hh:MM:ss,yyyy.mm.dd hh:MM:ss
+int tagTimeMs::setTime(const string& timeStr, const string& desc)
+{
+#if defined _MSC_VER || defined _ANDROID || defined _CONFIG_PC_LINUX
+	LogV(TAG, "skip %s",__func__);
+	return 0;
+#else
+	tagTimeMs time;
+	String2TimeMs(timeStr, time);
+	auto t = time.to_time_t();
+	int ret = stime(&t);
+	if (ret == 0)
+	{
+		auto tWant=time.to_time_t();
+		auto tNow = tagTimeMs::now().to_time_t();
+
+		auto delta = (int)(tWant - tNow);
+		LogV(TAG, "%s delta=%d", __func__, delta);
+
+		if (tWant > tNow + 3600 * 7 && tWant < tNow + 3600 * 9)
+		{
+			LogV(TAG, "auto fix timezone#begin");
+			t += 3600 * 8;
+			ret=stime(&t);
+			LogV(TAG, "auto fix timezone#end");
+		}
+	}
+
+	LogV(TAG, "stime ret=%d", ret);
+
+#endif
+}
+
 tagTimeMs tagTimeMs::now()
 {
-	return ShellTool::GetCurrentTimeMs();
+#ifdef _MSC_VER
+	SYSTEMTIME st;
+	::GetLocalTime(&st);
+	int year = st.wYear;
+	int month = st.wMonth;
+	int day = st.wDay;
+	int hour = st.wHour;
+	int minute = st.wMinute;
+	int second = st.wSecond;
+	int ms = st.wMilliseconds;
+#else
+	struct timeval tv = { 0 };
+	gettimeofday(&tv, nullptr);
+	time_t time = tv.tv_sec;
+	auto ms = (int)(tv.tv_usec / 1000);
+
+	struct tm tmNow;
+	localtime_r(&time, &tmNow);
+	int year = tmNow.tm_year + 1900;
+	int month = tmNow.tm_mon + 1;
+	int day = tmNow.tm_mday;
+	int hour = tmNow.tm_hour;
+	int minute = tmNow.tm_min;
+	int second = tmNow.tm_sec;
+#endif
+
+	tagTimeMs obj;
+	obj.year = year;
+	obj.month = month;
+	obj.day = day;
+	obj.hour = hour;
+	obj.minute = minute;
+	obj.second = second;
+	obj.ms = ms;
+	return obj;
 }
 
 time_t tagTimeMs::to_time_t()const

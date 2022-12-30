@@ -103,6 +103,7 @@ struct CORE_EXPORT tagTimeMs
 	string toText()const;
 	string stdDateTimeText()const;
 	static tagTimeMs now();
+	static int setTime(const string& timeStr,const string& desc="");
 };
 
 class CORE_EXPORT ShellTool
