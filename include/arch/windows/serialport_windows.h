@@ -51,7 +51,6 @@ protected:
 	void OnDestroy();
 
 	virtual int DispatchIoContext(IoContext *context, DWORD bytes);
-	virtual void OnCustomIocpMessage(UINT msg, LPVOID info);
 
 	virtual int OnConnect(long handle, Bundle* extraInfo);
 	virtual void OnReceive();

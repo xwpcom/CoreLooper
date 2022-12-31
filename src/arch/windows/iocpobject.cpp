@@ -41,10 +41,6 @@ BOOL IocpObject::PostCustomIocpMessage(HANDLE iocp, LPVOID obj, UINT msg, LPVOID
 }
 */
 
-void IocpObject::OnCustomIocpMessage(UINT msg, LPVOID info)
-{
-	//子类在处理时需要调用auto objThis = shared_from_this();确保不会被提前删除
-}
 }
 }
 }

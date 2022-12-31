@@ -14,7 +14,6 @@ public:
 	virtual ~IocpObject();
 
 	virtual int DispatchIoContext(IoContext *context, DWORD bytes);
-	virtual void OnCustomIocpMessage(UINT msg, LPVOID info);
 };
 }
 }

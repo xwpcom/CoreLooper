@@ -372,11 +372,6 @@ int SerialPort_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 	return 0;
 }
 
-void SerialPort_Windows::OnCustomIocpMessage(UINT msg, LPVOID info)
-{
-
-}
-
 int SerialPort_Windows::OnRecv(IoContext *context, DWORD bytes)
 {
 	ASSERT(context == &this->mIoContextRecv);

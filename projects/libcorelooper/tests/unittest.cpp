@@ -3722,7 +3722,6 @@ TEST_CLASS(STL)
 
 		LogV(TAG, "sizeof(uint8_t)=%zu", sizeof(uint8_t));
 	}
-
 };
 
 TEST_CLASS(_Udp)

@@ -259,22 +259,6 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 					IoContext* context = CONTAINING_RECORD(ov, IoContext, mOV);
 					obj->DispatchIoContext(context, bytes);
 				}
-				else if (ptr && ptr <= 0xFFFF)
-				{
-					UINT msg = (UINT)ptr;
-					LPVOID info = (LPVOID)(ULONGLONG)bytes;
-					LPVOID obj = (LPVOID)ov;
-
-					if (obj > (LPVOID)0xFFFF)
-					{
-						IocpObject* iocpObject = (IocpObject*)obj;
-						iocpObject->OnCustomIocpMessage(msg, info);
-					}
-					else
-					{
-						//OnCustomIocpMessage(obj, msg, info);
-					}
-				}
 			}
 
 			if (mLooperInternalData->mAttachThread)
