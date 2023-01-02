@@ -368,6 +368,7 @@
     <ClCompile Include="..\..\src\core\looper\looperinternaldata.cpp" />
     <ClCompile Include="..\..\src\core\looper\looperpool.cpp" />
     <ClCompile Include="..\..\src\core\looper\procnode.cpp" />
+    <ClCompile Include="..\..\src\core\looper\profiler.cpp" />
     <ClCompile Include="..\..\src\core\looper\tests\looper.test.cpp" />
     <ClCompile Include="..\..\src\core\looper\timermanager.cpp" />
     <ClCompile Include="..\..\src\core\net\bindwrapper.cpp">
@@ -560,6 +561,7 @@
     <ClInclude Include="..\..\include\core\looper\looperimpl.h" />
     <ClInclude Include="..\..\include\core\looper\looperpool.h" />
     <ClInclude Include="..\..\include\core\looper\procnode.h" />
+    <ClInclude Include="..\..\include\core\looper\profiler.h" />
     <ClInclude Include="..\..\include\core\looper\teststate.h" />
     <ClInclude Include="..\..\include\core\net\dnser.h" />
     <ClInclude Include="..\..\include\core\net\simpleconnect.h" />

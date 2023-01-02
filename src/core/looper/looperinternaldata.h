@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 namespace Bear {
 namespace Core
 {
@@ -10,16 +10,16 @@ struct tagLooperInternalData
 	void gc();
 
 	LooperImpl			*mLooperImpl=nullptr;
-	bool				mLooperRunning = false;//looperÊıÁ¿²»»áºÜ¶à£¬ËùÒÔÃ»ÓĞ±ØÒªÓÃbit field
-	bool				mAttachThread = false;//²»´´½¨_WorkThreadCBÏß³Ì£¬¶øÊÇattachµ½ÆäËûÏß³ÌÖĞ
-	bool				mBMQuit = false;//ÊÇ·ñÒÑÊÕµ½BM_QUITÏûÏ¢
-	std::shared_ptr<Event>	mExitEvent;//ÍË³öÏß³ÌÊ±¿É´¥·¢´ËÊÂ¼ş
+	bool				mLooperRunning = false;//looperæ•°é‡ä¸ä¼šå¾ˆå¤šï¼Œæ‰€ä»¥æ²¡æœ‰å¿…è¦ç”¨bit field
+	bool				mAttachThread = false;//ä¸åˆ›å»º_WorkThreadCBçº¿ç¨‹ï¼Œè€Œæ˜¯attachåˆ°å…¶ä»–çº¿ç¨‹ä¸­
+	bool				mBMQuit = false;//æ˜¯å¦å·²æ”¶åˆ°BM_QUITæ¶ˆæ¯
+	std::shared_ptr<Event>	mExitEvent;//é€€å‡ºçº¿ç¨‹æ—¶å¯è§¦å‘æ­¤äº‹ä»¶
 
 	CriticalSection					mMessageLock;
 	std::list<tagLoopMessageInternal> 	mMessageList;
 
 #ifdef _CONFIG_CALC_EVER_MAX_SIZE
-	//Í³¼ÆÔø¾­³öÏÖ¹ıµÄ×î´óÏûÏ¢Êı£¬¿ÉÓÃÀ´ÆÀ¹ÀÏµÍ³ĞÔÄÜ
+	//ç»Ÿè®¡æ›¾ç»å‡ºç°è¿‡çš„æœ€å¤§æ¶ˆæ¯æ•°ï¼Œå¯ç”¨æ¥è¯„ä¼°ç³»ç»Ÿæ€§èƒ½
 	long mCurrentMessages;
 	long mEverMaxMessages;
 #endif
@@ -28,7 +28,8 @@ struct tagLooperInternalData
 	std::weak_ptr<Looper>		mOwnerLooper;
 	long						mExitCode = 0;
 	long						mTimerCheckQuitLooper = 0;
-	LONGLONG					mTickStartQuit = 0;//ÓÃÀ´¼ÆËã´Ëlooper»¨¶à¾Ã²ÅÕæÕıÍË³ö
+	ULONGLONG					mTickStartQuit = 0;//ç”¨æ¥è®¡ç®—æ­¤looperèŠ±å¤šä¹…æ‰çœŸæ­£é€€å‡º
+	ULONGLONG					mTickDump= 0;
 
 	//private:
 	std::map<void*, std::shared_ptr<Handler>> mDestroyedHandlers;

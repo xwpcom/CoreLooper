@@ -8,6 +8,7 @@
 #include "../../core/looper/handlerinternaldata.h"
 #include "../../core/looper/looperinternaldata.h"
 #include "../../core/looper/timermanager.h"
+#include "profiler.h"
 
 #pragma comment(lib, "WS2_32.lib")
 
@@ -239,6 +240,12 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 				mLastIoTick = mLooperTick;
 			}
 
+#if defined _CONFIG_PROFILER
+			if (mEnableProfiler)
+			{
+				mProfiler->ioCount+=count;
+			}
+#endif
 			if (count > 1)
 			{
 				//LogV(TAG, "iocp finish count = %d",(int)count);
@@ -257,7 +264,37 @@ int Looper_Windows::getMessage(tagLoopMessageInternal& msg)
 
 					IocpObject* obj = (IocpObject*)ptr;
 					IoContext* context = CONTAINING_RECORD(ov, IoContext, mOV);
+					
+#if defined _CONFIG_PROFILER
+
+					//避免在下面的DispatchIoContext中修改mEnableProfiler
+					const auto enableProfiler = mEnableProfiler;
+
+					ULONGLONG tick=0;
+					if (enableProfiler)
+					{
+						tick =ShellTool::GetTickCount64();
+					}
+#endif
+
 					obj->DispatchIoContext(context, bytes);
+					//此时obj可能已失效
+
+#if defined _CONFIG_PROFILER
+					if (enableProfiler)
+					{
+						tick = ShellTool::GetTickCount64()-tick;
+
+						if (mEnableProfiler)
+						{
+							if (tick > mProfiler->ioContextMaxTick)
+							{
+								mProfiler->ioContextMaxTick = tick;
+							}
+
+						}
+					}
+#endif
 				}
 			}
 

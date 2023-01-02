@@ -6,6 +6,7 @@
 #include "net/dnslooper.h"
 #include "../../core/looper/handlerinternaldata.h"
 #include "../../core/looper/message.inl"
+#include "profiler.h"
 #include <string>
 #include <sstream>
 #ifdef _MSC_VER
@@ -156,16 +157,38 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 	{
 	case IoContextType_Recv:
 	{
+#if defined _CONFIG_PROFILER
+		if (Looper::CurrentLooper()->profilerEnabled())
+		{
+			auto obj = Looper::CurrentLooper()->profiler();
+			obj->tcpRecvCount++;
+		}
+#endif
+		
 		int ret = OnRecv(context, bytes);
 		break;
 	}
 	case IoContextType_Send:
 	{
+#if defined _CONFIG_PROFILER
+		if (Looper::CurrentLooper()->profilerEnabled())
+		{
+			auto obj = Looper::CurrentLooper()->profiler();
+			obj->tcpSentCount++;
+		}
+#endif
 		OnSendDone(context, bytes);
 		break;
 	}
 	case IoContextType_Connect:
 	{
+#if defined _CONFIG_PROFILER
+		if (Looper::CurrentLooper()->profilerEnabled())
+		{
+			auto obj = Looper::CurrentLooper()->profiler();
+			obj->tcpConnectAckCount++;
+		}
+#endif
 		mIoContextConnect.mBusying = false;
 		mIoContextConnect.mBaseClient = nullptr;
 		OnConnectAck();

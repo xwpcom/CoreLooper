@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "looper/looperimpl.h"
 #include "timermanager.h"
 #include "timerextrainfo.h"
@@ -8,6 +8,7 @@
 #include "message.inl"
 #include "handlerinternaldata.h"
 #include "looperinternaldata.h"
+#include "profiler.h"
 
 #ifdef _MSC_VER_DEBUG
 #define new DEBUG_NEW
@@ -146,6 +147,15 @@ LooperImpl::~LooperImpl()
 	}
 
 	//ASSERT(messageEmpty);
+
+#if defined _CONFIG_PROFILER
+	if (mProfiler)
+	{
+		delete mProfiler;
+		mProfiler = nullptr;
+	}
+#endif
+
 }
 
 LRESULT LooperImpl::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
@@ -196,6 +206,41 @@ LRESULT LooperImpl::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 		info->mEvent = CreateExitEvent_Impl();
 		return 0;
 	}
+
+#if defined _CONFIG_PROFILER
+	case BM_PROFILER_START:
+	{
+		if (mEnableProfiler && mProfiler)
+		{
+			return 0;
+		}
+		
+		if (!mProfiler)
+		{
+			mProfiler = new tagProfiler;
+		}
+
+		mProfiler->clear();
+		mProfiler->startTick = ShellTool::GetTickCount64();
+		mEnableProfiler = true;
+
+		return 0;
+	}
+	case BM_PROFILER_STOP:
+	{
+		if (mEnableProfiler && mProfiler)
+		{
+			mProfiler->stopTick = ShellTool::GetTickCount64();
+		}
+		
+		mEnableProfiler = false;
+
+		//不要删除mProfiler
+
+		return 0;
+	}
+#endif
+
 	}
 
 	return __super::OnMessage(msg, wp, lp);
@@ -400,10 +445,26 @@ long LooperImpl::SetTimerEx(shared_ptr<Handler>handler, UINT interval, shared_pt
 
 void LooperImpl::SingleStep()
 {
+#if defined _CONFIG_PROFILER
+	if (mEnableProfiler)
+	{
+		mProfiler->totalSteps++;
+	}
+#endif
+
 	tagLoopMessageInternal msg;
 	int ret = getMessage(msg);
 	if (ret == 0)
 	{
+
+#if defined _CONFIG_PROFILER
+		if (mEnableProfiler)
+		{
+			mProfiler->msgCount++;
+			
+		}
+#endif
+
 #ifdef _CONFIG_DEBUG_LOOPER
 		auto tick = ShellTool::GetTickCount64();
 		string name;
@@ -707,7 +768,7 @@ LRESULT LooperImpl::sendMessage(shared_ptr<Handler> handler, UINT msg, WPARAM wp
 
 void LooperImpl::sendMessageHelper(tagLoopMessageInternal& msg, LooperImpl& looper)
 {
-	msg.mSendLooper = &looper;// dynamic_pointer_cast<LooperImpl>(looper.shared_from_this());
+	msg.mSendLooper = &looper;
 
 	{
 		AutoLock lock(&mLooperInternalData->mMessageLock);
@@ -743,7 +804,35 @@ int LooperImpl::ProcessTimer(DWORD& cmsDelayNext, ULONGLONG ioIdleTick)
 
 	bool needWait = true;
 	auto timerMan = LooperImpl::GetTimerManager();
+#if defined _CONFIG_PROFILER
+
+	//避免在下面的timer中修改mEnableProfiler
+	const auto enableProfiler = mEnableProfiler;
+
+	ULONGLONG tick = 0;
+	if (enableProfiler)
+	{
+		tick = ShellTool::GetTickCount64();
+	}
+#endif
+
 	needWait = (timerMan->ProcessTimer(cmsDelayNext, ioIdleTick) == 0);
+
+#if defined _CONFIG_PROFILER
+	if (enableProfiler)
+	{
+		tick = ShellTool::GetTickCount64() - tick;
+
+		if (mEnableProfiler)
+		{
+			if (tick > mProfiler->timerMaxTick)
+			{
+				mProfiler->timerMaxTick = tick;
+			}
+
+		}
+	}
+#endif
 
 	if (needWait)
 	{
@@ -853,19 +942,15 @@ bool LooperImpl::CanQuitLooperNow()
 	}
 
 	{
-		static int dumpTimes = 0;
-		static ULONGLONG tick = ShellTool::GetTickCount64();
+		ULONGLONG tick = mLooperInternalData->mTickStartQuit;
 		ULONGLONG tickNow = ShellTool::GetTickCount64();
 		int ms = 3000;
-		if (tickNow >= tick + ms)
+		if (tickNow >= tick + ms && tickNow>= mLooperInternalData->mTickDump+ms)
 		{
-			++dumpTimes;
-			if (dumpTimes == 1)
-			{
-				LogV(TAG, "after emit quit %d ms,following handlers still alive:", ms);
-				mInternalData->Dump(0);//dump which object are still live
-			}
-			tick = tickNow;
+			mLooperInternalData->mTickDump = tickNow;
+
+			LogV(TAG, "after emit quit %d ms,following handlers still alive:", ms);
+			mInternalData->Dump(0);//dump which object are still live
 		}
 	}
 

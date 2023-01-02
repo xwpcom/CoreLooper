@@ -4,6 +4,7 @@
 #include "net/tcpclient.h"
 #include "looper/looper.h"
 #include "../../core/looper/handlerinternaldata.h"
+#include "profiler.h"
 
 #ifdef _CONFIG_OPENSSL
 #include "Util/SSLBox.h"
@@ -197,6 +198,15 @@ int TcpServer_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 	case IoContextType_Accept:
 		bool postAgain = false;
 		int ret = OnAccept(context->mSock);
+
+#if defined _CONFIG_PROFILER
+		if (Looper::CurrentLooper()->profilerEnabled())
+		{
+			auto obj = Looper::CurrentLooper()->profiler();
+			obj->tcpAcceptCount++;
+		}
+#endif
+
 		//如果socket没有被关闭，则继续侦听
 		if (ret == 0 && mSocket != INVALID_SOCKET)
 		{

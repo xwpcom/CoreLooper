@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
 enum
 {
-	//corelooper�ڲ�ʹ��
-	//BM_TIMER,//����Ҫ,��corelooperֱ�ӵ���OnTimer
+	//corelooper内部使用
+	//BM_TIMER,//不需要,由corelooper直接调用OnTimer
 	//BM_CLOSE = 2000000,
 	BM_QUIT = 2000000,
 	//BM_AUTO_CREATE,
@@ -27,5 +27,9 @@ enum
 
 	BM_MESSAGE,
 	BM_POST_MESSAGE,
+
+	BM_PROFILER_START,
+	BM_PROFILER_STOP,
+	BM_PROFILER_DUMP,
 
 };

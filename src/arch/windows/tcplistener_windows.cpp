@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "tcplistener_windows.h"
 #include "../../core/looper/handlerinternaldata.h"
+#include "profiler.h"
 
 namespace Bear {
 namespace Core
@@ -178,6 +179,13 @@ int TcpListener_Windows::DispatchIoContext(IoContext* context, DWORD bytes)
 	case IoContextType_Accept:
 		bool postAgain = false;
 		int ret = OnAccept(context->mSock);
+#if defined _CONFIG_PROFILER
+		if (Looper::CurrentLooper()->profilerEnabled())
+		{
+			auto obj = Looper::CurrentLooper()->profiler();
+			obj->tcpAcceptCount++;
+		}
+#endif
 		//如果socket没有被关闭，则继续侦听
 		if (ret == 0 && mSock != INVALID_SOCKET)
 		{

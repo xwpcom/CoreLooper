@@ -1,7 +1,9 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "timermanager.h"
+#include "looperimpl.h"
 #include "timerextrainfo.h"
 #include "handlerinternaldata.h"
+#include "profiler.h"
 
 #define GRANULARITY 1 //1ms
 #define WHEEL_BITS1 8
@@ -163,6 +165,13 @@ void TimerManager::ProcessTimeOut()
 			}
 #endif
 
+#if defined _CONFIG_PROFILER
+			if (Looper::CurrentLooper()->profilerEnabled())
+			{
+				auto obj = Looper::CurrentLooper()->profiler();
+				obj->timerCallCount++;
+			}
+#endif
 			{
 				//tagHandlerInternalData保证node->mHandler是有效的
 				node->mHandler->OnTimer(node->mTimerId);

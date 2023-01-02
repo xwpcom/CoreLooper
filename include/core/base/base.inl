@@ -1,5 +1,8 @@
 #pragma once
 
+#define _CONFIG_PROFILER  //2023.01.01 启用cpu占用分析
+
+
 #if defined _MSC_VER //|| defined _CONFIG_INGENIC
 #define _CONFIG_OPENSSL //2019.12,用来支持https做微信小程序
 #define ENABLE_OPENSSL //for zltoolkit

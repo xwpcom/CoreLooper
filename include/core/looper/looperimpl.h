@@ -7,10 +7,11 @@
 #endif
 
 namespace Bear {
-namespace Core
-{
+namespace Core{
 class Looper;
 struct tagLooperInternalData;
+struct tagProfiler;
+
 //XiongWanPing 2016.03.27
 //各平台的Looper_XXX基类
 class CORE_EXPORT LooperImpl :public Loop
@@ -26,6 +27,16 @@ class CORE_EXPORT LooperImpl :public Loop
 public:
 	LooperImpl();
 	virtual ~LooperImpl();
+#if defined _CONFIG_PROFILER
+	bool profilerEnabled()const
+	{
+		return mEnableProfiler;
+	}
+	tagProfiler* profiler()const
+	{
+		return mProfiler;
+	}
+#endif
 
 	static LooperImpl *CurrentLooper();
 	static void SetCurrentLooper(LooperImpl *);
@@ -122,6 +133,11 @@ protected:
 	std::shared_ptr<TimerManager> mTimerManager;
 
 	std::shared_ptr<tagLooperInternalData> mLooperInternalData;
+
+#if defined _CONFIG_PROFILER
+	bool mEnableProfiler = false;
+	tagProfiler* mProfiler = nullptr;
+#endif
 };
 
 //FindObject in current looper
