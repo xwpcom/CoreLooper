@@ -8,6 +8,8 @@
 #include <mutex>  
 #include "net/udpserver.h"
 #include "arch/windows/udpclient_windows.h"
+#include <cmath>
+
 
 class Demo
 {
@@ -3747,6 +3749,18 @@ public:
 		};
 
 		make_shared<MainLooper>()->StartRun();
+	}
+
+	TEST_METHOD(tan_)
+	{
+		const double PI = 3.14159265;
+		int degree = 6;
+		auto v=tan(PI*degree/180);
+		LogV(TAG, "tan(%d)=%.3f", degree,v);
+
+		auto r=40*tan(PI * degree / 180);
+		LogV(TAG, "r=%.3f", r);
+
 	}
 
 };
