@@ -12,7 +12,7 @@ using namespace Bear::Core2;
 
 namespace Bear {
 namespace Core2 {
-static const char* TAG = "log";
+static const char* TAG = u8"ostreamLog";
 
 TEST_CLASS(Log_)
 {
@@ -21,8 +21,15 @@ TEST_CLASS(Log_)
 		//LogerV(TAG)<<"hello";
 		//LogerV << "hello";
 		int year = 2023;
-		TraceL << u8"hello"<<" world "<<year<<u8" 新年快乐! ";
-		TraceL << u8"second line";
+		LogerV(TAG) << u8"hello"<<" world "<<year<<u8" 新年快乐! ";
+		LogerD(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		LogerI(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		LogerW(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		LogerE(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+
+		string tag = u8"stringLog";
+		LogerV(tag) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		//TraceL << u8"second line";
 	}
 };
 

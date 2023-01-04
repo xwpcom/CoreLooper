@@ -90,9 +90,16 @@ string getThreadName() {
 #endif
 }
 
-LogContext::LogContext(LogerLevel level, const char* file, const char* function, int line)
-	: _level(level), _line(line), _file(getFileName(file)), _function(getFunctionName(function))
+LogContext::LogContext(LogerLevel level, const char* file, const char* function, int line,const char *tag)
+	: _level(level), _line(line), _file(getFileName(file)), _function(getFunctionName(function)), mTag(tag)
 	 {
+	gettimeofday(&_tv, nullptr);
+	_thread_name = getThreadName();
+}
+
+LogContext::LogContext(LogerLevel level, const char* file, const char* function, int line, const string& tag)
+	: _level(level), _line(line), _file(getFileName(file)), _function(getFunctionName(function)), mTag(tag)
+{
 	gettimeofday(&_tv, nullptr);
 	_thread_name = getThreadName();
 }
@@ -126,7 +133,26 @@ Log& Log::operator<<(ostream& (*f)(ostream&))
 
 	auto text = mContext->str();
 	//_logger.write(mContext);
-	LogV(TAG, "%s",text.c_str());
+	if (mLevel == LogerLevel::verbose)
+	{
+		LogV(mContext->mTag, "%s", text.c_str());
+	}
+	else if (mLevel == LogerLevel::debug)
+	{
+		LogD(mContext->mTag, "%s", text.c_str());
+	}
+	else if (mLevel == LogerLevel::info)
+	{
+		LogI(mContext->mTag, "%s", text.c_str());
+	}
+	else if (mLevel == LogerLevel::warn)
+	{
+		LogW(mContext->mTag, "%s", text.c_str());
+	}
+	else if (mLevel == LogerLevel::error)
+	{
+		LogE(mContext->mTag, "%s", text.c_str());
+	}
 	mContext.reset();
 
 	return *this;

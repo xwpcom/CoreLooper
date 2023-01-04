@@ -697,7 +697,7 @@ void LogPage::OnTimer(UINT_PTR nIDEvent)
 			++idx;
 
 			LogV(TAG, "idx=%04d", idx);
-			LogW(TAG, "idx=%04d", idx);
+			LogW(TAG, u8"idx=%04d 中文", idx);
 		}
 		tick = ShellTool::GetTickCount64()-tick;
 		//TRACE("tick=%lld **********************\r\n", tick);
