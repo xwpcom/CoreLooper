@@ -339,6 +339,7 @@
     <ClCompile Include="..\..\src\arch\windows\wndmanager.cpp" />
     <ClCompile Include="..\..\src\core2\core2.test.cpp" />
     <ClCompile Include="..\..\src\core2\handler2.cpp" />
+    <ClCompile Include="..\..\src\core2\loger2.cpp" />
     <ClCompile Include="..\..\src\core2\looper2.cpp" />
     <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
     <ClCompile Include="..\..\src\core\base\memorylog.cpp" />
@@ -629,6 +630,7 @@
     <ClInclude Include="..\..\include\json\jsonhelper.h" />
     <ClInclude Include="..\..\src\arch\windows\wepoll\wepoll.h" />
     <ClInclude Include="..\..\src\core2\handler2.h" />
+    <ClInclude Include="..\..\src\core2\loger2.h" />
     <ClInclude Include="..\..\src\core2\looper2.h" />
     <ClInclude Include="..\..\src\core\looper\handlerinternaldata.h" />
     <ClInclude Include="..\..\src\core\looper\looperinternaldata.h" />

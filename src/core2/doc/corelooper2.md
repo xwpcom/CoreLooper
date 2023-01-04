@@ -78,7 +78,25 @@ shared_ptr<Handler> mapChild(const string& token);
 
 
 
+## 文件全部采用utf8 with bom保存
+
+之前一些嵌入式设备的编译器，不支持utf8 bom
+
+目前用的嵌入式设备编译器都能支持bom了
 
 
 
+## 编译 0 warning
+
+我们自己的代码编译时不能出现任何警告
+
+引入的第三方代码不作此要求
+
+
+
+
+
+## 支持udp
+
+## 支持http和https
 
