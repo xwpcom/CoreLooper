@@ -4,8 +4,8 @@ namespace Bear {
 namespace Core2 {
 using namespace std;
 
-//loger is simple than logger
-enum class LogerLevel
+//loger能比logger少写一个字母
+enum class LogLevel
 {
 	verbose,
 	debug,
@@ -14,43 +14,44 @@ enum class LogerLevel
 	error,
 };
 
-//from zlmediakit
-//zlmediakit中的log不支持TAG,而我觉得TAG非常有用,必须要支持
-class LogContext : public std::ostringstream {
+/*
+log设计参考了zlmediakit
+.增加了TAG
+ 个人觉得TAG非常有用,必须要支持
+.去掉了func
+ 由于我们的dt双击能自动在vs中定位到代码行,func没太大作用
+*/
+
+class LogItem : public ostringstream {
 public:
-	//_file,_function改成string保存，目的是有些情况下，指针可能会失效
-	//比如说动态库中打印了一条日志，然后动态库卸载了，那么指向静态数据区的指针就会失效
-	LogContext() = default;
-	LogContext(LogerLevel level, const char* file, const char* function, int line,const char *tag);
-	LogContext(LogerLevel level, const char* file, const char* function, int line, const string& tag);
-	~LogContext() = default;
+	LogItem() = default;
+	LogItem(const char* tag,LogLevel level, const char* file, int line);
+	LogItem(const string& tag,LogLevel level, const char* file, int line);
+	~LogItem() = default;
 
-	LogerLevel _level;
-	int _line;
-	int _repeat = 0;
-	std::string _file;
-	std::string _function;
-	std::string _thread_name;
+	LogLevel mLevel;
+	string mFilePath;
+	int mLine;
 	string mTag;
-	struct timeval _tv;
+	struct timeval mTime;
 
-	const std::string& str();
+	const string& str();
 
 private:
-	bool _got_content = false;
-	std::string _content;
+	bool mGotContent = false;
+	string mContent;
 };
 
-using LogContextPtr = std::shared_ptr<LogContext>;
+using LogItemPtr = shared_ptr<LogItem>;
 
-#define WriteL(tag,level) Log(level, __FILE__, __FUNCTION__, __LINE__,tag)
-#define TraceL(tag) WriteL(tag,LogerLevel::verbose)
+#define LogL(tag,level) Log(tag,level, __FILE__, __LINE__)
 
-#define LogerV(tag)	WriteL(tag,LogerLevel::verbose)
-#define LogerD(tag)	WriteL(tag,LogerLevel::debug)
-#define LogerI(tag)	WriteL(tag,LogerLevel::info)
-#define LogerW(tag)	WriteL(tag,LogerLevel::warn)
-#define LogerE(tag)	WriteL(tag,LogerLevel::error)
+//tag能起分类过滤作用,强制要求提供tag
+#define LogerV(tag)	LogL(tag,LogLevel::verbose)
+#define LogerD(tag)	LogL(tag,LogLevel::debug)
+#define LogerI(tag)	LogL(tag,LogLevel::info)
+#define LogerW(tag)	LogL(tag,LogLevel::warn)
+#define LogerE(tag)	LogL(tag,LogLevel::error)
 
 /*
 XiongWanPing 2023.01.04
@@ -59,19 +60,14 @@ XiongWanPing 2023.01.04
 class CORE_EXPORT Log
 {
 public:
-	Log(LogerLevel level,const char* file,const char *func, int line,const char *tag)
-		:mFilePath(file), mFunc(func),mLine(line), mLevel(level),
-		mContext(new LogContext(level, file, func, line,tag))
+	Log(const char* tag,LogLevel level,const char* file,int line)
+		:mItem(new LogItem(tag,level, file, line))
 	{
 	}
-	Log(LogerLevel level, const char* file, const char* func, int line, const string& tag)
-		:mFilePath(file), mFunc(func), mLine(line), mLevel(level),
-		mContext(new LogContext(level, file, func, line, tag))
+
+	Log(const string& tag,LogLevel level, const char* file, int line)
+		:mItem(new LogItem(tag,level, file, line))
 	{
-	}
-	Log(const Log& that):mContext(that.mContext)
-	{
-		const_cast<LogContextPtr&>(that.mContext).reset();
 	}
 	
 	~Log()
@@ -83,19 +79,14 @@ public:
 
 	template<typename T>
 	Log& operator<<(T&& data) {
-		if (!mContext) {
-			return *this;
+		if (mItem) {
+			(*mItem) << forward<T>(data);
 		}
-		(*mContext) << std::forward<T>(data);
 		return *this;
 	}
 
 protected:
-	LogContextPtr mContext;
-	const char* mFilePath;
-	const char* mFunc;
-	int mLine;
-	LogerLevel mLevel;
+	LogItemPtr mItem;
 };
 
 

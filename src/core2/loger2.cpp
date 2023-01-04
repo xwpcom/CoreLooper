@@ -7,25 +7,6 @@ namespace Core2 {
 
 static const char* TAG = "loger";
 
-static inline const char* getFileName(const char* file) {
-	auto pos = strrchr(file, '/');
-#ifdef _WIN32
-	if (!pos) {
-		pos = strrchr(file, '\\');
-	}
-#endif
-	return pos ? pos + 1 : file;
-}
-
-static inline const char* getFunctionName(const char* func) {
-#ifndef _WIN32
-	return func;
-#else
-	auto pos = strrchr(func, ':');
-	return pos ? pos + 1 : func;
-#endif
-}
-
 int gettimeofday(struct timeval* tp, void* tzp) {
 	auto now_stamp = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	tp->tv_sec = (decltype(tp->tv_sec))(now_stamp / 1000000LL);
@@ -33,127 +14,63 @@ int gettimeofday(struct timeval* tp, void* tzp) {
 	return 0;
 }
 
-string getThreadName() {
-#if ((defined(__linux) || defined(__linux__)) && !defined(ANDROID)) || (defined(__MACH__) || defined(__APPLE__)) || (defined(ANDROID) && __ANDROID_API__ >= 26) || defined(__MINGW32__)
-	string ret;
-	ret.resize(32);
-	auto tid = pthread_self();
-	pthread_getname_np(tid, (char*)ret.data(), ret.size());
-	if (ret[0]) {
-		ret.resize(strlen(ret.data()));
-		return ret;
-	}
-	return to_string((uint64_t)tid);
-#elif defined(_MSC_VER)
-	using GetThreadDescriptionFunc = HRESULT(WINAPI*)(_In_ HANDLE hThread, _In_ PWSTR* ppszThreadDescription);
-	static auto getThreadDescription = reinterpret_cast<GetThreadDescriptionFunc>(::GetProcAddress(::GetModuleHandleA("Kernel32.dll"), "GetThreadDescription"));
-
-	if (!getThreadDescription) {
-		std::ostringstream ss;
-		ss << std::this_thread::get_id();
-		return ss.str();
-	}
-	else {
-		PWSTR data;
-		HRESULT hr = getThreadDescription(GetCurrentThread(), &data);
-		if (SUCCEEDED(hr) && data[0] != '\0') {
-			char threadName[MAX_PATH];
-			size_t numCharsConverted;
-			errno_t charResult = wcstombs_s(&numCharsConverted, threadName, data, MAX_PATH - 1);
-			if (charResult == 0) {
-				LocalFree(data);
-				std::ostringstream ss;
-				ss << threadName;
-				return ss.str();
-			}
-			else {
-				if (data) {
-					LocalFree(data);
-				}
-				return to_string((uint64_t)GetCurrentThreadId());
-			}
-		}
-		else {
-			if (data) {
-				LocalFree(data);
-			}
-			return to_string((uint64_t)GetCurrentThreadId());
-		}
-	}
-#else
-	if (!thread_name.empty()) {
-		return thread_name;
-	}
-	std::ostringstream ss;
-	ss << std::this_thread::get_id();
-	return ss.str();
-#endif
-}
-
-LogContext::LogContext(LogerLevel level, const char* file, const char* function, int line,const char *tag)
-	: _level(level), _line(line), _file(getFileName(file)), _function(getFunctionName(function)), mTag(tag)
-	 {
-	gettimeofday(&_tv, nullptr);
-	_thread_name = getThreadName();
-}
-
-LogContext::LogContext(LogerLevel level, const char* file, const char* function, int line, const string& tag)
-	: _level(level), _line(line), _file(getFileName(file)), _function(getFunctionName(function)), mTag(tag)
+LogItem::LogItem(const char* tag,LogLevel level, const char* file, int line)
+	:mLevel(level), mLine(line), mFilePath(file), mTag(tag)
 {
-	gettimeofday(&_tv, nullptr);
-	_thread_name = getThreadName();
+	gettimeofday(&mTime, nullptr);
 }
 
-const string& LogContext::str() {
-	if (_got_content) {
-		return _content;
+LogItem::LogItem(const string& tag,LogLevel level, const char* file,int line)
+	:mLevel(level), mLine(line), mFilePath(file),  mTag(tag)
+{
+	gettimeofday(&mTime, nullptr);
+}
+
+const string& LogItem::str() 
+{
+	if (!mGotContent) 
+	{
+		mContent = ostringstream::str();
+		mGotContent = true;
 	}
-	_content = ostringstream::str();
-	_got_content = true;
-	return _content;
+	
+	return mContent;
 }
-
-/*
-int Log::operator()(const char* tag, const char* lpszFormat, ...)
-{
-	return -1;
-}
-
-int Log::operator()(const string& tag, const char* lpszFormat, ...)
-{
-	return -1;
-}
-*/
 
 Log& Log::operator<<(ostream& (*f)(ostream&))
 {
-	if (!mContext) {
-		return *this;
-	}
+	if (mItem) 
+	{
+		auto& item = *mItem;
+		auto& text = item.str();
+		//_logger.write(mItem);
 
-	auto text = mContext->str();
-	//_logger.write(mContext);
-	if (mLevel == LogerLevel::verbose)
-	{
-		LogV(mContext->mTag, "%s", text.c_str());
+		if (0)
+		{
+			if (item.mLevel == LogLevel::verbose)
+			{
+				LogV(mItem->mTag, "%s", text.c_str());
+			}
+			else if (item.mLevel == LogLevel::debug)
+			{
+				LogD(item.mTag, "%s", text.c_str());
+			}
+			else if (item.mLevel == LogLevel::info)
+			{
+				LogI(item.mTag, "%s", text.c_str());
+			}
+			else if (item.mLevel == LogLevel::warn)
+			{
+				LogW(item.mTag, "%s", text.c_str());
+			}
+			else if (item.mLevel == LogLevel::error)
+			{
+				LogE(item.mTag, "%s", text.c_str());
+			}
+		}
+
+		mItem.reset();
 	}
-	else if (mLevel == LogerLevel::debug)
-	{
-		LogD(mContext->mTag, "%s", text.c_str());
-	}
-	else if (mLevel == LogerLevel::info)
-	{
-		LogI(mContext->mTag, "%s", text.c_str());
-	}
-	else if (mLevel == LogerLevel::warn)
-	{
-		LogW(mContext->mTag, "%s", text.c_str());
-	}
-	else if (mLevel == LogerLevel::error)
-	{
-		LogE(mContext->mTag, "%s", text.c_str());
-	}
-	mContext.reset();
 
 	return *this;
 }

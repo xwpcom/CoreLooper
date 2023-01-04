@@ -16,7 +16,7 @@ XiongWanPing 2022.12.18
 
 ## Log日志改进
 
-可参考spdlog
+~~可参考spdlog~~,spdlog过于复杂
 
 采用stream来做日志
 
@@ -27,14 +27,10 @@ LogV(TAG,"%s","hello");
 改用
 
 ```c++
-LogV<<TAG<<xx<<endl;	
+LogV(TAG)<<xx<<yy;
 ```
 
-但stream log有个问题，怎么支持TAG?
-
 log要支持循环保存到文件
-
-
 
 
 
@@ -99,4 +95,34 @@ shared_ptr<Handler> mapChild(const string& token);
 ## 支持udp
 
 ## 支持http和https
+
+## namespace避免过多层次
+
+一般采用两级即可,比如
+
+Bear::Core2
+
+Bear::Net
+
+Bear::Http
+
+Bear::Ftp
+
+不要搞成Bear::Net::Http这样的
+
+
+
+## Net要支持多个looper并行
+
+## 引入wepoll，在windows下不再自行使用iocp
+
+wepoll使用了microsoft没公开的接口，可能会有风险
+
+但java官方都用了wepoll,说明其可靠性是有保障的
+
+好处是可以和linux epoll,macos kqueue的用法统一
+
+
+
+## 可以但尽量少用template
 
