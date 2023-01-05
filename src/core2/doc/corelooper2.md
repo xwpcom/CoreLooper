@@ -126,6 +126,10 @@ Bear::Ftp
 
 ## Net要支持多个looper并行
 
+- Net input和output要分开处理,可参考netty的设计
+
+
+
 ## 引入wepoll，在windows下不再自行使用iocp
 
 wepoll使用了microsoft没公开的接口，可能会有风险

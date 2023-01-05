@@ -11,6 +11,7 @@
 #include "textparser.h"
 #include "libcrypt/ssl/sha1.h"
 #include "libcrypt/base64ex.h"
+#include "core/looper/profiler.h"
 
 using namespace Bear::Core;
 namespace Bear {
@@ -292,6 +293,16 @@ int HttpRequest::OnHeaderContentReady()
 		return 0;
 	}
 
+#if defined _CONFIG_PROFILER
+	ULONGLONG  tick = 0;
+	if (Looper::CurrentLooper()->profilerEnabled())
+	{
+		auto obj = Looper::CurrentLooper()->profiler();
+		obj->httpCallCount++;
+		tick = ShellTool::GetTickCount64();
+	}
+#endif
+
 	ASSERT(!m_handler);
 	m_handler = CreateHandler(m_headerInfo.m_uri);
 	if (!m_handler)
@@ -305,6 +316,21 @@ int HttpRequest::OnHeaderContentReady()
 	m_handler->SetOutbox(&m_outboxPending);
 	m_handler->SetUserPassword(GetUserName(), GetPassword());
 	m_handler->Start(&m_headerInfo);
+
+#if defined _CONFIG_PROFILER
+	if (tick && Looper::CurrentLooper()->profilerEnabled())
+	{
+		tick = ShellTool::GetTickCount64() - tick;
+
+		auto obj = Looper::CurrentLooper()->profiler();
+		if (tick > obj->httpMaxTick)
+		{
+			obj->httpMaxTick = tick;
+			obj->httpMaxTickUrl = m_headerInfo.mUrl;
+		}
+	}
+
+#endif
 
 	return 0;
 }

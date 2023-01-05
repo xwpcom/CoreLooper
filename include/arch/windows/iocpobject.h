@@ -10,10 +10,10 @@ class IoContext;
 class CORE_EXPORT IocpObject
 {
 public:
-	IocpObject();
-	virtual ~IocpObject();
+	IocpObject(){}
+	virtual ~IocpObject(){}
 
-	virtual int DispatchIoContext(IoContext *context, DWORD bytes);
+	virtual int DispatchIoContext(IoContext *context, DWORD bytes)=0;
 };
 }
 }

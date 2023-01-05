@@ -158,26 +158,59 @@ int TcpClient_Windows::DispatchIoContext(IoContext *context, DWORD bytes)
 	case IoContextType_Recv:
 	{
 #if defined _CONFIG_PROFILER
+		ULONGLONG  tick = 0;
 		if (Looper::CurrentLooper()->profilerEnabled())
 		{
 			auto obj = Looper::CurrentLooper()->profiler();
 			obj->tcpRecvCount++;
+			tick = ShellTool::GetTickCount64();
 		}
 #endif
-		
+
 		int ret = OnRecv(context, bytes);
+#if defined _CONFIG_PROFILER
+		if (tick&& Looper::CurrentLooper()->profilerEnabled())
+		{
+			tick = ShellTool::GetTickCount64()-tick;
+
+			auto obj = Looper::CurrentLooper()->profiler();
+			if (tick > obj->tcpRecvMaxTick)
+			{
+				obj->tcpRecvMaxTick = tick;
+				obj->tcpRecvMaxTickHandler = GetParent()->GetObjectName() + "/" + GetObjectName();
+			}
+		}
+
+#endif
+
 		break;
 	}
 	case IoContextType_Send:
 	{
 #if defined _CONFIG_PROFILER
+		ULONGLONG  tick = 0;
 		if (Looper::CurrentLooper()->profilerEnabled())
 		{
 			auto obj = Looper::CurrentLooper()->profiler();
 			obj->tcpSentCount++;
+			tick = ShellTool::GetTickCount64();
 		}
 #endif
 		OnSendDone(context, bytes);
+#if defined _CONFIG_PROFILER
+		if (tick && Looper::CurrentLooper()->profilerEnabled())
+		{
+			tick = ShellTool::GetTickCount64() - tick;
+
+			auto obj = Looper::CurrentLooper()->profiler();
+			if (tick > obj->tcpSentMaxTick)
+			{
+				obj->tcpSentMaxTick = tick;
+				obj->tcpSentMaxTickHandler = GetParent()->GetObjectName()+"/"+GetObjectName();
+			}
+		}
+
+#endif
 		break;
 	}
 	case IoContextType_Connect:

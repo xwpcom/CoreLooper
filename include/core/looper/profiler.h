@@ -4,6 +4,8 @@ namespace Bear {
 namespace Core {
 
 #if defined _CONFIG_PROFILER
+//XiongWanPing 2022.01.05
+//性能统计
 struct tagProfiler
 {
 	tagProfiler();
@@ -22,6 +24,18 @@ struct tagProfiler
 		tcpRecvCount = 0;
 		tcpSentCount = 0;
 		tcpConnectAckCount = 0;
+		tcpRecvMaxTick = 0;
+		tcpRecvMaxTickHandler.clear();
+
+		tcpSentMaxTick = 0;
+		tcpSentMaxTickHandler.clear();
+
+		procCallCount = 0;
+		procMaxTick = 0;
+
+		httpCallCount = 0;
+		httpMaxTick = 0;
+		httpMaxTickUrl.clear();
 	}
 
 	ULONGLONG startTick = 0;
@@ -36,6 +50,19 @@ struct tagProfiler
 	ULONGLONG tcpRecvCount = 0;
 	ULONGLONG tcpSentCount = 0;
 	ULONGLONG tcpConnectAckCount = 0;
+	
+	ULONGLONG tcpRecvMaxTick = 0;
+	string	  tcpRecvMaxTickHandler;
+
+	ULONGLONG tcpSentMaxTick = 0;
+	string tcpSentMaxTickHandler;
+
+	ULONGLONG procCallCount = 0;
+	ULONGLONG procMaxTick= 0;
+
+	ULONGLONG httpCallCount = 0;
+	ULONGLONG httpMaxTick = 0;
+	string	  httpMaxTickUrl;
 
 };
 #endif

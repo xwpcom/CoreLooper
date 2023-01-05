@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "ajax_proc.h"
+#include "core/looper/profiler.h"
 
 using namespace Bear::Core;
 HTTP_EXPORT void _avoidCompileRemove_proc()
@@ -35,7 +36,15 @@ string Ajax_Proc::Process(const NameValue& params)
 		looper = Looper::CurrentLooper();
 	}
 
-	//auto tick = ShellTool::GetTickCount64();
+#if defined _CONFIG_PROFILER
+	ULONGLONG  tick = 0;
+	if (Looper::CurrentLooper()->profilerEnabled())
+	{
+		auto obj = Looper::CurrentLooper()->profiler();
+		obj->procCallCount++;
+		tick = ShellTool::GetTickCount64();
+	}
+#endif
 
 	auto url = params.GetString("url");
 	if (!url.empty())
@@ -55,11 +64,19 @@ string Ajax_Proc::Process(const NameValue& params)
 		,xml.c_str()
 	);
 
-	//tick = ShellTool::GetTickCount64()-tick;
-	//LogV(TAG, "tick=%lld",tick);
 
-#ifdef _DEBUG
-	//File::Dump(ack, "d:/proc.xml");
+#if defined _CONFIG_PROFILER
+	if (tick && Looper::CurrentLooper()->profilerEnabled())
+	{
+		tick = ShellTool::GetTickCount64() - tick;
+
+		auto obj = Looper::CurrentLooper()->profiler();
+		if (tick > obj->procMaxTick)
+		{
+			obj->procMaxTick = tick;
+		}
+	}
+
 #endif
 
 	return ack;
