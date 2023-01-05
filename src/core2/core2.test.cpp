@@ -20,6 +20,7 @@ TEST_CLASS(Log_)
 	TEST_METHOD(loger)
 	{
 		int year = 2023;
+		/*
 
 		auto tick = ShellTool::GetTickCount64();
 		for (int i = 0; i < 1000000;i++)
@@ -29,7 +30,9 @@ TEST_CLASS(Log_)
 
 		tick = ShellTool::GetTickCount64()-tick;
 		LogV(TAG, "tick=%lld", tick);
+		*/
 
+		LogerV(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		LogerD(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		LogerI(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		LogerW(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";

@@ -34,6 +34,18 @@ log要支持循环保存到文件
 
 
 
+很多日志系统都需要初始化才能正常工作，这样有时不太方便，比如初始化全局变量时没法打印日志
+
+core2采用可扩展的方式来支持Log
+
+可支持directLog和initedLog
+
+directLog是指不需要初始化，直接就能打印日志
+
+initedLog是指需要初始化后才能使用日志
+
+
+
 ## Handler
 
 ###  proc从xml改为json
@@ -125,4 +137,8 @@ wepoll使用了microsoft没公开的接口，可能会有风险
 
 
 ## 可以但尽量少用template
+
+## 每个模块都内置profiler功能
+
+便于检查性能瓶颈
 

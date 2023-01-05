@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "loger2.h"
+#include "loghandler_dt.h"
 
 namespace Bear {
 using namespace Core;
@@ -45,28 +46,15 @@ Log& Log::operator<<(ostream& (*f)(ostream&))
 		auto& text = item.str();
 		//_logger.write(mItem);
 
-		if (0)
+		
 		{
-			if (item.mLevel == LogLevel::verbose)
-			{
-				LogV(mItem->mTag, "%s", text.c_str());
-			}
-			else if (item.mLevel == LogLevel::debug)
-			{
-				LogD(item.mTag, "%s", text.c_str());
-			}
-			else if (item.mLevel == LogLevel::info)
-			{
-				LogI(item.mTag, "%s", text.c_str());
-			}
-			else if (item.mLevel == LogLevel::warn)
-			{
-				LogW(item.mTag, "%s", text.c_str());
-			}
-			else if (item.mLevel == LogLevel::error)
-			{
-				LogE(item.mTag, "%s", text.c_str());
-			}
+			LogItemInfo info;
+			info.mFile = item.mFilePath.c_str();
+			info.mLevel = (int)item.mLevel;
+			info.mLine = item.mLine;
+			info.mTag = item.mTag.c_str();
+			info.msg = text.c_str();
+			LogHandler_DT::send(info);
 		}
 
 		mItem.reset();
