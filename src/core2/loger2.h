@@ -7,11 +7,11 @@ using namespace std;
 //loger能比logger少写一个字母
 enum class LogLevel
 {
-	verbose,
-	debug,
-	info,
-	warn,
 	error,
+	warn,
+	info,
+	debug,
+	verbose,
 };
 
 /*

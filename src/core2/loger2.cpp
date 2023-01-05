@@ -46,6 +46,13 @@ Log& Log::operator<<(ostream& (*f)(ostream&))
 		auto& text = item.str();
 		//_logger.write(mItem);
 
+		/*
+		todo:
+		同步调用LogHandler_DT时，每条日志涉及跨进程通讯，性能较低，为此要支持如下选项:
+		.LogHandler_DT可编译时启用/禁用
+		.LogHandler_DT可配置为同步，或者异步(在LogLooper中触发)
+		 在LogLooper没就绪时采用同步,LogLooper就绪后改用异步
+		*/
 		
 		{
 			LogItemInfo info;
