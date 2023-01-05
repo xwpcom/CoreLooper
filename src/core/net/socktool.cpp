@@ -53,7 +53,7 @@ int SockTool::socketpair(SOCKET& sock0, SOCKET& sock1)
 	}
 
 	CAutoClose ac(&sListen);
-
+	//LogV(TAG, "%s", __func__);
 	SOCKET s = SockTool::SocketEx(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	SockTool::SetAsync(s);
 	CAutoClose acs(&s);
@@ -160,6 +160,7 @@ int SockTool::Bind(int sockfd, const struct sockaddr* addr, socklen_t addrlen)
 
 int SockTool::StartServer(int port)
 {
+	LogV(TAG, "%s,port=%d", __func__,port);
 	SOCKET s = SockTool::SocketEx(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (s == INVALID_SOCKET)
 	{
@@ -233,6 +234,11 @@ void SockTool::CLOSE_SOCKET(SOCKET& s)
 SOCKET SockTool::SocketEx(int af, int type, int protocol)
 {
 	SOCKET s = socket(af, type, protocol);
+	{
+		static int idx = 0;
+		++idx;
+		//LogV(TAG, "%s[%02d],sock=%d",__func__,idx,s);
+	}
 	if (s == INVALID_SOCKET)
 	{
 		LogW(TAG,"fail socket,af=%d,type=%d,protocol=0x%x,err=%s", af, type, protocol, GetErrorDesc(GetLastError()));

@@ -53,7 +53,11 @@ TcpClient_Linux::~TcpClient_Linux()
 int TcpClient_Linux::ConnectHelper(string ip)
 {
 	int port = mBundle.GetInt("port");
-
+	{
+		static int idx = 0;
+		++idx;
+		//LogV(TAG, "%s[%04d](%s:%d)", __func__, idx,ip.c_str(), port);
+	}
 	SOCKET s = SockTool::SocketEx(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	SockTool::SetAsync(s);
 	mSock = s;

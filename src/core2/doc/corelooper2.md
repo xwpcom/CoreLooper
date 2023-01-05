@@ -142,3 +142,9 @@ wepoll使用了microsoft没公开的接口，可能会有风险
 
 便于检查性能瓶颈
 
+## 用shared_ptr实现pool功能
+
+需要unit test来验证，看是否真的能提高性能
+
+
+
