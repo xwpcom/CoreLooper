@@ -127,6 +127,7 @@ Bear::Ftp
 ## Net要支持多个looper并行
 
 - Net input和output要分开处理,可参考netty的设计
+- ajax要采用异步返回
 
 
 
@@ -151,4 +152,8 @@ wepoll使用了microsoft没公开的接口，可能会有风险
 需要unit test来验证，看是否真的能提高性能
 
 
+
+## 大量使用lambda
+
+lamdba比较方便
 

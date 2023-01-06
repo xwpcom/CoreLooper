@@ -32,14 +32,14 @@ TEST_CLASS(Log_)
 		LogV(TAG, "tick=%lld", tick);
 		*/
 
-		LogerV(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
-		LogerD(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
-		LogerI(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
-		LogerW(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
-		LogerE(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logV(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logD(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logI(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logW(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logE(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 
 		string tag = u8"stringLog";
-		LogerV(tag) << u8"hello" << " world " << year << u8" 新年快乐! ";
+		logV(tag) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		//TraceL << u8"second line";
 	}
 };

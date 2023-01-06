@@ -777,9 +777,16 @@ void TcpClient_Windows::CheckInitTls(bool serverMode)
 
 		obj->mInBuffer = make_shared<BufferRaw>();
 		//obj->mOutBuffer = make_shared<BufferRaw>();
+		weak_ptr<TcpClient_Windows> wObj = dynamic_pointer_cast<TcpClient_Windows>(shared_from_this());
 
 		obj->mSslBox = make_shared<SSL_Box>(serverMode);
-		obj->mSslBox->setOnDecData([this](const Buffer::Ptr& buffer) {
+		obj->mSslBox->setOnDecData([wObj, this](const Buffer::Ptr& buffer) {
+			auto obj = wObj.lock();
+			if (!obj)
+			{
+				return;
+			}
+
 			//public_onRecv(pBuf);
 			auto data = buffer->data();
 			auto bytes = buffer->size();
@@ -790,8 +797,13 @@ void TcpClient_Windows::CheckInitTls(bool serverMode)
 
 			SignalOnReceive(this);
 		});
-		obj->mSslBox->setOnEncData([this](const Buffer::Ptr& buffer) {
-			int x = 0;
+		obj->mSslBox->setOnEncData([wObj,this](const Buffer::Ptr& buffer) {
+			auto obj = wObj.lock();
+			if (!obj)
+			{
+				return;
+			}
+
 			auto data = buffer->data();
 			auto bytes = buffer->size();
 			//DV("setOnEncData,bytes=%d", bytes);

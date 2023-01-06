@@ -44,14 +44,14 @@ private:
 
 using LogItemPtr = shared_ptr<LogItem>;
 
-#define LogL(tag,level) Log(tag,level, __FILE__, __LINE__)
+#define LogX(tag,level) Log(tag,level, __FILE__, __LINE__)
 
 //tag能起分类过滤作用,强制要求提供tag
-#define LogerV(tag)	LogL(tag,LogLevel::verbose)
-#define LogerD(tag)	LogL(tag,LogLevel::debug)
-#define LogerI(tag)	LogL(tag,LogLevel::info)
-#define LogerW(tag)	LogL(tag,LogLevel::warn)
-#define LogerE(tag)	LogL(tag,LogLevel::error)
+#define logV(tag)	LogX(tag,LogLevel::verbose)
+#define logD(tag)	LogX(tag,LogLevel::debug)
+#define logI(tag)	LogX(tag,LogLevel::info)
+#define logW(tag)	LogX(tag,LogLevel::warn)
+#define logE(tag)	LogX(tag,LogLevel::error)
 
 /*
 XiongWanPing 2023.01.04
