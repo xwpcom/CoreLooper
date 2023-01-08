@@ -1,7 +1,8 @@
 #pragma once
 
+#ifdef _MSC_VER
 #define _CONFIG_PROFILER  //2023.01.01 启用cpu占用分析
-
+#endif
 
 #if defined _MSC_VER //|| defined _CONFIG_INGENIC
 #define _CONFIG_OPENSSL //2019.12,用来支持https做微信小程序
@@ -211,7 +212,9 @@ private:							\
 #include "core/looper/looper.h"
 #include "core/looper/blocklooper.h"
 #include "core/looper/asynctasklooper.h"
+#include "core/looper/profiler.h"
 #include "core/net/channel.h"
 #include "json/ArduinoJson.h"
 #include "json/jsonhelper.h"
 #include "core/base/bytetool.h"
+//#include "core/base/filelogger.h"

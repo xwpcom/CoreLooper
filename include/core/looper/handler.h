@@ -155,7 +155,7 @@ class CORE_EXPORT Handler :public Object
 public:
 	Handler();
 	virtual ~Handler();
-
+	static int  totalCount();
 	virtual void LOOPER_SAFE Create(shared_ptr<Handler> parent);
 	virtual void LOOPER_SAFE Destroy();
 

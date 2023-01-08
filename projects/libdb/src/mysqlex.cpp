@@ -145,6 +145,18 @@ void MySql::SetUtf8()
 //一般采用MySqlRes rs=MySql::Query()在MySqlRes析构时自动释放
 MYSQL_RES* MySql::Query(const char* sql, bool reportError)
 {
+	string cmd;
+	if (sql)
+	{
+		cmd=sql;
+		auto pos = cmd.find('(');
+		if (pos > 0)
+		{
+			cmd=cmd.substr(0, pos);
+		}
+	}
+	Profiler profile(string("mysql.") + cmd);
+
 	if (!m_pMySql)
 	{
 		//ASSERT(FALSE);

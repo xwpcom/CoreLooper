@@ -11,7 +11,6 @@
 #include "textparser.h"
 #include "libcrypt/ssl/sha1.h"
 #include "libcrypt/base64ex.h"
-#include "core/looper/profiler.h"
 
 using namespace Bear::Core;
 namespace Bear {

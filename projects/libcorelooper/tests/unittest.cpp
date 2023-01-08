@@ -2,6 +2,7 @@
 #include "unittest.h"
 #include "CppUnitTest.h"
 #include "core/looper/teststate.h"
+#include "core/base/filelogger.h"
 #include "core/net/tcpclient.h"
 #include <atomic> 
 #include <functional>
@@ -9,13 +10,6 @@
 #include "net/udpserver.h"
 #include "arch/windows/udpclient_windows.h"
 #include <cmath>
-
-
-class Demo
-{
-public:
-	void *operator new(size_t) = delete;
-};
 
 
 #ifdef _MSC_VER_DEBUG
@@ -1720,6 +1714,54 @@ public:
 		auto ret = obj->StartRun();
 	}
 
+	TEST_METHOD(fileLogger)
+	{
+		class MainLooper :public MainLooper_
+		{
+		protected:
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				{
+					LogD(TAG, u8"早期数据");
+
+					auto obj = make_shared<FileLogger>();
+					obj->setFilePath("d:/test/file.log",3*1024,false);
+					
+					obj->addDisableTags("main,onvif,");
+					LogD("main", "main log");
+					LogD("onvif", "onvif log");
+					LogD("http", "http log");
+
+					//obj->disableLevel(DT_DEBUG);
+					LogD("http", "http log2");
+					LogI("http", "http info");
+
+					//obj->disableLevel(DT_DEBUG);
+
+					//obj->disableLog();
+					AddChild(obj);
+					obj->Start();
+					obj->sendMessage(BM_NULL);
+
+					
+
+					for (int i = 0; i < 4000;i++)
+					{
+						LogD(TAG, "test file logger[%04d]",i);
+					}
+
+					LogI(TAG, u8"mainLooper is gone...");
+
+					DelayExit(1);
+				}
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
+
 	TEST_METHOD(TestLooper)
 	{
 		class MainLooper :public Looper
@@ -2733,30 +2775,6 @@ public:
 			auto handler = make_shared<Handler>();
 			auto looper = make_shared<Looper>();
 		}
-	}
-
-	TEST_METHOD(New_Test)
-	{
-
-		/*
-		auto obj = ::new Demo();
-		make_shared<Demo>();
-
-		{
-			BYTE s_memPool[1000];
-			class Demo2
-			{
-
-			};
-
-			auto obj = new (s_memPool)Demo2();
-		}
-		*/
-	}
-
-	TEST_METHOD(New_Test2)
-	{
-		auto p = new int;
 	}
 
 	TEST_METHOD(string_replace)

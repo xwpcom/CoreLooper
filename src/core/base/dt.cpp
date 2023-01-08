@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "core/base/shelltool.h"
 #include "core/base/dt.h"
+#include "core/base/filelogger.h"
 #include "core/file/file.h"
 #include "bytebuffer.h"
 
@@ -87,7 +88,6 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
 		}
 
-		if (hwnd)
 		{
 			string msg;
 
@@ -114,15 +114,18 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 
 			va_end(ap);
 
-			tagLogInfo info;
-			info.hwnd = hwnd;
-			info.msg = msg.c_str();
-			info.mFile = m_lpszFile;
-			info.mLevel = m_nLevel;
-			info.mLine = m_nLine;
-			info.mTag = tag.c_str();
+			{
+				tagLogInfo info;
+				info.hwnd = hwnd;
+				info.msg = msg.c_str();
+				info.mFile = m_lpszFile;
+				info.mLevel = m_nLevel;
+				info.mLine = m_nLine;
+				info.mTag = tag.c_str();
 
-			CDT::send(info);
+				FileLogger::addLog(info);
+				CDT::send(info);
+			}
 		}
 	}
 
@@ -139,7 +142,6 @@ int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 			hwnd = ::FindWindowEx(NULL, NULL, NULL, gTitle);
 		}
 
-		if (hwnd)
 		{
 			string msg;
 			va_list ap;
@@ -165,15 +167,18 @@ int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 
 			va_end(ap);
 
-			tagLogInfo info;
-			info.hwnd = hwnd;
-			info.msg = msg.c_str();
-			info.mFile = m_lpszFile;
-			info.mLevel = m_nLevel;
-			info.mLine = m_nLine;
-			info.mTag = tag;
+			{
+				tagLogInfo info;
+				info.hwnd = hwnd;
+				info.msg = msg.c_str();
+				info.mFile = m_lpszFile;
+				info.mLevel = m_nLevel;
+				info.mLine = m_nLine;
+				info.mTag = tag;
 
-			CDT::send(info);
+				FileLogger::addLog(info);
+				CDT::send(info);
+			}
 		}
 	}
 
@@ -182,6 +187,11 @@ int CLog::operator()(const char* tag,const char* lpszFormat, ...)
 
 void CDT::send(tagLogInfo& info)
 {
+	if (!info.hwnd)
+	{
+		return;
+	}
+
 	HWND hwnd = info.hwnd;
 	const char* msg=info.msg;
 
@@ -353,6 +363,11 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 	}
 	//*/
 
+	if (!tag)
+	{
+		return -1;
+	}
+
 	int errSave = errno;//save for restore.DebugTrace do NOT change errno
 
 	const int nLevel = m_nLevel;
@@ -410,6 +425,19 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 		, buf
 	);
 
+	{
+		tagLogInfo info;
+		//info.hwnd = hwnd;
+		info.time = t;
+		info.msg = buf;
+		info.mFile = pszFile;
+		info.mLevel = nLevel;
+		info.mLine = nLine;
+		info.mTag = tag;
+
+		FileLogger::addLog(info);
+	}
+
 	bool align = true;//when save log file,maybe disable align
 
 #if defined _CONFIG_ANDROID || defined __APPLE__
@@ -456,9 +484,6 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 			//info.Replace('\n', '`');
 			string Tag = StringTool::Format("Bear/jni#%s", tag);
 			__android_log_print(p, Tag.c_str(), "%s", szMsg);
-
-			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
-
 		}
 	}
 #else
@@ -534,6 +559,19 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 	vsnprintf(buf, sizeof(buf) - 1, lpszFormat, varargs);
 	va_end(varargs);
 
+	{
+		tagLogInfo info;
+		//info.hwnd = hwnd;
+		info.time = t;
+		info.msg = buf;
+		info.mFile = pszFile;
+		info.mLevel = nLevel;
+		info.mLine = nLine;
+		info.mTag = tag.c_str();
+
+		FileLogger::addLog(info);
+	}
+
 	char* p = szMsg;
 	p[0] = 0;
 
@@ -591,9 +629,6 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 			//info.Replace('\n', '`');
 			string Tag = StringTool::Format("Bear/jni#%s",tag.c_str());
 			__android_log_print(p, Tag.c_str(), "%s", szMsg);
-
-			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
-
 		}
 	}
 #else
@@ -611,38 +646,6 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 
 
 	errno = errSave;
-	return 0;
-}
-
-static int AppendLogToFile(const char *pszLogFile,const char *msg)
-{
-	auto dwLen=File::GetFileLength(pszLogFile);
-	size_t maxFileLen=64*1024;
-#ifdef _CONFIG_ANDROID
-	maxFileLen = 1024 * 1024;
-#endif
-
-	if(dwLen>=maxFileLen)
-	{
-		File::DeleteFile(pszLogFile);
-	}
-
-	FILE *hFile=fopen(pszLogFile,"a+");
-	if(hFile)
-	{
-		auto len=strlen(msg);
-		auto ret=fwrite(msg,1,len,hFile);
-		if(ret!=len)
-		{
-			ASSERT(FALSE);
-		}
-
-		fwrite("\r\n",1,2,hFile);
-
-		fflush(hFile);
-		fclose(hFile);
-	}
-
 	return 0;
 }
 
@@ -755,9 +758,6 @@ int CDT::operator()( const char* lpszFormat, ... )
 			//info.Replace('\r','~');
 			//info.Replace('\n', '`');
 			__android_log_print(p, "Bear/JNI", "%s", szMsg);
-
-			//AppendLogToFile("/storage/sdcard1/0Camera/ds.log",info);
-			
 		}
 	}
 #else

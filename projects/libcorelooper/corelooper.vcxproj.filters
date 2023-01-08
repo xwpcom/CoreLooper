@@ -439,6 +439,9 @@
     <ClCompile Include="..\..\src\core2\loghandler_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\looper\filelogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="corelooper.vs.h">
@@ -982,6 +985,9 @@
       <Filter>header files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core2\loghandler_file.h">
+      <Filter>header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\core\base\filelogger.h">
       <Filter>header files</Filter>
     </ClInclude>
   </ItemGroup>

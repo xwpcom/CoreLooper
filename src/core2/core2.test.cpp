@@ -17,6 +17,29 @@ static const char* TAG = u8"ostreamLog";
 
 TEST_CLASS(Log_)
 {
+	template<class T>
+	void swap(T& a, T& b)
+	{
+		//decltype(a) t = a;
+		auto t = a;
+		a = b;
+		b = t;
+	};
+
+	TEST_METHOD(templateBase)
+	{
+		{
+			int x = 1, y = 2;
+			swap(x, y);
+			logV(TAG) <<"x=" << x << ",y=" << y;
+		}
+		{
+			string x = "hello", y = "world";
+			swap(x, y);
+			logV(TAG) << "x=" << x << ",y=" << y;
+		}
+	}
+
 	TEST_METHOD(loger)
 	{
 		int year = 2023;

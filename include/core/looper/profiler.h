@@ -4,6 +4,13 @@ namespace Bear {
 namespace Core {
 
 #if defined _CONFIG_PROFILER
+
+struct tagProfilerItem
+{
+	ULONGLONG times=0;
+	ULONGLONG maxTick = 0;
+};
+
 //XiongWanPing 2022.01.05
 //性能统计
 struct tagProfiler
@@ -36,6 +43,8 @@ struct tagProfiler
 		httpCallCount = 0;
 		httpMaxTick = 0;
 		httpMaxTickUrl.clear();
+
+		fields.clear();
 	}
 
 	ULONGLONG startTick = 0;
@@ -64,8 +73,21 @@ struct tagProfiler
 	ULONGLONG httpMaxTick = 0;
 	string	  httpMaxTickUrl;
 
+	map<string, tagProfilerItem> fields;
 };
+
 #endif
+
+class CORE_EXPORT Profiler
+{
+public:
+	Profiler(const string& name);
+	virtual ~Profiler();
+
+protected:
+	ULONGLONG mStartTick;
+	string mName;
+};
 
 }
 }

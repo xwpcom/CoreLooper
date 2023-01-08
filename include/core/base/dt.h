@@ -23,13 +23,20 @@ typedef long HWND;
 
 struct tagLogInfo
 {
+	tagLogInfo()
+	{
+		time = tagTimeMs::now();
+		tid = ShellTool::GetCurrentThreadId();
+	}
 	const char* mTag = nullptr;
 	const char* mFile= nullptr;
 	int mLine=0;
 	int mLevel=0;
+	int tid = 0;//threadId
 
 	HWND hwnd=0;
 	const char* msg = nullptr;
+	tagTimeMs time;
 };
 
 class CORE_EXPORT CLog

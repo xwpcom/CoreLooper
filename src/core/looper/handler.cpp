@@ -977,6 +977,15 @@ int Handler::OnProcDataSetter(string, string)
 	return eSetterResult_InvalidName;
 }
 
+int Handler::totalCount()
+{
+	auto v = 0;
+#ifdef _CONFIG_MONITOR_HANDLER
+	v = tagHandlerInternalData::GetHandlerCount();
+#endif
+	return v;
+}
+
 void Handler::DumpProcData(string& xmlAck, DWORD flags)
 {
 	bool debug = false;

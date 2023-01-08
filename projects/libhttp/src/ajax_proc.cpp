@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "ajax_proc.h"
-#include "core/looper/profiler.h"
 
 using namespace Bear::Core;
 HTTP_EXPORT void _avoidCompileRemove_proc()
@@ -29,6 +28,8 @@ Ajax_Proc::~Ajax_Proc()
 
 string Ajax_Proc::Process(const NameValue& params)
 {
+	Profiler profile("Ajax_Proc");
+
 	string xml;
 	LooperImpl* looper = Looper::GetMainLooper();
 	if (!looper)
