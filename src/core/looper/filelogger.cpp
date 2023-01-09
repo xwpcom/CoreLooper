@@ -16,7 +16,7 @@ static int gActiveDate = 0;//yyyymmdd,>0时限制只在此日期之前启用,比
 static set<string> gDisabledTags;
 static string mTag = "FileLogger";
 static list<tagLogItem> gItems;
-static int gMaxCacheCount = 1000;//没初始化之前允许缓存的最大条数
+static int gMaxCacheCount = 256;//没初始化之前允许缓存的最大条数
 static mutex gMutex;
 static bool gDestroyed = false;
 static int gSaveInterval = 5 * 60;//单位:秒,定时保存日志文件的时间
@@ -110,7 +110,7 @@ void FileLogger::addItem(const tagLogItem& item)
 	ASSERT(IsMyselfThread());
 
 	gItems.push_back(item);
-	if (gItems.size() >= 500)
+	if ((int)gItems.size() >= gMaxCacheCount)
 	{
 		saveLog();
 	}
@@ -126,6 +126,8 @@ void FileLogger::OnCreate()
     __super::OnCreate();
 	gWObj = dynamic_pointer_cast<FileLogger>(shared_from_this());
 
+	LogV(mTag, "%s", __func__);
+
 	auto obj = make_shared<LogFile>();
 	AddChild(obj);
 
@@ -133,12 +135,6 @@ void FileLogger::OnCreate()
 	obj->setFilePath(gFilePath, gMaxBytes,gAutoBackup);
 
 	int seconds = gSaveInterval;
-#ifdef _MSC_VER_DEBUG
-	seconds = 5;
-#endif
-	seconds = 30;
-
-	LogV(mTag, "%s",__func__);
 
 	SetTimer(mTimer_save, seconds * 1000);
 }
@@ -199,13 +195,15 @@ void FileLogger::saveLog(bool sync)
 				{
 					levelDesc = "###Warning";
 				}
-				auto text = StringTool::Format("%s[%s.%03d#%05d]%s#[%s]\r\n"
+				auto text = StringTool::Format("%s[%s.%03d#%05d]%s#[%s]\t\t(%s:%d)\r\n"
 					, levelDesc.c_str()
 					, item.t.stdDateTimeText().c_str()
 					, item.t.ms
 					, item.threadId
 					, item.tag.c_str()
 					, item.msg.c_str()
+					, item.file.c_str()
+					, item.line
 				);
 				box.Write(text);
 			}
@@ -281,7 +279,7 @@ void FileLogger::addLog(tagLogInfo& info)
 	item.tag = info.mTag;
 	item.msg = info.msg;
 	item.level = info.mLevel;
-	item.filePath = info.mFile;
+	item.file = info.mFile;
 	item.line = info.mLine;
 	item.threadId = info.tid;
 	item.t = info.time;

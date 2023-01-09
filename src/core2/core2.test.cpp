@@ -13,7 +13,7 @@ using namespace Bear::Core2;
 namespace Bear {
 using namespace Core;
 namespace Core2 {
-static const char* TAG = u8"ostreamLog";
+static const char* TAG = u8"core2";
 
 TEST_CLASS(Log_)
 {
@@ -31,7 +31,7 @@ TEST_CLASS(Log_)
 		{
 			int x = 1, y = 2;
 			swap(x, y);
-			logV(TAG) <<"x=" << x << ",y=" << y;
+			logV(TAG) << "x=" << x << ",y=" << y;
 		}
 		{
 			string x = "hello", y = "world";
@@ -65,6 +65,59 @@ TEST_CLASS(Log_)
 		logV(tag) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		//TraceL << u8"second line";
 	}
+
+};
+
+void Display(int& i)
+{
+	logV(TAG) << __func__<<"#int&";
+}
+
+void Display(int&& i)
+{
+	logV(TAG) << __func__ << "#int&&";
+}
+
+template<class T>
+void DisplayWrapper(T&& t) {
+	Display(forward<T>(t));
+}
+
+TEST_CLASS(cppStudy)
+{
+TEST_METHOD(loger_perfectForward)
+{
+	Display(1);
+
+	int x = 2;
+	Display(x);
+
+	int&& y = 7;
+	y = 8;
+
+	struct Player {
+		string name;
+	};
+
+	struct Team {
+		Team() {
+			goalKeeper = new Player{"Marc" };
+		};
+		Team(const Team& t) {
+			goalKeeper = new Player{ *t.goalKeeper };
+		};
+		Team(Team&& t) { // move constructor
+			goalKeeper = t.goalKeeper;
+			t.goalKeeper = nullptr;
+		};
+		~Team() { delete goalKeeper; }
+
+		Player* goalKeeper;
+	};
+
+	DisplayWrapper(1);
+	DisplayWrapper(x);
+}
 };
 
 }

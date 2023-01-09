@@ -6,7 +6,7 @@ struct tagLogItem
 {
 	string tag;
 	string msg;
-	string filePath;
+	string file;
 	int line = 0;
 	int level = 0;
 	int threadId = 0;
@@ -53,7 +53,8 @@ FileLogger功能
 .初始化后能采用两个文件循环保存日志
 .在析构后不再保存文件
 .可指定在某个日期后自动禁用保存文件，避免耗尽flash擦写次数
-
+.默认保存DT_DEBUG和更高级别的日志,比如LogD,LogI,LogW和LogW,要禁用的级别可用disableLevel指定
+.用法见TEST_METHOD(fileLogger)
 */
 class CORE_EXPORT FileLogger :public Looper
 {

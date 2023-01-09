@@ -40,6 +40,23 @@ void CDT::enableDT(bool enable)
 	mEnabled = enable;
 }
 
+static const char * getFileName(const char* filePath)
+{
+	if (filePath)
+	{
+		auto len = strlen(filePath);
+		for (int i = len - 1; i > 0; i--)
+		{
+			auto& ch = filePath[i];
+			if (ch == '\\' || ch == '/')
+			{
+				return filePath + i+1;
+			}
+		}
+	}
+
+	return "";
+}
 
 #ifdef _CONFIG_ANDROID
 extern "C"
@@ -430,7 +447,7 @@ int CLog::operator()(const char* tag, const char* lpszFormat, ...)
 		//info.hwnd = hwnd;
 		info.time = t;
 		info.msg = buf;
-		info.mFile = pszFile;
+		info.mFile = getFileName(pszFile);
 		info.mLevel = nLevel;
 		info.mLine = nLine;
 		info.mTag = tag;
@@ -564,7 +581,7 @@ int CLog::operator()(const string& tag, const char* lpszFormat, ...)
 		//info.hwnd = hwnd;
 		info.time = t;
 		info.msg = buf;
-		info.mFile = pszFile;
+		info.mFile = getFileName(pszFile);
 		info.mLevel = nLevel;
 		info.mLine = nLine;
 		info.mTag = tag.c_str();
