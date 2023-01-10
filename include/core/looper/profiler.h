@@ -37,9 +37,6 @@ struct tagProfiler
 		tcpSentMaxTick = 0;
 		tcpSentMaxTickHandler.clear();
 
-		procCallCount = 0;
-		procMaxTick = 0;
-
 		httpCallCount = 0;
 		httpMaxTick = 0;
 		httpMaxTickUrl.clear();
@@ -65,9 +62,6 @@ struct tagProfiler
 
 	ULONGLONG tcpSentMaxTick = 0;
 	string tcpSentMaxTickHandler;
-
-	ULONGLONG procCallCount = 0;
-	ULONGLONG procMaxTick= 0;
 
 	ULONGLONG httpCallCount = 0;
 	ULONGLONG httpMaxTick = 0;

@@ -311,6 +311,8 @@ int HttpRequest::OnHeaderContentReady()
 		return 0;
 	}
 
+	Profiler profile("http."+ m_headerInfo.m_uri);
+
 	m_handler->SetHttpRequest(this);
 	m_handler->SetOutbox(&m_outboxPending);
 	m_handler->SetUserPassword(GetUserName(), GetPassword());
