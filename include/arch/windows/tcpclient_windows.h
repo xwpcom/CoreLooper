@@ -130,11 +130,13 @@ private:
 		shared_ptr<SSL_Box>	  mSslBox;
 		ByteBuffer mInboxSSL;
 		ByteBuffer mOutboxSSL;
+		ULONGLONG memoryUsed_impl();
 	};
 
 	unique_ptr<tagTlsInfo> mTlsInfo;
 #endif
 
+	ULONGLONG memoryUsed_impl()override;
 };
 }
 }

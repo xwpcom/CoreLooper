@@ -221,5 +221,14 @@ bool SSL_Box::setHost(const char *host) {
 	return false;
 }
 
+ULONGLONG SSL_Box::memoryUsed_impl()
+{
+	ULONGLONG bytes = 0;
+	_bufferOut.for_each([&bytes](Buffer::Ptr& obj) {
+		bytes+=obj->size();
+	});
+
+	return bytes;
+}
 
 }

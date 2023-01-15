@@ -305,6 +305,18 @@ void HttpHandler::DetachChannel()
 	}
 }
 
+ULONGLONG HttpHandler::memoryUsed_impl()
+{
+	auto ret = __super::memoryUsed_impl();
+	ret += mInbox.GetBufferSize() + mOutbox.GetBufferSize();
+	if (mHttpRequest)
+	{
+		ret += mHttpRequest->memoryUsed_impl();
+	}
+
+	return ret;
+}
+
 }
 }
 }

@@ -76,6 +76,7 @@ struct tagHandlerInternalData
 #ifdef _CONFIG_MONITOR_HANDLER
 	static void DumpAll();
 	static int  GetHandlerCount();
+	static int fetchHandlerInfo(JsonObject& json);
 	static void SetRationalHandlerUpperLimit(int count);
 
 	static CriticalSection gCSBaseHandler;

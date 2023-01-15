@@ -657,7 +657,7 @@ void TcpClient_Windows::OnConnectAck()
 
 		SignalOnConnect(this, 0, nullptr, nullptr);
 	}
-	}
+}
 
 void TcpClient_Windows::ConfigCacheBox()
 {
@@ -767,6 +767,23 @@ int TcpClient_Windows::GetOutboxCacheBytes()
 	return mOutbox.length();
 }
 
+#ifdef _CONFIG_OPENSSL
+ULONGLONG TcpClient_Windows::tagTlsInfo::memoryUsed_impl()
+{
+	ULONGLONG ret = mInboxSSL.GetBufferSize() + mOutboxSSL.GetBufferSize();
+	if (mInBuffer)
+	{
+		ret += mInBuffer->size();
+	}
+	if (mSslBox)
+	{
+		ret += mSslBox->memoryUsed_impl();
+	}
+
+	return ret;
+}
+#endif
+
 void TcpClient_Windows::CheckInitTls(bool serverMode)
 {
 #ifdef _CONFIG_OPENSSL
@@ -824,6 +841,21 @@ void TcpClient_Windows::CheckInitTls(bool serverMode)
 	}
 #endif
 
+}
+
+ULONGLONG TcpClient_Windows::memoryUsed_impl()
+{
+	auto ret = __super::memoryUsed_impl();
+	ret += mInbox.GetBufferSize()+mOutbox.GetBufferSize();
+
+#ifdef _CONFIG_OPENSSL
+	if (mTlsInfo)
+	{
+		ret += mTlsInfo->memoryUsed_impl();
+	}
+#endif
+
+	return ret;
 }
 
 

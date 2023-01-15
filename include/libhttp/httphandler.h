@@ -56,6 +56,7 @@ protected:
 	ByteBuffer					mOutbox;
 	std::shared_ptr<HttpRequest>	mHttpRequest;
 	std::shared_ptr<tagWebServerConfig> mWebConfig;
+	ULONGLONG memoryUsed_impl()override;
 };
 }
 }

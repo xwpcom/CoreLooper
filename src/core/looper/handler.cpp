@@ -544,6 +544,34 @@ void Handler::OnDestroy()
 	}
 }
 
+//会在handler所属looper中调用本接口
+//返回handler大致使用的字节数
+ULONGLONG Handler::memoryUsed_impl()
+{
+	return sizeof(Handler)+sizeof(tagHandlerInternalData);
+}
+
+//返回大致使用的字节数
+ULONGLONG Handler::memoryUsed()
+{
+	ULONGLONG bytes = 0;
+	auto fn = [this,&bytes]() {
+		
+		bytes = memoryUsed_impl();
+	};
+
+	if (IsMyselfThread())
+	{
+		fn();
+	}
+	else
+	{
+		sendRunnable(fn);
+	}
+
+	return bytes;
+}
+
 //说明:
 //对Handler来说,主动调用Create()没太大意义,并且很容易忘记调用它
 //所以约定BM_CREATE是可选的
@@ -984,6 +1012,15 @@ int Handler::totalCount()
 	v = tagHandlerInternalData::GetHandlerCount();
 #endif
 	return v;
+}
+
+int Handler::fetchHandlerInfo(JsonObject& json)
+{
+	int ret = -1;
+#ifdef _CONFIG_MONITOR_HANDLER
+	ret = tagHandlerInternalData::fetchHandlerInfo(json);
+#endif
+	return ret;
 }
 
 void Handler::DumpProcData(string& xmlAck, DWORD flags)

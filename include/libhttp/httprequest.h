@@ -102,6 +102,7 @@ public:
 	int Transform(std::string  target, ByteBuffer& box);
 
 	bool IsAuthAction(const char *pszAction, const char *pszUserGroup = NULL);
+	ULONGLONG memoryUsed_impl();
 protected:
 	std::shared_ptr<HttpRequestHandler> CreateHandler(std::string  uri);
 

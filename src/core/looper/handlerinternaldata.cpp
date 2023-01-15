@@ -680,6 +680,78 @@ void tagHandlerInternalData::DumpAll()
 	}
 }
 
+struct tagItem
+{
+	string name;
+	int count = 0;
+	ULONGLONG bytes = 0;
+};
+
+static bool
+handler_compareCount(tagItem& item1, tagItem& item2)
+{
+	return item1.count > item2.count;
+}
+static bool
+handler_compareBytes(tagItem& item1, tagItem& item2)
+{
+	return item1.bytes > item2.bytes;
+}
+
+int tagHandlerInternalData::fetchHandlerInfo(JsonObject& json)
+{
+	AutoLock lock(&gCSBaseHandler);
+
+	map<string, tagItem> handlerCounts;//统计相同name的个数
+	for (auto& iter : gHandlers)
+	{
+		Handler* obj = (Handler*)iter.second;
+		if (obj)
+		{
+			auto bytes = obj->memoryUsed();
+
+			auto& name = obj->GetObjectName();
+			auto& item = handlerCounts[name];
+			item.name = name;
+			item.count++;
+			item.bytes += bytes;
+		}
+	}
+
+	vector <tagItem> items;
+	items.reserve(handlerCounts.size());
+	for (auto& item : handlerCounts)
+	{
+		items.emplace_back(tagItem{ item.first,item.second.count,item.second.bytes });
+	}
+	
+	{
+		sort(items.begin(), items.end(), handler_compareCount);
+
+		auto& jItems = json.createNestedArray("itemCounts");
+		for (auto& item : items)
+		{
+			auto& jItem = jItems.createNestedObject();
+			jItem["name"] = item.name;
+			jItem["count"] = item.count;
+		}
+	}
+	{
+		sort(items.begin(), items.end(), handler_compareBytes);
+
+		auto& jItems = json.createNestedArray("itemBytes");
+		for (auto& item : items)
+		{
+			auto& jItem = jItems.createNestedObject();
+			jItem["name"] = item.name;
+			jItem["bytes"] = item.bytes;
+		}
+	}
+
+
+	return 0;
+}
+
 //返回handler总数
 //如果count持续上升，超过合理范围，说明有handler泄漏
 int tagHandlerInternalData::GetHandlerCount()

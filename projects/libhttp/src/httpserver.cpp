@@ -43,9 +43,6 @@ void HttpServer::OnConnect(Channel* endPoint, long error, ByteBuffer* pBox, Bund
 	handler->AttachChannel(endPoint);
 	AddChild(handler);
 	handler->OnConnect(endPoint, error, extraInfo);
-
-	//LogV(TAG, "");
-
 }
 
 

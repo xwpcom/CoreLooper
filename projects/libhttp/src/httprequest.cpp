@@ -1124,6 +1124,12 @@ void HttpRequest::SetStatus(eHttpRequestStatus status)
 
 	m_eHttpRequestStatus = status;
 }
+
+ULONGLONG HttpRequest::memoryUsed_impl()
+{
+	return m_outboxPending.GetBufferSize();
+}
+
 }
 }
 }

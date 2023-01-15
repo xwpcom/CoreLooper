@@ -5,6 +5,7 @@
 #include "core/base/object.h"
 #include "core/looper/procnode.h"
 #include <functional>
+#include "json/ArduinoJson.h"
 
 namespace Bear {
 namespace Core
@@ -20,7 +21,7 @@ using std::make_shared;
 using std::weak_ptr;
 using std::enable_shared_from_this;
 using std::dynamic_pointer_cast;
-
+using namespace ArduinoJson;
 struct tagHandlerInternalData;
 #define CHILD_NODE_NAME "Child"
 
@@ -155,7 +156,9 @@ class CORE_EXPORT Handler :public Object
 public:
 	Handler();
 	virtual ~Handler();
-	static int  totalCount();
+	static int totalCount();
+	static int fetchHandlerInfo(JsonObject& json);
+	LOOPER_SAFE virtual ULONGLONG memoryUsed();
 	virtual void LOOPER_SAFE Create(shared_ptr<Handler> parent);
 	virtual void LOOPER_SAFE Destroy();
 
@@ -374,6 +377,7 @@ protected:
 
 	DWORD mThreadId = 0;
 	shared_ptr<tagHandlerInternalData> mInternalData;
+	virtual ULONGLONG memoryUsed_impl();
 private:
 	Handler & operator=(Handler& src);
 	Handler(const Handler&);

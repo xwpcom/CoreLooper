@@ -206,6 +206,7 @@ public:
 	 * @return 是否成功
 	 */
 	bool setHost(const char *host);
+	ULONGLONG memoryUsed_impl();
 private:
 	void flushWriteBio();
 	void flushReadBio();
