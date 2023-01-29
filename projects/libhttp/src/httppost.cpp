@@ -20,10 +20,18 @@ HttpPost::HttpPost()
 	SetObjectName("HttpPost");
 	mBoundary = "--------------------------716657498184592405569245";
 	//LogV(TAG, "%s,this=%p", __func__, this);
+	Profiler profile("HttpPost.ctor",0);
+#ifdef _MSC_VER_DEBUG
+	LogV(TAG, "%s(%p)", __func__, this);
+#endif
 }
 
 HttpPost::~HttpPost()
 {
+	Profiler profile("HttpPost.dtor", 0);
+#ifdef _MSC_VER_DEBUG
+	LogV(TAG, "%s(%p)", __func__, this);
+#endif
 	//LogV(TAG,"%s,this=%p", __func__, this);
 
 	if (!mRecvAckDone)

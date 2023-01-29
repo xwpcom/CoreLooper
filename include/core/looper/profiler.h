@@ -75,11 +75,12 @@ struct tagProfiler
 class CORE_EXPORT Profiler
 {
 public:
-	Profiler(const string& name);
+	Profiler(const string& name,int minTick=32);
 	virtual ~Profiler();
 
 protected:
 	ULONGLONG mStartTick;
+	int mMinTick = 32;
 	string mName;
 };
 

@@ -13,10 +13,11 @@ tagProfiler::tagProfiler()
 
 #endif
 
-Profiler::Profiler(const string& name)
+Profiler::Profiler(const string& name, int minTick)
 {
 #if defined _CONFIG_PROFILER
 	mName = name;
+	mMinTick = minTick;
 	mStartTick = ShellTool::GetTickCount64();
 #endif
 }
@@ -30,7 +31,7 @@ Profiler::~Profiler()
 		obj->fields[mName].times++;
 
 		auto tick = ShellTool::GetTickCount64() - mStartTick;
-		if (tick > 32)
+		if (tick >= mMinTick)
 		{
 			if (tick > obj->fields[mName].maxTick)
 			{

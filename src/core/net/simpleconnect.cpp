@@ -13,11 +13,13 @@ SimpleConnect::SimpleConnect()
 	SetObjectName("SimpleConnect");
 	mTimeOutSecond = 90;
 	//LogV(TAG, "%s,this=%p", __func__, this);
+	Profiler profile("SimpleConnect.ctor", 0);
 }
 
 SimpleConnect::~SimpleConnect()
 {
 	//LogV(TAG,"%s,this=%p", __func__, this);
+	Profiler profile("SimpleConnect.dtor", 0);
 }
 
 int SimpleConnect::StartConnect(Bundle& bundle)
