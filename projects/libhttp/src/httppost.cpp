@@ -13,6 +13,10 @@ using namespace Core;
 static const char* TAG = "HttpPost";
 
 //static int gBigFrameIndex = 0;
+#ifdef _MSC_VER
+atomic<int> gAliveCount = 0;
+atomic<int> gTotalCount = 0;
+#endif
 
 HttpPost::HttpPost()
 {
@@ -21,16 +25,32 @@ HttpPost::HttpPost()
 	mBoundary = "--------------------------716657498184592405569245";
 	//LogV(TAG, "%s,this=%p", __func__, this);
 	Profiler profile("HttpPost.ctor",0);
-#ifdef _MSC_VER_DEBUG
+#ifdef _MSC_VER
 	LogV(TAG, "%s(%p)", __func__, this);
+	//memset(mTestBuffer, 0, sizeof(mTestBuffer));
+	++gAliveCount;
+	++gTotalCount;
 #endif
 }
+
+#ifdef _MSC_VER
+int HttpPost::totalInstanceCount()
+{
+	return gTotalCount;
+}
+
+int HttpPost::aliveInstanceCount()
+{
+	return gAliveCount;
+}
+#endif
 
 HttpPost::~HttpPost()
 {
 	Profiler profile("HttpPost.dtor", 0);
-#ifdef _MSC_VER_DEBUG
+#ifdef _MSC_VER
 	LogV(TAG, "%s(%p)", __func__, this);
+	--gAliveCount;
 #endif
 	//LogV(TAG,"%s,this=%p", __func__, this);
 
@@ -941,6 +961,19 @@ void HttpPost::SetBodyBigFile(const string& filePath)
 	mBodyBigFilePath = filePath;
 }
 
+#if defined _MSC_VER
+
+HttpPost2::HttpPost2()
+{
+	LogV(mTag, "%s(%p)", __func__, this);
+	memset(mBuffer, 0, sizeof(mBuffer));
+}
+
+HttpPost2::~HttpPost2()
+{
+	LogV(mTag, "%s(%p)", __func__, this);
+}
+#endif
 
 }
 }

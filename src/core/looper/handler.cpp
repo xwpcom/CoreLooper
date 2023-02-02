@@ -109,6 +109,14 @@ Handler::~Handler()
 		}
 	}
 #endif
+
+	{
+		auto parent = mInternalData->mParent;
+		if (parent)
+		{
+			parent->sendMessage(BM_CHILD_DTOR,(WPARAM)this);
+		}
+	}
 }
 
 LRESULT Handler::sendMessage(UINT msg, WPARAM wp, LPARAM lp)
@@ -280,6 +288,29 @@ LRESULT Handler::OnMessage(UINT msg, WPARAM wp, LPARAM lp)
 				ASSERT(FALSE);
 			}
 		}
+		return 0;
+	}
+
+	/*
+	2023.02.02增加,在child handler析构时主动删除mChildren中的weak_ptr
+	原因:
+	理想情况下BigObject占用的内存在最后一个shared_ptr失效时释放
+	控制块在weak_ptr失效时释放
+
+	现在用make_shared时控制块和BigObject是一起分配的，
+	当shared_ptr失效时，只调用了BigObject的析构
+	当weak_ptr失效时才释放了控制块和BigObject占用的内存
+	//*/
+	case BM_CHILD_DTOR:
+	{
+		long* item = (long*)wp;
+		auto& items = mInternalData->mChildren;
+		auto it = items.find(item);
+		if (it != items.end())
+		{
+			items.erase(it);
+		}
+
 		return 0;
 	}
 	case BM_DUMP:

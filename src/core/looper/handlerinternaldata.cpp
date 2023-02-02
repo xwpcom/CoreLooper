@@ -700,6 +700,7 @@ handler_compareBytes(tagItem& item1, tagItem& item2)
 
 int tagHandlerInternalData::fetchHandlerInfo(JsonObject& json)
 {
+#ifdef _MSC_VER
 	AutoLock lock(&gCSBaseHandler);
 
 	map<string, tagItem> handlerCounts;//统计相同name的个数
@@ -710,7 +711,7 @@ int tagHandlerInternalData::fetchHandlerInfo(JsonObject& json)
 		{
 			auto bytes = obj->memoryUsed();
 
-			auto& name = obj->GetObjectName();
+			auto name = obj->GetObjectName();
 			auto& item = handlerCounts[name];
 			item.name = name;
 			item.count++;
@@ -747,7 +748,7 @@ int tagHandlerInternalData::fetchHandlerInfo(JsonObject& json)
 			jItem["bytes"] = item.bytes;
 		}
 	}
-
+#endif
 
 	return 0;
 }

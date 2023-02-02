@@ -24,6 +24,15 @@ class HTTP_EXPORT HttpPost :public SimpleConnect
 public:
 	HttpPost();
 	~HttpPost();
+	HttpPost(const HttpPost&) = delete;
+	HttpPost(const HttpPost&&) = delete;
+	HttpPost(HttpPost&&) = delete;
+
+#if defined _MSC_VER
+	static int aliveInstanceCount();
+	static int totalInstanceCount();
+#endif
+
 	void SetHttpMethod(const string& method)
 	{
 		mHttpMethod= method;
@@ -121,7 +130,25 @@ protected:
 	string mBodyBigFilePath;//只支持一个文件
 	shared_ptr<FILE> mBigFile;
 	std::function<void(const string& url, int error, const string& ack)> mCB;
+
+#if defined _MSC_VER
+	//BYTE mTestBuffer[4096*100];
+#endif
 };
+
+
+#if defined _MSC_VER
+class HTTP_EXPORT HttpPost2 :public HttpPost
+{
+	SUPER(HttpPost);
+public:
+	HttpPost2();
+	~HttpPost2();
+protected:
+	BYTE mBuffer[1024*1024*10];
+	string mTag = "HttpPost2";
+};
+#endif
 
 }
 }

@@ -1666,7 +1666,8 @@ public:
 	//由于Handler内部大量用到了shared_from_this(),所以不应该在stack上创建Handler对象,请使用make_shared来创建
 	TEST_METHOD(CreateStackHandler)
 	{
-		class MainLooper :public Looper
+
+		class MainLooper :public MainLooper_
 		{
 		protected:
 			void OnCreate()
@@ -1682,6 +1683,124 @@ public:
 
 		auto obj = make_shared<MainLooper>();
 		auto ret = obj->StartRun();
+	}
+	
+	TEST_METHOD(weakMemory)
+	{
+		/*
+理想情况下BigObject占用的内存在最后一个shared_ptr失效时释放
+控制块在weak_ptr失效时释放
+
+现在用make_shared时控制块和BigObject是一起分配的，
+当shared_ptr失效时，只调用了BigObject的析构
+当weak_ptr失效时才释放了控制块和BigObject占用的内存
+		*/
+		class BigObject
+		{
+		public:
+			BigObject()
+			{
+				LogV(mTag, "%s(%p)", __func__, this);
+				memset(mBuffer, 0, sizeof(mBuffer));
+			}
+			virtual ~BigObject()
+			{
+				LogV(mTag, "%s(%p)", __func__, this);
+			}
+		protected:
+			BYTE mBuffer[1024 * 1024 * 100];
+			string mTag = "BigObject";
+		};
+
+		{
+			weak_ptr<BigObject> wObj;
+			{
+				auto obj = make_shared<BigObject>();
+				wObj = obj;
+				int x = 0;
+			}
+			LogV(TAG, "shared_ptr end");
+			wObj.reset();
+
+		}
+		int y = 0;
+	}
+
+	TEST_METHOD(handlerMemory)
+	{
+		class BigBuffer : public enable_shared_from_this<BigBuffer>
+			, public sigslot::has_slots<>
+
+		{
+		public:
+			BigBuffer()
+			{
+				mBuf = new BYTE[1024 * 1024 * 100];
+			}
+			~BigBuffer()
+			{
+				delete[]mBuf;
+				mBuf = nullptr;
+			}
+
+		protected:
+			LPBYTE mBuf = nullptr;
+		};
+		class HttpPost3 :public Handler
+		{
+			SUPER(Handler);
+		public:
+			HttpPost3()
+			{
+				LogV(mTag, "%s(%p)", __func__, this);
+				mBigBuffer = make_shared<BigBuffer>();
+				memset(mBuffer, 0, sizeof(mBuffer));
+			}
+			~HttpPost3()
+			{
+				LogV(mTag, "%s(%p)", __func__, this);
+			}
+		protected:
+			BYTE mBuffer[1024 * 1024 * 10];
+			string mTag = "HttpPost3";
+			shared_ptr<BigBuffer> mBigBuffer;
+		};
+
+		class MainLooper :public MainLooper_
+		{
+		protected:
+			long mTimer_test = 0;
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				SetTimer(mTimer_test, 5000);//
+
+				//DelayExit(10*1000);
+				//PostQuitMessage(1);
+			}
+
+			void OnTimer(long id)
+			{
+				if (id == mTimer_test)
+				{
+					auto obj = make_shared<HttpPost3>();
+					AddChild(obj);
+					obj->Destroy();
+
+					KillTimer(mTimer_test);
+
+					return;
+				}
+				__super::OnTimer(id);
+			}
+		};
+
+		{
+			auto obj = make_shared<MainLooper>();
+			auto ret = obj->StartRun();
+		}
+		int x = 0;
 	}
 
 

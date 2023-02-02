@@ -35,6 +35,7 @@ enum eCoreMessage
 	BM_NULL = 1000000,
 	BM_CREATE,			//主动调用Create()或AddChild时触发
 	BM_DESTROY,			//调用Destroy()时触发
+	BM_CHILD_DTOR,
 
 	//only for debug#begin
 	BM_DUMP= BM_NULL+1000,

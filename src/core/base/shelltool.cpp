@@ -6,6 +6,7 @@
 #include "file/inifile.h"
 #include "core/net/nettool.h"
 #include "string/utf8tool.h"
+#include <time.h>
 #ifdef _MSC_VER
 using namespace Bear::Core::Net;
 #include <Shlwapi.h>
