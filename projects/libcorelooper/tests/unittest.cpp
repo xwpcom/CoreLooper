@@ -1711,6 +1711,15 @@ public:
 			BYTE mBuffer[1024 * 1024 * 100];
 			string mTag = "BigObject";
 		};
+		/*
+		https://zhuanlan.zhihu.com/p/579105226
+只要std::weak_ptrs引用一个控制块(即，弱计数大于零)，该控制块必须继续存在。
+只要控制块存在，包含它的内存就保持被分配的状态。
+因此，由std::shared_ptr make函数分配的内存，在引用它的最后一个std::shared_ptr和最后一个std::weak_ptr被销毁之前不能被释放的。
+
+如果对象类型非常大，并且销毁最后一个std::shared_ptr和销毁最后一个std::weak_ptr之间的时间间隔很长，
+那么在销毁对象和释放它所占用的内存之间可能会出现延迟
+		*/
 
 		{
 			weak_ptr<BigObject> wObj;
