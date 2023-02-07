@@ -244,10 +244,10 @@ void SimpleConnect::SetTimeout(int seconds)
 {
 	mTimeOutSecond = seconds;
 
-	KillTimer(mTimer_AutoClose);
-
 	if (IsCreated())
 	{
+		KillTimer(mTimer_AutoClose);
+
 		if (mTimeOutSecond > 0)
 		{
 			SetTimer(mTimer_AutoClose, mTimeOutSecond * 1000);
