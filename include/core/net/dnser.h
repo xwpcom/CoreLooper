@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 namespace Bear {
 namespace Core {
 namespace Net {
@@ -15,6 +15,8 @@ namespace Net {
 
  windows提供了WSAAsyncGetHostByName和WSACancelAsyncRequest
  Dnser设计与之类似
+
+ todo:实现功能
 */
 
 class CORE_EXPORT Dnser :public Handler

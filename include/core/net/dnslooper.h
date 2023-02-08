@@ -6,7 +6,7 @@ namespace Net {
 
 //XiongWanPing 2016.08.16
 //提供异步域名解析
-//已过时，建议使用Dnser
+//todo:实现Dnser
 class CORE_EXPORT DnsLooper :public Bear::Core::Looper
 {
 	SUPER(Looper)

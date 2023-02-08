@@ -157,3 +157,9 @@ wepoll使用了microsoft没公开的接口，可能会有风险
 
 lamdba比较方便
 
+### 弱化类似windows message id的机制
+
+比如corelooper中的DnsLooper采用了BM_ADD_REQUEST和BM_CANCEL_REQUEST
+
+这导致使用域名解析时handler子类要重载OnMessage,响应自定义消息，改用lambda会方便很多
+
