@@ -43,6 +43,33 @@ TEST_CLASS(Log_)
 	TEST_METHOD(loger)
 	{
 		int year = 2023;
+		class Tool
+		{
+		public:
+			[[deprecated(u8"use Dnser")]]void test(){}
+			[[noreturn]] void main() {}
+		};
+
+		{
+			Tool obj;
+			obj.test();
+
+			map<string, string> titles;
+
+			titles["bear"] = "1";
+			titles["xwp"] = "2";
+
+			for (auto& item : titles)
+			{
+				logV(TAG) << item.first << "=" << item.second;
+			}
+			for (auto&& [name,value]: titles)
+			{
+				logV(TAG) << name << "=" << value;
+
+			}
+		}
+
 		/*
 
 		auto tick = ShellTool::GetTickCount64();
@@ -60,6 +87,9 @@ TEST_CLASS(Log_)
 		logI(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		logW(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
 		logE(TAG) << u8"hello" << " world " << year << u8" 新年快乐! ";
+
+		string mTag = "core";
+		LogV(mTag, u8"hello %d,努力",year);
 
 		string tag = u8"stringLog";
 		logV(tag) << u8"hello" << " world " << year << u8" 新年快乐! ";
@@ -85,7 +115,7 @@ void DisplayWrapper(T&& t) {
 
 TEST_CLASS(cppStudy)
 {
-TEST_METHOD(loger_perfectForward)
+TEST_METHOD(perfectForward)
 {
 	Display(1);
 
