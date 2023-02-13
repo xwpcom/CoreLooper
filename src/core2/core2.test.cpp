@@ -46,13 +46,13 @@ TEST_CLASS(Log_)
 		class Tool
 		{
 		public:
-			[[deprecated(u8"use Dnser")]]void test(){}
+			//[[deprecated(u8"use Dnser")]]void test(){}
 			[[noreturn]] void main() {}
 		};
 
 		{
-			Tool obj;
-			obj.test();
+			//Tool obj;
+			//obj.test();
 
 			map<string, string> titles;
 
