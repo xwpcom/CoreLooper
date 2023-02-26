@@ -60,7 +60,7 @@ public:
 	{
 		Execute(sql.c_str(),reportError);
 	}
-	DWORD GetAffectedRows();
+	DWORD GetAffectedRows()const;
 
 	void Disconnect();
 

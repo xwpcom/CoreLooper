@@ -195,7 +195,7 @@ void MySql::Execute(const char* sql, bool reportError)
 	MySqlRes rs = Query(sql, reportError);
 }
 
-DWORD MySql::GetAffectedRows()
+DWORD MySql::GetAffectedRows()const
 {
 	if (!m_pMySql)
 	{
