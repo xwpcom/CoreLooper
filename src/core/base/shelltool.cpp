@@ -1934,6 +1934,11 @@ void tagTimeMs::from_dt(const string& dt)
 		from_dt(date, time);
 		ms = ms_;
 	}
+
+	if (year == 0)
+	{
+		String2TimeMs(dt, *this);
+	}
 }
 
 void tagTimeMs::from_dt(int date, int time)
