@@ -26,7 +26,7 @@ HttpPost::HttpPost()
 	//LogV(TAG, "%s,this=%p", __func__, this);
 	Profiler profile("HttpPost.ctor",0);
 #ifdef _MSC_VER
-	LogV(TAG, "%s(%p)", __func__, this);
+	//LogV(TAG, "%s(%p)", __func__, this);
 	//memset(mTestBuffer, 0, sizeof(mTestBuffer));
 	++gAliveCount;
 	++gTotalCount;
@@ -47,9 +47,9 @@ int HttpPost::aliveInstanceCount()
 
 HttpPost::~HttpPost()
 {
-	Profiler profile("HttpPost.dtor", 0);
+	//Profiler profile("HttpPost.dtor", 0);
 #ifdef _MSC_VER
-	LogV(TAG, "%s(%p)", __func__, this);
+	//LogV(TAG, "%s(%p)", __func__, this);
 	--gAliveCount;
 #endif
 	//LogV(TAG,"%s,this=%p", __func__, this);
