@@ -47,7 +47,7 @@ void SCTP_clear(struct tagSCTP *obj)
 
 //return 0 if check ok
 //otherwise return -1
-int  SCTP_CheckCrc(tagBundle *bundle)
+int  SCTP_CheckCrc(tagBundle *bundle, unsigned short* crcAck)
 {
 	//除crc字段，要按依次累积所有字段
 	int i;
@@ -74,6 +74,11 @@ int  SCTP_CheckCrc(tagBundle *bundle)
 				Crc16Ex((unsigned char*)value, strlen(value), &crc);
 			}
 		}
+	}
+
+	if (crcAck)
+	{
+		*crcAck = crc;
 	}
 
 	{
@@ -165,10 +170,13 @@ int SCTP_Parse(tagSCTP *obj)
 
 		{
 			//检查crc
-			int crcOK = (SCTP_CheckCrc(&obj->mInboxBundle)==0);
+			unsigned short crcAck = 0;
+			int crcOK = (SCTP_CheckCrc(&obj->mInboxBundle,&crcAck)==0);
 			if (!crcOK)
 			{
-				SCTP_SetError(obj, "crc error\r\n");
+				char buf[256];
+				snprintf(buf, sizeof(buf) - 1, "crc error,crcLocalCalc=0x%04X", (int)crcAck);
+				SCTP_SetError(obj, buf);
 			}
 #ifdef __C51__
 			if(crcOK)

@@ -53,7 +53,7 @@ void SCTP_Enable485Verbose(tagSCTP* obj);
 //receiver专用,parser
 int  SCTP_InputString(tagSCTP *obj, char *text);
 int  SCTP_InputData(tagSCTP *obj, unsigned char *text, unsigned short bytes);
-int  SCTP_CheckCrc(tagBundle *bundle);
+int  SCTP_CheckCrc(tagBundle *bundle,unsigned short* crcAck);
 int SCTP_IsReservedKey(const char* name);
 
 //sender专用,creater

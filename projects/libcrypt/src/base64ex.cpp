@@ -299,7 +299,7 @@ BOOL Base64::Base64Encode(LPCSTR szEncoding, int nSize,char *pszOutput,int cbOut
 		{
 			nScratch = nBitStorage >> (nBitsRemaining - 6) & 0x3f;//提出最前的六位
 			pszOutput[i++] = pszBase64Alphabet[nScratch];
-			nPerRowCount++;
+			//nPerRowCount++;
 			if(nPerRowCount >= 76)
 			{
 				pszOutput[i++] = '\r';
@@ -317,7 +317,7 @@ BOOL Base64::Base64Encode(LPCSTR szEncoding, int nSize,char *pszOutput,int cbOut
 		nScratch = nBitStorage << (6-nBitsRemaining);//空位补0
 		nScratch &= 0x3f;
 		pszOutput[i++] = pszBase64Alphabet[nScratch];
-		nPerRowCount++;
+		//nPerRowCount++;
 		if(nPerRowCount >= 76)
 		{
 			pszOutput[i++] = '\r';
@@ -331,7 +331,7 @@ BOOL Base64::Base64Encode(LPCSTR szEncoding, int nSize,char *pszOutput,int cbOut
 	while((i - endlCount) % 4 != 0)
 	{
 		pszOutput[i++] = '=';
-		nPerRowCount++;
+		//nPerRowCount++;
 		if(nPerRowCount >= 76)
 		{
 			pszOutput[i++] = '\r';

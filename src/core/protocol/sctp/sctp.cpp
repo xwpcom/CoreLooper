@@ -106,7 +106,7 @@ int Sctp::InputData(void *text, unsigned short bytes)
 
 int Sctp::CheckCrc()
 {
-	return SCTP_CheckCrc(&mObject.mInboxBundle);
+	return SCTP_CheckCrc(&mObject.mInboxBundle,0);
 }
 
 int Sctp::AddField(const char *name, const char *value)
