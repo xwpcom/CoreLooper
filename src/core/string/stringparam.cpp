@@ -162,6 +162,42 @@ string StringParam::MergeFields(const string& base, const string& newFields, con
 	return ack;
 }
 
+void StringParam::ParseItems(const string& items, vector<tagNameValue>& ackItems, const char* itemSeperator, const char* sign)
+{
+	ackItems.clear();
+
+	TextSeparator obj2(items.c_str(), itemSeperator);
+	string nv;
+	while (1)
+	{
+		int ret = obj2.GetNext(nv);
+		if (ret)
+		{
+			break;
+		}
+
+		tagNameValue item;
+		auto pos = nv.find(sign);
+		if (pos != string::npos)
+		{
+			item.name = nv.substr(0, pos);
+			item.value = nv.substr(pos + 1);
+		}
+		else
+		{
+			item.name = nv;
+		}
+
+		//if (trim)
+		{
+			StringTool::Trim(item.name);
+			StringTool::Trim(item.value);
+		}
+
+
+		ackItems.push_back(item);
+	}
+}
 
 }
 }
