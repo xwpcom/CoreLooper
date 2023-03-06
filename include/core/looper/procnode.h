@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "core/base/stringtool.h"
 #include <string>
 namespace Bear {
@@ -249,7 +249,7 @@ protected:
 			{
 				DumpName(*iter, xml);
 				//xml+=StringTool::Format("<%s>", iter->mName.c_str());
-				xml += StringTool::Format("%s</%s>", iter->mValue.c_str(), iter->mName.c_str());
+				xml += StringTool::Format("%s</%s>", StringTool::xml(iter->mValue).c_str(), iter->mName.c_str());
 			}
 		}
 
