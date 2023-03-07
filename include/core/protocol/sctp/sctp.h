@@ -37,6 +37,11 @@ public:
 		mEnableSeq = false;
 	}
 
+	void disableDumpCrcError()
+	{
+		mDumpCrcError = false;
+	}
+
 	void Create();
 	void clear();
 	void Enable485VerboseMode();
@@ -79,6 +84,7 @@ protected:
 
 	bool mEnableSeq;
 	string mTag = "sctp";
+	bool mDumpCrcError = true;
 };
 
 #ifdef _MSC_VER

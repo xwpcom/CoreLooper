@@ -39,6 +39,11 @@ void Sctp::OnRecvCommand(const char *cmd, tagBundle *bundle)
 
 void Sctp::OnError(tagSCTP* obj,const char *desc)
 {
+	if (!mDumpCrcError)
+	{
+		return;
+	}
+
 	LogV(mTag,"%s,%s,#begin", __func__, desc);
 
 	{
