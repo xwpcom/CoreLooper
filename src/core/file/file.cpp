@@ -136,7 +136,7 @@ enum {
 
 int File::remove_file(const char *path, int flags)
 {
-	DT("remove_file(%s),flags=%d", path, flags);
+	LogV(TAG,"remove_file(%s),flags=%d", path, flags);
 
 	struct stat path_stat;
 	int path_exists = 1;
