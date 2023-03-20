@@ -359,3 +359,31 @@ string CMD5::md5(const string& text)
 	StringTool::MakeLower(ack);
 	return ack;
 }
+
+string CMD5::fileMD5(const string& filePath)
+{
+	CMD5 obj;
+
+	ByteBuffer box;
+	int bufBytes = 1024 * 64;
+	box.PrepareBuf(bufBytes);
+	auto file = fopen(filePath.c_str(), "rb");
+	File::CAutoClose ac(file);
+
+	bool ok = false;
+	while (file)
+	{
+		auto ret = fread(box.GetNewDataPointer(), 1, bufBytes, file);
+		if (ret > 0)
+		{
+			obj.Update(box.GetNewDataPointer(), ret);
+		}
+		else
+		{
+			ok = feof(file);
+			break;
+		}
+	}
+
+	return ok ? obj.GetResult().c_str() : "";
+}

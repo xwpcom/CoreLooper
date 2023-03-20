@@ -24,6 +24,7 @@ public:
 	{
 		return md5(text);
 	}
+	static string fileMD5(const string& filePath);
 	// ***********************
 	// 说明: 获取当前的MD5值
 	// 参数: pDigest 输出的MD5值, 大小为16字节的字符串类型
