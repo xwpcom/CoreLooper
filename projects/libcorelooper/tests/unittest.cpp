@@ -145,8 +145,65 @@ TEST_CLASS(_TestCPP11)
 			make_shared<MainLooper>()->StartRun();
 		}
 
+		TEST_METHOD(sortBase)
+		{
+			//https://stackoverflow.com/questions/11357918/how-to-sort-a-container-of-stdshared-ptrwidget-objects
+			class Widget
+			{
+			public:
+				Widget(const string& n)
+				{
+					name = n;
+				}
+				string name;
+			};
+			class Criterium
+			{
+			public:
+				bool operator()(const Widget& left, const Widget& right)const
+				{
+					return left.name < right.name;
+				}
+			};
+
+			std::vector< std::shared_ptr<Widget> > items;
+			items.push_back(make_shared<Widget>("apple"));
+			items.push_back(make_shared<Widget>("xwp"));
+			items.push_back(make_shared<Widget>("bear"));
+
+			Criterium criterium;
+			
+			if (1)
+			{
+				sort(items.begin(), items.end(),
+					 [](const shared_ptr<Widget>& l, const shared_ptr<Widget>& r)
+					 {
+						 return l->name < r->name;
+					 }
+				);
+			}
+			else
+			{
+				sort(items.begin(), items.end(),
+					 [&criterium](const shared_ptr<Widget>& l, const shared_ptr<Widget>& r)
+					 {
+						 return criterium(*l.get(), *r.get());
+					 }
+				);
+			}
+
+			for (auto& item : items)
+			{
+				LogV(TAG, "%s",item->name.c_str());
+			}
+
+
+
+		}
+
 		TEST_METHOD(_lambda_base)
 		{
+
 			// Create a vector object that contains 10 elements.
 			vector<int> v;
 			for (int i = 1; i < 10; ++i) {
