@@ -522,6 +522,11 @@ int HttpPost::PrepareData()
 	req.MakeSureEndWithNull();
 	//req.Write(tail);
 
+	if (mVerbose)
+	{
+		LogV(TAG, "%s(%s)",__func__,req.data());
+	}
+
 	mOutbox.Append(req);
 	SwitchStage(eSendHeader);
 	//CheckSend();
