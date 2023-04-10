@@ -58,6 +58,15 @@ BOOL ScintillaWnd::Create(DWORD dwExStyle, DWORD dwStyle, const RECT& rect, CWnd
 	return ret;
 }
 
+void ScintillaWnd::setFontSize(int size)
+{
+	mFontSize = size;
+	if (GetSafeHwnd())
+	{
+		SendMessage(SCI_STYLESETSIZE, STYLE_DEFAULT, (LPARAM)mFontSize);//字体大小
+	}
+}
+
 int ScintillaWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
@@ -66,7 +75,7 @@ int ScintillaWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SendMessage(SCI_SETVIRTUALSPACEOPTIONS, (WPARAM)SCVS_RECTANGULARSELECTION | SCVS_NOWRAPLINESTART | SCVS_USERACCESSIBLE);
 
 	SendMessage(SCI_STYLESETFONT, STYLE_DEFAULT, (LPARAM)_T("新宋体"));
-	SendMessage(SCI_STYLESETSIZE, STYLE_DEFAULT, (LPARAM)18);//字体大小
+	SendMessage(SCI_STYLESETSIZE, STYLE_DEFAULT, (LPARAM)mFontSize);//字体大小
 
 	SendMessage(SCI_SETTABWIDTH, 4);
 	SendMessage(SCI_SETBACKSPACEUNINDENTS, true);//?

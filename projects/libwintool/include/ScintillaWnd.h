@@ -19,9 +19,15 @@ public:
 	int RegisterStyle(COLORREF textColor,COLORREF backColor=RGB(255,255,255));
 	int SetStyle(int style,long start, long length);
 	string body();
+	void setFontSize(int size);
+	int fontSize()const
+	{
+		return mFontSize;
+	}
 protected:
 	DECLARE_MESSAGE_MAP()
 	int mNextStyleId = 88;
+	int mFontSize = 14;
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
