@@ -32,6 +32,8 @@ void SerialPort_Windows::OnCreate()
 	USES_CONVERSION;
 	auto name = A2T(mDeviceName.c_str());
 	//DV("%s", mDeviceName.c_str());
+	LogV(TAG, "open %s#begin",mDeviceName.c_str());
+	auto t = GetTickCount64();
 	mFile = ::CreateFile(name,
 		GENERIC_READ | GENERIC_WRITE,
 		0,
@@ -39,6 +41,8 @@ void SerialPort_Windows::OnCreate()
 		OPEN_EXISTING,
 		FILE_FLAG_OVERLAPPED,
 		0);
+	t = GetTickCount64()-t;
+	LogV(TAG, "open %s,handler=%p,time=%lld ms", mDeviceName.c_str(),mFile,t);
 	if (mFile == INVALID_HANDLE_VALUE)
 	{
 		if (mDeviceName != "\\\\.\\")
