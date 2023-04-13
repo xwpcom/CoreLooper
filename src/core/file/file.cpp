@@ -487,7 +487,8 @@ BOOL File::MakeSureDirectoryPathExists(LPCSTR lpszDirPath)
 	memset(szDir, 0, sizeof(szDir));
 	strncpy(szDir, lpszDirPath, sizeof(szDir) - 1);
 	szDir[sizeof(szDir) - 1] = 0;
-	for (int nPos = 0; nPos < (int)strlen(szDir); nPos++)
+	const int len = (int)strlen(szDir);
+	for (int nPos = 0; nPos < len; nPos++)
 	{
 		if (File::IsPathSplitChar(szDir[nPos]))
 		{
