@@ -111,7 +111,7 @@ public:
 		//map<string,string> //用map能实现大小写无关吗，有待测试
 	}
 
-	TEST_METHOD(ParseUrl)
+	TEST_METHOD(ParseUrl_httpTool)
 	{
 		string url = "/tree.xml?url=DemoHandler";
 		string uri;
