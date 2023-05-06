@@ -303,6 +303,8 @@ void HttpHandler::DetachChannel()
 	{
 		LogW(TAG, "%s(%p),channel is null", __func__, this);
 	}
+
+	disconnect_all();
 }
 
 ULONGLONG HttpHandler::memoryUsed_impl()

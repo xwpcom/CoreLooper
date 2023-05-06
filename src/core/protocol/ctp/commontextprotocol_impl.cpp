@@ -168,7 +168,10 @@ int CommonTextProtocol_Impl::ParseInbox()
 				else if ((pos = item.find(".noAck")) != -1)
 				{
 					string cmd = item.substr(0, pos);
-					mCB->OnNotify(this, cmd, headerItems, mInputBody);
+					if (mCB)
+					{
+						mCB->OnNotify(this, cmd, headerItems, mInputBody);
+					}
 
 				}
 				else
