@@ -132,7 +132,7 @@ int SCTP_Parse(tagSCTP *obj)
 		while (body[0] && body < end)
 		{
 			char* d = body;
-			if (!isalpha(d[0]) 
+			if (!isalpha((unsigned char)d[0]) 
 				|| (obj->m485Verbose && (d[0] != 'c' || d[1] != 'm' || d[2] != 'd' || d[3] != '='))
 				)
 			{
