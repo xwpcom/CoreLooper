@@ -6,6 +6,7 @@ using namespace std;
 namespace Bear {
 namespace Core
 {
+static const char* TAG = "StringTool";
 
 string StringTool::Format(const char* fmt, ...)
 {
@@ -335,6 +336,83 @@ int StringTool::Test()
 	return 0;
 }
 #endif
+
+/*
+XiongWanPing 2022.09.22
+m4版字符串帮助类
+注意不能使用heap,全部只能使用静态buffer
+*/
+int StringTool::AppendText(char* dst, int dstBytes, const char* text)
+{
+	if (!dst || !text)
+	{
+		LogW(TAG, "invaid %s", __func__);
+		return -1;
+	}
+
+	auto len = strlen(dst);
+	auto textLen = strlen(text);
+	if (len + textLen + 1 >= dstBytes)
+	{
+		LogW(TAG, "fail %s", __func__);
+		return -1;
+	}
+
+	strncpy(dst + len, text, textLen);
+	return 0;
+
+}
+
+int StringTool::AppendFormat(char* dst, int dstBytes, const char* fmt, ...)
+{
+	char buf[1024] = { 0 };
+
+	va_list plist;
+	va_start(plist, fmt);
+	int ret = vsnprintf(buf, sizeof(buf), fmt, plist);
+	va_end(plist);
+
+	return AppendText(dst, dstBytes, buf);
+
+}
+
+void StringTool::split(const char* text, const char* sep, char* itemBuf, size_t itemBufBytes, function<void(const char* item)> fn)
+{
+	if (!text || !sep || !itemBuf || itemBufBytes <= 1)
+	{
+		return;
+	}
+
+	const auto sepBytes = strlen(sep);
+	if (sepBytes == 0)
+	{
+		return;
+	}
+
+	auto s = text;
+	while (s && s[0])
+	{
+		auto p = strstr(s, sep);
+		if (p)
+		{
+			auto bytes = p - s;
+			bytes = MIN(bytes, (int)itemBufBytes - 1);
+			if (bytes > 0)
+			{
+				strncpy(itemBuf, s, bytes);
+				itemBuf[bytes] = 0;
+				fn(itemBuf);
+			}
+
+			s = p + sepBytes;
+		}
+		else
+		{
+			fn(s);
+			break;
+		}
+	}
+}
 
 }
 }

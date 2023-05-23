@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "core/base/win32.h"
 #include <stdlib.h>
+#include <functional>
 #include "core/base/dt.h"
 
 namespace Bear {
@@ -20,6 +21,10 @@ std::string StringFormat(const char* format, Args ... args)
 class CORE_EXPORT StringTool
 {
 public:
+	static int AppendText(char* dst, int dstBytes, const char* text);
+	static int AppendFormat(char* dst, int dstBytes, const char* fmt, ...);
+	static void split(const char* text, const char* sep, char* itemBuf, size_t itemBufBytes, function<void(const char* item)> fn);
+
 	static std::string xml(std::string sz);
 	static std::string Format(const char* lpszFormat, ...);
 	static std::string& AppendFormat(std::string& obj, const char* lpszFormat, ...);

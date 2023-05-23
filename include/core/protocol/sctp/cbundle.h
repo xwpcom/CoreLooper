@@ -1,5 +1,4 @@
-﻿#ifndef _CBUNDLE_H
-#define _CBUNDLE_H
+﻿#pragma once
 #include "cbytebuffer.h"
 
 //XiongWanPing 2018.12.22
@@ -28,5 +27,3 @@ unsigned char Bundle_GetByte(tagBundle* obj, const char *name);
 void Bundle_clear(tagBundle* obj);
 int Bundle_Push(tagBundle* obj,const char *name, const char *value);
 int Bundle_Exists(tagBundle* obj, const char *name);
-
-#endif
