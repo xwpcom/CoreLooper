@@ -103,7 +103,7 @@ public:
 		return atoll(v.c_str());
 	}
 
-	const string GetString(const string&name, const char *defaultValue = "")const
+	const string GetString(const string&name, const string& defaultValue="")const
 	{
 		auto iter = mItems.find(name);
 		if (iter != mItems.end())
