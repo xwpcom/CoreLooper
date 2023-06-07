@@ -940,7 +940,15 @@ void HttpPost::OnRecvHttpAckDone()
 
 	if (mCB)
 	{
-		mCB(mUrl, 0, (char*)mInbox.GetDataPointer());
+		auto data = (char*)mInbox.GetDataPointer();
+		if (data)
+		{
+			#ifdef _MSC_VER_DEBUG
+			LogV(TAG, "bytes=%d",mInbox.length());
+			#endif
+
+			mCB(mUrl, 0, data);
+		}
 	}
 
 }
