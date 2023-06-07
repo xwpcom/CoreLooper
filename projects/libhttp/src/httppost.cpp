@@ -944,7 +944,7 @@ void HttpPost::OnRecvHttpAckDone()
 		if (data)
 		{
 			#ifdef _MSC_VER_DEBUG
-			LogV(TAG, "bytes=%d",mInbox.length());
+			//LogV(TAG, "bytes=%d",mInbox.length());
 			#endif
 
 			mCB(mUrl, 0, data);
