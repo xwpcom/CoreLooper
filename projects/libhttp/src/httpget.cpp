@@ -210,6 +210,27 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 	}
 }
 
+/*
+2023.06.12
+今天测试aleka路由器时，发现如下报文也符合http规范
+特征是http ack中以\n\n结束header,然后跟一个text
+00000000  47 45 54 20 2f 67 6f 66  6f 72 6d 2f 67 6f 66 6f   GET /gof orm/gofo
+00000010  72 6d 5f 73 65 74 5f 63  6d 64 5f 70 72 6f 63 65   rm_set_c md_proce
+00000020  73 73 3f 67 6f 66 6f 72  6d 49 64 3d 41 4c 4b 5f   ss?gofor mId=ALK_
+00000030  4c 4f 47 49 4e 20 48 54  54 50 2f 31 2e 31 0d 0a   LOGIN HT TP/1.1..
+00000040  48 6f 73 74 3a 20 31 39  32 2e 31 36 38 2e 31 2e   Host: 19 2.168.1.
+00000050  31 0d 0a 0d 0a                                     1....
+	00000000  48 54 54 50 2f 31 2e 31  20 32 30 30 20 4f 4b 0a   HTTP/1.1  200 OK.
+	00000010  53 65 72 76 65 72 3a 20  44 65 6d 6f 2d 57 65 62   Server:  Demo-Web
+	00000020  73 0d 0a 58 2d 46 72 61  6d 65 2d 4f 70 74 69 6f   s..X-Fra me-Optio
+	00000030  6e 73 3a 20 53 41 4d 45  4f 52 49 47 49 4e 0a 50   ns: SAME ORIGIN.P
+	00000040  72 61 67 6d 61 3a 20 6e  6f 2d 63 61 63 68 65 0a   ragma: n o-cache.
+	00000050  43 61 63 68 65 2d 63 6f  6e 74 72 6f 6c 3a 20 6e   Cache-co ntrol: n
+	00000060  6f 2d 63 61 63 68 65 0a  43 6f 6e 74 65 6e 74 2d   o-cache. Content-
+	00000070  54 79 70 65 3a 20 74 65  78 74 2f 68 74 6d 6c 0a   Type: te xt/html.
+	00000080  0a 7b 22 72 65 73 75 6c  74 22 3a 22 73 75 63 63   .{"resul t":"succ
+	00000090  65 73 73 22 7d                                     ess"}
+*/
 void HttpGet::ParseInbox()
 {
 	KeepAlive();
@@ -228,10 +249,15 @@ void HttpGet::ParseInbox()
 		const char *ps = (const char*)mInbox.data();
 		const char *key = "\r\n\r\n";
 		const char *pEnd = strstr(ps, key);
+		if (!pEnd)
+		{
+			key = "\n\n";
+			pEnd = strstr(ps, key);
+		}
 		if (pEnd)
 		{
 			{
-				string header(ps, pEnd - ps+4);
+				string header(ps, pEnd - ps+strlen(key));
 				HttpAcker obj;
 				obj.Parse(header, true);
 				mAckHeaders = obj.fields();
@@ -298,6 +324,12 @@ void HttpGet::ParseInbox()
 				}
 				else
 				{
+					if (mAckInfo.mAckBody.empty())
+					{
+						auto text=pEnd + strlen(key);
+						mAckInfo.mAckBody.Write((char*)text);
+					}
+
 					SwitchStatus(eHttpAckStatus_Done);
 				}
 			}
