@@ -237,7 +237,9 @@ void HttpGet::ParseInbox()
 
 	if(mVerbose && !mInbox.empty())
 	{
-		//LogV(mTag, "%s(%s)",__func__,(char*)mInbox.data());
+		mInbox.MakeSureEndWithNull();
+
+		LogV(mTag, "%s(%s)",__func__,(char*)mInbox.data());
 	}
 	
 	switch (mAckInfo.mHttpAckStatus)
@@ -277,6 +279,10 @@ void HttpGet::ParseInbox()
 			}
 
 			mAckInfo.mContentLength = atoi(mAckHeaders["Content-Length"].c_str());// HttpTool::GetInt(header, "Content-Length");
+			if (mAckInfo.mContentLength == 0)
+			{
+				mAckInfo.mContentLength = atoi(mAckHeaders["Content-length"].c_str());//todo:要支持大小写不敏感
+			}
 			if (mAckInfo.mContentLength > 0)
 			{
 				SwitchStatus(eHttpAckStatus_ReceivingBody);
@@ -324,13 +330,34 @@ void HttpGet::ParseInbox()
 				}
 				else
 				{
+					bool done = true;
 					if (mAckInfo.mAckBody.empty())
 					{
+						/*
+						2023.06.13
+						aleka 4G路由器http ack虽然也符合http规范，但比较另类
+						每行可能以\n或\r\n结尾
+						返回http body时可能不带Content-Length字段导致要做如下特殊处理
+						根本原因是我们自己对Http协议没能完全支持和兼容,后续重构时改进
+						*/
+
 						auto text=pEnd + strlen(key);
 						mAckInfo.mAckBody.Write((char*)text);
+
+						auto aleka = strstr(ps, "Demo-Webs\r\n");//aleka Server
+						if (aleka && !strstr(pEnd,"}"))
+						{
+							done = false;
+							LogV(mTag, "need more data");
+							mInbox.clear();
+							SwitchStatus(eHttpAckStatus_ReceivingBody);
+						}
 					}
 
-					SwitchStatus(eHttpAckStatus_Done);
+					if (done)
+					{
+						SwitchStatus(eHttpAckStatus_Done);
+					}
 				}
 			}
 
