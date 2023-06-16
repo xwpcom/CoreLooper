@@ -37,6 +37,8 @@ void FileLogger::setFilePath(const string& filePath, int maxBytes, bool autoBack
 	gFilePath = filePath;
 	gMaxBytes = MAX(maxBytes, 1024);//为提高性能，做必要限制
 	gAutoBackup = autoBackup;
+
+	LogV(mTag, "%s(%s,maxBytes=%d)", __func__, filePath.c_str(), maxBytes);
 }
 
 LogFile::LogFile()
@@ -137,6 +139,7 @@ void FileLogger::OnCreate()
 	int seconds = gSaveInterval;
 
 	SetTimer(mTimer_save, seconds * 1000);
+	SetTimer(mTimer_keepAlive, 30 * 1000);
 }
 
 void FileLogger::OnDestroy()
@@ -155,6 +158,19 @@ void FileLogger::OnTimer(long id)
 	if (id == mTimer_save)
 	{
 		saveLog();
+		return;
+	}
+	else if (id == mTimer_keepAlive)
+	{
+		//每10分钟写一条
+		auto t = tagTimeMs::now();
+		auto tickNow = ShellTool::GetTickCount64();
+		if ((t.minute%10)==0 && (mKeepAliveTick==0 || tickNow > mKeepAliveTick + 60 * 1000))
+		{
+			mKeepAliveTick = tickNow;
+			LogI(mTag, "keepAlive");
+		}
+
 		return;
 	}
 

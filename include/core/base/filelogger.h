@@ -88,6 +88,10 @@ protected:
 
 	weak_ptr<LogFile> mLogFile;
 	long mTimer_save = 0;
+	
+	long mTimer_keepAlive = 0;
+	ULONGLONG mKeepAliveTick = 0;
+
 };
 
 }
