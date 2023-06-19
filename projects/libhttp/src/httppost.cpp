@@ -23,7 +23,7 @@ HttpPost::HttpPost()
 	//LogW(TAG,"%s,this=%p", __func__, this);
 	SetObjectName("HttpPost");
 	mBoundary = "--------------------------716657498184592405569245";
-	//LogV(TAG, "%s,this=%p", __func__, this);
+	LogV(TAG, "%s,this=%p", __func__, this);
 	Profiler profile("HttpPost.ctor",0);
 #ifdef _MSC_VER
 	//LogV(TAG, "%s(%p)", __func__, this);
@@ -52,7 +52,7 @@ HttpPost::~HttpPost()
 	//LogV(TAG, "%s(%p)", __func__, this);
 	--gAliveCount;
 #endif
-	//LogV(TAG,"%s,this=%p", __func__, this);
+	LogV(TAG,"%s,this=%p,mRecvAckDone=%d", __func__, this, mRecvAckDone);
 
 	if (!mRecvAckDone)
 	{
@@ -175,7 +175,7 @@ void HttpPost::OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundle*
 
 	if (mVerbose)
 	{
-		LogV(TAG, "%s,error=%d",__func__,error);
+		LogV(TAG, "%s(%p),error=%d",__func__,this,error);
 	}
 
 	if (error == 0)
@@ -337,7 +337,7 @@ int HttpPost::PrepareData()
 {
 	if (mVerbose)
 	{
-		LogV(TAG, "%s", __func__);
+		LogV(TAG, "%s(%p)", __func__,this);
 	}
 
 	string header;

@@ -637,7 +637,7 @@ int TcpClient_Linux::EnableTls(bool clientMode)
 			auto bytes = buffer->length();
 			if (mVerbose)
 			{
-				LogV(TAG, "setOnDecData,bytes=%d(%s)", bytes, data);
+				LogV(TAG, "setOnDecData(%p),bytes=%d(%s)", this,bytes, data);
 			}
 
 			auto& inbox = mSslInfo.mInbox;
@@ -681,7 +681,7 @@ void TcpClient_Linux::checkSend()
 	auto ret = (int)send(mSock, (char*)outbox.data(), dataLen, 0);
 	if (mVerbose)
 	{
-		LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", dataLen, ret);
+		//LogV(TAG, "setOnEncData,bytes=%d,send ret=%d", dataLen, ret);
 	}
 	if (ret > 0)
 	{
