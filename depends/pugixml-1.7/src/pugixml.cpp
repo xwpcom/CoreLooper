@@ -6785,6 +6785,11 @@ namespace pugi
 
 	PUGI__FN xml_parse_result xml_document::load(const char_t* contents, unsigned int options)
 	{
+		if (!contents)
+		{
+			contents = "";
+		}
+
 		return load_string(contents, options);
 	}
 
