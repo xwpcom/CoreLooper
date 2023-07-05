@@ -13,7 +13,7 @@ public:
 	//首次调用时*crc必须为0xFFFF
 	static unsigned short Crc16Ex(unsigned char* pData, int bytes, unsigned short* crc);
 
-	static bool CrcMatched(LPBYTE d, int bytes);
+	static bool CrcMatched(LPBYTE d, int bytes,bool bigEndian=false);
 	static int  FillCrc(LPBYTE d, int bytes);
 
 };

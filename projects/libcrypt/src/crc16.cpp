@@ -96,7 +96,7 @@ unsigned short Crc16::Crc16Ex(unsigned char* pData, int bytes, unsigned short* c
 	return CRC;
 }
 
-bool Crc16::CrcMatched(LPBYTE d, int bytes)
+bool Crc16::CrcMatched(LPBYTE d, int bytes, bool bigEndian)
 {
 	if (bytes <= 2)
 	{
@@ -106,6 +106,12 @@ bool Crc16::CrcMatched(LPBYTE d, int bytes)
 	Crc16Ex(d, bytes - 2, &crc);
 	BYTE b1=(crc >> 8) & 0xFF;
 	BYTE b2 = crc & 0xFF;
+
+	if (bigEndian)
+	{
+		return d[bytes - 2] == b1 && d[bytes - 1] == b2;
+	}
+
 	return d[bytes - 2] == b2 && d[bytes - 1] == b1;
 }
 
