@@ -343,6 +343,7 @@
     <ClCompile Include="..\..\src\core2\loghandler_dt.cpp" />
     <ClCompile Include="..\..\src\core2\loghandler_file.cpp" />
     <ClCompile Include="..\..\src\core2\looper2.cpp" />
+    <ClCompile Include="..\..\src\core\base\bcdtool.cpp" />
     <ClCompile Include="..\..\src\core\base\fieldtracker.cpp" />
     <ClCompile Include="..\..\src\core\base\memorylog.cpp" />
     <ClCompile Include="..\..\src\core\base\object.cpp" />
@@ -533,6 +534,7 @@
     <ClInclude Include="..\..\include\arch\windows\uirunnable.h" />
     <ClInclude Include="..\..\include\arch\windows\wndhandler.h" />
     <ClInclude Include="..\..\include\arch\windows\wndmanager.h" />
+    <ClInclude Include="..\..\include\core\base\bcdtool.h" />
     <ClInclude Include="..\..\include\core\base\bundle.h" />
     <ClInclude Include="..\..\include\core\base\bundleex.h" />
     <ClInclude Include="..\..\include\core\base\bytebuffer.h" />
