@@ -276,6 +276,15 @@ int ByteBuffer::MakeSureEndWithNull()
 	return 0;
 }
 
+int ByteBuffer::AppendHex(const string& hex, bool makeSureEndNull)
+{
+	ByteBuffer buf;
+	buf.PrepareBuf(hex.length());
+	ByteTool::HexCharToByte(hex.c_str(), buf.GetNewDataPointer(), buf.GetFreeSize());
+	buf.WriteDirect(hex.length() / 2);
+	return Append(buf, makeSureEndNull);
+}
+
 int ByteBuffer::Append(const ByteBuffer& src, bool makeSureEndNull)
 {
 	AssertNotLocked();

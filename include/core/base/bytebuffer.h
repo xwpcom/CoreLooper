@@ -54,6 +54,7 @@ public:
 	}
 
 	int Append(const ByteBuffer& src, bool makeSureEndNull = true);
+	int AppendHex(const string& hex, bool makeSureEndNull = true);
 
 	//指定缓冲初始和最大尺寸
 	int SetBufferSize(UINT nInitSize = 32, UINT nMaxSize = 16*1024 * 1024);
@@ -276,6 +277,18 @@ public:
 	int Write(WORD data)
 	{
 		return Write(&data, sizeof(data));
+	}
+	int WriteBE(WORD data)
+	{
+		WriteByte((BYTE)(data>>8));
+		return WriteByte((BYTE)(data&0xFF));
+	}
+	int WriteBE(int data)
+	{
+		WriteByte((BYTE)(data >> 24));
+		WriteByte((BYTE)(data >> 16));
+		WriteByte((BYTE)(data >> 8));
+		return WriteByte((BYTE)(data >> 0));
 	}
 	int Write(int data)
 	{
