@@ -98,13 +98,30 @@ int BcdTool::DectoBCD(int Dec, unsigned char* Bcd, int length)
 {
 	int i;
 	int temp;
+	int bytes = 0;
 	for (i = length - 1; i >= 0; i--)
 	{
 		temp = Dec % 100;
 		Bcd[i] = ((temp / 10) << 4) + ((temp % 10) & 0x0F);
 		Dec /= 100;
+		bytes++;
+
+		if (Dec == 0)
+		{
+			break;
+		}
 	}
-	return 0;
+
+	if (bytes > 0)
+	{
+		memmove(Bcd,Bcd + length - bytes,bytes);
+		if (length >= bytes + 1)
+		{
+			Bcd[bytes] = 0;
+		}
+	}
+
+	return bytes;
 }
 
 int BcdTool::bcd2Dec(BYTE bcd)
