@@ -33,9 +33,9 @@ public:
 
 	//目前只有windows下做了openssl支持
 	//2022.06.25 t21 linux下测试wolfssl client
-	void EnableTls()
+	void EnableTls(bool useTls=true)
 	{
-		mUseTls = true;
+		mUseTls = useTls;
 	}
 
 	int StartConnect(Bundle& bundle);

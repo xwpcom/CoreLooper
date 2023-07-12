@@ -578,7 +578,7 @@ int MySqlRes::GetFieldLength(const char* pszFieldName)
 void MySqlRes::dumpX()
 {
 	auto row = mysql_num_rows(m_pMySQLRes);
-	auto col = mysql_num_fields(m_pMySQLRes);
+	auto col = (int)mysql_num_fields(m_pMySQLRes);
 
 	vector<string> fieldNames;
 	{
