@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "bytetool.h"
 #include "base/stringtool.h"
 
@@ -93,9 +93,12 @@ string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte,const char* fmt, i
 	return text;
 }
 
-void ByteTool::HexString2Bin(const char* hexString, ByteBuffer& box)
+void ByteTool::HexString2Bin(const string& hexString, ByteBuffer& box)
 {
-	auto pSrc = hexString;
+	string hex(hexString);
+	StringTool::makeHexPretty(hex);
+
+	auto pSrc = hex.c_str();
 	for (int i = 0; 1; i++)
 	{
 		//每个hex由pSrc中的两个hex字符组成
@@ -130,4 +133,15 @@ void ByteTool::HexString2Bin(const char* hexString, ByteBuffer& box)
 
 		pSrc += 2;
 	}
+
+}
+
+void ByteTool::HexString2Bin(const char* hexString, ByteBuffer& box)
+{
+	if (!hexString || !hexString[0])
+	{
+		return;
+	}
+
+	return HexString2Bin((string)hexString, box);
 }

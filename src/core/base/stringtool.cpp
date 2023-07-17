@@ -207,6 +207,15 @@ string& StringTool::MakeUpper(string&obj)
 	return obj;
 }
 
+void StringTool::makeHexPretty(string& hex)
+{
+	StringTool::Replace(hex, "\r", "");
+	StringTool::Replace(hex, "\n", "");
+	StringTool::Replace(hex, " ", "");
+	StringTool::Replace(hex, "\t", "");
+}
+
+
 string& StringTool::MakeLower(string&obj)
 {
 	std::transform(obj.begin(), obj.end(), obj.begin(), (int(*)(int))tolower);
