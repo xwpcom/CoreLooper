@@ -93,7 +93,8 @@ unsigned long  BcdTool::BCDtoDec(const unsigned char* bcd, int length)
 //输入：int Dec                      待转换的十进制数据   
 //      int length                   BCD码数据长度   
 //输出：unsigned char *Bcd           转换后的BCD码   
-//思路：原理同BCD码转十进制   
+//思路：原理同BCD码转十进制
+//返回字节数
 int BcdTool::DectoBCD(int Dec, unsigned char* Bcd, int length)
 {
 	int i;
