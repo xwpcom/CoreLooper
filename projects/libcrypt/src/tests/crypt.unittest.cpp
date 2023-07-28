@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "CppUnitTest.h"
 #include "libcrypt.inl"
 #include "libcrypt/tea.h"
@@ -58,12 +58,15 @@ public:
 
 	TEST_METHOD(Base64_Test)
 	{
-		auto enc = "4bP0vuLHTko=";
+		auto enc = "MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEKEaQ58FGqaFK01LvIpTyfPDMrT99fc/Kkz0Dnj959OBv4loAXYp/lY0egnJ1jVDQsINCYlgFgk6G7c3y3tnjQA==";
 		
 		ByteBuffer box;
 		Base64::Decode(enc, box);
 		auto data = box.data();
 		auto bytes = box.length();
+		auto hex = ByteTool::ByteToHexChar(box.data(), box.length());
+		string mTag = "base64";
+		LogV(mTag, "hex=%s",hex.c_str());
 		int x = 0;
 	}
 	TEST_METHOD(Tea_Test)
