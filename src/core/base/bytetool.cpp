@@ -93,6 +93,7 @@ string ByteTool::ByteToHexChar(const LPBYTE pByte, int cbByte,const char* fmt, i
 	return text;
 }
 
+//注意是向box追加，并不清空box已有的数据
 void ByteTool::HexString2Bin(const string& hexString, ByteBuffer& box)
 {
 	string hex(hexString);
