@@ -22,6 +22,11 @@ class
 	SUPER(Handler)
 public:
 	Sctp();
+
+	tagSCTP& sctp()
+	{
+		return mObject;
+	}
 	void setTag(const string& tag)
 	{
 		mTag = tag;

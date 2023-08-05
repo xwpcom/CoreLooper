@@ -27,6 +27,9 @@ seq
 crc计算时采用累积字段和对应的数据,各字段顺序无强制要求，生成和校验crc依次进行即可
 
 */
+
+typedef struct tagSCTP tagSCTP;
+typedef void(*STCP_DumpFrame)(tagSCTP* obj, const char* frame, int bytes);
 typedef struct tagSCTP
 {
 	tagByteBuffer	mInbox;
@@ -41,6 +44,7 @@ typedef struct tagSCTP
 	//所以采用强制转换
 	void			*mOnRecvCommandCB;
 	void			*mOnErrorCB;
+	STCP_DumpFrame  mDumpFrameCB;
 #endif
 
 }tagSCTP;

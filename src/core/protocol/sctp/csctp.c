@@ -144,6 +144,11 @@ int SCTP_Parse(tagSCTP *obj)
 			}
 		}
 
+		if (obj->mDumpFrameCB)
+		{
+			obj->mDumpFrameCB(obj, body, strlen(body));
+		}
+
 		//提取出所有字段
 		while (body[0])
 		{
