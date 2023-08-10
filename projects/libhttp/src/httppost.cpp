@@ -52,7 +52,7 @@ HttpPost::~HttpPost()
 	//LogV(TAG, "%s(%p)", __func__, this);
 	--gAliveCount;
 #endif
-	LogV(TAG,"%s,this=%p,mRecvAckDone=%d", __func__, this, mRecvAckDone);
+	LogV(TAG,"%s,this=%p,mRecvAckDone=%d,mServer=%s,port=%d,mUrl=%s", __func__, this, mRecvAckDone, mServer.c_str(), mPort, mUrl.c_str());
 
 	if (!mRecvAckDone)
 	{
