@@ -549,6 +549,11 @@ void TcpClient_Windows::Close()
 	}
 }
 
+int TcpClient_Windows::localPort()
+{
+	return mLocalPort;
+}
+
 //服务器收到连接会运行到此
 int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 {
@@ -564,7 +569,8 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 
 		{
 			mPeerDesc = StringTool::Format("%s:%d", SockTool::GetPeerIP(s).c_str(), SockTool::GetPeerPort(s));
-			mLocalDesc =StringTool::Format("%s:%d", SockTool::GetLocalIP(s).c_str(), SockTool::GetLocalPort(s));
+			mLocalPort = SockTool::GetLocalPort(s);
+			mLocalDesc =StringTool::Format("%s:%d", SockTool::GetLocalIP(s).c_str(), mLocalPort);
 		}
 		{
 			// 设置连接的KEEPALIVE参数

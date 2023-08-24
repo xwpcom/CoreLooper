@@ -80,6 +80,8 @@ protected:
 		ByteBuffer mOutbox;
 	}mSslInfo;
 	void checkSend();
+	int localPort();
+	int mLocalPort = -1;
 };
 }
 }

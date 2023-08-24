@@ -148,6 +148,11 @@ int TcpClient_Linux::Connect(Bundle& info)
 	return 0;
 }
 
+int TcpClient_Linux::localPort()
+{
+	return mLocalPort;
+}
+
 //当服务端收到accept后会触发本接口
 int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 {
@@ -167,7 +172,9 @@ int TcpClient_Linux::OnConnect(long handle, Bundle* extraInfo)
 		mSock = s;
 		{
 			mPeerDesc = Core::StringTool::Format("%s:%d", SockTool::GetPeerIP(s).c_str(), SockTool::GetPeerPort(s));
-			mLocalDesc = Core::StringTool::Format("%s:%d", SockTool::GetLocalIP(s).c_str(), SockTool::GetLocalPort(s));
+			
+			mLocalPort = SockTool::GetLocalPort(s);
+			mLocalDesc = StringTool::Format("%s:%d", SockTool::GetLocalIP(s).c_str(), mLocalPort);
 		}
 
 		unsigned long handle = (unsigned long)(LONGLONG)GetLooperHandle();

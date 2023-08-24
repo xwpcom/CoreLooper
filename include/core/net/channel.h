@@ -86,6 +86,11 @@ public:
 	{
 		return 0;
 	}
+
+	virtual int localPort()
+	{
+		return -1;
+	}
 protected:
 	void OnCreate();
 	void OnTimer(long timerId);

@@ -137,6 +137,9 @@ private:
 #endif
 
 	ULONGLONG memoryUsed_impl()override;
+	int localPort();
+	int mLocalPort = -1;
+
 };
 }
 }
