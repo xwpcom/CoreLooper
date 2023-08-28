@@ -325,7 +325,7 @@ int HttpPost::PackData()
 	req.Write(tail);
 
 #ifdef _MSC_VER_DEBUG
-	File::Dump(req, "G:/test/hz/httppost.bear.txt");
+	//File::Dump(req, "G:/test/hz/httppost.bear.txt");
 #endif
 
 	SwitchStage(eSendHeader);
@@ -509,6 +509,14 @@ int HttpPost::PrepareData()
 		contentLength += tail.length();
 		//LogV(TAG,"contentLength=%d", contentLength);
 	}
+
+	#ifdef _MSC_VER_DEBUGx
+	if (mFiles.size() > 0 || !mBodyBigFilePath.empty())
+	{
+		contentLength = 0;
+	}
+	//test ok,multipart/form-data上传文件时不依赖Content-Length
+	#endif
 
 	ByteBuffer req;
 	req.Write(StringTool::Format(

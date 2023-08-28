@@ -677,7 +677,7 @@ public:
 				//string fileName = "2013.10.02.zip";
 				//string filePath = "F:/Picture&Video/" + fileName;
 
-				string fileName = "x.txt";
+				string fileName = "xg.bin";
 				string filePath = "d:/" + fileName;
 
 				auto obj = make_shared<HttpPost>();
