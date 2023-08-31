@@ -339,7 +339,7 @@ int HttpRequest::OnHeaderContentReady()
 int HttpRequest::Transform(string  target, ByteBuffer& box)
 {
 #ifdef _MSC_VER_DEBUG
-	File::Dump(box, "g:/test/http.post.bin");
+	//File::Dump(box, "g:/test/http.post.bin");
 #endif
 
 	int ret = -1;

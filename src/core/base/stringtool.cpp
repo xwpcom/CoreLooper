@@ -361,7 +361,7 @@ int StringTool::AppendText(char* dst, int dstBytes, const char* text)
 
 	auto len = strlen(dst);
 	auto textLen = strlen(text);
-	if (len + textLen + 1 >= dstBytes)
+	if (len + textLen + 1 >= (size_t)dstBytes)
 	{
 		LogW(TAG, "fail %s", __func__);
 		return -1;
