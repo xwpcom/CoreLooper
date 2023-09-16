@@ -178,6 +178,9 @@ public:
 
 	void RemoveSection(const string& section);
 
+	void enableBOM() {
+		mAddBOM = true;
+	}
 protected:
 	shared_ptr<tagIniSection> FindSection(const char *pszSection, BOOL bCreateIfNoFind = TRUE);
 	shared_ptr<tagIniKey> FindKey(const char *pszSection, const char *pszKey, BOOL bCreateIfNoFind = TRUE);
@@ -188,6 +191,7 @@ protected:
 	ULONGLONG			mTickChanged;//最后修改时间
 	DWORD				mVersion;//每次数据有变化都增加版本号
 	list<shared_ptr<tagIniSection>> mSections;
+	bool mAddBOM = false;
 };
 }
 }}

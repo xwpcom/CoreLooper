@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "inifile.h"
 #include "base/dt.h"
 #include "base/stringtool.h"
@@ -144,6 +144,12 @@ int IniFile::Dump(ByteBuffer& box)
 		}
 
 		box.PrepareBuf((int)content.length() + 1);
+		if (!content.empty() && mAddBOM)
+		{
+			box.WriteByte(0xEF);
+			box.WriteByte(0xBB);
+			box.WriteByte(0xBF);
+		}
 		box.Write(content);
 		box.MakeSureEndWithNull();
 	}
