@@ -9,6 +9,7 @@ namespace Http {
 class HTTP_EXPORT HttpTool
 {
 public:
+	static bool is_valid_path(const std::string& path);
 	static int GetInt(std::string request, const char *name, int defaultValue = 0)
 	{
 		return GetInt(request.c_str(), name, defaultValue);

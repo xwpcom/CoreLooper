@@ -66,7 +66,7 @@ public:
 	{
 		m_headerInfo.mLocalAddr = addr;
 	}
-
+	bool canMapDiskFile(string uri);
 	int Input(ByteBuffer& inbox);
 	void SetOutbox(ByteBuffer *outbox);
 
@@ -104,7 +104,7 @@ public:
 	bool IsAuthAction(const char *pszAction, const char *pszUserGroup = NULL);
 	ULONGLONG memoryUsed_impl();
 protected:
-	std::shared_ptr<HttpRequestHandler> CreateHandler(std::string  uri);
+	std::shared_ptr<HttpRequestHandler> CreateHandler(std::string  uri,bool canMapDiskFile=false);
 
 	void CheckSubmit();
 	void SetStatus(eHttpRequestStatus status);

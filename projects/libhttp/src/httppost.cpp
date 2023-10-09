@@ -292,7 +292,7 @@ int HttpPost::PackData()
 				, boundary.c_str()
 				, iter->name.c_str()
 				, File::GetPathFileName(iter->value.c_str()).c_str()
-				, Mime::GetFileContentType(iter->value).c_str()
+				, HttpTool::GetContentType(iter->value).c_str()
 			));
 			body.Append(box);
 			body.Write("\r\n");
@@ -490,7 +490,7 @@ int HttpPost::PrepareData()
 				, boundary.c_str()
 				, iter->name.c_str()
 				, File::GetPathFileName(iter->value.c_str()).c_str()
-				, Mime::GetFileContentType(iter->value).c_str()
+				, HttpTool::GetContentType(iter->value).c_str()
 			);
 			contentLength += desc.length();
 			auto fileBytes = File::GetFileLength(iter->value.c_str());//file data
@@ -633,7 +633,7 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 					, mBoundary.c_str()
 					, fileInfo.name.c_str()
 					, File::GetPathFileName(fileInfo.value.c_str()).c_str()
-					, Mime::GetFileContentType(fileInfo.value).c_str()
+					, HttpTool::GetContentType(fileInfo.value).c_str()
 				);
 				mOutbox.Write(desc);
 				//contentLength += desc.length();

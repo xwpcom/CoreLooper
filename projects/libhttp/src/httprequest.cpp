@@ -236,6 +236,59 @@ int HttpRequest::OnHeaderReady()
 	return ret;
 }
 
+bool HttpRequest::canMapDiskFile(string uri)
+{
+	string szFileName;
+	FILE* hFile = nullptr;
+	auto vm = mWebConfig->mVirtualFolder;
+
+	//先试虚拟目录文件
+	if (vm)
+	{
+		if (uri.empty())
+		{
+			uri = "/";
+		}
+		else if (uri[0] != '/')
+		{
+			uri = "/" + uri;
+		}
+
+		string  localPath = vm->Virtual2LocalPathFile(uri);
+		if (!localPath.empty())
+		{
+			char filename[MAX_PATH];
+			memset(filename, 0, sizeof(filename));
+			strncpy(filename, localPath.c_str(), sizeof(filename) - 1);
+			File::PathMakePretty(filename);
+			szFileName = filename;
+
+			ASSERT(!hFile);
+			hFile = File::fopen(szFileName.c_str(), "rb");
+		}
+	}
+
+	if (!hFile)
+	{
+		//再试www文件夹
+
+		szFileName = StringTool::Format("%s%s", mWebConfig->mWebRootFolder.c_str(), uri.c_str());
+		hFile = File::fopen(szFileName.c_str(), "rb");
+	}
+
+	bool ok = false;
+
+	if (hFile)
+	{
+		fclose(hFile);
+		hFile = nullptr;
+
+		ok = true;
+	}
+
+	return ok;
+}
+
 //解析到完整的http header+content之后会调用本接口
 int HttpRequest::OnHeaderContentReady()
 {
@@ -303,7 +356,23 @@ int HttpRequest::OnHeaderContentReady()
 #endif
 
 	ASSERT(!m_handler);
-	m_handler = CreateHandler(m_headerInfo.m_uri);
+
+	bool isDiskFile = false;
+	{
+		//检查是不是普通文件
+		FILE* hFile = NULL;
+		string  szFileName;
+		auto&  uri = m_headerInfo.m_uri;
+
+		StringTool::Replace(uri, "\\", "/");
+		//屏蔽uri中的..字样,防止恶意用户非法访问文件
+		if (HttpTool::is_valid_path(uri))
+		{
+			isDiskFile = canMapDiskFile(uri);
+		}
+	}
+
+	m_handler = CreateHandler(m_headerInfo.m_uri,isDiskFile);
 	if (!m_handler)
 	{
 		LogW(TAG,"no handler for [%s]", m_headerInfo.m_uri.c_str());
@@ -942,7 +1011,7 @@ bool HttpRequest::IsAuthAction(const char *pszAction, const char *pszUserGroup)
 }
 
 //根据uri来确定handler
-shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri)
+shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri, bool canMapDiskFile)
 {
 	shared_ptr<HttpRequestHandler> handler;
 	if (mWebConfig && mWebConfig->mHttpRequestFilter)
@@ -1018,7 +1087,7 @@ shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri)
 #endif
 
 	//处理ajax,cgi
-	if (!handler)
+	if (!handler && !canMapDiskFile)
 	{
 		string  ext = HttpTool::GetUriExt(uri);
 

@@ -74,54 +74,6 @@ int HttpRequestHandler_File::Process()
 	return 0;
 }
 
-/*
-2022.06.01
-http要防止客户在url中恶意使用..
-zlmediakit在File::absolutePath做了处理
-cpp-httplib在httplib.h inline bool is_valid_path(const std::string &path)里面的思路不错
-测试了可行
-
-*/
-static bool is_valid_path(const std::string& path) 
-{
-	size_t level = 0;
-	size_t i = 0;
-
-	// Skip slash
-	while (i < path.size() && path[i] == '/') {
-		i++;
-	}
-
-	while (i < path.size()) {
-		// Read component
-		auto beg = i;
-		while (i < path.size() && path[i] != '/') {
-			i++;
-		}
-
-		auto len = i - beg;
-		//assert(len > 0);
-
-		if (!path.compare(beg, len, ".")) {
-			;
-		}
-		else if (!path.compare(beg, len, "..")) {
-			if (level == 0) { return false; }
-			level--;
-		}
-		else {
-			level++;
-		}
-
-		// Skip slash
-		while (i < path.size() && path[i] == '/') {
-			i++;
-		}
-	}
-
-	return true;
-}
-
 int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 {
 	ASSERT(!m_hFile);
@@ -138,7 +90,7 @@ int HttpRequestHandler_File::Start(tagHttpHeaderInfo *headerInfo)
 
 	StringTool::Replace(uri, "\\", "/");
 	//屏蔽uri中的..字样,防止恶意用户非法访问文件
-	if(is_valid_path(uri))
+	if(HttpTool::is_valid_path(uri))
 	{
 		int x = 1;
 	}
