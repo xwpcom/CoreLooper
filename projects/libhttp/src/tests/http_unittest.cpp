@@ -190,6 +190,27 @@ public:
 
 		make_shared<MainLooper>()->StartRun();
 	}
+	
+	TEST_METHOD(Http_simple_web_server)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				auto config = make_shared<tagWebServerConfig>();
+				config->mWebRootFolder = "d:/test/webRoot/";
+				auto svr(make_shared<HttpServer>());
+				svr->SetConfig(config);
+
+				AddChild(svr);
+				svr->StartServer(80);
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
 
 	TEST_METHOD(Tree)
 	{
