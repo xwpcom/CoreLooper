@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "ftpcommandhandler.h"
 #include "ftpprotocol.h"
 #include "net/channel.h"
@@ -340,10 +340,10 @@ int FtpCommandHandler::OnCommand_PASV(const string& param)
 
 		DV("%p.create FtpDataServer(%p)", this, obj.get());
 
+		AddChild(obj);
 		auto ret = obj->StartServer(0);
 		ASSERT(ret == 0);
 
-		AddChild(obj);
 		obj->SignalOnConnect.connect(this, &FtpCommandHandler::OnDataHandlerConnect);
 
 		DV("FtpDataServer port=%d", obj->GetPort());

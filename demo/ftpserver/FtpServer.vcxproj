@@ -257,6 +257,14 @@
   <ItemGroup>
     <Text Include="todo.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\projects\libcorelooper\corelooper.vcxproj">
+      <Project>{fd47e92b-7702-459f-bfb7-81c2d64c61b9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\projects\libhttp\libhttp.vcxproj">
+      <Project>{6d2bab04-c6fb-4b65-a6c9-e2dc05e34e80}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
