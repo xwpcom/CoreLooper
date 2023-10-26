@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <sys/stat.h>
 
@@ -47,6 +47,11 @@ public:
 	std::string GetFileName();
 	ULONGLONG GetLength();
 	void Close();
+
+	void enableSoryByName()
+	{
+		mFolderAtFirst = false;
+	}
 #ifdef _MSC_VER
 	BOOL GetLastWriteTime(CTime& tmWrite);
 #else
@@ -70,7 +75,9 @@ protected:
 	std::vector<tagFileFindItem>	mItems;//tagFileFindItem*
 	bool			mStopOnCorruptFiles = false;
 	bool			mCorrupt = false;
-	static bool sortcmp(const tagFileFindItem& a, const tagFileFindItem& b);
+	bool			mFolderAtFirst = true;
+	static bool sortcmpFolderAtFirst(const tagFileFindItem& a, const tagFileFindItem& b);
+	static bool sortcmpByName(const tagFileFindItem& a, const tagFileFindItem& b);
 };
 
 }

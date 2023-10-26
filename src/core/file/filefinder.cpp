@@ -182,14 +182,21 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 
 	{
 		//auto nc = mItems.size();// GetSize();
-		std::sort(mItems.begin(), mItems.end(), sortcmp);
+		if (mFolderAtFirst)
+		{
+			std::sort(mItems.begin(), mItems.end(), sortcmpFolderAtFirst);
+		}
+		else
+		{
+			std::sort(mItems.begin(), mItems.end(), sortcmpByName);
+		}
 	}
 
 	mIdx = -1;
 	return mItems.size() > 0;
 }
 
-bool FileFinder::sortcmp(const tagFileFindItem& a, const tagFileFindItem& b)
+bool FileFinder::sortcmpFolderAtFirst(const tagFileFindItem& a, const tagFileFindItem& b)
 {
 	int ret = 0;
 	if ((a.IsFolder() && b.IsFolder())
@@ -206,6 +213,12 @@ bool FileFinder::sortcmp(const tagFileFindItem& a, const tagFileFindItem& b)
 		ret = a.IsFolder() ? -1 : 1;
 	}
 
+	return ret > 0 ? false : true;
+}
+
+bool FileFinder::sortcmpByName(const tagFileFindItem& a, const tagFileFindItem& b)
+{
+	auto ret=StringTool::CompareNoCase(a.mName, b.mName);
 	return ret > 0 ? false : true;
 }
 
