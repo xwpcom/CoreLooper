@@ -5,6 +5,7 @@
 #include <mutex>  
 #include "include/rs485monitor.h"
 #include "include/libwintool.inl"
+#include "swd.h"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -50,6 +51,18 @@ public:
 		{
 			//auto ok = IEHttpProxy::DisableConnectionProxy(_T(""));LogV(mTag, "disable proxy,return = %d", ok);
 		}
+
+	}
+
+};
+
+TEST_CLASS(Swd_)
+{
+public:
+	TEST_METHOD(swd_test)
+	{
+		Swd obj;
+		obj.init();
 
 	}
 
