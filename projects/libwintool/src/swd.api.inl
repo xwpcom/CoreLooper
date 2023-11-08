@@ -1,1 +1,1 @@
-ITEM(mApi.getDLLVersion, JLINK_GetDLLVersion);
+//ITEM(mApi.getDLLVersion, JLINK_GetDLLVersion);
