@@ -104,4 +104,7 @@ protected:
 }
 }
 }
+
+int testWolfSSL(const char* host,int port);
+
 #endif

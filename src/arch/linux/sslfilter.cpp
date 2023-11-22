@@ -2,6 +2,9 @@
 #include "sslfilter.h"
 
 #if defined _CONFIG_WOLFSSL
+using namespace Bear::Core;
+using namespace Bear::Core::Net;
+using namespace std;
 
 namespace Bear {
 namespace Core {
@@ -282,8 +285,133 @@ void SslFilter::onConnect()
 	}
 }
 
+
 }
 }
 }
+
+string host2ip(const string& host)
+{
+	DWORD dwRetval;
+	struct addrinfo* result = NULL;
+	struct addrinfo* ptr = NULL;
+	struct addrinfo hints;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+
+	//LogV(TAG,"getaddrinfo(%s)#begin", mDns);
+	dwRetval = getaddrinfo(host.c_str(), nullptr, &hints, &result);//注意在断网情况下，此api可能阻塞60秒或更长时间
+	if (dwRetval == 0)
+	{
+		for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
+		{
+			sockaddr_in* sa = (sockaddr_in*)ptr->ai_addr;
+			//DT("name: %s ip:%s", ptr->ai_canonname,
+			  //    inet_ntop(AF_INET, &sa->sin_addr.s_addr, ip, sizeof (ip)));  
+			const char* ipThis = inet_ntoa(sa->sin_addr);
+			//DT("Length of this sockaddr: %d,ip=[%s]", ptr->ai_addrlen,ip);
+			//LogV(TAG,"Canonical name: %s,ipThis=%s", ptr->ai_canonname,ipThis);
+			if (ipThis)
+			{
+				#ifdef _MSC_VER_DEBUG
+				LogV(TAG, "[%s]=[%s]", host.c_str(), ipThis);
+				#endif
+				return ipThis;
+				//strncpy(mIP, ipThis, sizeof(mIP) - 1);
+				break;
+			}
+		}
+	}
+
+	return "";
+}
+
+//static const char* TAG = "wolfssl";
+int testWolfSSL(const char* host, int port)
+{
+	int ret = wolfSSL_Init();
+	printf("wolfSSL_Init=%d\r\n", ret);
+
+	WOLFSSL_CTX* ctx = wolfSSL_CTX_new(wolfTLSv1_2_client_method());
+	wolfSSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);//不加的话wireshark中能看到client向server发Fatal Alert - Unknown CA
+
+	/*
+	ret = wolfSSL_CTX_load_verify_locations(ctx, "D:/iot.jjyip.com.p12"
+		//, 0
+		, R"(D:\os\wolfssl\certs\external)"
+	);
+	LogV(TAG, "wolfSSL_CTX_load_verify_locations ret=%d", ret);
+	*/
+
+	int s = -1;
+	{
+		s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+		//ip = "210.76.75.21";
+		//port = 5443;
+		//ip = host2ip("iot.jjyip.com");
+		//ip = host2ip("163.com");
+		//port = 443;
+
+		struct sockaddr_in servAddr;
+		servAddr.sin_addr.s_addr = inet_addr(host);
+		servAddr.sin_family = AF_INET;
+		servAddr.sin_port = htons(port);
+
+		struct timeval tval;
+		tval.tv_sec = 5;
+		tval.tv_usec = 0;
+		int ret = connect(s, (struct sockaddr*)&servAddr, sizeof(struct sockaddr));
+		printf("connec ret = %d\r\n", ret);
+
+	}
+
+	//https://github.com/dktran65/MyWolfssl
+	/*
+	Note 2) wolfSSL takes a different approach to certificate verification than OpenSSL does.
+	The default policy for the client is to verify the server,
+	this means that if you don't load CAs to verify the server you'll get a connect error,
+	no signer error to confirm failure (-188).
+	If you want to mimic OpenSSL behavior of having SSL_connect succeed
+	even if verifying the server failsand reducing security you can do this by calling :
+	wolfSSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);
+	另一个解决办法是在wolfSSL_CTX_load_verify_locations用第三个参数加载root pem
+	*/
+	//wolfSSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, 0);
+
+	WOLFSSL* ssl = wolfSSL_new(ctx);
+	ret = wolfSSL_set_fd(ssl, s);
+	//wolfSSL_set_tlsext_host_name(ssl, "163.com");
+
+	printf("wolfSSL_set_fd ret = %d\r\n", ret);
+	char req[256] = { 0 };
+	snprintf(req, sizeof(req),
+			 "GET / HTTP/1.1\r\n"
+			 "\r\n"
+	);
+
+	//Sleep(2000);
+	//ret=wolfSSL_connect(ssl);
+	//cout << "wolfSSL_connect ret=" << ret << endl;
+	ret = wolfSSL_write(ssl, req, strlen(req));
+	printf("wolfSSL_write ret= %d\r\n", ret);
+
+	char ack[8 * 1024] = { 0 };
+	ret = wolfSSL_read(ssl, ack, sizeof(ack) - 1);
+	printf("wolfSSL_read ret = %d\r\n", ret);
+	if (ret > 0)
+	{
+		ack[ret] = 0;
+		printf("recv:%s\r\n", ack);
+	}
+
+	//auto _read_bio = BIO_new(BIO_s_mem());
+
+	return 0;
+}
+
 
 #endif

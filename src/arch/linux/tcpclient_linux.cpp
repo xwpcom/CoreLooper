@@ -270,6 +270,11 @@ void TcpClient_Linux::OnReceive()
 		{
 			BYTE buf[4096];
 			int ret = (int)recv(mSock, (char*)buf, sizeof(buf)-1, 0);
+
+			if (mVerbose) {
+				LogV(TAG, "raw.recv ret=%d",ret);
+			}
+
 			if (ret > 0)
 			{
 				buf[ret] = 0;
@@ -538,6 +543,10 @@ void TcpClient_Linux::OnEvent(DWORD events)
 
 	if (events & (EPOLLRDHUP | EPOLLERR | EPOLLHUP))
 	{
+		if (mVerbose) {
+			auto err = errno;
+			LogV(TAG, "this=%p,events=0x%x,error=%d(%s)",this, events,err,strerror(err));
+		}
 		Close();
 		return;
 	}
