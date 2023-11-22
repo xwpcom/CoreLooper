@@ -113,6 +113,21 @@ public:
 
 	TEST_METHOD(ParseUrl_httpTool)
 	{
+		{
+			string url = "http://122.224.145.113:18220/sz-access/dataAccess/fireWaterTank?removeUrlHeader=1&headers=X-Apig-AppCode=ce3b32701cd84f0eb67ae4aca17b25e9cf83f41171f6447fac7868118d10a21f";
+			string uri;
+			NameValue params;
+
+			string host;
+			int port;
+			string pageUrl;
+			bool useHttps = false;
+			HttpTool::ParseUrl(url,host, port, pageUrl,&useHttps);
+			HttpTool::ParseUrlParam(pageUrl, uri, params);
+			int x = 0;
+
+		}
+
 		string url = "/tree.xml?url=DemoHandler";
 		string uri;
 		NameValue params;
