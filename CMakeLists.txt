@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
 project(corelooper LANGUAGES CXX C)
 
@@ -61,11 +61,14 @@ INCLUDE_DIRECTORIES(${INCLUDE_CORE}/string)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/thread)
 INCLUDE_DIRECTORIES(${INCLUDE_CORE}/xml)
 
-SET(WOLFSSL_DIR ${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/tools/wolfssl/wolfssl-3.15.3)
+#SET(WOLFSSL_DIR ${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/tools/wolfssl/wolfssl-3.15.3)
 #message (${WOLFSSL_DIR})
+#INCLUDE_DIRECTORIES(${WOLFSSL_DIR})
+#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/platforms/include)
+#INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl)
+
+SET(WOLFSSL_DIR ${CMAKE_CURRENT_LIST_DIR}/projects/wolfssl.11.22)
 INCLUDE_DIRECTORIES(${WOLFSSL_DIR})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl/platforms/include)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_LIST_DIR}/src/arch/linux/wolfssl)
 
 
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -86,7 +89,8 @@ add_subdirectory(projects/libcrypt)
 add_subdirectory(projects/libhttp)
 endif(_CONFIG_INGENIC)
 
-add_subdirectory(src/arch/linux/wolfssl)
+#add_subdirectory(src/arch/linux/wolfssl)
+add_subdirectory(${WOLFSSL_DIR})
 if(CMAKE_BUILD_EXAMPLES)
   add_subdirectory(demo)
 endif()

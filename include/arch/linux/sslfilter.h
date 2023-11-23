@@ -6,7 +6,7 @@
 
 #ifdef _CONFIG_WOLFSSL
 #include "wolfssl/ssl.h"
-#include <cyassl/ssl.h>
+//#include <cyassl/ssl.h>
 
 namespace Bear {
 namespace Core {

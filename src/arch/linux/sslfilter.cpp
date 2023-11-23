@@ -332,6 +332,7 @@ string host2ip(const string& host)
 //static const char* TAG = "wolfssl";
 int testWolfSSL(const char* host, int port)
 {
+	printf("%s %s:%d\r\n", __FUNCTION__, host, port);
 	int ret = wolfSSL_Init();
 	printf("wolfSSL_Init=%d\r\n", ret);
 
@@ -394,8 +395,8 @@ int testWolfSSL(const char* host, int port)
 	);
 
 	//Sleep(2000);
-	//ret=wolfSSL_connect(ssl);
-	//cout << "wolfSSL_connect ret=" << ret << endl;
+	ret = wolfSSL_connect(ssl);
+	printf("wolfSSL_connect ret=%d\r\n", ret);
 	ret = wolfSSL_write(ssl, req, strlen(req));
 	printf("wolfSSL_write ret= %d\r\n", ret);
 
