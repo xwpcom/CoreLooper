@@ -80,10 +80,8 @@ single call hash function. Instead the name `WC_SHA`, `WC_SHA256`, `WC_SHA384` a
 Release 5.6.4 has been developed according to wolfSSL's development and QA process (see link below) and successfully passed the quality criteria.
 https://www.wolfssl.com/about/wolfssl-software-development-process-quality-assurance
 
-
 NOTE: * --enable-heapmath is being deprecated and will be removed by 2024
       * Old CyaSSL/CtaoCrypt shim layer was removed in this release (5.6.4)
-
 
 ## Vulnerabilities
 
@@ -143,7 +141,6 @@ https://www.wolfssl.com/docs/security-vulnerabilities/
 
 See INSTALL file for build instructions.
 More info can be found on-line at: https://wolfssl.com/wolfSSL/Docs.html
-
 
 # Resources
 

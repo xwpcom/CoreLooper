@@ -447,5 +447,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
 </Project>

@@ -89,7 +89,6 @@ add_subdirectory(projects/libcrypt)
 add_subdirectory(projects/libhttp)
 endif(_CONFIG_INGENIC)
 
-#add_subdirectory(src/arch/linux/wolfssl)
 add_subdirectory(${WOLFSSL_DIR})
 if(CMAKE_BUILD_EXAMPLES)
   add_subdirectory(demo)

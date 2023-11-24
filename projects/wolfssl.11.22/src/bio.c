@@ -2520,7 +2520,6 @@ int wolfSSL_BIO_flush(WOLFSSL_BIO* bio)
 
 #if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER >= 0x10100000L
     WOLFSSL_BIO* wolfSSL_BIO_new(const WOLFSSL_BIO_METHOD* method)
-        #error 1
 #else
     WOLFSSL_BIO* wolfSSL_BIO_new(WOLFSSL_BIO_METHOD* method)
 #endif

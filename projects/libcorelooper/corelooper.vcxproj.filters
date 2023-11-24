@@ -1026,6 +1026,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
+    <Text Include="..\..\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="header files">

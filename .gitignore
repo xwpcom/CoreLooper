@@ -36,3 +36,6 @@ app-*.apk
 /projects/libcorelooper.as/libcorelooper/*.aar
 /projects/libxml/*.aps
 /bin.pclinux
+/projects/wolfssl.11.22/bin.pclinux
+/projects/wolfssl.11.22/bin.t21
+bin.*

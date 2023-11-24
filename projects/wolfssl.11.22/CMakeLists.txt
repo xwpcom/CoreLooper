@@ -123,6 +123,15 @@ check_type_size("long long" SIZEOF_LONG_LONG)
 check_type_size("long" SIZEOF_LONG)
 check_type_size("time_t" SIZEOF_TIME_T)
 
+#已测试，对减少app尺寸没有效果
+list(APPEND WOLFSSL_DEFINITIONS "-DNO_WOLFSSL_SERVER")
+list(APPEND WOLFSSL_DEFINITIONS "-DNO_DES3")
+list(APPEND WOLFSSL_DEFINITIONS "-DNO_DSA")
+list(APPEND WOLFSSL_DEFINITIONS "-DNO_MD4")
+list(APPEND WOLFSSL_DEFINITIONS "-D NO_PSK")
+list(APPEND WOLFSSL_DEFINITIONS "-D NO_RC4")
+list(APPEND WOLFSSL_DEFINITIONS "-D NO_OLD_TLS")
+
 # By default, HAVE___UINT128_T gets defined as TRUE,
 # but we want it as 1.
 if(HAVE___UINT128_T)

@@ -1,3 +1,0 @@
-/mnt/os/onenet_studio_sdk(20210816)/tools/wolfssl/bin.pclinux/CMakeFiles/aio_tools_wolfssl.dir
-/mnt/os/onenet_studio_sdk(20210816)/tools/wolfssl/bin.pclinux/CMakeFiles/edit_cache.dir
-/mnt/os/onenet_studio_sdk(20210816)/tools/wolfssl/bin.pclinux/CMakeFiles/rebuild_cache.dir
