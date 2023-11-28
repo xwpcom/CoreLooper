@@ -12,39 +12,9 @@ set(SRC_LIST
 	${SRC}
 	)
 
-add_library(mini_wolfssl ${SRC_LIST})
+add_library(wolfssl ${SRC_LIST})
 
-#target_sources(mini_wolfssl
-#  PRIVATE
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/hmac.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/hash.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/rsa.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/aes.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/sha.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/sha256.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/md5.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/asn.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/coding.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/random.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/wc_port.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/misc.c
-#    ${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/integer.c
-#	${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/wc_encrypt.c
-#	${CMAKE_CURRENT_LIST_DIR}/wolfssl/wolfcrypt/src/logging.c
-#
-#	${CRYPT_SRC}/memory.c
-#	${CRYPT_SRC}/dh.c
-#	${CRYPT_SRC}/des3.c
-#	${CRYPT_SRC}/arc4.c
-#	${CRYPT_SRC}/pwdbased.c
-#	${CRYPT_SRC}/md4.c
-#	${CRYPT_SRC}/pkcs12.c
-#	${CRYPT_SRC}/dsa.c
-#	${CRYPT_SRC}/error.c
-#	${CRYPT_SRC}/wolfmath.c
-#  )
-
-target_sources(mini_wolfssl
+target_sources(wolfssl
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl/src/wolfio.c
     ${CMAKE_CURRENT_LIST_DIR}/wolfssl/src/internal.c
@@ -77,5 +47,8 @@ endif(_CONFIG_INGENIC)
 
 add_executable(testclient
     ${CMAKE_CURRENT_SOURCE_DIR}/testclient.c)
-target_link_libraries(testclient mini_wolfssl -lm)
+target_link_libraries(testclient wolfssl -lm)
 set_target_properties(testclient PROPERTIES RUNTIME_OUTPUT_DIRECTORY /home/bear/work/nfs)
+
+#没有生效，要手工复制
+set_target_properties(wolfssl PROPERTIES LIBRARY_OUTPUT_DIRECTORY /mnt/corelooper/projects/master/t21.sdk/lib-5.4.0/uclibc/)
