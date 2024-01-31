@@ -216,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="include\libwintool.inl" />
+    <None Include="include\swd.api.inl" />
     <None Include="libwintool.def" />
     <None Include="res\libwintool.rc2" />
   </ItemGroup>
@@ -226,10 +227,10 @@
     <ClInclude Include="include\logwnd.h" />
     <ClInclude Include="include\rs485monitor.h" />
     <ClInclude Include="include\ScintillaWnd.h" />
+    <ClInclude Include="include\swd.h" />
     <ClInclude Include="include\ToastWnd.h" />
     <ClInclude Include="libwintool.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="src\swd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

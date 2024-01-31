@@ -52,7 +52,7 @@ FILE* File::fopen(const char *pszFile, const char *pszMode)
 
 	if (!hFile)
 	{
-#ifdef _MSC_VER
+#if defined _MSC_VER && !defined _MSC_VER_DEBUG
 		LogV(TAG,"Fail to open[%s],err=%d(%s)", pszFile, errno, strerror(errno));
 #endif
 	}

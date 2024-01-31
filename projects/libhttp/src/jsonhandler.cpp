@@ -29,7 +29,7 @@ string JsonHandler::Process(string url)
 
 	mExtraHeader.clear();
 
-	LogV(TAG,"%s", url.c_str());
+	//LogV(TAG,"%s", url.c_str());
 
 	string ack;
 

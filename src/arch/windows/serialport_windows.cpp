@@ -32,7 +32,13 @@ void SerialPort_Windows::OnCreate()
 	USES_CONVERSION;
 	auto name = A2T(mDeviceName.c_str());
 	//DV("%s", mDeviceName.c_str());
-	LogV(TAG, "open %s#begin",mDeviceName.c_str());
+	if (mDeviceName.empty())
+	{
+		Destroy();
+		return;
+	}
+	
+	LogV(TAG, "open %s#begin", mDeviceName.c_str());
 	auto t = GetTickCount64();
 	mFile = ::CreateFile(name,
 		GENERIC_READ | GENERIC_WRITE,

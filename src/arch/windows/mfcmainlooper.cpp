@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "mfcmainlooper.h"
 #include "uirunnable.h"
 

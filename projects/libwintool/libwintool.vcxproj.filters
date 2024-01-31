@@ -59,6 +59,9 @@
     <None Include="include\libwintool.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="include\swd.api.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -94,7 +97,7 @@
     <ClInclude Include="include\ieproxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\swd.h">
+    <ClInclude Include="include\swd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

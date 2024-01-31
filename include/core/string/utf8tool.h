@@ -23,6 +23,10 @@ public:
 
 #ifdef _MSC_VER
 	static CString UTF8_to_UNICODE(const char *utf8_string, int length);
+	static CString UTF8_to_UNICODE(const string& utf8_string)
+	{
+		return UTF8_to_UNICODE(utf8_string.c_str(), utf8_string.length());
+	}
 	static void UNICODE_to_UTF8(const CString& unicodeString, std::string& str);
 	static string UNICODE_to_UTF8(const CString& unicodeString);
 #endif

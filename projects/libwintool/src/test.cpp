@@ -5,7 +5,7 @@
 #include <mutex>  
 #include "include/rs485monitor.h"
 #include "include/libwintool.inl"
-#include "swd.h"
+#include "include/swd.h"
 
 using namespace std;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;

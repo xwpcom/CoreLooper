@@ -87,7 +87,7 @@ public:
 		obj.Decode(enc, dec);
 		dec.MakeSureEndWithNull();
 		auto decText = dec.data();
-
+		Assert::IsTrue(strcmp((char*)decText,val)==0);
 		int x = 0;	 
 	}
 
