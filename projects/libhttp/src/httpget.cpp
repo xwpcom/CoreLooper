@@ -2,6 +2,8 @@
 #include "libhttp/httpget.h"
 #include "net/dnslooper.h"
 #include "net/tcpclient.h"
+#include "string/utf8tool.h"
+
 using namespace Bear::Core::FileSystem;
 namespace Bear {
 namespace Core {
@@ -115,7 +117,12 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 			ASSERT(!mAckInfo.mFile);
 
 			File::CreateFolderForFile(tmpFilePath);
+			#ifdef _MSC_VER
+			auto uFilePath = Utf8Tool::UTF8_to_UNICODE(tmpFilePath);
+			mAckInfo.mFile = _wfopen(uFilePath, _T("wb"));
+			#else
 			mAckInfo.mFile = fopen(tmpFilePath.c_str(), "wb");
+			#endif
 			if (!mAckInfo.mFile)
 			{
 				Destroy();

@@ -441,7 +441,23 @@ int	File::rename(const char *oldname, const char *newname)
 		return -1;
 	}
 
+	#ifdef _MSC_VER
+	{
+		auto un = Utf8Tool::UTF8_to_UNICODE(newname);
+		::DeleteFile(un);
+	}
+	#endif
+
+	#ifdef _MSC_VER
+	string o = oldname;
+	string n = newname;
+	auto uo = Utf8Tool::UTF8_to_UNICODE(o);
+	auto un = Utf8Tool::UTF8_to_UNICODE(n);
+	int ret = _wrename(uo, un);
+	#else
 	int ret = ::rename(oldname, newname);
+	#endif
+
 	if (ret)
 	{
 		LogW(TAG,"rename(%s,%s) errno=%d(%s)", oldname, newname, errno, strerror(errno));
@@ -512,7 +528,8 @@ int File::mkdir(const char *pszDir, DWORD mode)
 	}
 
 #ifdef _MSC_VER
-	int ret = SHCreateDirectoryExA(NULL, pszDir, NULL);
+	auto name=Utf8Tool::UTF8_to_UNICODE(pszDir);
+	int ret = SHCreateDirectoryEx(NULL, name, NULL);
 	if (ret == ERROR_SUCCESS
 		|| ret == ERROR_ALREADY_EXISTS)
 	{
