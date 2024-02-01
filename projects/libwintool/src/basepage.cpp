@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "include/basepage.h"
 #include "base64ex.h"
+#include "core/string/utf8tool.h"
 
 using namespace Bear::Core;
 
@@ -214,11 +215,36 @@ void BasePage::SaveDlgItemInt(UINT id, CString name)
 	mIni->SetInt(mSection, name, value);
 }
 
+void BasePage::SaveDlgItemString(UINT id, const string& name)
+{
+	CString text;
+	GetDlgItemText(id, text);
+	auto v=Utf8Tool::UNICODE_to_UTF8(text);
+	mIni->SetString(mSection,name,v);
+}
+void BasePage::LoadDlgItemString(UINT id, const string& name, const string& defaultValue)
+{
+	auto text = mIni->GetString(mSection, name, defaultValue);
+	auto v = Utf8Tool::UTF8_to_UNICODE(text);
+	SetDlgItemText(id, v);
+}
+
 void BasePage::LoadDlgItemString(UINT id, CString name, CString defaultValue)
 {
 	USES_CONVERSION;
 	CString value = mIni->GetStringMFC(mSection, name, defaultValue);
 	SetDlgItemText(id, value);
+}
+
+void BasePage::SaveCombo(UINT id, const string& name)
+{
+	USES_CONVERSION;
+	SaveCombo(id, A2T(name.c_str()));
+}
+void BasePage::LoadCombo(UINT id, const string& name, const string& defaultValue)
+{
+	USES_CONVERSION;
+	LoadCombo(id, A2T(name.c_str()), Utf8Tool::UTF8_to_UNICODE(defaultValue));
 }
 
 void BasePage::LoadCombo(UINT id, CString name, CString defaultValue)
@@ -240,7 +266,8 @@ void BasePage::SaveCombo(UINT id, CString name)
 	{
 		CString value;
 		item->GetLBText(sel, value);
-		mIni->SetStringMFC(mSection, name, value);
+		//mIni->SetStringMFC(mSection, name, value);
+		mIni->SetString(mSection, Utf8Tool::UNICODE_to_UTF8(name), Utf8Tool::UNICODE_to_UTF8(value));
 	}
 }
 

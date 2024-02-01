@@ -60,8 +60,10 @@ public:
 	void SaveDlgItemStringBase64(UINT id, CString name);
 	void LoadDlgItemStringBase64(UINT id, CString name, CString defaultValue = _T(""));
 	void SaveDlgItemString(UINT id, CString name);
-	void SaveDlgItemInt(UINT id, CString name);
 	void LoadDlgItemString(UINT id, CString name, CString defaultValue = _T(""));
+	void SaveDlgItemString(UINT id, const string& name);
+	void LoadDlgItemString(UINT id, const string&, const string& defaultValue = "");
+	void SaveDlgItemInt(UINT id, CString name);
 	void LoadDlgItemInt(UINT id, CString name, int defaultValue = 0);
 	void SetInt(CString name, int value);
 	void SetString(CString name, CString value);
@@ -78,18 +80,9 @@ public:
 		LoadCheck(id, A2T(name.c_str()), defaultValue);
 	}
 	void SaveCombo(UINT id, CString name);
-	void SaveCombo(UINT id, string name)
-	{
-		USES_CONVERSION;
-		SaveCombo(id, A2T(name.c_str()));
-	}
 	void LoadCombo(UINT id, CString name, CString defaultValue = _T(""));
-	void LoadCombo(UINT id, const string& name, const string& defaultValue = "")
-	{
-		USES_CONVERSION;
-		LoadCombo(id, A2T(name.c_str()), A2T(defaultValue.c_str()));
-	}
-
+	void SaveCombo(UINT id, const string& name);
+	void LoadCombo(UINT id, const string& name, const string& defaultValue = "");
 	int GetInt(CString name, int defaultValue = 0);
 	CString GetString(CString name, CString DefaultValue = _T(""));
 
