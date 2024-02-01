@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 namespace Bear {
 namespace Windows {
@@ -12,17 +12,6 @@ public:
 
 struct tagUIRunnable
 {
-	/*
-	tagUIRunnable()
-	{
-		DG("%s(%p)", __func__, this);
-	}
-	virtual ~tagUIRunnable()
-	{
-		DG("%s(%p)", __func__, this);
-	}
-	*/
-
 	shared_ptr<tagUIRunnable> mSelfRef;
 	weak_ptr<UIProxy>	mProxy;
 	std::function<void()> fn;
