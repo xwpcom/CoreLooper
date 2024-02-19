@@ -26,7 +26,7 @@ typedef DWORD(WINAPI* JLINK_GetHardwareVersion)(void);
 typedef DWORD(WINAPI* JLINK_GetFirmwareString)(char* buff, int count);
 typedef DWORD(WINAPI* JLINK_GetSN)(void);
 
-typedef BOOL(WINAPI* JLINK_ExecCommand)(const char* cmd, int a, int b);
+typedef int(WINAPI* JLINK_ExecCommand)(const char* cmd, char* buf, int bufBytes);
 typedef void  (WINAPI* JLINK_TIF_GetAvailable)(int32_t* mask);
 typedef DWORD(WINAPI* JLINK_TIF_Select)(int type);
 typedef void  (WINAPI* JLINK_SetSpeed)(int speed);
