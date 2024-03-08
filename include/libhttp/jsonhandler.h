@@ -20,6 +20,9 @@ public:
 	{
 		mUserInfo = userInfo;
 	}
+	void setHttpRequest(HttpRequest* obj) {
+		mHttpRequest = obj;
+	}
 
 	void SetVirtualFolder(shared_ptr<VirtualFolder> vm)
 	{
@@ -41,6 +44,8 @@ protected:
 	string mExtraHeader;
 	shared_ptr<UserInfo>				mUserInfo;
 	shared_ptr<VirtualFolder>			mVirtualFolder;
+	HttpRequest* mHttpRequest = nullptr;
+
 };
 
 }

@@ -183,6 +183,14 @@ void WebSocketHandler::onWebSocketDecodePlayload(const WebSocketHeader& header, 
 	}
 }
 
+string WebSocketHandler::peer() {
+	if (mChannel) {
+		return mChannel->GetPeerDesc();
+	}
+
+	return "";
+}
+
 }
 }
 }

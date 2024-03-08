@@ -53,6 +53,7 @@ string JsonHandler::Process(string url)
 		handler->SetVirtualFolder(mVirtualFolder);
 		handler->SetUserInfo(mUserInfo);
 		handler->SetPort(mPort);
+		handler->setHttpRequest(mHttpRequest);
 
 		bool hasAuth = true;
 		AjaxRuntimeClass* info = (*AjaxRuntimeClass::m_mapPackClass)[uri];

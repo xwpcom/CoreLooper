@@ -38,6 +38,7 @@ int HttpRequestHandler_Json::Start(tagHttpHeaderInfo* headerInfo)
 		userInfo->SetUserPassword(this->GetUserName(), this->GetPassword());
 		json->SetVirtualFolder(mWebConfig->mVirtualFolder);
 		json->SetUserInfo(userInfo);
+		json->setHttpRequest(m_httpRequest);
 
 		{
 			auto localAddr = headerInfo->mLocalAddr;

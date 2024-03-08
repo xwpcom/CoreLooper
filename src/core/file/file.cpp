@@ -330,7 +330,11 @@ BOOL File::FileExists(const  string& szFile)
 	int ret = access(szFile.c_str(), F_OK);
 	if (ret)
 	{
-#ifndef _MSC_VER
+
+#ifdef _MSC_VER
+		auto filePath = Utf8Tool::UTF8_to_UNICODE(szFile);
+		ret = _waccess(filePath, 0);
+#else
 		//LogW(TAG,"fail access %s,ret=%d,error=%d(%s)",pszFile,ret,errno,strerror(errno));
 #endif
 	}

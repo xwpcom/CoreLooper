@@ -61,6 +61,10 @@ public:
 	{
 		m_headerInfo.m_peerAddr = peerAddr;
 	}
+	string peerAddr()const
+	{
+		return m_headerInfo.m_peerAddr;
+	}
 
 	void SetLocalAddr(std::string addr)
 	{

@@ -9,7 +9,7 @@ using namespace FileSystem;
 class UserInfo;
 namespace Net {
 namespace Http {
-
+class HttpRequest;
 class AjaxHandler;
 typedef AjaxHandler* (*PFN_AjaxCreateInstance)();
 struct HTTP_EXPORT AjaxRuntimeClass
@@ -66,8 +66,13 @@ public:
 	{
 		mPort = port;
 	}
+	void setHttpRequest(HttpRequest* obj)
+	{
+		mHttpRequest = obj;
+	}
 
 protected:
+	HttpRequest* mHttpRequest = nullptr;
 	int mPort = 0;
 	std::string mExtraHeader;
 	std::shared_ptr<VirtualFolder>		mVirtualFolder;

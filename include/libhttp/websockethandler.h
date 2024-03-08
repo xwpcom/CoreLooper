@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "websocketsplitter.h"
 #include "net/channel.h"
 
@@ -20,6 +20,7 @@ public:
 	virtual void Send(Handler*, ByteBuffer& box);
 	void OnWSHandlerDestroy(Handler*);
 	void Attach(shared_ptr<Channel> channel);
+	string peer();
 
 protected:
 	virtual void OnClose(Channel*);
@@ -35,7 +36,7 @@ protected:
 	shared_ptr<Channel>	mChannel;
 
 	ByteBuffer mOutbox;
-	ByteBuffer mWebSocketOutbox;//´æ·ÅÓÉonWebSocketEncodeData±àÂëºóµÄÊı¾İ£¬Ö±½Ó·¢¸ø¶Ô·½websocket½ÓÊÕ
+	ByteBuffer mWebSocketOutbox;//å­˜æ”¾ç”±onWebSocketEncodeDataç¼–ç åçš„æ•°æ®ï¼Œç›´æ¥å‘ç»™å¯¹æ–¹websocketæ¥æ”¶
 };
 
 
