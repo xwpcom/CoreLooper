@@ -421,6 +421,7 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 		ASSERT(!mHttpPostHandler);
 		mHttpPostHandler = make_shared<HttpPostHandler>();
 		mHttpPostHandler->SetConfig(mWebConfig);
+		mHttpPostHandler->setHttpRequest(this);
 		int ret = mHttpPostHandler->Input(box);
 		if (ret)
 		{

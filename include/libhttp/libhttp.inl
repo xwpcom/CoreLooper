@@ -18,6 +18,7 @@
 #include "jsonhandler.h"
 #include "httpackheader.h"
 #include "httpackparser.h"
+#include "httprequest.h"
 //#include "httpclient.h"
 #include "httpconfig.h"
 #include "httphandler.h"

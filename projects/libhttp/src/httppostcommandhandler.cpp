@@ -142,6 +142,8 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 						auto handler = obj->CreatePostJsonHandler(name);
 						if (handler)
 						{
+							handler->setHttpRequest(mHttpRequest);
+
 							//LogV(TAG, "%s#4", __func__);
 							obj->AddChild(handler);
 

@@ -134,6 +134,8 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 
 			const char* psz = (const char*)inbox.data();
 			auto len = inbox.length();
+			mCommandHander->setHttpRequest(mHttpRequest);
+
 			auto ret=mCommandHander->Input(inbox);
 			if (ret == HttpFormField::eResult_Finish)
 			{

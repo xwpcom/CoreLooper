@@ -6,7 +6,7 @@ namespace Bear {
 namespace Core {
 namespace Net {
 namespace Http {
-
+class HttpRequest;
 //XiongWanPing 2016.09.09
 //处理http post command基类,抽象出一个框架，由子类处理具体的命令
 class HttpPostCommandHandler
@@ -20,6 +20,10 @@ public:
 	{
 		mWebConfig = config;
 	}
+	void setHttpRequest(HttpRequest* obj) {
+		mHttpRequest = obj;
+	}
+
 	virtual string GetAck();
 
 	//接收完所有数据时会调用本接口
@@ -38,6 +42,7 @@ protected:
 	virtual shared_ptr<HttpFormField> CreateField(const string & fieldName);
 
 protected:
+	HttpRequest* mHttpRequest = nullptr;
 	shared_ptr<HttpHeader> mHeader;
 
 	shared_ptr<HttpFormField> mCurrentField;

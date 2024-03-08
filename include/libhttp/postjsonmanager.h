@@ -11,6 +11,7 @@ XiongWanPing 2020.11.30
 后续重构libhttp时才有时间考虑完善
 */
 
+class HttpRequest;
 class HTTP_EXPORT PostJsonHandler :public Handler
 {
 public:
@@ -18,6 +19,12 @@ public:
 	{
 		return "";
 	}
+
+	void setHttpRequest(HttpRequest* obj) {
+		mHttpRequest = obj;
+	}
+
+	HttpRequest *mHttpRequest = nullptr;
 };
 
 class HTTP_EXPORT PostJsonManager :public Handler
