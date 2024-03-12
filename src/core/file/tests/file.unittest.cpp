@@ -81,6 +81,46 @@ public:
 
 	}
 
+	TEST_METHOD(removeTrashFiles) {
+		class Tool {
+		public:
+			static void removeTrashFiles(const string& folder)
+			{
+				FileFinder finder;
+				auto ok = finder.FindFile(folder);
+				BOOL bOK = finder.FindFile(folder);
+				while (bOK)
+				{
+					bOK = finder.FindNextFile();
+					if (finder.IsDots())
+					{
+						continue;
+					}
+
+					auto filename = finder.GetFileName();
+					string fullPath = folder + "/" + filename;
+					if (!finder.IsDirectory())
+					{
+						bool trash = false;
+						if (StringTool::EndWith(filename, ".tmp"))
+						{
+							trash = true;
+						}
+
+						if (!trash) {
+							trash = File::Length(fullPath) == 0;
+						}
+						if (trash) {
+							File::Delete(fullPath);
+						}
+					}
+				}
+
+			}
+		};
+
+		Tool::removeTrashFiles("d:/test/gm");
+	}
 
 };
 }
