@@ -434,6 +434,26 @@ void HttpGet::ParseInbox()
 			LogV(mTag, "chunked.bytes=%d", bodyBytes);
 		}
 		
+		//2024.04.20 hot fix#begin,临时紧急使用
+		if (mAckInfo.mChunked)
+		{
+			auto data = mInbox.data();
+			{
+				auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+
+				if (recvFinish)
+				{
+					mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
+					mAckInfo.mAckBody.MakeSureEndWithNull();
+
+					//extract data from chunked format
+					SwitchStatus(eHttpAckStatus_Done);
+					return;
+				}
+			}
+		}
+		//2024.04.20 hot fix#end,临时紧急使用
+
 		SwitchStatus(eHttpAckStatus_ReceivingChunkedBody);
 		break;
 	}
