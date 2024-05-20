@@ -34,6 +34,10 @@ typedef struct tagWheel
 //http://www.cnblogs.com/zhanghairong/p/3757656.html
 //https://github.com/ape2010/ape_cpp_server/tree/master/frame/common/
 //它本身参考了linux kernel中的timer实现
+// https://www.snellman.net/blog/archive/2016-07-27-ratas-hierarchical-timer-wheel/
+// 上面这个网文提到了我关注的一个问题:
+// One of the perceived problems of timer wheels is that while event insertion and deletion are O(1) operations, 
+// finding out the time remaining until the next event triggers is O(m+n) where m is the total number of timer wheel slots 
 TimerManager::TimerManager()
 {
 	mBusying = false;

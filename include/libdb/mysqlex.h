@@ -48,6 +48,7 @@ public:
 
 	int Connect(const char * server, const char * user, const char * password, const char * database,int port=0);
 	bool IsConnect();
+	int ping();
 
 	LONGLONG GetLastInsertId(const string& fieldName);
 	MYSQL_RES* Query(const string& sql)

@@ -113,6 +113,11 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 	return iReValue;
 }
 
+int MySql::ping()
+{
+	return mysql_ping(m_pMySql);
+}
+
 /*
 https://blog.csdn.net/kakarot5/article/details/40088137
 set names utf8之前，
