@@ -95,7 +95,7 @@ void HttpPost::AddField(string name, string value)
 }
 
 //filePath必须为存在的文件
-int HttpPost::AddFile(string name, string filePath)
+int HttpPost::AddFile(string name, string filePath,string fileTitle)
 {
 	if (!File::FileExists(filePath.c_str()))
 	{
@@ -107,6 +107,7 @@ int HttpPost::AddFile(string name, string filePath)
 	tagItem item;
 	item.name = name;
 	item.value = filePath;
+	item.fileTitle = fileTitle;
 
 	FILE* file = fopen(filePath.c_str(), "rb");
 	auto obj = shared_ptr<FILE>(file, ::fclose);
@@ -291,7 +292,7 @@ int HttpPost::PackData()
 				"\r\n"
 				, boundary.c_str()
 				, iter->name.c_str()
-				, File::GetPathFileName(iter->value.c_str()).c_str()
+				, iter->getFileTitle().c_str()
 				, HttpTool::GetContentType(iter->value).c_str()
 			));
 			body.Append(box);
@@ -489,7 +490,7 @@ int HttpPost::PrepareData()
 				"\r\n"
 				, boundary.c_str()
 				, iter->name.c_str()
-				, File::GetPathFileName(iter->value.c_str()).c_str()
+				, iter->getFileTitle().c_str()
 				, HttpTool::GetContentType(iter->value).c_str()
 			);
 			contentLength += desc.length();
@@ -632,7 +633,7 @@ void HttpPost::PreStage(HttpPost::eSendStage stage)
 					"\r\n"
 					, mBoundary.c_str()
 					, fileInfo.name.c_str()
-					, File::GetPathFileName(fileInfo.value.c_str()).c_str()
+					, fileInfo.getFileTitle().c_str()
 					, HttpTool::GetContentType(fileInfo.value).c_str()
 				);
 				mOutbox.Write(desc);

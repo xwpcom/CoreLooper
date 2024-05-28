@@ -51,7 +51,7 @@ public:
 	void AddField(string name, string value);
 
 	//filePath必须为存在的文件
-	int AddFile(string name, string filePath);
+	int AddFile(string name, string filePath, string fileTitle="");
 	void SetBodyRawData(const ByteBuffer& box);
 	void SetBody(const string& text);
 	
@@ -73,6 +73,14 @@ protected:
 	{
 		string name;
 		string value;
+		string fileTitle;//仅在file时用到
+		string getFileTitle() {
+			if (fileTitle.empty()) {
+				return File::GetPathFileName(value.c_str());
+			}
+
+			return fileTitle;
+		}
 		long   mBytes = 0;//仅mFiles有意义
 	};
 	vector<tagItem>  mFields;
