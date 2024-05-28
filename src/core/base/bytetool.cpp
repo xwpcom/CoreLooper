@@ -144,5 +144,8 @@ void ByteTool::HexString2Bin(const char* hexString, ByteBuffer& box)
 		return;
 	}
 
-	return HexString2Bin((string)hexString, box);
+	string hex = hexString;
+	StringTool::Replace(hex, " ", "");
+
+	return HexString2Bin(hex, box);
 }
