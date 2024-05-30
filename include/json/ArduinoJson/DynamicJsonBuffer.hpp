@@ -1,4 +1,4 @@
-﻿// ArduinoJson - arduinojson.org
+// ArduinoJson - arduinojson.org
 // Copyright Benoit Blanchon 2014-2018
 // MIT License
 
@@ -167,4 +167,5 @@ class DynamicJsonBufferBase
 // more suitable for embedded systems.
 typedef Internals::DynamicJsonBufferBase<Internals::DefaultAllocator>
     DynamicJsonBuffer;
+typedef DynamicJsonBuffer JBuf;
 }
