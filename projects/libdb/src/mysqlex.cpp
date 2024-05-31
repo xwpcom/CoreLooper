@@ -113,6 +113,16 @@ int MySql::Connect(const char* server, const char* user, const char* password, c
 	return iReValue;
 }
 
+int MySql::autocommit(bool autoMode)
+{
+	return mysql_autocommit(m_pMySql, autoMode);
+}
+
+int MySql::commit()
+{
+	return mysql_commit(m_pMySql);
+}
+
 int MySql::ping()
 {
 	return mysql_ping(m_pMySql);
