@@ -110,7 +110,7 @@ struct CORE_EXPORT tagTimeMs
 class CORE_EXPORT ShellTool
 {
 public:
-
+	static int str2Int(const string& addr);
 	static void String2IntVector(const string& text, vector<int>& vec);
 	static void String2Vector(const string& text, vector<string>& vec);
 	static bool IsExists(vector<int>& vec, int number);
