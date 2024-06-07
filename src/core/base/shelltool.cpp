@@ -2048,7 +2048,7 @@ int ShellTool::str2Int(const string& addr)
 		v = 1024 * atoi(addr.c_str());
 	}
 	else if (addr.find("0x") == 0 || addr.find("0X") == 0) {
-		v = stol(addr.c_str() + 2, nullptr, 16);
+		v = strtol(addr.c_str() + 2, nullptr, 16);
 	}
 	else {
 		v = atoi(addr.c_str());
