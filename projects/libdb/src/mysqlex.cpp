@@ -214,7 +214,7 @@ DWORD MySql::GetAffectedRows()const
 {
 	if (!m_pMySql)
 	{
-		ASSERT(FALSE);
+		//ASSERT(FALSE);
 		return 0;
 	}
 

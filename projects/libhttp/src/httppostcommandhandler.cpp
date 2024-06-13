@@ -154,10 +154,47 @@ HttpFormField::eResult HttpPostCommandHandler::Input(ByteBuffer& inbox)
 							}
 						#endif
 
-							DynamicJsonBuffer jBuffer;
-							auto& json = jBuffer.parseObject(mInboxBody.data());
-							auto ok = json.success();
+							const char *data = (char*)mInboxBody.data();
+							if (!data || !data[0])
+							{
+								data = "";
+							}
 
+							/*
+							2024.06.11
+							雷达
+REALAIRHEIGHT=LackEnergy
+MODEL=80G_Radar
+SID=610023000850465236353020
+VER=202406011
+
+							*/
+
+							string dataText;
+							DynamicJsonBuffer jBuffer;
+							if (data[0] != '{' && data[0] != '[')
+							{
+								string text = data;
+								StringTool::Replace(text, "\r\n", "\n");
+
+								vector<tagNameValue> items;
+								StringParam::ParseItems(text, items, "\n", "=");
+
+								auto& json = jBuffer.createObject();
+								for (auto& item : items)
+								{
+									json[item.name] = item.value;
+								}
+
+								json.printTo(dataText);
+							}
+							else
+							{
+								dataText = data;
+							}
+
+							auto& json = jBuffer.parseObject(dataText);
+							auto ok = json.success();
 							string ackJson = handler->ProcessJson(json);
 							if (!ackJson.empty())
 							{
