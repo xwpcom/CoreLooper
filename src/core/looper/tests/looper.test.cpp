@@ -102,6 +102,34 @@ public:
 		make_shared<MainLooper>()->StartRun();
 
 	}
+	TEST_METHOD(mainLooper)
+	{
+		class MainLooper :public MainLooper_
+		{
+			long mTimer_test = 0;
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				SetTimer(mTimer_test, 100);
+			}
+
+			void OnTimer(long id)
+			{
+				if (id == mTimer_test)
+				{
+					PostQuitMessage(0);
+					return;
+				}
+
+				__super::OnTimer(id);
+			}
+
+		};
+
+		make_shared<MainLooper>()->StartRun();
+
+	}
 
 	//创建一些looper,测试互发消息
 	TEST_METHOD(sendMessage_)
