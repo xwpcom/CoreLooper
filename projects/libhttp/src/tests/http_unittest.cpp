@@ -379,9 +379,11 @@ public:
 
 				auto obj = make_shared<HttpGet>();
 				AddChild(obj);
-				obj->EnableTls();
-
-				auto url = "https://163.com/index.htm";
+				string url = "https://163.com/index.htm";
+				if (url.find("https") != -1)
+				{
+					obj->EnableTls();
+				}
 				obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
 				obj->Execute(url);
 
@@ -405,21 +407,22 @@ public:
 	{
 		class MainLooper :public MainLooper_
 		{
+			string mTag = "httpGet";
 			void OnCreate()
 			{
 				__super::OnCreate();
 
 				auto obj = make_shared<HttpGet>();
 				AddChild(obj);
-				obj->SetHttpAction("POST");
+				//obj->SetHttpAction("POST");
 
 				auto url = "http://cs.xqxyd.com/dimai.php";
-				obj->SignalHttpGetAck.connect(this, &MainLooper::OnHttpGetAck);
-				obj->Execute(url);
-
-				{
-					postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
-				}
+				url = "192.168.1.3/index.htm";
+				obj->Execute(url, [this](const string& url, int error, ByteBuffer& box) {
+					const char* data = (char*)box.data();
+					LogV(mTag, "testHttp.ack=%s", data);
+							 });
+				postDelayedRunnable(make_shared<DelayExitRunnable>(), 5 * 1000);
 			}
 
 			void OnHttpGetAck(Handler*, string& url, int error, ByteBuffer& box)

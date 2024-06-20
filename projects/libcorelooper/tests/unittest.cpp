@@ -901,7 +901,43 @@ public:
 
 	TEST_METHOD(TestBase_)
 	{
-		TestBase(1, 2);
+		//TestBase(1, 2);
+
+		class Base
+		{
+		protected:
+			string mTag = "base";
+		public:
+			virtual ~Base()
+			{
+				fun();
+			}
+			virtual void fun()
+			{
+				LogV(mTag, "%s",__func__);
+			}
+		};
+		
+		class Child:public Base
+		{
+		public:
+			Child()
+			{
+				mTag = "child";
+			}
+			~Child()override
+			{
+				fun();
+			}
+			virtual void fun()
+			{
+				LogV(mTag, "%s", __func__);
+			}
+		};
+
+		{
+			Child obj;
+		}
 	}
 
 	TEST_METHOD(TestShortcut)
