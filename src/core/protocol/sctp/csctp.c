@@ -211,7 +211,7 @@ int SCTP_Parse(tagSCTP *obj)
 	return 0;
 }
 
-int SCTP_InputData(tagSCTP *obj, unsigned char *text, unsigned short textBytes)
+static int SCTP_InputDataImpl(tagSCTP *obj, unsigned char *text, unsigned short textBytes)
 {
 	{
 		//为避免后续字符串解析出错，当遇到非法0x00字符时主动修改
@@ -248,6 +248,26 @@ int SCTP_InputData(tagSCTP *obj, unsigned char *text, unsigned short textBytes)
 	}
 
 	return SCTP_Parse(obj);
+}
+
+/*
+2024.06.25 业务越来越多导致现在可能一次性收到大量数据，超过sctp inbox尺寸
+需要限制每次最多提交的字节数
+*/
+int SCTP_InputData(tagSCTP* obj, unsigned char* text, unsigned short textBytes)
+{
+	auto d = text;
+	int left = textBytes;
+	while (left > 0)
+	{
+		auto eatBytes = MIN(left, 1024);
+		SCTP_InputDataImpl(obj, d, eatBytes);
+
+		d += eatBytes;
+		left -= eatBytes;
+	}
+
+	return 0;
 }
 
 int SCTP_InputString(tagSCTP *obj, char *text)

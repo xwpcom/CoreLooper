@@ -846,7 +846,13 @@ void HttpPost::ParseInbox()
 	}
 
 	mInbox.MakeSureEndWithNull();
+
 	const char* ack = (const char*)mInbox.GetDataPointer();
+	if (mVerbose)
+	{
+		LogV(TAG, "%p.%s[%s]", this, __func__, ack);
+	}
+
 	const char* key = "\r\n\r\n";
 	auto headerTail = strstr(ack, key);
 	auto headerReady = (headerTail != nullptr);

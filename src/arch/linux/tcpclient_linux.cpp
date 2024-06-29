@@ -272,7 +272,7 @@ void TcpClient_Linux::OnReceive()
 			int ret = (int)recv(mSock, (char*)buf, sizeof(buf)-1, 0);
 
 			if (mVerbose) {
-				LogV(TAG, "raw.recv ret=%d",ret);
+				LogV(TAG, "%p,raw.recv ret=%d",this,ret);
 			}
 
 			if (ret > 0)
