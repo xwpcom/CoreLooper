@@ -117,8 +117,9 @@ int testWolfSSL(const char* host, int port)
 int main()
 {
 	printf("hello\r\n");
-	testWolfSSL("210.76.75.21", 5443);//hwCloud obs
+	//testWolfSSL("210.76.75.21", 5443);//hwCloud obs
 	//testWolfSSL("47.106.193.63", 443);//jjy
+	testWolfSSL("222.216.6.175", 8083);//广西https reportPicture
 
 	return 0;
 }
