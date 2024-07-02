@@ -32,7 +32,7 @@ int HttpAcker::Parse(const string& ack, bool onlyHeader)
 		if (idx < 10)
 		{
 			++idx;
-			LogW(TAG, "invalid http ack");
+			LogV(TAG, "invalid http ack");
 		}
 		//ASSERT(FALSE);
 		return -1;
