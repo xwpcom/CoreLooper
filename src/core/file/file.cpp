@@ -1260,8 +1260,9 @@ int File::GetFileWriteTime(const string& filePath, tagTimeMs& t)
 {
 	int ret = -1;
 
-	HANDLE hFile = ::CreateFileA(filePath.c_str(), GENERIC_READ | GENERIC_WRITE,
-		FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
+	auto wFilePath = Utf8Tool::UTF8_to_UNICODE(filePath);
+	HANDLE hFile = ::CreateFileW(wFilePath, GENERIC_READ | GENERIC_WRITE,
+								 FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
 		NULL);
 	if (hFile != INVALID_HANDLE_VALUE)
 	{
