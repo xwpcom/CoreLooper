@@ -93,7 +93,7 @@ LRESULT Channel::HandleClose(WPARAM wp, LPARAM lp)
 	UNUSED(wp);
 	UNUSED(lp);
 
-	DW("%s", __func__);
+	//DW("%s", __func__);
 	OnClose();
 	return 0;
 }

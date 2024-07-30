@@ -78,7 +78,7 @@ size_t File::GetFileLength(FILE *hFile)
 
 size_t File::GetFileLength(const char *pszFile)
 {
-	if (!pszFile)
+	if (!pszFile || !pszFile[0])
 	{
 		ASSERT(FALSE);
 		return 0;
@@ -86,13 +86,26 @@ size_t File::GetFileLength(const char *pszFile)
 
 	size_t dwLen = 0;
 
+	int ret = -1;
+	#ifdef _MSC_VER
+	struct __stat64 fs = {0};
+	string filePath = pszFile;
+	auto path=Utf8Tool::UTF8_to_UNICODE(filePath);
+	ret= _wstat64(path,&fs);
+	if (ret == 0)
+	{
+		dwLen = (size_t)fs.st_size;
+	}
+
+	#else
 	struct _stat fs;
 	memset(&fs, 0, sizeof(fs));
-	int ret = ::_stat(pszFile, &fs);
+	ret=::_stat(pszFile, &fs);
 	if (ret == 0)
 	{
 		dwLen = fs.st_size;
 	}
+	#endif
 
 	return dwLen;
 }

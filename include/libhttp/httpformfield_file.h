@@ -25,7 +25,7 @@ protected:
 	void Close();
 
 	std::string  mFolder;
-	FILE *mFile;
+	FILE *mFile=nullptr;
 
 	std::string  mLatitude;
 	std::string  mLongitude;

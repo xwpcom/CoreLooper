@@ -13,11 +13,12 @@ static const char* TAG = "HttpPostCommandHandler";
 HttpPostCommandHandler::HttpPostCommandHandler()
 {
 	mInboxBody.SetBufferSize(16 * 1024, 1024 * 1024 * 16);
+	LogV(TAG, "%s(%p)",__func__,this);
 }
 
 HttpPostCommandHandler::~HttpPostCommandHandler()
 {
-
+	LogV(TAG, "%s(%p)", __func__, this);
 }
 
 int HttpPostCommandHandler::Init(shared_ptr<HttpHeader> header)
