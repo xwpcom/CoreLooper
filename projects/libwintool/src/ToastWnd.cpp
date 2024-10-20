@@ -204,6 +204,7 @@ void ToastWnd::OnTimer(UINT_PTR nIDEvent)
 	{
 	case eTimerStartFadeOut:
 	{
+		KillTimer(eTimerStartFadeOut);
 		SetTimer(eTimerFadeOut, 100, nullptr);
 		break;
 	}
@@ -212,6 +213,10 @@ void ToastWnd::OnTimer(UINT_PTR nIDEvent)
 		int alpha = MAX(mCurrentAlpha -30,0);
 		if (alpha == 0)
 		{
+			KillTimer(eTimerFadeOut);
+			AfxGetMainWnd()->SetActiveWindow();
+			AfxGetMainWnd()->SetFocus();
+
 			KillTimer(eTimerFadeOut);
 		}
 		

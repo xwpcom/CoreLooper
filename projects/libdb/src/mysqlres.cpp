@@ -301,6 +301,24 @@ bool MySqlRes::GetFieldInt(const char* pszFieldName, int& iFieldVal)const
 	return false;
 }
 
+bool MySqlRes::GetField(const char* pszFieldName, int64_t& iFieldVal)const
+{
+	const char* pSqlRes = GetField(pszFieldName);
+	if (pSqlRes)
+	{
+		iFieldVal = atoll(pSqlRes);
+		return true;
+	}
+	else
+	{
+		LogW(TAG, "no find field value[%s]", pszFieldName);
+		iFieldVal = 0;
+	}
+
+	//ASSERT(FALSE);
+	return false;
+}
+
 // **************************************************************
 // Function	  : GetFieldFloat
 // Description: 根据field名称取数据 浮点型返回

@@ -106,7 +106,7 @@ public:
 			__super::OnCancel();
 		}
 	}
-
+	static ULONGLONG toastTick();
 	void ShowToast(CString text, int ms=1000);
 	virtual UINT_PTR SetTimer(UINT_PTR nIDEvent, UINT nElapse,
 		void (CALLBACK* lpfnTimer)(HWND, UINT, UINT_PTR, DWORD)=nullptr)

@@ -105,8 +105,15 @@ void BasePage::DelayCloseDialog(int ms)
 	SetTimer(eTimer_DelayCloseDialog, ms,nullptr);
 }
 
+static ULONGLONG gShowToastTick = 0;
+ULONGLONG BasePage::toastTick()
+{
+	return gShowToastTick;
+}
+
 void BasePage::ShowToast(CString text,int ms)
 {
+	gShowToastTick = GetTickCount64();
 	GetToast()->Show(this, text, ms);
 }
 
@@ -120,7 +127,7 @@ shared_ptr<ToastWnd> BasePage::GetToast()
 			WS_POPUP);
 		mToast->SetAlpha(160);
 
-		mToast->SetWindowPos(nullptr, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+		mToast->SetWindowPos(nullptr, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE| SWP_NOSENDCHANGING);
 
 		//DW("toast.Create HWND=0x%08x", mToast->GetSafeHwnd());
 	}

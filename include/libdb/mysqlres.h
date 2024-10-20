@@ -44,6 +44,7 @@ public:
 
 	// 获取该字段值 整形型返回
 	bool GetFieldInt(const char* pszFieldName, int& iFieldVal)const;
+	bool GetField(const char* pszFieldName, int64_t& iFieldVal)const;
 	bool GetFieldBool(const char* pszFieldName, bool& iFieldVal)const;
 
 	// 获取该字段值 浮点型返回
