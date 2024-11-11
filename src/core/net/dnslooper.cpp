@@ -241,6 +241,14 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			}
 
 			//出现过设备网络正常，但dns解析不成功的情况,为此内置平台ip
+			/*
+			if (mIP[0] == 0 && strcmp(mDns, "test.jjyip.com") == 0)
+			{
+				strncpy(mIP, "47.106.193.63", sizeof(mIP) - 1);
+				LogV(TAG, "getaddrinfo fail,use built-in %s",mDns);
+			}
+			*/
+
 			if (mIP[0] == 0 && strcmp(mDns, "iot.jjyip.com") == 0)
 			{
 				strncpy(mIP, "47.106.193.63", sizeof(mIP) - 1);

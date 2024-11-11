@@ -76,6 +76,11 @@ public:
 						string addr = "163.com";
 						dnsLooper->AddRequest(addr, shared_from_this(), BM_DNS_ACK);
 					}
+					if (dnsLooper)
+					{
+						string addr = "test.jjyip.com";
+						dnsLooper->AddRequest(addr, shared_from_this(), BM_DNS_ACK);
+					}
 					return;
 				}
 
