@@ -40,6 +40,9 @@ public:
 	FileFinder(void);
 	virtual ~FileFinder(void);
 
+	//static int enumFiles(function<int(const char* name, size_t bytes)> fn, const char* folder, const char* ext = "");
+	//static int enumFolders(function<int(const char* name)> fn, const char* folder);
+
 	BOOL FindFile(const string&dir, std::string ext = "");
 	BOOL FindNextFile();
 	BOOL IsDots();
@@ -54,6 +57,7 @@ public:
 	}
 #ifdef _MSC_VER
 	BOOL GetLastWriteTime(CTime& tmWrite);
+	BOOL GetLastWriteTime(time_t& tmWrite);
 #else
 	BOOL GetLastWriteTime(time_t& tmWrite);
 #endif

@@ -276,6 +276,19 @@ ULONGLONG FileFinder::GetLength()
 }
 
 #ifdef _MSC_VER
+BOOL FileFinder::GetLastWriteTime(time_t& tmWrite)
+{
+	if (mIdx != -1)
+	{
+		CTime t = CTime(mItems[mIdx].mStat.st_ctime);
+		tmWrite = t.GetTime();
+		return TRUE;
+	}
+	ASSERT(FALSE);
+	return FALSE;
+	//return finder.GetLastWriteTime(tmWrite);
+}
+
 BOOL FileFinder::GetLastWriteTime(CTime& tmWrite)
 {
 	if (mIdx != -1)
@@ -302,5 +315,18 @@ BOOL FileFinder::GetLastWriteTime(time_t& tmWrite)
 }
 #endif
 }
+
+/*
+int FileFinder::enumFiles(function<int(const char* name, size_t bytes)> fn, const char* folder, const char* ext)
+{
+	return -1;
+}
+
+int FileFinder::enumFolders(function<int(const char* name)> fn, const char* folder)
+{
+	return -1;
+}
+*/
+
 }
 }
