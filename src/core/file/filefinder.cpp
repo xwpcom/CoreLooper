@@ -114,7 +114,7 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 	}
 #else
 	DIR * pDir = opendir(dir.c_str());
-	//DT("opendir(%s)=0x%x",mDir.c_str(),pDir);
+	//LogV(mTag,"opendir(%s)=0x%x",mDir.c_str(),pDir);
 	if (!pDir)
 	{
 		return FALSE;
@@ -153,11 +153,13 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 
 			char fullname[MAX_PATH];
 			File::concat_path_file(dir.c_str(), entry->d_name, fullname, sizeof(fullname) - 1);
-			struct stat dstat;
+			struct stat dstat = {0};
 			int ret = lstat(fullname, &dstat);
-			if (ret == 0)
+			bool link = (entry->d_type == DT_LNK);
+
+			if (ret == 0 || link)
 			{
-				if (tagFileFindItem::IsDirectory(dstat) || ext.empty())
+				if (link || tagFileFindItem::IsDirectory(dstat) || ext.empty())
 				{
 				}
 				else
@@ -166,6 +168,28 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 					if (ext != StringTool::Right(fileName,extLen))
 					{
 						continue;
+					}
+				}
+
+				if (link)
+				{
+					char pathname[MAX_PATH] = { 0 };
+					snprintf(pathname, sizeof(pathname) - 1, "%s/%s", dir.c_str(), entry->d_name);
+					//LogV(mTag, "pathname=[%s]", pathname);
+					char buf[MAX_PATH] = { 0 };
+					ssize_t ret = readlink(pathname, buf, sizeof(buf) - 1);
+					struct stat s;
+					if (lstat(buf, &s) == 0) {
+						if (S_ISDIR(s.st_mode)) {
+							dstat.st_mode = S_IFDIR;
+							//LogV(mTag, "is dir:[%s]",pathname);
+						}
+						else if (S_ISREG(s.st_mode)) {
+							//LogV(mTag, "is file:[%s]", pathname);
+						}
+						else if (S_ISLNK(s.st_mode)) {
+							//LogV(mTag, "is link:[%s]", pathname);
+						}
 					}
 				}
 

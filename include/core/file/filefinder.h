@@ -31,6 +31,11 @@ struct tagFileFindItem
 		return (S_IFMT & stat.st_mode) == S_IFDIR;
 #endif
 	}
+
+	time_t writeTime()const
+	{
+		return mStat.st_ctime;
+	}
 };
 
 //XiongWanPing 2011.06.15
@@ -72,6 +77,11 @@ public:
 		return mCorrupt;
 	}
 
+	const std::vector<tagFileFindItem>& items()
+	{
+		return mItems;
+	}
+
 protected:
 	int				mIdx;
 	std::string		mDir;
@@ -82,6 +92,7 @@ protected:
 	bool			mFolderAtFirst = true;
 	static bool sortcmpFolderAtFirst(const tagFileFindItem& a, const tagFileFindItem& b);
 	static bool sortcmpByName(const tagFileFindItem& a, const tagFileFindItem& b);
+	string mTag = "fileFinder";
 };
 
 }
