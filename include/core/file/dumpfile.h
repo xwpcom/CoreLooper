@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <stdio.h>
 
 namespace Bear {
@@ -27,7 +27,7 @@ public:
 
 	long GetPos();
 protected:
-	FILE * mFile;
+	FILE * mFile=nullptr;
 };
 }
 }
