@@ -82,6 +82,15 @@ public:
 		return mItems;
 	}
 
+	void setOrderAsc()
+	{
+		mOrderAsc = true;
+	}
+	void setOrderDesc()
+	{
+		mOrderAsc = false;
+	}
+
 protected:
 	int				mIdx;
 	std::string		mDir;
@@ -90,8 +99,11 @@ protected:
 	bool			mStopOnCorruptFiles = false;
 	bool			mCorrupt = false;
 	bool			mFolderAtFirst = true;
+	bool			mOrderAsc = true;
 	static bool sortcmpFolderAtFirst(const tagFileFindItem& a, const tagFileFindItem& b);
 	static bool sortcmpByName(const tagFileFindItem& a, const tagFileFindItem& b);
+	static bool sortcmpFolderAtFirst_desc(const tagFileFindItem& a, const tagFileFindItem& b);
+	static bool sortcmpByName_desc(const tagFileFindItem& a, const tagFileFindItem& b);
 	string mTag = "fileFinder";
 };
 

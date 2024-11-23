@@ -208,11 +208,25 @@ BOOL FileFinder::FindFile(const string& dir, string ext)
 		//auto nc = mItems.size();// GetSize();
 		if (mFolderAtFirst)
 		{
-			std::sort(mItems.begin(), mItems.end(), sortcmpFolderAtFirst);
+			if (mOrderAsc)
+			{
+				std::sort(mItems.begin(), mItems.end(), sortcmpFolderAtFirst);
+			}
+			else
+			{
+				std::sort(mItems.begin(), mItems.end(), sortcmpFolderAtFirst_desc);
+			}
 		}
 		else
 		{
-			std::sort(mItems.begin(), mItems.end(), sortcmpByName);
+			if (mOrderAsc)
+			{
+				std::sort(mItems.begin(), mItems.end(), sortcmpByName);
+			}
+			else
+			{
+				std::sort(mItems.begin(), mItems.end(), sortcmpByName_desc);
+			}
 		}
 	}
 
@@ -244,6 +258,31 @@ bool FileFinder::sortcmpByName(const tagFileFindItem& a, const tagFileFindItem& 
 {
 	auto ret=StringTool::CompareNoCase(a.mName, b.mName);
 	return ret > 0 ? false : true;
+}
+
+bool FileFinder::sortcmpFolderAtFirst_desc(const tagFileFindItem& a, const tagFileFindItem& b)
+{
+	int ret = 0;
+	if ((a.IsFolder() && b.IsFolder())
+		|| (!a.IsFolder() && !b.IsFolder())
+		)
+	{
+		//both are folders or both are files
+		//ret = _stricmp(pa->mName.c_str(),pb->mName.c_str());
+		ret = StringTool::CompareNoCase(b.mName, a.mName);
+	}
+	else
+	{
+		//one is folder,another is file
+		ret = a.IsFolder() ? -1 : 1;
+	}
+
+	return ret > 0 ? false : true;
+}
+
+bool FileFinder::sortcmpByName_desc(const tagFileFindItem& a, const tagFileFindItem& b)
+{
+	return !sortcmpByName(a, b);
 }
 
 BOOL FileFinder::FindNextFile()
