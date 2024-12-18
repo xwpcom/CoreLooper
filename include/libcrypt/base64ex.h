@@ -25,13 +25,10 @@ public:
 	// base64Encode:
 	// returns a 0-terminated std::string that the caller is responsible for delete[]ing.
 	static char* base64Encode(char const* orig, unsigned origLength);
+	static int  CalcBase64EncDataLen(int cbInputSize);
+	static BOOL Base64Encode(LPCSTR szEncoding, int nSize, char* pszOutput, int cbOutput);
 protected:
 	static bool Decode(std::string  szText, char * buf, int buflen, int & outlen);
-
-
-	//smtp
-	static BOOL Base64Encode(LPCSTR szEncoding, int nSize, char *pszOutput, int cbOutput);
-	static int  CalcBase64EncDataLen(int cbInputSize);
 
 
 };
