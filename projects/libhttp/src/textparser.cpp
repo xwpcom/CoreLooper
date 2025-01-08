@@ -107,7 +107,13 @@ CSeq: 1
 		if (pos != -1)
 		{
 			string item=line.substr(pos+1);
-			mBundle.Set(line.substr(0,pos), StringTool::Trim(item,' '));
+
+			auto name = line.substr(0, pos);
+			if (mBundle.IsKeyExists(name))
+			{
+				name += "2";
+			}
+			mBundle.Set(name, StringTool::Trim(item,' '));
 		}
 
 	}
