@@ -201,7 +201,7 @@ void HttpHandler::ParseInbox()
 	{
 		auto d = inbox->data();
 		auto bytes = inbox->length();
-		if (bytes == 0)
+		if (!d || bytes == 0)
 		{
 			break;
 		}
@@ -230,6 +230,11 @@ void HttpHandler::ParseInbox()
 		}
 
 		auto httpResult = mHttpRequest;
+		if (!httpResult)
+		{
+			LogW(TAG, "mHttpRequest is null");
+			return;
+		}
 
 		bytes = inbox->length();
 		auto ret = httpResult->Input(*inbox);

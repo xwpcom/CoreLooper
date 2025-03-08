@@ -140,7 +140,7 @@ protected:
 protected:
 	int CheckWebSocket();
 	bool mIsWebSocket = false;
-	ByteBuffer * m_outbox;
+	ByteBuffer * m_outbox = nullptr;
 	ByteBuffer				m_outboxPending;		//有待发给m_outbox的数据
 	//m_outboxPending给CHttpRequestHandlerXXX提供足够大的空间，保证至少能提交普通的http ack header+4KB数据
 
@@ -148,8 +148,8 @@ protected:
 
 	tagHttpHeaderInfo		m_headerInfo;
 
-	IUserInfo				*m_userAuth;
-	IHttpRequestTransform	*m_httpRequestTransform;
+	IUserInfo				*m_userAuth=nullptr;
+	IHttpRequestTransform	*m_httpRequestTransform = nullptr;
 
 	std::shared_ptr<HttpRequestHandler> m_handler;
 	static NameValue		*m_mapUriFile;//映射特殊的uri文件

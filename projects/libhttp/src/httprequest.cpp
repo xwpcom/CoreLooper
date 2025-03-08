@@ -212,13 +212,16 @@ int HttpRequest::Input(ByteBuffer& inbox)
 		//IE6.0有时在最后面会多加\r\n
 
 		const int len = hi.m_headerLength + hi.m_contentLength;
-		BYTE chSave = pData[len];
-		pData[len] = 0;
-		m_headerInfo.m_request = (char*)pData;
-		m_headerInfo.m_len = len;
-		OnHeaderContentReady();
-		pData[len] = chSave;
-		inbox.Eat(len);
+		if (len > 0 && len <= cbData)
+		{
+			BYTE chSave = pData[len];
+			pData[len] = 0;
+			m_headerInfo.m_request = (char*)pData;
+			m_headerInfo.m_len = len;
+			OnHeaderContentReady();
+			pData[len] = chSave;
+			inbox.Eat(len);
+		}
 	}
 
 	return 0;
