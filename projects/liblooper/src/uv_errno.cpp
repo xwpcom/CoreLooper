@@ -2,14 +2,6 @@
 #include "uv_errno.h"
 #include <cstdio>
 
-#if defined(_WIN32)
-#define FD_SETSIZE 1024 //修改默认64为1024路
-#include <winsock2.h>
-#include <windows.h>
-#else
-#include <cerrno>
-#endif // defined(_WIN32)
-
 namespace Core {
 
 static const char *uv__unknown_err_code(int err) {

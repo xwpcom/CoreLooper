@@ -211,6 +211,39 @@ int Tea::Encode(ByteBuffer& inbox,ByteBuffer& outbox)
 	return 0;
 }
 
+//返回解密结果字节数
+//cbData必须>=cbEnc
+int Tea::decode(const uint8_t* pEnc, int cbEnc, uint8_t* pData, int cbData)
+{
+	const int eat = 8;			//每步消耗字节数
+
+	if (cbData < cbEnc || cbEnc <= 0 || ((cbEnc % eat) != 0))
+	{
+		//ASSERT(false);
+		return 0;
+	}
+
+	//const int max_padding=8;	//最多填充8字节
+
+	auto psrc = pEnc;
+	uint8_t* pdst = pData;
+	int left = cbEnc;
+	int cbWrite = 0;
+
+	while (left >= eat)
+	{
+		Decrypt((ULONG*)psrc, (ULONG*)pdst);
+		psrc += eat;
+		pdst += eat;
+		cbWrite += eat;
+
+		left -= eat;
+	}
+
+	cbWrite -= *(pdst - 1);//删除padding字节数
+	return cbWrite;
+}
+
 int Tea::Decode(ByteBuffer& inbox,ByteBuffer& outbox)
 {
 	outbox.clear();

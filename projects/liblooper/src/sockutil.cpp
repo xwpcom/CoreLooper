@@ -1,5 +1,4 @@
 ﻿#include <pch.h>
-
 #include <fcntl.h>
 #include <assert.h>
 #include <cstdio>
@@ -17,8 +16,10 @@
 #include <netinet/tcp.h>
 #endif
 using namespace std;
+#include "logger.h"
 
 namespace Core {
+static const char* TAG = "sockutil";
 
 #if defined(_WIN32)
 static onceToken g_token([]() {
@@ -96,7 +97,12 @@ static inline bool support_ipv6_l() {
     if (fd == -1) {
         return false;
     }
+
+	#ifdef _MSC_VER
+	closesocket(fd);
+	#else
     close(fd);
+	#endif
     return true;
 }
 
@@ -147,7 +153,7 @@ int SockUtil::setCloseWait(int fd, int second) {
     int ret = setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &m_sLinger, sizeof(linger));
     if (ret == -1) {
 #ifndef _WIN32
-        TraceL << "setsockopt SO_LINGER failed";
+        logD(TAG) << "setsockopt SO_LINGER failed";
 #endif
     }
     return ret;
@@ -157,7 +163,7 @@ int SockUtil::setNoDelay(int fd, bool on) {
     int opt = on ? 1 : 0;
     int ret = setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &opt, static_cast<socklen_t>(sizeof(opt)));
     if (ret == -1) {
-        TraceL << "setsockopt TCP_NODELAY failed";
+        logD(TAG) << "setsockopt TCP_NODELAY failed";
     }
     return ret;
 }
@@ -166,14 +172,14 @@ int SockUtil::setReuseable(int fd, bool on, bool reuse_port) {
     int opt = on ? 1 : 0;
     int ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, static_cast<socklen_t>(sizeof(opt)));
     if (ret == -1) {
-        TraceL << "setsockopt SO_REUSEADDR failed";
+        logD(TAG) << "setsockopt SO_REUSEADDR failed";
         return ret;
     }
 #if defined(SO_REUSEPORT)
     if (reuse_port) {
         ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, (char *) &opt, static_cast<socklen_t>(sizeof(opt)));
         if (ret == -1) {
-            TraceL << "setsockopt SO_REUSEPORT failed";
+            logD(TAG) << "setsockopt SO_REUSEPORT failed";
         }
     }
 #endif
@@ -184,7 +190,7 @@ int SockUtil::setBroadcast(int fd, bool on) {
     int opt = on ? 1 : 0;
     int ret = setsockopt(fd, SOL_SOCKET, SO_BROADCAST, (char *) &opt, static_cast<socklen_t>(sizeof(opt)));
     if (ret == -1) {
-        TraceL << "setsockopt SO_BROADCAST failed";
+        logD(TAG) << "setsockopt SO_BROADCAST failed";
     }
     return ret;
 }
@@ -194,7 +200,7 @@ int SockUtil::setKeepAlive(int fd, bool on, int interval, int idle, int times) {
     int opt = on ? 1 : 0;
     int ret = setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &opt, static_cast<socklen_t>(sizeof(opt)));
     if (ret == -1) {
-        TraceL << "setsockopt SO_KEEPALIVE failed";
+        logD(TAG) << "setsockopt SO_KEEPALIVE failed";
     }
 #if !defined(_WIN32)
 #if !defined(SOL_TCP) && defined(IPPROTO_TCP)
@@ -207,15 +213,15 @@ int SockUtil::setKeepAlive(int fd, bool on, int interval, int idle, int times) {
     if (on && interval > 0 && ret != -1) {
         ret = setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, (char *) &idle, static_cast<socklen_t>(sizeof(idle)));
         if (ret == -1) {
-            TraceL << "setsockopt TCP_KEEPIDLE failed";
+            logD(TAG) << "setsockopt TCP_KEEPIDLE failed";
         }
         ret = setsockopt(fd, SOL_TCP, TCP_KEEPINTVL, (char *) &interval, static_cast<socklen_t>(sizeof(interval)));
         if (ret == -1) {
-            TraceL << "setsockopt TCP_KEEPINTVL failed";
+            logD(TAG) << "setsockopt TCP_KEEPINTVL failed";
         }
         ret = setsockopt(fd, SOL_TCP, TCP_KEEPCNT, (char *) &times, static_cast<socklen_t>(sizeof(times)));
         if (ret == -1) {
-            TraceL << "setsockopt TCP_KEEPCNT failed";
+            logD(TAG) << "setsockopt TCP_KEEPCNT failed";
         }
     }
 #endif
@@ -226,7 +232,7 @@ int SockUtil::setCloExec(int fd, bool on) {
 #if !defined(_WIN32)
     int flags = fcntl(fd, F_GETFD);
     if (flags == -1) {
-        TraceL << "fcntl F_GETFD failed";
+        logD(TAG) << "fcntl F_GETFD failed";
         return -1;
     }
     if (on) {
@@ -237,7 +243,7 @@ int SockUtil::setCloExec(int fd, bool on) {
     }
     int ret = fcntl(fd, F_SETFD, flags);
     if (ret == -1) {
-        TraceL << "fcntl F_SETFD failed";
+        logD(TAG) << "fcntl F_SETFD failed";
         return -1;
     }
     return ret;
@@ -251,7 +257,7 @@ int SockUtil::setNoSigpipe(int fd) {
     int set = 1;
     auto ret = setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, (char *) &set, sizeof(int));
     if (ret == -1) {
-        TraceL << "setsockopt SO_NOSIGPIPE failed";
+        logD(TAG) << "setsockopt SO_NOSIGPIPE failed";
     }
     return ret;
 #else
@@ -267,7 +273,7 @@ int SockUtil::setNoBlocked(int fd, bool noblock) {
 #endif //defined(_WIN32)
     int ret = ioctl(fd, FIONBIO, &ul); //设置为非阻塞模式
     if (ret == -1) {
-        TraceL << "ioctl FIONBIO failed";
+        logD(TAG) << "ioctl FIONBIO failed";
     }
 
     return ret;
@@ -280,7 +286,7 @@ int SockUtil::setRecvBuf(int fd, int size) {
     }
     int ret = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (char *) &size, sizeof(size));
     if (ret == -1) {
-        TraceL << "setsockopt SO_RCVBUF failed";
+        logD(TAG) << "setsockopt SO_RCVBUF failed";
     }
     return ret;
 }
@@ -291,7 +297,7 @@ int SockUtil::setSendBuf(int fd, int size) {
     }
     int ret = setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (char *) &size, sizeof(size));
     if (ret == -1) {
-        TraceL << "setsockopt SO_SNDBUF failed";
+        logD(TAG) << "setsockopt SO_SNDBUF failed";
     }
     return ret;
 }
@@ -366,7 +372,7 @@ private:
         } while (ret == -1 && get_uv_error(true) == UV_EINTR);
 
         if (!answer) {
-            WarnL << "getaddrinfo failed: " << host;
+            logW(TAG) << "getaddrinfo failed: " << host;
             return nullptr;
         }
         return std::shared_ptr<struct addrinfo>(answer, freeaddrinfo);
@@ -405,7 +411,7 @@ static int set_ipv6_only(int fd, bool flag) {
     int opt = flag;
     int ret = setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&opt, sizeof opt);
     if (ret == -1) {
-        TraceL << "setsockopt IPV6_V6ONLY failed";
+        logD(TAG) << "setsockopt IPV6_V6ONLY failed";
     }
     return ret;
 }
@@ -418,12 +424,12 @@ static int bind_sock6(int fd, const char *ifr_ip, uint16_t port) {
     addr.sin6_port = htons(port);
     if (1 != inet_pton(AF_INET6, ifr_ip, &(addr.sin6_addr))) {
         if (strcmp(ifr_ip, "0.0.0.0")) {
-            WarnL << "inet_pton to ipv6 address failed: " << ifr_ip;
+            logW(TAG) << "inet_pton to ipv6 address failed: " << ifr_ip;
         }
         addr.sin6_addr = IN6ADDR_ANY_INIT;
     }
     if (::bind(fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
-        WarnL << "Bind socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Bind socket failed: " << get_uv_errmsg(true);
         return -1;
     }
     return 0;
@@ -437,12 +443,12 @@ static int bind_sock4(int fd, const char *ifr_ip, uint16_t port) {
     addr.sin_port = htons(port);
     if (1 != inet_pton(AF_INET, ifr_ip, &(addr.sin_addr))) {
         if (strcmp(ifr_ip, "::")) {
-            WarnL << "inet_pton to ipv4 address failed: " << ifr_ip;
+            logW(TAG) << "inet_pton to ipv4 address failed: " << ifr_ip;
         }
         addr.sin_addr.s_addr = INADDR_ANY;
     }
     if (::bind(fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
-        WarnL << "Bind socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Bind socket failed: " << get_uv_errmsg(true);
         return -1;
     }
     return 0;
@@ -468,7 +474,7 @@ int SockUtil::connect(const char *host, uint16_t port, bool async, const char *l
 
     int sockfd = (int) socket(addr.ss_family, SOCK_STREAM, IPPROTO_TCP);
     if (sockfd < 0) {
-        WarnL << "Create socket failed: " << host;
+        logW(TAG) << "Create socket failed: " << host;
         return -1;
     }
 
@@ -496,7 +502,7 @@ int SockUtil::connect(const char *host, uint16_t port, bool async, const char *l
         //Asynchronous connection successful
         return sockfd;
     }
-    WarnL << "Connect socket to " << host << " " << port << " failed: " << get_uv_errmsg(true);
+    logW(TAG) << "Connect socket to " << host << " " << port << " failed: " << get_uv_errmsg(true);
     close(sockfd);
     return -1;
 }
@@ -505,7 +511,7 @@ int SockUtil::listen(const uint16_t port, const char *local_ip, int back_log) {
     int fd = -1;
     int family = support_ipv6() ? (is_ipv4(local_ip) ? AF_INET : AF_INET6) : AF_INET;
     if ((fd = (int)socket(family, SOCK_STREAM, IPPROTO_TCP)) == -1) {
-        WarnL << "Create socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Create socket failed: " << get_uv_errmsg(true);
         return -1;
     }
 
@@ -521,7 +527,7 @@ int SockUtil::listen(const uint16_t port, const char *local_ip, int back_log) {
     //开始监听  [AUTO-TRANSLATED:4404b1a8]
     //Start listening
     if (::listen(fd, back_log) == -1) {
-        WarnL << "Listen socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Listen socket failed: " << get_uv_errmsg(true);
         close(fd);
         return -1;
     }
@@ -645,11 +651,11 @@ void for_each_netAdapter_posix(FUN &&fun){ //type: struct ifreq *
     ifconf.ifc_buf = buf;
     int sockfd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if (sockfd < 0) {
-        WarnL << "Create socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Create socket failed: " << get_uv_errmsg(true);
         return;
     }
     if (-1 == ioctl(sockfd, SIOCGIFCONF, &ifconf)) {    //获取所有接口信息
-        WarnL << "ioctl SIOCGIFCONF failed: " << get_uv_errmsg(true);
+        logW(TAG) << "ioctl SIOCGIFCONF failed: " << get_uv_errmsg(true);
         close(sockfd);
         return;
     }
@@ -785,7 +791,7 @@ int SockUtil::bindUdpSock(const uint16_t port, const char *local_ip, bool enable
     int fd = -1;
     int family = support_ipv6() ? (is_ipv4(local_ip) ? AF_INET : AF_INET6) : AF_INET;
     if ((fd = (int)socket(family, SOCK_DGRAM, IPPROTO_UDP)) == -1) {
-        WarnL << "Create socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Create socket failed: " << get_uv_errmsg(true);
         return -1;
     }
     if (enable_reuse) {
@@ -815,7 +821,7 @@ int SockUtil::dissolveUdpSock(int fd) {
     if (-1 == ::connect(fd, (struct sockaddr *)&addr, addr_len) && get_uv_error() != UV_EAFNOSUPPORT) {
         // mac/ios时返回EAFNOSUPPORT错误  [AUTO-TRANSLATED:bbe0621c]
         //Returns EAFNOSUPPORT error on Mac/IOS
-        WarnL << "Connect socket AF_UNSPEC failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Connect socket AF_UNSPEC failed: " << get_uv_errmsg(true);
         return -1;
     }
    return 0;
@@ -934,13 +940,13 @@ string SockUtil::get_ifr_mask(const char *if_name) {
     struct ifreq ifr_mask;
     fd = socket(AF_INET, SOCK_STREAM, 0);
     if (fd == -1) {
-        WarnL << "Create socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Create socket failed: " << get_uv_errmsg(true);
         return "";
     }
     memset(&ifr_mask, 0, sizeof(ifr_mask));
     strncpy(ifr_mask.ifr_name, if_name, sizeof(ifr_mask.ifr_name) - 1);
     if ((ioctl(fd, SIOCGIFNETMASK, &ifr_mask)) < 0) {
-        WarnL << "ioctl SIOCGIFNETMASK on " << if_name << " failed: " << get_uv_errmsg(true);
+        logW(TAG) << "ioctl SIOCGIFNETMASK on " << if_name << " failed: " << get_uv_errmsg(true);
         close(fd);
         return "";
     }
@@ -980,13 +986,13 @@ string SockUtil::get_ifr_brdaddr(const char *if_name) {
     struct ifreq ifr_mask;
     fd = socket( AF_INET, SOCK_STREAM, 0);
     if (fd == -1) {
-        WarnL << "Create socket failed: " << get_uv_errmsg(true);
+        logW(TAG) << "Create socket failed: " << get_uv_errmsg(true);
         return "";
     }
     memset(&ifr_mask, 0, sizeof(ifr_mask));
     strncpy(ifr_mask.ifr_name, if_name, sizeof(ifr_mask.ifr_name) - 1);
     if ((ioctl(fd, SIOCGIFBRDADDR, &ifr_mask)) < 0) {
-        WarnL << "ioctl SIOCGIFBRDADDR failed: " << get_uv_errmsg(true);
+        logW(TAG) << "ioctl SIOCGIFBRDADDR failed: " << get_uv_errmsg(true);
         close(fd);
         return "";
     }
@@ -1018,7 +1024,7 @@ int SockUtil::setMultiTTL(int fd, uint8_t ttl) {
 #if defined(IP_MULTICAST_TTL)
     ret = setsockopt(fd, IPPROTO_IP, IP_MULTICAST_TTL, (char *) &ttl, sizeof(ttl));
     if (ret == -1) {
-        TraceL << "setsockopt IP_MULTICAST_TTL failed";
+        logD(TAG) << "setsockopt IP_MULTICAST_TTL failed";
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1032,7 +1038,7 @@ int SockUtil::setMultiIF(int fd, const char *local_ip) {
     addr.s_addr = inet_addr(local_ip);
     ret = setsockopt(fd, IPPROTO_IP, IP_MULTICAST_IF, (char *) &addr, sizeof(addr));
     if (ret == -1) {
-        TraceL << "setsockopt IP_MULTICAST_IF failed";
+        logD(TAG) << "setsockopt IP_MULTICAST_IF failed";
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1045,7 +1051,7 @@ int SockUtil::setMultiLOOP(int fd, bool accept) {
     uint8_t loop = accept;
     ret = setsockopt(fd, IPPROTO_IP, IP_MULTICAST_LOOP, (char *) &loop, sizeof(loop));
     if (ret == -1) {
-        TraceL << "setsockopt IP_MULTICAST_LOOP failed";
+        logD(TAG) << "setsockopt IP_MULTICAST_LOOP failed";
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1060,7 +1066,7 @@ int SockUtil::joinMultiAddr(int fd, const char *addr, const char *local_ip) {
     imr.imr_interface.s_addr = inet_addr(local_ip);
     ret = setsockopt(fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, (char *) &imr, sizeof(struct ip_mreq));
     if (ret == -1) {
-        TraceL << "setsockopt IP_ADD_MEMBERSHIP failed: " << get_uv_errmsg(true);
+        logD(TAG) << "setsockopt IP_ADD_MEMBERSHIP failed: " << get_uv_errmsg(true);
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1075,7 +1081,7 @@ int SockUtil::leaveMultiAddr(int fd, const char *addr, const char *local_ip) {
     imr.imr_interface.s_addr = inet_addr(local_ip);
     ret = setsockopt(fd, IPPROTO_IP, IP_DROP_MEMBERSHIP, (char *) &imr, sizeof(struct ip_mreq));
     if (ret == -1) {
-        TraceL << "setsockopt IP_DROP_MEMBERSHIP failed: " << get_uv_errmsg(true);
+        logD(TAG) << "setsockopt IP_DROP_MEMBERSHIP failed: " << get_uv_errmsg(true);
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1098,7 +1104,7 @@ int SockUtil::joinMultiAddrFilter(int fd, const char *addr, const char *src_ip, 
 
     ret = setsockopt(fd, IPPROTO_IP, IP_ADD_SOURCE_MEMBERSHIP, (char *) &imr, sizeof(struct ip_mreq_source));
     if (ret == -1) {
-        TraceL << "setsockopt IP_ADD_SOURCE_MEMBERSHIP failed: " << get_uv_errmsg(true);
+        logD(TAG) << "setsockopt IP_ADD_SOURCE_MEMBERSHIP failed: " << get_uv_errmsg(true);
     }
 #endif
     clearMulticastAllSocketOption(fd);
@@ -1116,7 +1122,7 @@ int SockUtil::leaveMultiAddrFilter(int fd, const char *addr, const char *src_ip,
 
     ret = setsockopt(fd, IPPROTO_IP, IP_DROP_SOURCE_MEMBERSHIP, (char *) &imr, sizeof(struct ip_mreq_source));
     if (ret == -1) {
-        TraceL << "setsockopt IP_DROP_SOURCE_MEMBERSHIP failed: " << get_uv_errmsg(true);
+        logD(TAG) << "setsockopt IP_DROP_SOURCE_MEMBERSHIP failed: " << get_uv_errmsg(true);
     }
 #endif
     clearMulticastAllSocketOption(fd);

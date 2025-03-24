@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "uv_errno.h"
 
 #if defined(_WIN32)
 #include <winsock2.h>

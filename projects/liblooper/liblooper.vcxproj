@@ -163,15 +163,29 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\bytebuffer.cpp" />
+    <ClCompile Include="src\bytetool.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\loghandler_dt.cpp" />
     <ClCompile Include="src\looper.cpp" />
     <ClCompile Include="src\pipeWrap.cpp" />
     <ClCompile Include="src\sockutil.cpp" />
+    <ClCompile Include="src\stringtool.cpp" />
+    <ClCompile Include="src\system.cpp" />
+    <ClCompile Include="src\timems.cpp" />
+    <ClCompile Include="src\timer.cpp" />
     <ClCompile Include="src\uv_errno.cpp" />
+    <ClCompile Include="src\wepoll\sys\epoll.cpp" />
+    <ClCompile Include="src\wepoll\wepoll.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\wepoll\wepoll.test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="src\bytebuffer.h" />
+    <ClInclude Include="src\bytetool.h" />
     <ClInclude Include="src\list.h" />
     <ClInclude Include="src\logger.h" />
     <ClInclude Include="src\loghandler_dt.h" />
@@ -180,8 +194,17 @@
     <ClInclude Include="src\onceToken.h" />
     <ClInclude Include="src\pipeWrap.h" />
     <ClInclude Include="src\sockutil.h" />
+    <ClInclude Include="src\stringtool.h" />
+    <ClInclude Include="src\system.h" />
     <ClInclude Include="src\task.executor.h" />
+    <ClInclude Include="src\timems.h" />
+    <ClInclude Include="src\timer.h" />
     <ClInclude Include="src\uv_errno.h" />
+    <ClInclude Include="src\wepoll\sys\epoll.h" />
+    <ClInclude Include="src\wepoll\wepoll.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,21 @@
+# To learn more about .editorconfig see https://aka.ms/editorconfigdocs
+
+# All files
+[*]
+indent_style = tab
+indent_size = 4
+#charset = utf-8-bom
+charset = utf-8
+
+# Xml files
+[*.xml]
+indent_size = 2
+
+[*.json]
+charset = utf-8
+
+[*.cpp]
+charset = utf-8-bom
+[*.h]
+charset = utf-8-bom
+

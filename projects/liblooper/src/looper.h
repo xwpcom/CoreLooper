@@ -12,10 +12,10 @@ public:
 	virtual ~Looper();
 
 	typedef enum {
-		Event_Read = 1 << 0, //读事件
-		Event_Write = 1 << 1, //写事件
-		Event_Error = 1 << 2, //错误事件
-		Event_LT = 1 << 3,//水平触发
+		Event_Read	= 1 << 0,
+		Event_Write = 1 << 1,
+		Event_Error = 1 << 2,
+		Event_LT	= 1 << 3,
 	} PollEvent;
 
 	using Ptr = shared_ptr<Looper>;
@@ -37,8 +37,9 @@ public:
 
 	DelayTask::Ptr doDelayTask(uint64_t delay_ms, std::function<uint64_t()> task);
 
+	void runLoop();
 protected:
-	void runLoop(bool blocked, bool ref_self);
+	Task::Ptr async_l(TaskIn task, bool may_sync = true, bool first = false);
 
 	void onPipeEvent(bool flush = false);
 	uint64_t flushDelayTask(uint64_t now);
@@ -47,6 +48,7 @@ protected:
 	
 	PipeWrap _pipe;
 
+	bool _exit_flag=false;
 	int _event_fd = -1;
 	std::unordered_map<int, std::shared_ptr<PollEventCB> > _event_map;
 	std::unordered_set<int> _event_cache_expired;
@@ -55,7 +57,9 @@ protected:
 	std::mutex _mtx_task;
 	List<Task::Ptr> _list_task;
 
+	std::thread* _loop_thread = nullptr;
 	//Logger::Ptr _logger;
+	string mTag = "looper";
 };
 
 }
