@@ -20,9 +20,32 @@
 #endif //HAS_EPOLL
 
 namespace Core {
+static Looper* gInstance = nullptr;
+Looper::Ptr Looper::instance()
+{
+	if (gInstance)
+	{
+		return gInstance->shared_from_this();
+	}
+
+	return nullptr;
+}
+
+Looper::~Looper()
+{
+	if (gInstance == this)
+	{
+		gInstance = nullptr;
+	}
+}
 
 Looper::Looper()
 {
+	if (!gInstance)
+	{
+		gInstance = this;
+	}
+
 	#if defined(HAS_EPOLL)
 	_event_fd = create_event();
 	if (_event_fd == -1) {
@@ -34,11 +57,6 @@ Looper::Looper()
 	//_name = std::move(name);
 	//_logger = Logger::Instance().shared_from_this();
 	addEventPipe();
-}
-
-Looper::~Looper()
-{
-
 }
 
 void Looper::addEventPipe() {
@@ -91,19 +109,9 @@ void Looper::runLoop()
 #if defined(HAS_EPOLL)
 	struct epoll_event events[EPOLL_SIZE];
 	while (!_exit_flag) {
-		auto minDelay = getMinDelay();
-		minDelay = min(minDelay, 0x7FFFFFFFULL);
-		if (minDelay > 0x7FFFFFFFULL)
-		{
-			minDelay = 0x7FFFFFFF;
-		}
-		auto ms = (int)minDelay;
-
-		//startSleep();//用于统计当前线程负载情况
+		auto ms = (int)getMinDelay();
 		int ret = epoll_wait(_event_fd, events, EPOLL_SIZE, ms ? ms : -1);
-		//sleepWakeUp();//用于统计当前线程负载情况
 		if (ret <= 0) {
-			//超时或被打断  [AUTO-TRANSLATED:7005fded]
 			//Timed out or interrupted
 			continue;
 		}
@@ -177,13 +185,19 @@ uint64_t Looper::getMinDelay() {
 	}
 
 	auto now = GetTickCount64();
+	uint64_t ms = 0;
 	if (it->first > now) {
 		//All tasks have not expired
-		return it->first - now;
+		ms = it->first - now;
+	}
+	else
+	{
+		//Execute expired tasks and refresh sleep delay
+		ms = flushDelayTask(now);
 	}
 	
-	//Execute expired tasks and refresh sleep delay
-	return flushDelayTask(now);
+	//ms = min(ms, 0x7FFFFFFFULL);//wepoll.c内部已做处理,即使转为int32_t也影响不大
+	return ms;
 }
 
 Looper::DelayTask::Ptr Looper::doDelayTask(uint64_t delay_ms, function<uint64_t()> task) {

@@ -199,5 +199,154 @@ void StringParam::ParseItems(const string& items, vector<tagNameValue>& ackItems
 	}
 }
 
+static const char* TAG = "stringParam";
+static int pushItems(tagNameValue* ackItems, int itemCount, int& index, const char* name, const char* value)
+{
+	if (index < itemCount - 1)
+	{
+		ackItems[index].name = name;
+		ackItems[index].value = value;
+		++index;
+		return 0;
+	}
+
+	LogW(TAG, "%s fail,[%s]=[%s]", __func__, name, value);
+
+	return -1;
+}
+
+//在vsTest中测试,TEST_METHOD(stringParam)
+//data必须为可写,数据格式name1=value1,name2=value2,
+//返回解析出的item个数
+int StringParam::ParseItemsInPlace(char* data, tagNameValue* ackItems, int itemCount, const char* sepText)
+{
+	if (!data || !data[0] || !ackItems || itemCount <= 0 || !sepText || !sepText[0])
+	{
+		return 0;
+	}
+
+	int index = 0;
+	char* s = data;
+	bool eof = false;
+	while (*s)
+	{
+		auto end = strstr(s, sepText);
+		if (end)
+		{
+			*end = 0;
+		}
+		else
+		{
+			eof = true;
+		}
+
+		auto sep = strchr(s, '=');
+		if (sep)
+		{
+			*sep = 0;
+
+			char* name = s;
+			char* value = sep + 1;
+
+			pushItems(ackItems, itemCount, index, name, value);
+		}
+
+		if (eof)
+		{
+			break;
+		}
+		else
+		{
+			s = end + 1;
+		}
+	}
+
+	return index;
+}
+
+NVWrapper::NVWrapper(tagNameValue* items, int count)
+{
+	mItems = items;
+	mCount = count;
+}
+
+tagNameValue* NVWrapper::findItem(const char* name)
+{
+	if (!name || !*name)
+	{
+		return nullptr;
+	}
+
+	for (int i = 0; i < mCount; i++)
+	{
+		if (strcmp(name, mItems[i].name.c_str()) == 0)
+		{
+			return &mItems[i];
+		}
+	}
+
+	return nullptr;
+}
+
+const char* NVWrapper::getString(const char* name, const char* defaultValue)
+{
+	auto item = findItem(name);
+	if (item)
+	{
+		return item->value.c_str();
+	}
+
+	return defaultValue;
+}
+
+bool NVWrapper::exists(const char* name)
+{
+	return !!findItem(name);
+}
+
+bool NVWrapper::getBool(const char* name, bool defaultValue)
+{
+	auto item = findItem(name);
+	if (item)
+	{
+		return atoi(item->value.c_str()) != 0;
+	}
+
+	return defaultValue;
+}
+
+int NVWrapper::getInt(const char* name, int defaultValue)
+{
+	auto item = findItem(name);
+	if (item)
+	{
+		return atoi(item->value.c_str());
+	}
+
+	return defaultValue;
+}
+
+double NVWrapper::getDouble(const char* name, double defaultValue)
+{
+	auto item = findItem(name);
+	if (item)
+	{
+		return atof(item->value.c_str());
+	}
+
+	return defaultValue;
+}
+
+//保证不返回nullptr
+const char* NVWrapper::operator[](const char* name)
+{
+	auto item = findItem(name);
+	if (item && item->value.c_str())
+	{
+		return item->value.c_str();
+	}
+	return "";
+}
+
 }
 }

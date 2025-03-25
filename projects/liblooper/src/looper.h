@@ -34,11 +34,15 @@ public:
 	static Looper::Ptr currentLooper();
 	thread::id getThreadId() const;
 	const string& getThreadName() const;
+	static Looper::Ptr instance();
 
 	DelayTask::Ptr doDelayTask(uint64_t delay_ms, std::function<uint64_t()> task);
 
 	void runLoop();
+	virtual void onCreate() {}
+	virtual void onDestroy() {}
 protected:
+
 	Task::Ptr async_l(TaskIn task, bool may_sync = true, bool first = false);
 
 	void onPipeEvent(bool flush = false);

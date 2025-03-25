@@ -6,8 +6,11 @@ namespace Core {
 int64_t tickCount();
 int currentPid();
 int currentTid();
-tagTimeMs currentTimeMs();
+//tagTimeMs currentTimeMs();
 int lastError();
 void setThreadName(const string& name, int dwThreadID=-1);
+
+string appPathName();
+string appFolder();
 
 }

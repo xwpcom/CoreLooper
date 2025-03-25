@@ -2040,20 +2040,22 @@ addr=十进制地址
 addr=0x/0Xabcd,十六进制地址
 addr=xxKB/kb,以整数KB为单位
 */
-int ShellTool::str2Int(const string& addr)
+uint32_t ShellTool::str2Int(const string& addr)
 {
-	int v = 0;
+	uint32_t v = 0;
 
 	if (addr.find("KB") != string::npos || addr.find("kb") != string::npos) {
-		v = 1024 * atoi(addr.c_str());
+		v = 1024 * (uint32_t)atoll(addr.c_str());
 	}
 	else if (addr.find("0x") == 0 || addr.find("0X") == 0) {
-		v = strtol(addr.c_str() + 2, nullptr, 16);
+		v = strtoll(addr.c_str() + 2, nullptr, 16);
 	}
 	else {
-		v = atoi(addr.c_str());
+		
+		v = (uint32_t)atoll(addr.c_str());
 	}
 
 	return v;
 }
+
 

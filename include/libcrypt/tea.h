@@ -18,6 +18,9 @@ public:
 	Tea(int round = 16);
 	~Tea(void);
 	void SetPassword(const char *pszPassword);
+	void setPassword(const std::string& password) {
+		SetPassword(password);
+	}
 	void SetPassword(std::string password)
 	{
 		return SetPassword(password.c_str());
@@ -25,6 +28,7 @@ public:
 
 	int Encode(ByteBuffer& inbox, ByteBuffer& outbox);
 	int Decode(ByteBuffer& inbox, ByteBuffer& outbox);
+	int decode(const uint8_t* pEnc, int cbEnc, uint8_t* pData, int cbData);
 
 	std::string  EncodeTextWithBase64(std::string  plainText);
 	std::string  DecodeTextWithBase64(std::string  cryptText);

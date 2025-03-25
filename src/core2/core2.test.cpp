@@ -40,7 +40,7 @@ TEST_CLASS(Log_)
 		}
 	}
 
-	TEST_METHOD(loger)
+	TEST_METHOD(zl_loger)
 	{
 		int year = 2023;
 		class Tool
@@ -148,6 +148,14 @@ TEST_METHOD(perfectForward)
 	DisplayWrapper(1);
 	DisplayWrapper(x);
 }
+
+TEST_METHOD(zl_looper_test)
+{
+	auto looper = make_shared<Looper>();
+	//looper->run();
+
+}
+
 };
 
 }
