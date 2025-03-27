@@ -17,7 +17,7 @@
                                 | (((epoll_event) & EPOLLHUP) ? Event_Error : 0) \
                                 | (((epoll_event) & EPOLLERR) ? Event_Error : 0)
 #define create_event() epoll_create(EPOLL_SIZE)
-#endif //HAS_EPOLL
+#endif
 
 namespace Core {
 static Looper* gInstance = nullptr;
