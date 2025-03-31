@@ -134,6 +134,9 @@
     <ClInclude Include="src\file.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="log.fmt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />

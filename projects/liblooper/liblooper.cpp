@@ -4,6 +4,7 @@
 #include "timer.h"
 #include "iniConfiger.h"
 #include "system.h"
+#include "log.fmt.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace Core;
@@ -28,6 +29,15 @@ namespace liblooper
 			cfg["s1.s2.sn"] = 3;
 			cfg.dumpFile(folder + "/zlStudy.save.ini");
 		}
+		TEST_METHOD(logFormat)
+		{
+			auto mTag = "fmt";
+			float v = 0.12345678f;
+			int i = 123;
+			logV(mTag) << ",i=" << vt(i, 8) << ",float=" << vt(v,2);
+			logV(mTag) << ",i=" << vt(i, 8) << ",float=" << vt{ v, 2 };
+		}
+
 
 		TEST_METHOD(baseRun)
 		{
@@ -51,6 +61,7 @@ namespace liblooper
 
 						++mIndex;
 						logV(mTag) << "timer,index="<< mIndex;
+
 						//strong_self->onManager();
 
 						if (mIndex == 2)

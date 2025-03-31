@@ -4,6 +4,28 @@
 namespace Core {
 using namespace std;
 
+/*
+value to text
+用于格式化int,float,double
+w用法: w=4时,对int是%04d,对float,doubel是%.4f
+
+	auto mTag = "fmt";
+	float v = 0.12345678f;
+	int i = 123;
+	logV(mTag) << "i=" << vt(i, 8) << ",float=" << vt(v,2);
+	//结果为:
+	//i=00000123,float=0.12
+*/
+struct vt
+{
+	vt(int d, uint8_t w=4) :i(d), width(w) { isInt = true; }
+	vt(double d, uint8_t w=3) :f(d), width(w) { isInt = false; }
+	int i=0;
+	double f = 0;
+	uint8_t width;
+	bool isInt = true;
+};
+
 //loger能比logger少写一个字母
 enum class LogLevel
 {
@@ -81,6 +103,26 @@ public:
 	Log& operator<<(T&& data) {
 		if (mItem) {
 			(*mItem) << forward<T>(data);
+		}
+		return *this;
+	}
+	
+	Log& operator<<(vt&& obj) {
+		if (mItem) {
+			char buf[64] = { 0 };
+			char fmt[16] = { 0 };
+			if (obj.isInt)
+			{
+				snprintf(fmt, sizeof(fmt) - 1, "%%0%dd",obj.width);
+				snprintf(buf, sizeof(buf) - 1, fmt,obj.i);
+			}
+			else
+			{
+				snprintf(fmt, sizeof(fmt) - 1, "%%.%df", obj.width);
+				snprintf(buf, sizeof(buf) - 1, fmt, obj.f);
+			}
+
+			(*mItem) << buf;
 		}
 		return *this;
 	}

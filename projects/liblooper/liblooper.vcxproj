@@ -185,6 +185,7 @@
     <ClCompile Include="src\wepoll\wepoll.test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="log.fmt.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="src\bytebuffer.h" />
     <ClInclude Include="src\bytetool.h" />
