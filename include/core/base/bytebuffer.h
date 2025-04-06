@@ -271,6 +271,10 @@ public:
 
 	//写入指定的数据到缓存
 	int Write(const LPVOID pData, int cbData);
+	int Write(const uint8_t* data, int cbData)
+	{
+		return Write((const LPVOID)data, cbData);
+	}
 
 	//写一个字节到缓存
 	int WriteByte(BYTE data);
