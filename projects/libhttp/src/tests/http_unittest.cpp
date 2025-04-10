@@ -136,6 +136,72 @@ public:
 		params.Dump();
 	}
 
+	TEST_METHOD(http_parseUrl)
+	{
+		//临时截断字符串,并在析构时自动恢复
+		class AutoZero
+		{
+		public:
+			AutoZero(char* ps)
+			{
+				mChar = *ps;
+				mPtr = ps;
+				*mPtr = 0;
+			}
+			AutoZero(uint8_t* ps)
+			{
+				mChar = *ps;
+				mPtr = (char*)ps;
+				*mPtr = 0;
+			}
+			~AutoZero()
+			{
+				*mPtr = mChar;
+			}
+		private:
+			char* mPtr = nullptr;
+			char mChar = 0;
+		};
+
+
+		char request[] = {"GET /hello HTTP/1.1\r\n\r\n"};
+
+		char szReq[128] = {};
+		char szUrl[4 * 1024] = {};//url可以用?加参数,所以可能比较长
+		char szHttpVer[16] = {};
+
+		auto lineEnd = strstr(request, "\r\n");
+		if (lineEnd)
+		{
+			auto space = strchr(request, ' ');
+			const char* urlBegin = nullptr;
+			if (space)
+			{
+				strncpy(szReq, request, space-request);
+				urlBegin = space + 1;
+			}
+
+			AutoZero zero(lineEnd);
+
+			if (urlBegin)
+			{
+				auto verBegin = strrchr(urlBegin, ' ');
+				if (verBegin)
+				{
+					auto ver = string(verBegin, lineEnd - verBegin);
+					auto urlEnd = verBegin;
+					if (urlBegin && urlEnd > urlBegin)
+					{
+						auto url = string(urlBegin, urlEnd - urlBegin);
+ 						strncpy(szUrl, url.c_str(), sizeof(szUrl) - 1);
+					}
+				}
+			}
+		}
+
+		int x = 0;
+	}
+
 	TEST_METHOD(Http_Https_Server_Demo)
 	{
 		class MainLooper :public MainLooper_

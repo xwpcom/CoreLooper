@@ -18,6 +18,31 @@ namespace Core {
 namespace Net {
 namespace Http {
 
+//临时截断字符串,并在析构时自动恢复
+class AutoZero
+{
+public:
+	AutoZero(char* ps)
+	{
+		mChar = *ps;
+		mPtr = ps;
+		*mPtr = 0;
+	}
+	AutoZero(uint8_t* ps)
+	{
+		mChar = *ps;
+		mPtr = (char*)ps;
+		*mPtr = 0;
+	}
+	~AutoZero()
+	{
+		*mPtr = mChar;
+	}
+private:
+	char* mPtr = nullptr;
+	char mChar = 0;
+};
+
 NameValue *HttpRequest::m_mapUriFile = NULL;
 static const char* TAG = "HttpRequest";
 HttpRequest::HttpRequest()
@@ -539,27 +564,42 @@ int HttpRequest::ParseHeader()
 	int ret = 0;
 
 	{
-		char szReq[128];
-		char szUrl[4 * 1024];//url可以用?加参数,所以可能比较长
-		char szHttpVer[16];
-		CLR_BUF(szReq);
-		CLR_BUF(szUrl);
-		CLR_BUF(szHttpVer);
+		char szReq[128] = {};
+		char szUrl[4 * 1024] = {};//url可以用?加参数,所以可能比较长
+		//char szHttpVer[16] = {};
 
+		//GET url HTTP/1.1\r\n
 		{
-			char szFmt[128];
-			CLR_BUF(szFmt);
-			_snprintf(szFmt, sizeof(szFmt) - 1, "%%%u[^ ] %%%u[^ ] %%%u[^ \r]",
-				(int)sizeof(szReq) - 1,
-				(int)sizeof(szUrl) - 1,
-				(int)sizeof(szHttpVer) - 1
-			);
-			szFmt[sizeof(szFmt) - 1] = 0;
-			ret = sscanf(request, szFmt, szReq, szUrl, szHttpVer);
-			if (ret != 3)
+			auto lineEnd = strstr(request, "\r\n");
+			if (lineEnd)
 			{
-				LogW(TAG,"invalid http request");
-				return -1;
+				auto space = strchr(request, ' ');
+				const char* urlBegin = nullptr;
+				if (space)
+				{
+					strncpy(szReq, request, space - request);
+					urlBegin = space + 1;
+				}
+				else
+				{
+					return -1;
+				}
+
+				AutoZero zero(lineEnd);
+
+				if (urlBegin)
+				{
+					auto verBegin = strrchr(urlBegin, ' ');
+					if (verBegin)
+					{
+						auto urlEnd = verBegin;
+						if (urlEnd > urlBegin)
+						{
+							auto url = string(urlBegin, urlEnd - urlBegin);
+							strncpy(szUrl, url.c_str(), sizeof(szUrl) - 1);
+						}
+					}
+				}
 			}
 		}
 
