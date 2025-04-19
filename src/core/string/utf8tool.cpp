@@ -1,10 +1,59 @@
 ﻿#include "stdafx.h"
 #include "utf8tool.h"
 #include "core/base/bytetool.h"
+#include <regex>
 
 #ifdef _MSC_VER
 namespace Bear {
 namespace Core {
+
+string Utf8Tool::escapeUnicode(const string& input)
+{
+	std::string output;
+	std::regex unicodeRegex(R"(\\u([0-9a-fA-F]{4}))");
+	std::smatch match;
+
+	std::string::const_iterator searchStart(input.cbegin());
+	while (std::regex_search(searchStart, input.cend(), match, unicodeRegex)) {
+		// Convert the matched Unicode sequence to a UTF-8 character
+		char16_t unicodeChar = static_cast<char16_t>(std::stoi(match[1].str(), nullptr, 16));
+
+		{
+			/*
+			//深圳市住建局接口返回的json字符串样本
+				std::string jsonResponse = R"({
+					"errcode":"-1",
+					"msg":"\u7B2C1\u9879\u7684\u9879\u76EEID\u4E0E\u76D1\u7763\u7F16\u53F7\u4E0D\u5339\u914D",
+					"res":"OK"
+				})";
+				注意\u后面接4个字符为unicode,然后中间可能掺杂ascii字符
+			*/
+			auto psz = match.prefix().str();
+			if (psz.cend() != searchStart)
+			{
+				output += psz;//加上ascii字符
+			}
+		}
+
+		if (unicodeChar <= 0x7F) {
+			output += static_cast<char>(unicodeChar);
+		}
+		else if (unicodeChar <= 0x7FF) {
+			output += static_cast<char>(0xC0 | ((unicodeChar >> 6) & 0x1F));
+			output += static_cast<char>(0x80 | (unicodeChar & 0x3F));
+		}
+		else {
+			output += static_cast<char>(0xE0 | ((unicodeChar >> 12) & 0x0F));
+			output += static_cast<char>(0x80 | ((unicodeChar >> 6) & 0x3F));
+			output += static_cast<char>(0x80 | (unicodeChar & 0x3F));
+		}
+		searchStart = match.suffix().first;
+	}
+
+	// Append the remaining part of the string
+	output += std::string(searchStart, input.cend());
+	return output;
+}
 
 #ifdef _MSC_VER
 //http ://www.knowsky.com/resource/gb2312tbl.htm
@@ -203,6 +252,7 @@ void Utf8Tool::GB2312ToUTF_8(string& pOut, const char *pText, int pLen)
 	return;
 }
 
+/*
 //把unicode字符串"\\u63A5\\u6536\\u5DF2\\u5904\\u7406"转为utf8
 //"-8\u7B2C0\u9879\u7684\u9879\u76EEID\u4E0E\u76D1\u7763\u7F16\u53F7\u4E0D\u5339\u914D"
 //json string msg = root["msg"].as<string>();提取出的字符串不是\u,而是u前缀  
@@ -230,10 +280,8 @@ string Utf8Tool::unicodeUnescape(const string& src)
 		char ch = strSource[nPos];
 		if (ch == '\\' && strSource[nPos + 1] == 'u')
 		{
-			char szTemp[5];
-			char szSource[5];
-			ZeroMemory(szTemp, 5);
-			ZeroMemory(szSource, 5);
+			char szTemp[5] = { 0 };
+			char szSource[5] = { 0 };
 			CopyMemory(szSource, (char*)strSource + nPos + 2, 4);
 			sscanf_s(szSource, "%04X", (unsigned int*)szTemp);
 			CopyMemory(pResult + nDestStep, szTemp, 4);
@@ -279,6 +327,7 @@ string Utf8Tool::unicodeUnescape(const string& src)
 	pWbuufer = nullptr;
 	return strResult;
 }
+*/
 
 string Utf8Tool::UTF_8ToGB2312(const string& text)
 {
@@ -307,8 +356,8 @@ void Utf8Tool::UTF_8ToGB2312(string &pOut, const char *pText, int pLen)
 	}
 	memset(newBuf, 0, len);
 
-	char Ctemp[4];
-	memset(Ctemp, 0, sizeof(Ctemp));
+	char Ctemp[4] = {0};
+	//memset(Ctemp, 0, sizeof(Ctemp));
 
 	int i = 0;
 	int j = 0;

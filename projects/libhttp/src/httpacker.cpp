@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 #include "httpacker.h"
 #include "string/stringparam.h"
+#include "string/utf8tool.h"
 
 namespace Bear {
 namespace Core {
@@ -135,8 +136,9 @@ int HttpAcker::Parse(const string& ack, bool onlyHeader)
 		}
 
 	}
-
-
+	#ifdef _MSC_VER
+	mBody = Utf8Tool::escapeUnicode(mBody);
+	#endif
 	return 0;
 }
 
