@@ -188,7 +188,7 @@ shared_ptr<SSL_CTX> SSLUtil::makeSSLContext(X509 *cer, EVP_PKEY *key,bool server
     public:
         static void SslKeyLogFunc(const SSL* ssl, const char* line)
         {
-            auto fd = fopen("d:/test/sslkey.log", "a+b");
+            auto fd = fopen("c:/test/sslkey.log", "a+b");
             if (fd)
             {
                 fwrite(line, 1, strlen(line), fd);

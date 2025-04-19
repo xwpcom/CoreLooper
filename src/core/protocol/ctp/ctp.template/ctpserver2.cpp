@@ -24,6 +24,10 @@ shared_ptr<Channel> CtpServer2::CreateChannel()
 {
 	auto obj(make_shared<TcpClient>());
 	obj->SignalOnConnect.connect(this, &CtpServer2::OnConnect);
+	if (mUseTls)
+	{
+		obj->EnableTls();
+	}
 	return obj;
 }
 

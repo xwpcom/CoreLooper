@@ -25,13 +25,18 @@ public:
 
 #ifdef _CONFIG_OPENSSL
 	static int InitSSL(const string& filePath);
-#endif
+	void EnableTls()
+	{
+		mUseTls = true;
+	}
+	#endif
 protected:
 	virtual shared_ptr<Channel> CreateChannel();
 
 	virtual void OnAccept(Handler*,SOCKET s);
 
 protected:
+	bool mUseTls = false;
 };
 }
 }

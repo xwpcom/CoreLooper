@@ -55,6 +55,13 @@ void TcpServer2_Windows::OnAccept(Handler*,SOCKET s)
 shared_ptr<Channel> TcpServer2_Windows::CreateChannel()
 {
 	auto client(make_shared<TcpClient>());
+	#if defined _CONFIG_OPENSSL && defined _MSC_VER
+	if (mUseTls)
+	{
+		client->EnableTls();
+	}
+	#endif
+
 	return client;
 }
 
