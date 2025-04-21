@@ -12,6 +12,9 @@ static const char* TAG = "CtpClient2";
 CtpClient2::CtpClient2()
 {
 	SetObjectName("CtpClient2");
+
+	mProtocol = CommonTextProtocolFactory2::Create();
+	mProtocol->SetCB(this);
 }
 
 CtpClient2::~CtpClient2()
@@ -29,8 +32,6 @@ void CtpClient2::OnConnect(Channel* endPoint, long error, ByteBuffer* box, Bundl
 {
 	if (error == 0)
 	{
-		mProtocol = CommonTextProtocolFactory2::Create();
-		mProtocol->SetCB(this);
 	}
 
 	__super::OnConnect(endPoint, error, box, extraInfo);
