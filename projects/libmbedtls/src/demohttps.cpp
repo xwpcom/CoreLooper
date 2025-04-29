@@ -194,8 +194,8 @@ int TestSsl()
 	}
 	else
 	{
-		string appKey = "3020f008059c4ddda8e845f34df2a2c8";
-		string secret = "3f5e68bd464b36746c35111d451e490d";
+		string appKey = "2025f008059c4ddda8e845f34df2a2c8";
+		string secret = "202568bd464b36746c35111d451e490d";
 
 		string body = StringTool::Format(
 			"appKey=%s&appSecret=%s"
@@ -473,8 +473,8 @@ void DemoHttps::SendRequest()
 {
 	ASSERT(mOutbox.IsEmpty());
 
-	string appKey = "3020f008059c4ddda8e845f34df2a2c8";
-	string secret = "3f5e68bd464b36746c35111d451e490d";
+	string appKey = "2025f008059c4ddda8e845f34df2a2c8";
+	string secret = "202568bd464b36746c35111d451e490d";
 
 	string  req = StringTool::Format(
 		"POST /api/lapp/token/get  HTTP/1.1\r\n"
