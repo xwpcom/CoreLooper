@@ -24,10 +24,14 @@ shared_ptr<Channel> CtpServer2::CreateChannel()
 {
 	auto obj(make_shared<TcpClient>());
 	obj->SignalOnConnect.connect(this, &CtpServer2::OnConnect);
+	
+	#ifdef _MSC_VER
 	if (mUseTls)
 	{
 		obj->EnableTls();
 	}
+	#endif
+
 	return obj;
 }
 
