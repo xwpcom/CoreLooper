@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "../include/logwnd.h"
 #include "Scintilla.h"
-#include "SciLexer.h"
+//#include "SciLexer.h"
 #include "core/string/utf8tool.h"
 
 

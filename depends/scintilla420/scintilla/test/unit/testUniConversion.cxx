@@ -1,20 +1,23 @@
-// Unit Tests for Scintilla internal data structures
+/** @file testUniConversion.cxx
+ ** Unit Tests for Scintilla internal data structures
+ **/
 
 #include <cstring>
 
 #include <string>
 #include <string_view>
 #include <vector>
+#include <optional>
 #include <algorithm>
 #include <memory>
 
-#include "Platform.h"
+#include "Debugging.h"
 
 #include "UniConversion.h"
 
 #include "catch.hpp"
 
-using namespace Scintilla;
+using namespace Scintilla::Internal;
 
 // Test UniConversion.
 // Use examples from Wikipedia:
@@ -25,53 +28,53 @@ TEST_CASE("UTF16Length") {
 	SECTION("UTF16Length ASCII") {
 		// Latin Small Letter A
 		const char *s = "a";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 1U);
 	}
 
 	SECTION("UTF16Length Example1") {
 		// Dollar Sign
 		const char *s = "\x24";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 1U);
 	}
 
 	SECTION("UTF16Length Example2") {
 		// Cent Sign
 		const char *s = "\xC2\xA2";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 1U);
 	}
 
 	SECTION("UTF16Length Example3") {
 		// Euro Sign
 		const char *s = "\xE2\x82\xAC";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 1U);
 	}
 
 	SECTION("UTF16Length Example4") {
 		// Gothic Letter Hwair
 		const char *s = "\xF0\x90\x8D\x88";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 2U);
 	}
 
 	SECTION("UTF16Length Invalid Trail byte in lead position") {
 		const char *s = "a\xB5yz";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 4U);
 	}
 
 	SECTION("UTF16Length Invalid Lead byte at end") {
 		const char *s = "a\xC2";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 2U);
 	}
 
 	SECTION("UTF16Length Invalid Lead byte implies 3 trails but only 2") {
 		const char *s = "a\xF1yz";
-		size_t len = UTF16Length(s);
+		const size_t len = UTF16Length(s);
 		REQUIRE(len == 2U);
 	}
 }
@@ -81,17 +84,17 @@ TEST_CASE("UniConversion") {
 	// UnicodeFromUTF8
 
 	SECTION("UnicodeFromUTF8 ASCII") {
-		const unsigned char s[]={'a', 0};
+		const unsigned char s[]={'a', 0, 0, 0};
 		REQUIRE(UnicodeFromUTF8(s) == 'a');
 	}
 
 	SECTION("UnicodeFromUTF8 Example1") {
-		const unsigned char s[]={0x24, 0};
+		const unsigned char s[]={0x24, 0, 0, 0};
 		REQUIRE(UnicodeFromUTF8(s) == 0x24);
 	}
 
 	SECTION("UnicodeFromUTF8 Example2") {
-		const unsigned char s[]={0xC2, 0xA2, 0};
+		const unsigned char s[]={0xC2, 0xA2, 0, 0};
 		REQUIRE(UnicodeFromUTF8(s) == 0xA2);
 	}
 
@@ -105,76 +108,99 @@ TEST_CASE("UniConversion") {
 		REQUIRE(UnicodeFromUTF8(s) == 0x10348);
 	}
 
+	SECTION("UnicodeFromUTF8 StringView") {
+		const unsigned char s[]="\xF0\x90\x8D\x88";
+		REQUIRE(UnicodeFromUTF8(s) == 0x10348);
+	}
+
 	// UTF16FromUTF8
 
 	SECTION("UTF16FromUTF8 ASCII") {
 		const char s[] = {'a', 0};
 		wchar_t tbuf[1] = {0};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 'a');
+		char back[4]{};
+		UTF8FromUTF16(std::wstring_view(tbuf, tlen), back, sizeof(back));
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF16FromUTF8 Example1") {
 		const char s[] = {'\x24', 0};
 		wchar_t tbuf[1] = {0};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0x24);
+		char back[4]{};
+		UTF8FromUTF16(std::wstring_view(tbuf, tlen), back, sizeof(back));
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF16FromUTF8 Example2") {
 		const char s[] = {'\xC2', '\xA2', 0};
 		wchar_t tbuf[1] = {0};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0xA2);
+		char back[4]{};
+		UTF8FromUTF16(std::wstring_view(tbuf, tlen), back, sizeof(back));
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF16FromUTF8 Example3") {
 		const char s[] = {'\xE2', '\x82', '\xAC', 0};
 		wchar_t tbuf[1] = {0};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 1);;
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 1);;
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0x20AC);
+		char back[4]{};
+		UTF8FromUTF16(std::wstring_view(tbuf, tlen), back, sizeof(back));
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF16FromUTF8 Example4") {
 		const char s[] = {'\xF0', '\x90', '\x8D', '\x88', 0};
 		wchar_t tbuf[2] = {0, 0};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 2);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 2);
 		REQUIRE(tlen == 2U);
 		REQUIRE(tbuf[0] == 0xD800);
 		REQUIRE(tbuf[1] == 0xDF48);
+		char back[5]{};
+		UTF8FromUTF16(std::wstring_view(tbuf, tlen), back, sizeof(back));
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF16FromUTF8 Invalid Trail byte in lead position") {
 		const char s[] = "a\xB5yz";
 		wchar_t tbuf[4] = {};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 4);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 4);
 		REQUIRE(tlen == 4U);
 		REQUIRE(tbuf[0] == 'a');
 		REQUIRE(tbuf[1] == 0xB5);
 		REQUIRE(tbuf[2] == 'y');
 		REQUIRE(tbuf[3] == 'z');
+		// Invalid so can't round trip
 	}
 
 	SECTION("UTF16FromUTF8 Invalid Lead byte at end") {
 		const char s[] = "a\xC2";
 		wchar_t tbuf[2] = {};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 2);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 2);
 		REQUIRE(tlen == 2U);
 		REQUIRE(tbuf[0] == 'a');
 		REQUIRE(tbuf[1] == 0xC2);
+		// Invalid so can't round trip
 	}
 
 	SECTION("UTF16FromUTF8 Invalid Lead byte implies 3 trails but only 2") {
 		const char *s = "a\xF1yz";
 		wchar_t tbuf[4] = {};
-		size_t tlen = UTF16FromUTF8(s, tbuf, 4);
+		const size_t tlen = UTF16FromUTF8(s, tbuf, 4);
 		REQUIRE(tlen == 2U);
 		REQUIRE(tbuf[0] == 'a');
 		REQUIRE(tbuf[1] == 0xF1);
+		// Invalid so can't round trip
 	}
 
 	// UTF32FromUTF8
@@ -182,47 +208,62 @@ TEST_CASE("UniConversion") {
 	SECTION("UTF32FromUTF8 ASCII") {
 		const char s[] = {'a', 0};
 		unsigned int tbuf[1] = {0};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == static_cast<unsigned int>('a'));
+		char back[5]{};
+		UTF8FromUTF32Character(tbuf[0], back);
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF32FromUTF8 Example1") {
 		const char s[] = {'\x24', 0};
 		unsigned int tbuf[1] = {0};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0x24);
+		char back[5]{};
+		UTF8FromUTF32Character(tbuf[0], back);
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF32FromUTF8 Example2") {
 		const char s[] = {'\xC2', '\xA2', 0};
 		unsigned int tbuf[1] = {0};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0xA2);
+		char back[5]{};
+		UTF8FromUTF32Character(tbuf[0], back);
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF32FromUTF8 Example3") {
 		const char s[] = {'\xE2', '\x82', '\xAC', 0};
 		unsigned int tbuf[1] = {0};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0x20AC);
+		char back[5]{};
+		UTF8FromUTF32Character(tbuf[0], back);
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF32FromUTF8 Example4") {
 		const char s[] = {'\xF0', '\x90', '\x8D', '\x88', 0};
 		unsigned int tbuf[1] = {0};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 1);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 1);
 		REQUIRE(tlen == 1U);
 		REQUIRE(tbuf[0] == 0x10348);
+		char back[5]{};
+		UTF8FromUTF32Character(tbuf[0], back);
+		REQUIRE(strcmp(s, back) == 0);
 	}
 
 	SECTION("UTF32FromUTF8 Invalid Trail byte in lead position") {
 		const char s[] = "a\xB5yz";
 		unsigned int tbuf[4] = {};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 4);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 4);
 		REQUIRE(tlen == 4U);
 		REQUIRE(tbuf[0] == static_cast<unsigned int>('a'));
 		REQUIRE(tbuf[1] == 0xB5);
@@ -233,7 +274,7 @@ TEST_CASE("UniConversion") {
 	SECTION("UTF32FromUTF8 Invalid Lead byte at end") {
 		const char s[] = "a\xC2";
 		unsigned int tbuf[2] = {};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 2);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 2);
 		REQUIRE(tlen == 2U);
 		REQUIRE(tbuf[0] == static_cast<unsigned int>('a'));
 		REQUIRE(tbuf[1] == 0xC2);
@@ -242,7 +283,7 @@ TEST_CASE("UniConversion") {
 	SECTION("UTF32FromUTF8 Invalid Lead byte implies 3 trails but only 2") {
 		const char *s = "a\xF1yz";
 		unsigned int tbuf[4] = {};
-		size_t tlen = UTF32FromUTF8(s, tbuf, 4);
+		const size_t tlen = UTF32FromUTF8(s, tbuf, 4);
 		REQUIRE(tlen == 2U);
 		REQUIRE(tbuf[0] == static_cast<unsigned int>('a'));
 		REQUIRE(tbuf[1] == 0xF1);
@@ -252,8 +293,8 @@ TEST_CASE("UniConversion") {
 namespace {
 
 // Simple adapter to avoid casting
-int UTFClass(const char *s) {
-	return UTF8Classify(reinterpret_cast<const unsigned char *>(s), static_cast<int>(strlen(s)));
+int UTFClass(std::string_view sv) noexcept {
+	return UTF8Classify(sv);
 }
 
 }

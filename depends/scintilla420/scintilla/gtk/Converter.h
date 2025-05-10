@@ -14,7 +14,7 @@ const gsize sizeFailure = static_cast<gsize>(-1);
  * Encapsulate g_iconv safely.
  */
 class Converter {
-	GIConv iconvh;
+	GIConv iconvh = iconvhBad;
 	void OpenHandle(const char *fullDestination, const char *charSetSource) noexcept {
 		iconvh = g_iconv_open(fullDestination, charSetSource);
 	}
@@ -22,13 +22,15 @@ class Converter {
 		return iconvh != iconvhBad;
 	}
 public:
-	Converter() noexcept {
-		iconvh = iconvhBad;
-	}
+	Converter() noexcept = default;
 	Converter(const char *charSetDestination, const char *charSetSource, bool transliterations) {
-		iconvh = iconvhBad;
 		Open(charSetDestination, charSetSource, transliterations);
 	}
+	// Deleted so Converter objects can not be copied.
+	Converter(const Converter &) = delete;
+	Converter(Converter &&) = delete;
+	Converter &operator=(const Converter &) = delete;
+	Converter &operator=(Converter &&) = delete;
 	~Converter() {
 		Close();
 	}

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Dependencies.py - discover, read, and write dependencies file for make.
 # The format like the output from "g++ -MM" which produces a
 # list of header (.h) files used by source files (.cxx).
@@ -111,7 +111,6 @@ def ExtractDependencies(input):
 	for line in input:
 		headersLine = line.startswith(" ") or line.startswith("\t")
 		line = line.strip()
-		isContinued = line.endswith("\\")
 		line = line.rstrip("\\ ")
 		fileNames = line.strip().split(" ")
 		if not headersLine:

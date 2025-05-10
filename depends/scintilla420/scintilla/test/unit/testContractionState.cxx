@@ -1,4 +1,6 @@
-// Unit Tests for Scintilla internal data structures
+/** @file testContractionState.cxx
+ ** Unit Tests for Scintilla internal data structures
+ **/
 
 #include <cstddef>
 #include <cstring>
@@ -6,10 +8,11 @@
 #include <stdexcept>
 #include <string_view>
 #include <vector>
+#include <optional>
 #include <algorithm>
 #include <memory>
 
-#include "Platform.h"
+#include "Debugging.h"
 
 #include "Position.h"
 #include "UniqueString.h"
@@ -20,7 +23,7 @@
 
 #include "catch.hpp"
 
-using namespace Scintilla;
+using namespace Scintilla::Internal;
 
 // Test ContractionState.
 
@@ -104,12 +107,27 @@ TEST_CASE("ContractionState") {
 		REQUIRE(true == pcs->GetVisible(0));
 		REQUIRE(false == pcs->GetVisible(1));
 		REQUIRE(true == pcs->HiddenLines());
+		REQUIRE(1 == pcs->LinesDisplayed());
 
 		pcs->SetVisible(1, 1, true);
 		for (int l=0;l<2;l++) {
 			REQUIRE(true == pcs->GetVisible(0));
 		}
 		REQUIRE(false == pcs->HiddenLines());
+	}
+
+	SECTION("Hide All") {
+		pcs->InsertLines(0,1);
+		for (int l=0;l<2;l++) {
+			REQUIRE(true == pcs->GetVisible(0));
+		}
+		REQUIRE(false == pcs->HiddenLines());
+
+		pcs->SetVisible(0, 1, false);
+		REQUIRE(false == pcs->GetVisible(0));
+		REQUIRE(false == pcs->GetVisible(1));
+		REQUIRE(true == pcs->HiddenLines());
+		REQUIRE(0 == pcs->LinesDisplayed());
 	}
 
 	SECTION("Contracting") {
@@ -134,6 +152,28 @@ TEST_CASE("ContractionState") {
 		REQUIRE(true == pcs->GetExpanded(3));
 	}
 
+	SECTION("ExpandAll") {
+		pcs->InsertLines(0,4);
+		for (int l=0;l<4;l++) {
+			REQUIRE(true == pcs->GetExpanded(l));
+		}
+
+		pcs->SetExpanded(2, false);
+		REQUIRE(true == pcs->GetExpanded(1));
+		REQUIRE(false == pcs->GetExpanded(2));
+		REQUIRE(true == pcs->GetExpanded(3));
+
+		pcs->SetExpanded(1, false);
+		REQUIRE(false == pcs->GetExpanded(1));
+		REQUIRE(false == pcs->GetExpanded(2));
+		REQUIRE(true == pcs->GetExpanded(3));
+
+		REQUIRE(true == pcs->ExpandAll());
+		REQUIRE(true == pcs->GetExpanded(1));
+		REQUIRE(true == pcs->GetExpanded(2));
+		REQUIRE(true == pcs->GetExpanded(3));
+	}
+
 	SECTION("ChangeHeight") {
 		pcs->InsertLines(0,4);
 		for (int l=0;l<4;l++) {
@@ -148,12 +188,18 @@ TEST_CASE("ContractionState") {
 
 	SECTION("SetFoldDisplayText") {
 		pcs->InsertLines(0, 4);
+		REQUIRE(5 == pcs->LinesInDoc());
 		pcs->SetFoldDisplayText(1, "abc");
 		REQUIRE(strcmp(pcs->GetFoldDisplayText(1), "abc") == 0);
 		pcs->SetFoldDisplayText(1, "def");
 		REQUIRE(strcmp(pcs->GetFoldDisplayText(1), "def") == 0);
 		pcs->SetFoldDisplayText(1, nullptr);
 		REQUIRE(static_cast<const char *>(nullptr) == pcs->GetFoldDisplayText(1));
+		// At end
+		pcs->SetFoldDisplayText(5, "xyz");
+		REQUIRE(strcmp(pcs->GetFoldDisplayText(5), "xyz") == 0);
+		pcs->DeleteLines(4, 1);
+		REQUIRE(strcmp(pcs->GetFoldDisplayText(4), "xyz") == 0);
 	}
 
 }

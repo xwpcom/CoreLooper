@@ -2,17 +2,29 @@
 
 from __future__ import unicode_literals
 
-import ctypes, os, sys
+import ctypes
 
-from ctypes import c_int, c_ulong, c_char_p, c_wchar_p, c_ushort, c_uint, c_long, c_ssize_t
+from ctypes import c_int, c_char_p, c_long, c_ssize_t
 
 def IsEnumeration(t):
 	return t[:1].isupper()
+
+basicTypes = ["bool", "int", "position", "line", "pointer", "colour", "colouralpha"]
+
+def BasicTypeOrEnumeration(t):
+	return t in basicTypes or IsEnumeration(t)
 
 class TEXTRANGE(ctypes.Structure):
 	_fields_= (\
 		('cpMin', c_long),
 		('cpMax', c_long),
+		('lpstrText', ctypes.POINTER(ctypes.c_char)),
+	)
+
+class TEXTRANGEFULL(ctypes.Structure):
+	_fields_= (\
+		('cpMin', c_ssize_t),
+		('cpMax', c_ssize_t),
 		('lpstrText', ctypes.POINTER(ctypes.c_char)),
 	)
 
@@ -25,13 +37,22 @@ class FINDTEXT(ctypes.Structure):
 		('cpMaxText', c_long),
 	)
 
+class FINDTEXTFULL(ctypes.Structure):
+	_fields_= (\
+		('cpMin', c_ssize_t),
+		('cpMax', c_ssize_t),
+		('lpstrText', c_char_p),
+		('cpMinText', c_ssize_t),
+		('cpMaxText', c_ssize_t),
+	)
+
 class SciCall:
 	def __init__(self, fn, ptr, msg, stringResult=False):
 		self._fn = fn
 		self._ptr = ptr
 		self._msg = msg
 		self._stringResult = stringResult
-	def __call__(self, w=0, l=0):
+	def __call__(self, w=0, lp=0):
 		ww = ctypes.cast(w, c_char_p)
 		if self._stringResult:
 			lengthBytes = self._fn(self._ptr, self._msg, ww, None)
@@ -42,7 +63,7 @@ class SciCall:
 			assert lengthBytes == lengthBytes2
 			return bytearray(result)[:lengthBytes]
 		else:
-			ll = ctypes.cast(l, c_char_p)
+			ll = ctypes.cast(lp, c_char_p)
 			return self._fn(self._ptr, self._msg, ww, ll)
 
 sciFX = ctypes.CFUNCTYPE(c_ssize_t, c_char_p, c_int, c_char_p, c_char_p)
@@ -86,8 +107,7 @@ class ScintillaCallable:
 				not name.startswith("Get") and \
 				not feature["Param1Type"] and \
 				not feature["Param2Type"] and \
-				(feature["ReturnType"] in ["bool", "int", "position", "line", "pointer"] or \
-				IsEnumeration(feature["ReturnType"])):
+				BasicTypeOrEnumeration(feature["ReturnType"]):
 				#~ print("property", feature)
 				return self._scifn(self._sciptr, value, None, None)
 		elif name.startswith("SCN_") and name in self.k:
@@ -105,7 +125,7 @@ class ScintillaCallable:
 			value = int(feature["Value"], 0)
 			#~ print("setproperty", feature)
 			if feature["FeatureType"] == "set" and not name.startswith("Set"):
-				if feature["Param1Type"] in ["bool", "int", "position", "line"] or IsEnumeration(feature["Param1Type"]):
+				if BasicTypeOrEnumeration(feature["Param1Type"]):
 					return self._scifn(self._sciptr, value, c_char_p(val), None)
 				elif feature["Param2Type"] in ["string"]:
 					return self._scifn(self._sciptr, value, None, c_char_p(val))
@@ -132,6 +152,16 @@ class ScintillaCallable:
 		text = tr.lpstrText[:length]
 		text += b"\0" * (length - len(text))
 		return text
+	def ByteRangeFull(self, start, end):
+		tr = TEXTRANGEFULL()
+		tr.cpMin = start
+		tr.cpMax = end
+		length = end - start
+		tr.lpstrText = ctypes.create_string_buffer(length + 1)
+		self.GetTextRangeFull(0, ctypes.byref(tr))
+		text = tr.lpstrText[:length]
+		text += b"\0" * (length - len(text))
+		return text
 	def StyledTextRange(self, start, end):
 		tr = TEXTRANGE()
 		tr.cpMin = start
@@ -139,6 +169,16 @@ class ScintillaCallable:
 		length = 2 * (end - start)
 		tr.lpstrText = ctypes.create_string_buffer(length + 2)
 		self.GetStyledText(0, ctypes.byref(tr))
+		styledText = tr.lpstrText[:length]
+		styledText += b"\0" * (length - len(styledText))
+		return styledText
+	def StyledTextRangeFull(self, start, end):
+		tr = TEXTRANGEFULL()
+		tr.cpMin = start
+		tr.cpMax = end
+		length = 2 * (end - start)
+		tr.lpstrText = ctypes.create_string_buffer(length + 2)
+		self.GetStyledTextFull(0, ctypes.byref(tr))
 		styledText = tr.lpstrText[:length]
 		styledText += b"\0" * (length - len(styledText))
 		return styledText
@@ -150,6 +190,16 @@ class ScintillaCallable:
 		ft.cpMinText = 0
 		ft.cpMaxText = 0
 		pos = self.FindText(flags, ctypes.byref(ft))
+		#~ print(start, end, ft.cpMinText, ft.cpMaxText)
+		return pos
+	def FindBytesFull(self, start, end, s, flags):
+		ft = FINDTEXTFULL()
+		ft.cpMin = start
+		ft.cpMax = end
+		ft.lpstrText = s
+		ft.cpMinText = 0
+		ft.cpMaxText = 0
+		pos = self.FindTextFull(flags, ctypes.byref(ft))
 		#~ print(start, end, ft.cpMinText, ft.cpMaxText)
 		return pos
 

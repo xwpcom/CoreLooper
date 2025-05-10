@@ -1,92 +1,116 @@
+#!/usr/bin/env python3
 # Script to check that headers are in a consistent order
-# Requires Python 2.6 or later
+# Canonical header order is defined in a file, normally scripts/HeaderOrder.txt
+# Requires Python 3.6 or later
 
-from __future__ import print_function
-import codecs, glob, os, platform, sys, unicodedata
-
-def ciCompare(a,b):
-    return cmp(a.lower(), b.lower())
-
-def ciKey(a):
-    return a.lower()
-
-def SortListInsensitive(l):
-    try:    # Try key function
-        l.sort(key=ciKey)
-    except TypeError:    # Earlier version of Python, so use comparison function
-        l.sort(ciCompare)
+import pathlib, sys
 
 def IsHeader(x):
-    return x.strip().startswith("#") and ("include" in x or "import" in x)
+    return x.strip().startswith("#") and \
+        ("include" in x or "import" in x) and \
+        "dllimport" not in x
 
-def ExtractHeaders(filename):
-    with codecs.open(filename, "r", "UTF-8") as infile:
-        includeLines = [x.strip()[1:].strip()[7:].strip() for x in infile.readlines() if \
-            IsHeader(x)]
-    if '.' not in filename:
-        print(filename)
-        for n in includeLines:
-            print(n)
-        print()
-    return includeLines
+def HeaderFromIncludeLine(s):
+    #\s*#\s*(include|import)\s+\S+\s*
+    return s.strip()[1:].strip()[7:].strip()
 
-def CheckFiles(root):
-    # Find all the lexer source code files
-    filePaths = glob.glob(root + "/include/*.h")
-    filePaths += glob.glob(root + "/src/*.cxx")
-    SortListInsensitive(filePaths)
-    filePaths += glob.glob(root + "/lexlib/*.cxx")
-    filePaths += glob.glob(root + "/lexers/*.cxx")
-    filePaths += glob.glob(root + "/win32/*.cxx")
-    filePaths += glob.glob(root + "/gtk/*.cxx")
-    filePaths += glob.glob(root + "/cocoa/*.mm")
-    filePaths += glob.glob(root + "/cocoa/*.h")
-    filePaths += glob.glob(root + "/test/unit/*.cxx")
-    # The Qt platform code interleaves system and Scintilla headers
-    #~ filePaths += glob.glob(root + "/qt/ScintillaEditBase/*.cpp")
-    #~ filePaths += glob.glob(root + "/qt/ScintillaEdit/*.cpp")
-    #~ print(filePaths)
-    masterHeaderList = ExtractHeaders(root + "/scripts/HeaderOrder.txt")
-    for f in filePaths:
-        if "LexCaml" in f:
-            continue
-        print("   File ", f)
-        try:
-            incs = ExtractHeaders(f)
-        except UnicodeDecodeError:
-            #~ print("UnicodeDecodeError\n")
-            continue
-        #~ print("\n".join(incs))
-        news = set(incs) - set(masterHeaderList)
-        #~ print("")
-        #~ print("\n".join(incs))
-        #~ print("")
-        ended = False
+def ExtractHeaders(file):
+    with file.open(encoding="iso-8859-1") as infile:
+        return [HeaderFromIncludeLine(h) for h in infile if IsHeader(h)]
+
+def ExtractWithPrefix(file, prefix):
+    with file.open(encoding="iso-8859-1") as infile:
+        return [s.strip()[len(prefix):] for s in infile if s.startswith(prefix)]
+
+def ExcludeName(name, excludes):
+    return any(exclude in name for exclude in excludes)
+
+def SortLike(incs, order):
+    return sorted(incs, key = lambda i: order.index(i))
+
+basePrefix = "//base:"
+sourcePrefix = "//source:"
+excludePrefix = "//exclude:"
+
+def CheckFiles(headerOrderTxt):
+    headerOrderFile = pathlib.Path(headerOrderTxt).resolve()
+    bases = ExtractWithPrefix(headerOrderFile, basePrefix)
+    base = bases[0] if len(bases) > 0 else ".."
+    orderDirectory = headerOrderFile.parent
+    root = (orderDirectory / base).resolve()
+
+    # Find all the source code files
+    patterns = ExtractWithPrefix(headerOrderFile, sourcePrefix)
+    excludes = ExtractWithPrefix(headerOrderFile, excludePrefix)
+
+    filePaths = []
+    for p in patterns:
+        filePaths += root.glob(p)
+    headerOrder = ExtractHeaders(headerOrderFile)
+    originalOrder = headerOrder[:]
+    orderedPaths = [p for p in sorted(filePaths) if not ExcludeName(str(p), excludes)]
+    allIncs = set()
+    for f in orderedPaths:
+        #~ print("   File ", f.relative_to(root))
+        incs = ExtractHeaders(f)
+        allIncs = allIncs.union(set(incs))
+
         m = 0
         i = 0
+        # Detect headers not in header order list and insert at OK position
+        needs = []
         while i < len(incs):
-            if m == len(masterHeaderList):
-                print("**** extend", incs[i:])
-                masterHeaderList.extend(incs[i:])
+            if m == len(headerOrder):
+                #~ print("**** extend", incs[i:])
+                headerOrder.extend(incs[i:])
+                needs.extend(incs[i:])
                 break
-            if masterHeaderList[m] == incs[i]:
-                #~ print("equal", masterHeaderList[m])
+            if headerOrder[m] == incs[i]:
+                #~ print("equal", headerOrder[m])
                 i += 1
                 m += 1
             else:
-                if masterHeaderList[m] not in incs:
-                    #~ print("skip", masterHeaderList[m])
+                if headerOrder[m] not in incs:
+                    #~ print("skip", headerOrder[m])
                     m += 1
-                elif incs[i] not in masterHeaderList:
-                    print(f + ":1: Add master", incs[i])
-                    masterHeaderList.insert(m, incs[i])
+                elif incs[i] not in headerOrder:
+                    #~ print(str(f) + ":1: Add master", incs[i])
+                    headerOrder.insert(m, incs[i])
+                    needs.append(incs[i])
                     i += 1
                     m += 1
                 else:
-                    print(f + ":1: Header out of order", incs[i], masterHeaderList[m])
-                    print("incs", " ".join(incs))
                     i += 1
-                    #~ return
-        #print("Master header list", " ".join(masterHeaderList))
+        if needs:
+            print(f"{f}:1: needs these headers:")
+            for header in needs:
+                print("#include " + header)
 
-CheckFiles("..")
+        # Detect out of order
+        ordered = SortLike(incs, headerOrder)
+        if incs != ordered:
+            print(f"{f}:1: is out of order")
+            fOrdered = pathlib.Path(str(f) + ".ordered")
+            with fOrdered.open("w") as headerOut:
+                for header in ordered:
+                    headerOut.write("#include " + header + "\n")
+            print(f"{fOrdered}:1: is ordered")
+
+    if headerOrder != originalOrder:
+        newIncludes = set(headerOrder) - set(originalOrder)
+        headerOrderNew = orderDirectory / "NewOrder.txt"
+        print(f"{headerOrderFile}:1: changed to {headerOrderNew}")
+        print(f"   Added {', '.join(newIncludes)}.")
+        with headerOrderNew.open("w") as headerOut:
+            for header in headerOrder:
+                headerOut.write("#include " + header + "\n")
+
+    unused = sorted(set(headerOrder) - allIncs)
+    if unused:
+        print("In HeaderOrder.txt but not used")
+        print("\n".join(unused))
+
+if len(sys.argv) > 1:
+    CheckFiles(sys.argv[1])
+else:
+    CheckFiles("HeaderOrder.txt")

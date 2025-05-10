@@ -1,4 +1,4 @@
-# Script to build Scintilla for OS X with most supported build files.
+# Script to build Scintilla for macOS with most supported build files.
 # Current directory should be scintilla/cocoa before running.
 
 cd ../..
@@ -14,13 +14,13 @@ make test
 cd ../../..
 
 # ************************************************************
-# Target 2: build framework and test app with Xcode targeting OS X 10.n with n from 9 to 5
+# Target 2: build framework and test app with Xcode targeting macOS 10.n with n from 9 to 5
 # Only SDK versions that are installed will be built
 # Clean both then build both -- if perform clean in ScintillaTest, also cleans ScintillaFramework
 # which can cause double build
 
 echo Building Cocoa-native ScintillaFramework and ScintillaTest
-for sdk in macosx10.9 macosx10.8 macosx10.7 macosx10.6 macosx10.5
+for sdk in macosx10.15 macosx10.14
 do
     xcodebuild -showsdks | grep $sdk
     if [ "$(xcodebuild -showsdks | grep $sdk)" != "" ]
@@ -54,13 +54,10 @@ xcodebuild
 cd ..
 
 cd ScintillaEdit
-python WidgetGen.py
+python3 WidgetGen.py
 qmake -spec macx-xcode
 xcodebuild clean
 xcodebuild
 cd ..
 
-cd ScintillaEditPy
-python sepbuild.py
-cd ..
 cd ../..

@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "../include/ScintillaWnd.h"
 #include "Scintilla.h"
-#include "SciLexer.h"
+//#include "SciLexer.h"
 
 using namespace Bear::Core;
 IMPLEMENT_DYNAMIC(ScintillaWnd, CWnd)
@@ -48,9 +48,9 @@ BOOL ScintillaWnd::Create(DWORD dwExStyle, DWORD dwStyle, const RECT& rect, CWnd
 {
 	HMODULE mSci = nullptr;
 #ifdef _DEBUG
-	auto dll = _T("SciLexerD.dll");
+	auto dll = _T("ScintillaD.dll");
 #else
-	auto dll = _T("SciLexer.dll");
+	auto dll = _T("Scintilla.dll");
 #endif
 	mSci = LoadLibrary(dll);
 
