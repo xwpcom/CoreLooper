@@ -221,7 +221,11 @@ void SimpleConnect::OnTimer(long id)
 {
 	if (id == mTimer_AutoClose)
 	{
-		//LogV(TAG,"%s timeout auto close,this=%p,mTimeOutSecond=%d", GetObjectName().c_str(),this, mTimeOutSecond);
+		if(mVerbose)
+		{
+			LogV(TAG, "%s timeout auto close,this=%p,mTimeOutSecond=%d", GetObjectName().c_str(), this, mTimeOutSecond);
+		}
+		
 		Destroy();
 		return;
 	}

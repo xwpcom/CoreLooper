@@ -9,6 +9,7 @@ DWORD TickDumper::mDefaultAlarmDuration = 30;
 #define IDS_TRACKER		""
 #endif
 
+static const char* TAG = "tickDumper";
 TickDumper::TickDumper(const char *comment, bool dump, DWORD tickAlarmDuration)
 {
 	//DT("%s#enter",mComment);
@@ -19,7 +20,7 @@ TickDumper::TickDumper(const char *comment, bool dump, DWORD tickAlarmDuration)
 
 	if (mEnableDump)
 	{
-		DT("%s%s#begin", IDS_TRACKER, mComment.c_str());
+		LogV(TAG,"%s%s#begin", IDS_TRACKER, mComment.c_str());
 	}
 }
 
@@ -29,14 +30,14 @@ TickDumper::~TickDumper()
 	if (mEnableDump)
 	{
 		auto gap = ShellTool::GetTickCount64() - mTickStart;
-		DT("%s%s#end,tick=" FMT_LONGLONG, IDS_TRACKER, mComment.c_str(), gap);
+		LogV(TAG, "%s%s#end,tick=" FMT_LONGLONG, IDS_TRACKER, mComment.c_str(), gap);
 	}
 	if (mTickAlarmDuration)
 	{
 		auto gap = ShellTool::GetTickCount64() - mTickStart;
 		if (gap > mTickAlarmDuration)
 		{
-			DW("%s%s timeout,gap=" FMT_LONGLONG ",mTickAlarmDuration=%lu", IDS_TRACKER, mComment.c_str(), gap, mTickAlarmDuration);
+			LogV(TAG, "%s%s timeout,gap=" FMT_LONGLONG ",mTickAlarmDuration=%lu", IDS_TRACKER, mComment.c_str(), gap, mTickAlarmDuration);
 			if (Looper::IsMainLooper(Looper::CurrentLooper()))
 			{
 				//int x = 0;

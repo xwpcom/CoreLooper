@@ -72,6 +72,12 @@ protected:
 				fclose(mFile);
 				mFile = nullptr;
 			}
+
+			auto filePath = mSaveAsFilePath + ".tmp";
+			if (File::FileExists(filePath) && File::Length(filePath)==0)
+			{
+				File::DeleteFile(filePath.c_str());
+			}
 		}
 
 		void Reset()
@@ -93,7 +99,7 @@ protected:
 		DWORD			mContentLength;
 		ByteBuffer		mAckBody;
 		string			mSaveAsFilePath;
-		FILE			*mFile;
+		FILE			*mFile=nullptr;
 		ULONGLONG		mStartTick=0;//用来计算下载速度
 		bool			mChunked = false;//是否采用Transfer-Encoding: chunked
 		double			mSpeed=0.0f;//KB/秒,仅在下载成功后有效
