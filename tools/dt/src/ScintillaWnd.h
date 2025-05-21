@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "Scintilla.h"
-#include "SciLexer.h"
 
 //XiongWanPing 2019.09.14
 //参考https://blog.csdn.net/embededvc/article/details/7049788

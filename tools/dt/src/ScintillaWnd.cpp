@@ -26,11 +26,11 @@ END_MESSAGE_MAP()
 BOOL ScintillaWnd::Create(DWORD dwExStyle, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
 	HMODULE mSci = nullptr;
-#ifdef _DEBUG
-	auto dll = _T("SciLexerD.dll");
-#else
-	auto dll = _T("SciLexer.dll");
-#endif
+	#ifdef _DEBUG
+	auto dll = _T("ScintillaD.dll");
+	#else
+	auto dll = _T("Scintilla.dll");
+	#endif
 	mSci = LoadLibrary(dll);
 
 	auto ret=CWnd::CreateEx(dwExStyle, _T("Scintilla"), _T(""), dwStyle, rect, pParentWnd, nID);
