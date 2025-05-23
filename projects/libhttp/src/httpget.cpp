@@ -61,6 +61,11 @@ int HttpGet::Execute(const string& url, const string& saveAsFilePath, std::funct
 		EnableTls();
 	}
 
+	if (mVerbose)
+	{
+		LogV(mTag, "useHttps=%d",useHttps);
+	}
+
 	mReqInfo.mPageUrl = pageUrl;
 	mReqInfo.mHost = host;
 	mReqInfo.mPort = port;
