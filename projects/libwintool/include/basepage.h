@@ -51,8 +51,10 @@ public:
 	int GetCurSel(CListCtrl& list, bool enableFocus = true);
 	void SetReadOnly(UINT id, bool readOnly = true);
 	CString GetString(UINT id);
+	string getString(UINT id);
 	CString GetText(UINT id);
 	int SetText(UINT id, CString text);
+	int SetText(UINT id, const string& text);
 	int SetInt(UINT id, int value);
 	int GetInt(UINT id);
 	CString GetItemText(UINT id);

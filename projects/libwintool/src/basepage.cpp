@@ -20,11 +20,30 @@ BEGIN_MESSAGE_MAP(BasePage, CDialogEx)
 	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
+string BasePage::getString(UINT id)
+{
+	CString text;
+	GetDlgItemText(id, text);
+
+	return Utf8Tool::Unicode2Utf8(text);
+}
+
 CString BasePage::GetString(UINT id)
 {
 	CString text;
 	GetDlgItemText(id, text);
 	return text;
+}
+
+int BasePage::SetText(UINT id, const string& text)
+{
+	USES_CONVERSION;
+	auto v = Utf8Tool::UTF8_to_UNICODE(text);
+	if (v)
+	{
+		SetDlgItemText(id, v);
+	}
+	return 0;
 }
 
 int BasePage::SetText(UINT id, CString text)
@@ -193,8 +212,14 @@ void BasePage::SaveDlgItemStringBase64(UINT id, CString name)
 	CString text;
 	GetDlgItemText(id, text);
 	USES_CONVERSION;
-	string data = Base64::Encode((const char*)T2A(text));
-	mIni->SetString(mSection, T2A(name), data);
+
+	auto v = (const char*)T2A(text);
+	if (v)
+	{
+		string data = Base64::Encode(v);
+		auto text = T2A(name);
+		mIni->SetString(mSection, text, data);
+	}
 }
 
 void BasePage::LoadDlgItemStringBase64(UINT id, CString name, CString defaultValue)
