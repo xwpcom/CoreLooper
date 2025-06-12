@@ -172,6 +172,10 @@ public:
 	{
 		return m_nData;
 	}
+	int bytes()const
+	{
+		return m_nData;
+	}
 	int GetDataLength()const
 	{
 		return m_nData;

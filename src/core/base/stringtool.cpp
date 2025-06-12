@@ -423,5 +423,32 @@ void StringTool::split(const char* text, const char* sep, char* itemBuf, size_t 
 	}
 }
 
+int StringTool::ByteToHexChar(const unsigned char* pByte, int cbByte, char* dest, int destBytes)
+{
+	char* d = dest;
+	int i = 0;
+	d[0] = 0;
+
+	if (cbByte * 2 >= destBytes)//确保dest以'\0'结尾
+	{
+		return 0;
+	}
+
+	for (i = 0; i < cbByte; i++)
+	{
+		char buf[8];
+		int value = pByte[i];
+		sprintf(buf, "%02X", value);
+
+		d[0] = buf[0];
+		d[1] = buf[1];
+		d += 2;
+	}
+
+	d[0] = 0;//结尾加'\0'
+
+	return cbByte * 2;
+}
+
 }
 }
