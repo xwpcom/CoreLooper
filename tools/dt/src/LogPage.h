@@ -100,6 +100,10 @@ protected:
 
 	int mMaxLogCount = 1000 * 1000;
 	int mListSelectIndex = -1;
+
+	vector<string> mRootPaths;
+	int tryConvertToFullPath(string& filePath);
+
 public:
 	LogListCtrl mListCtrl;
 	afx_msg void OnDestroy();

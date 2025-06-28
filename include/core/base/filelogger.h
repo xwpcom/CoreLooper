@@ -30,8 +30,10 @@ public:
 		addLog((LPBYTE)text.c_str(), (int)text.length());
 	}
 	void addLog(LPBYTE data, int bytes);
+	void switchFile();
 
 	sigslot::signal2<Handler*, const string&> SignalFileBackupReady;
+	sigslot::signal2<Handler*, const string&> SignalPrepareSwitchLogFile;
 protected:
 	int write(LPBYTE data,int bytes);
 	string mTag;
@@ -63,6 +65,8 @@ public:
     FileLogger();
 	~FileLogger();
 
+	LOOPER_SAFE void setBackupFolder(const string& rootFolder);
+	LOOPER_SAFE void switchFile();//主动切换文件，主要用来测试
 	LOOPER_SAFE static void addLog(tagLogInfo& info);
 	LOOPER_SAFE void saveLog(bool sync = false);
 	LOOPER_SAFE void enableLog();
@@ -91,6 +95,8 @@ protected:
 	
 	long mTimer_keepAlive = 0;
 	ULONGLONG mKeepAliveTick = 0;
+	string mBackupRootFolder;//备份日志的根目录，非空时有效
+	void onPrepareSwitchLogFile(Handler*, const string& filePath);
 
 };
 

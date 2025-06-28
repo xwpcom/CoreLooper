@@ -1,3 +1,14 @@
+# 2025.06.15
+增加了dt.path.json
+qt在vs2022中编译时__FILE__是相对路径,为了能方便定位日志文件,需要将相对路径转换为绝对路径
+可在dt.path.json中增加工程路径，然后dt会自动搜索匹配为绝对路径
+这样双击就能在vs中定位到日志代码行了
+
+https://forum.juce.com/t/clang-make-file-use-absolute-path/41874
+When compiling with MSVC, the /FC flag can be used to make the __FILE__ macro resolve to the absolute path of the current source file.
+I added -working-directory=$PROJECT_DIR to the Xcode compiler flags and now __FILE__ is working as expected, giving me the absolute path to the current source.
+
+
 # 2021.09.22
 LogPage::OnCopyAll()中在loop中调用T2A可导致stack overflow
 //已改

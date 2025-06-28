@@ -102,6 +102,7 @@ int LogWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//SetTimer(eTimerDump, 1000,nullptr);
 
 	//SendMessage(SCI_SETYCARETPOLICY);// , CARET_STRICT, CARET_STRICT);// , CARET_JUMPSand CARET_EVEN, );
+	SetUtf8();
 	return 0;
 }
 

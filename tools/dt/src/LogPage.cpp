@@ -222,6 +222,27 @@ int LogPage::Init()
 #ifdef _DEBUG
 	SetTimer(eTimer_Test, 1000);
 #endif
+
+	{
+		//qt在vs2022中编译时__FILE__是相对路径,为了能方便定位日志文件,需要将相对路径转换为绝对路径
+		ByteBuffer box;
+		File::ReadFile(ShellTool::GetAppPath() + "/dt.path.json", box);
+		if (!box.empty())
+		{
+			DynamicJsonBuffer jBuf;
+			auto& jItems = jBuf.parseArray(box.data());
+			for (auto& jItem : jItems)
+			{
+				auto path = jItem.as<string>();
+				//if (File::FileExists(path.c_str()))
+				{
+					mRootPaths.push_back(path);
+					//LogV("dt", "rootPaths.add %s", path.c_str());
+				}
+			}
+		}
+	}
+
 	return ret;
 }
 
@@ -502,7 +523,10 @@ void LogPage::OnOpenFileGotoLine()
 		return;
 	}
 
-	if (!File::FileExists(item->file))
+	auto filePath = item->file;
+	tryConvertToFullPath(filePath);
+
+	if (!File::FileExists(filePath))
 	{
 		ShowToast(_T("file no found"));
 		return;
@@ -524,7 +548,7 @@ void LogPage::OnOpenFileGotoLine()
 	string cmd = StringTool::Format(
 		"%s \"%s\" %d"
 		,exe.c_str()
-		,item->file.c_str()
+		,filePath.c_str()
 		,item->line
 	);
 
@@ -574,8 +598,11 @@ void LogPage::OnCopyFullPath()
 		//return;
 	}
 
+	auto filePath = item->file;
+	tryConvertToFullPath(filePath);
+
 	USES_CONVERSION;
-	CString text = A2T(item->file.c_str());
+	CString text = A2T(filePath.c_str());
 	ShellTool::CopyTextToClipboard(GetSafeHwnd(), text);
 
 	text.Format(_T("Copy full path OK,line = %d"), item->line);
@@ -590,7 +617,10 @@ void LogPage::OnOpenFolder()
 		return;
 	}
 
-	if (!File::FileExists(item->file))
+	auto filePath = item->file;
+	tryConvertToFullPath(filePath);
+
+	if (!File::FileExists(filePath))
 	{
 		ShowToast(_T("file no found"));
 		return;
@@ -985,4 +1015,26 @@ void LogPage::OnNMClickList(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 
 	UpdateUserActionTick();
+}
+
+int LogPage::tryConvertToFullPath(string& filePath)
+{
+	if (filePath.length() > 2 && filePath.at(1) != ':')
+	{
+		//可能是相对路径
+		for (auto& root : mRootPaths)
+		{
+			auto fullPath = root + "/" + filePath;
+			if (File::FileExists(fullPath.c_str()))
+			{
+				filePath = fullPath;
+
+				File::PathMakePretty(filePath);
+				StringTool::Replace(filePath, "/", "\\");
+				return 0;
+			}
+		}
+	}
+
+	return 0;
 }

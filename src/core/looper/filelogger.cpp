@@ -47,21 +47,28 @@ LogFile::LogFile()
     mTag = "LogFile";
 }
 
+void LogFile::switchFile()
+{
+	SignalPrepareSwitchLogFile(this, gFilePath);
+
+	if (gAutoBackup)
+	{
+		auto file = gFilePath + ".bak";
+		File::CopyFile(gFilePath, file);
+
+		SignalFileBackupReady(this, file);
+	}
+
+	File::DeleteFile(gFilePath.c_str());
+}
+
 //返回成功写入的字节数
 int LogFile::write(LPBYTE data, int bytes)
 {
 	auto fileBytes = (int)File::GetFileLength(gFilePath.c_str());
 	if (fileBytes >= gMaxBytes)
 	{
-		if (gAutoBackup)
-		{
-			auto file = gFilePath + ".bak";
-			File::CopyFile(gFilePath, file);
-
-			SignalFileBackupReady(this, file);
-		}
-
-		File::DeleteFile(gFilePath.c_str());
+		switchFile();
 		fileBytes = 0;
 	}
 
@@ -136,6 +143,7 @@ void FileLogger::OnCreate()
 	mLogFile = obj;
 	obj->setFilePath(gFilePath, gMaxBytes,gAutoBackup);
 
+	obj->SignalPrepareSwitchLogFile.connect(this, &FileLogger::onPrepareSwitchLogFile);
 	int seconds = gSaveInterval;
 
 	SetTimer(mTimer_save, seconds * 1000);
@@ -319,6 +327,50 @@ void FileLogger::addLog(tagLogInfo& info)
 
 		gItems.push_back(item);
 	}
+}
+
+void FileLogger::switchFile()
+{
+	auto fn = [this]() {
+		auto obj = mLogFile.lock();
+		if (obj)
+		{
+			obj->switchFile();
+		}
+	};
+
+	post(fn);
+}
+
+//如果rootFolder有效，在master.log已满时会复制为如下文件
+//rootFolder/yyyy-mm-dd/hhmmss.log
+//由上层负责文件空间的循环覆盖
+void FileLogger::setBackupFolder(const string& rootFolder)
+{
+	auto fn = [this,rootFolder]() {
+		mBackupRootFolder = rootFolder;
+		LogI(mTag, "backupRootFolder=%s",rootFolder.c_str());
+		///opt/media/mmcblk0p1/media
+	};
+
+	post(fn);
+}
+
+void FileLogger::onPrepareSwitchLogFile(Handler*, const string& filePath)
+{
+	if (!mBackupRootFolder.empty())
+	{
+		auto t = tagTimeMs::now();
+		auto file = StringTool::Format("%s/%04d-%02d-%02d/%04d-%02d-%02d_%02d_%02d_%02d.log"
+									   ,mBackupRootFolder.c_str()
+									   ,t.year,t.month,t.day
+									   , t.year, t.month, t.day,t.hour,t.minute,t.second
+									   );
+		File::CopyFile(filePath, file);
+		LogV(mTag, "backup file to %s", file.c_str());
+	}
+
+
 }
 
 }
