@@ -1952,7 +1952,7 @@ void tagTimeMs::from_dt(int date, int time)
 	ms = 0;
 }
 
-void tagTimeMs::from_time_t(time_t t)
+tagTimeMs& tagTimeMs::from_time_t(time_t t)
 {
 	tm time = { 0 };
 	DateTime::localtime(t, &time);
@@ -1964,6 +1964,7 @@ void tagTimeMs::from_time_t(time_t t)
 	minute = time.tm_min;
 	second = time.tm_sec;
 	ms = 0;
+	return *this;
 }
 
 /* 对接第三方平台时经常用到，标准日期时间字符串 */
