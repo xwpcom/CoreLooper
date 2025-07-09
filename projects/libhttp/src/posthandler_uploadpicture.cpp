@@ -120,6 +120,14 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		auto fileName = params.GetString("fileName");
 		obj->SetFileName(fileName);
 	}
+	else if (tag == "gxCsv")
+	{
+		obj->params().Set("tag", tag);
+
+		folder = StringTool::Format("C:/iot/gx/%s", uid.c_str());
+		auto fileName = params.GetString("fileName");
+		obj->SetFileName(fileName);
+	}
 	else
 	{
 		folder = StringTool::Format("%s/pictures/%s", mWebConfig->mMediaRootPath.c_str(), uid.c_str());
@@ -128,7 +136,6 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 	obj->SetFolder(folder);
 	return obj;
 }
-
 
 }
 }

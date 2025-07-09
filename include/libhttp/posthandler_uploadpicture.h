@@ -26,7 +26,6 @@ protected:
 	std::shared_ptr<HttpFormField> CreateField(const std::string& fieldName);
 };
 
-
 }
 }
 }
