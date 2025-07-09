@@ -466,6 +466,8 @@ int HttpRequest::Transform(string  target, ByteBuffer& box)
 			{
 				ack =
 					"HTTP/1.1 200 OK\r\n"
+					"Connection: close\r\n" //
+					"Content-Length: 0\r\n"	//在chrome中gx.htm post文件时要加上这行chrome才能及时结束上传流程
 					"\r\n"
 					;
 			}

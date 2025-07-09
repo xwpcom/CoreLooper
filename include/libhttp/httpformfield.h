@@ -25,6 +25,11 @@ public:
 		mWebConfig = config;
 	}
 
+	void setHttpPostCommandHandler(HttpPostCommandHandler* obj)
+	{
+		mHttpPostCommandHandler = obj;
+	}
+
 	enum eResult
 	{
 		eResult_NeedMoreData,
@@ -75,6 +80,8 @@ protected:
 	std::shared_ptr<tagWebServerConfig> mWebConfig;
 
 	Bundle mParams;
+	HttpPostCommandHandler* mHttpPostCommandHandler = nullptr;
+
 };
 }
 }

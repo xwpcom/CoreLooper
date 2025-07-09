@@ -123,9 +123,12 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 	else if (tag == "gxCsv")
 	{
 		obj->params().Set("tag", tag);
+		auto id = params.GetString("id");
+		obj->params().Set("id", id);
 
-		folder = StringTool::Format("C:/iot/gx/%s", uid.c_str());
-		auto fileName = params.GetString("fileName");
+		folder = StringTool::Format("C:/iot/gx");
+		auto t = tagTimeMs::now();
+		auto fileName = StringTool::Format("%d%02d%02d_%02d%02d%02d.csv",t.year,t.month,t.day,t.hour,t.minute,t.second);
 		obj->SetFileName(fileName);
 	}
 	else

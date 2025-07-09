@@ -15,7 +15,7 @@ class HTTP_EXPORT FileUploadManager :public Handler
 	SUPER(Handler);
 public:
 	FileUploadManager();
-	virtual void OnUploadFile(const string& filePath, Bundle& params);
+	virtual void OnUploadFile(const string& filePath, Bundle& params,string& httpAck);
 protected:
 	void OnCreate();
 

@@ -63,6 +63,7 @@ int HttpPostCommandHandler::BeginField(const string & fieldName, int rangeStart)
 
 	mCurrentField = CreateField(fieldName);
 	ASSERT(mCurrentField);
+	mCurrentField->setHttpPostCommandHandler(this);
 
 	mCurrentField->InitField(mHeader, fieldName, rangeStart);
 

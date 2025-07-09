@@ -23,6 +23,10 @@ public:
 	void setHttpRequest(HttpRequest* obj) {
 		mHttpRequest = obj;
 	}
+	void setAck(const string& ack)
+	{
+		mAck = ack;
+	}
 
 	virtual string GetAck();
 

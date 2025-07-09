@@ -50,6 +50,7 @@ protected:
 	std::shared_ptr<HttpHeader> mHeader;
 
 	std::shared_ptr<HttpPostCommandHandler>	mCommandHander;
+	string mAck;
 	std::shared_ptr<tagWebServerConfig>		mWebConfig;
 
 	ULONG mContentLength=0;//used when eState_WaitSimpleHttpBody

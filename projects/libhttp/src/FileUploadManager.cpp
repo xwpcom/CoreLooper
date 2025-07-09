@@ -18,7 +18,7 @@ void FileUploadManager::OnCreate()
 	__super::OnCreate();
 }
 
-void FileUploadManager::OnUploadFile(const string& filePath, Bundle& params)
+void FileUploadManager::OnUploadFile(const string& filePath, Bundle& params, string& httpAck)
 {
 	LogV(TAG, "%s,filePath=[%s]",__func__,filePath.c_str());
 }

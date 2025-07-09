@@ -18,12 +18,12 @@ public:
 		mFolder = folder;
 		return 0;
 	}
+
 protected:
 	int Input(LPBYTE data, int dataLen);
 	void OnPostFail();
 	virtual void SetDataReady(bool ready = true);
 	void Close();
-
 	std::string  mFolder;
 	FILE *mFile=nullptr;
 

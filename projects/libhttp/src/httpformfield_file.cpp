@@ -1,6 +1,8 @@
 ﻿#include "stdafx.h"
 #include "httpformfield_file.h"
 #include "FileUploadManager.h"
+#include "httppostcommandhandler.h"
+
 using namespace Bear::Core;
 
 namespace Bear {
@@ -42,7 +44,13 @@ void HttpFormField_File::Close()
 				auto obj = _Object(FileUploadManager, "FileUploadManager");
 				if (obj)
 				{
-					obj->OnUploadFile(mFilePath, mParams);
+					string httpAck;
+					obj->OnUploadFile(mFilePath, mParams, httpAck);
+
+					if(!httpAck.empty() && mHttpPostCommandHandler)
+					{
+						mHttpPostCommandHandler->setAck(httpAck);
+					}
 				}
 			}
 		}

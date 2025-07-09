@@ -169,6 +169,7 @@ int HttpPostHandler::Input(ByteBuffer& inbox)
 						inbox.Eat(keyBytes);
 						int error = 0;
 						mCommandHander->OnFinishRecvData(error);
+						mAck=mCommandHander->GetAck();
 						mCommandHander = nullptr;
 						SwitchState(eState_Done);
 						return 0;
@@ -234,7 +235,7 @@ string HttpPostHandler::GetAck()
 		return mCommandHander->GetAck();
 	}
 
-	return "";
+	return mAck;
 }
 
 bool HttpPostHandler::IsDone()
