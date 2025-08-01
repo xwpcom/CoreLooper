@@ -3695,7 +3695,7 @@ public:
 						{
 							static int idx = -1;
 							++idx;
-							DW("phone timer delay[%04d]=%lld", idx, delay);
+							LogW(TAG,"phone timer delay[%04d]=%lld", idx, delay);
 						}
 
 						mDebugTick = tickNow;
