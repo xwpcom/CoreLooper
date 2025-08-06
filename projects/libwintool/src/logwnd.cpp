@@ -260,6 +260,13 @@ void LogWnd::CopyAll()
 	SendMessage(SCI_COPYRANGE, 0, len);
 }
 
+//是AddLog简化版，速度应该快一些,可用于批量添加
+int LogWnd::addLogFast(const string& text)
+{
+	SendMessage(SCI_APPENDTEXT, text.length(), (LPARAM)text.c_str());
+	return 0;
+}
+
 int LogWnd::AddLog(const string& text)
 {
 	bool scroll = false;
@@ -288,12 +295,12 @@ int LogWnd::AddLog(const string& text)
 	}
 
 	{
-		auto len = SendMessage(SCI_GETLENGTH);
-		auto line=SendMessage(SCI_LINEFROMPOSITION, len);
-		auto pos2 = SendMessage(SCI_GETCURRENTPOS);
+		//auto len = SendMessage(SCI_GETLENGTH);
+		//auto line=SendMessage(SCI_LINEFROMPOSITION, len);
+		//auto pos2 = SendMessage(SCI_GETCURRENTPOS);
 		//LogV(TAG, "pos=%d,pos2=%d,line=%d", pos, pos2,line);
 	
-		return line;
+		return 0;// line;
 
 	}
 }

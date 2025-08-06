@@ -116,6 +116,8 @@ public:
 		
 		return __super::SetTimer(nIDEvent, nElapse, lpfnTimer);
 	}
+	virtual void SaveConfig();
+	virtual void LoadConfig();
 protected:
 	virtual BOOL OnInitDialog();
 	virtual int Init();
@@ -125,8 +127,6 @@ protected:
 	void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual void OnFirstShow();
 
-	virtual void LoadConfig();
-	virtual void SaveConfig();
 
 	string mSection;
 	bool mEnableOK=false;
