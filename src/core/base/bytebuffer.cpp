@@ -326,6 +326,19 @@ int ByteBuffer::ReadLine(string& line)
 			Eat(len + 1);
 			return 0;
 		}
+		else
+		{
+			if (m_nData > 0)
+			{
+				line = string(p, m_nData);
+				Eat(m_nData);
+				return 0;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
 	return -1;
