@@ -53,7 +53,7 @@ void SerialPort_Windows::OnCreate()
 	{
 		if (mDeviceName != "\\\\.\\")
 		{
-			LogW(TAG, "fail open[%s]", mDeviceName.c_str());
+			LogD(TAG, "fail open[%s]", mDeviceName.c_str());
 		}
 #ifndef _MSC_VER
 		ASSERT(FALSE);
