@@ -199,7 +199,6 @@ void* DnsLooper::_DnsThreadCB(void *p)
 		}
 		else
 		{
-			DWORD dwRetval;
 			struct addrinfo *result = NULL;
 			struct addrinfo *ptr = NULL;
 			struct addrinfo hints;
@@ -210,9 +209,9 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			hints.ai_protocol = IPPROTO_TCP;
 
 			//LogV(TAG,"getaddrinfo(%s)#begin", mDns);
-			dwRetval = getaddrinfo(mDns, nullptr, &hints, &result);//注意在断网情况下，此api可能阻塞60秒或更长时间
+			auto err = getaddrinfo(mDns, nullptr, &hints, &result);//注意在断网情况下，此api可能阻塞60秒或更长时间
 			//LogV(TAG,"getaddrinfo(%s)#end,ret=%d", mDns, dwRetval);
-			if (dwRetval == 0)
+			if (err == 0)
 			{
 				for (ptr = result; ptr != NULL; ptr = ptr->ai_next)
 				{
@@ -236,7 +235,8 @@ void* DnsLooper::_DnsThreadCB(void *p)
 			{
 				if (mDns[0])
 				{
-					LogV(TAG, "getaddrinfo(%s) error=%d(%s)", mDns, errno, strerror(errno));
+					auto errDesc = SockTool::GetErrorDesc(err);
+					LogV(TAG, "getaddrinfo(%s) error=%d(%s)", mDns, err, errDesc);
 				}
 			}
 

@@ -844,6 +844,52 @@ public:
 		make_shared<MainLooper>()->StartRun();
 	}
 
+	TEST_METHOD(testHttpPost)
+	{
+		class MainLooper :public MainLooper_
+		{
+			void OnCreate()
+			{
+				__super::OnCreate();
+
+				reportData();
+			}
+
+			void reportData()
+			{
+				string url = "http://iot1.jjyip.com/reportData.json?hello";
+				string uid = "00000EMU";
+
+				DynamicJsonBuffer jBuf;
+				auto& json = jBuf.createObject();
+				json["uid"] = uid;
+				json["cmd"] = "test";
+
+				string text;
+
+				auto obj = make_shared<HttpPost>();
+				AddChild(obj);
+
+				if (url.find("https") != string::npos)
+				{
+					obj->EnableTls();
+				}
+
+				obj->AddHeader("Content-Type", "application/json");
+				obj->SetBody(text);
+
+				string urlNew = url;
+				//addLogText(uid, StringTool::Format("doHttpPost,url=[%s],body=[%s]", url.c_str(), text.c_str()));
+
+				obj->Start(urlNew, [this, uid](const string& url, int error, const string& ack) {
+					//addLogText(uid, StringTool::Format("url=[%s],ack=[%s],error=%d", url.c_str(), ack.c_str(), error));
+					LogV(TAG, "error=%d,uid=%s,url=[%s],ack=[%s]", error, uid.c_str(), url.c_str(), ack.c_str());
+				});
+			}
+		};
+
+		make_shared<MainLooper>()->StartRun();
+	}
 };
 
 
