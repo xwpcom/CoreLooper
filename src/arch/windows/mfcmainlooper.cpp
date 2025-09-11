@@ -33,12 +33,31 @@ shared_ptr<MfcMainLooper> MfcMainLooper::CheckCreateMainLooper()
 	}
 }
 
-void MfcMainLooper::postRunnableUI(const std::function<void()>& fn, weak_ptr<UIProxy>& proxy)
+void MfcMainLooper::postRunnableUI(const std::function<void()>& fn, weak_ptr<UIProxy>& proxy,const string& body)
 {
 	auto item = make_shared<tagUIRunnable>();
 	item->mSelfRef = item;
 	item->fn = fn;
 	item->mProxy = proxy;
+	item->body = body;
+
+	auto ptr = item.get();
+	auto ok = ::PostMessage(mHwnd, mHwndMessage, (WPARAM)ptr, 0);
+	if (!ok)
+	{
+		ASSERT(false);
+
+		item->mSelfRef = nullptr;
+	}
+}
+
+void MfcMainLooper::postRunnableUI(const std::function<void(const string&)>& fn, weak_ptr<UIProxy>& proxy, const string& body)
+{
+	auto item = make_shared<tagUIRunnable>();
+	item->mSelfRef = item;
+	item->fn2 = fn;
+	item->mProxy = proxy;
+	item->body = body;
 
 	auto ptr = item.get();
 	auto ok = ::PostMessage(mHwnd, mHwndMessage, (WPARAM)ptr, 0);

@@ -113,7 +113,18 @@ LRESULT WndManager::OnRunnableEvent(WPARAM wp, LPARAM lp)
 	auto proxy = info->mProxy.lock();
 	if (proxy)
 	{
-		info->fn();
+		if (info->fn)
+		{
+			info->fn();
+		}
+		else if (info->fn2)
+		{
+			info->fn2(info->body);
+		}
+		else
+		{
+			ASSERT(FALSE);
+		}
 	}
 
 	info->mSelfRef = nullptr;

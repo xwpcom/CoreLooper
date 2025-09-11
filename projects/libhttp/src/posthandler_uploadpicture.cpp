@@ -107,7 +107,7 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 	}
 	else if (tag == "file")
 	{
-		folder = StringTool::Format("C:/iot/file/%s", uid.c_str());
+		folder = StringTool::Format("C:/iot/web/file/%s", uid.c_str());
 		auto fileName = params.GetString("fileName");
 		obj->SetFileName(fileName);
 	}
@@ -116,7 +116,7 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		obj->params().Set("tag", tag);
 		obj->params().Set("uid", uid);
 
-		folder = StringTool::Format("C:/iot/rtspSnap/%s", uid.c_str());
+		folder = StringTool::Format("C:/iot/web/rtspSnap/%s", uid.c_str());
 		auto fileName = params.GetString("fileName");
 		obj->SetFileName(fileName);
 	}
@@ -126,7 +126,7 @@ shared_ptr<HttpFormField> PostHandler_UploadFile::CreateField(const string& fiel
 		auto id = params.GetString("id");
 		obj->params().Set("id", id);
 
-		folder = StringTool::Format("C:/iot/gx");
+		folder = StringTool::Format("C:/iot/web/gx");
 		auto t = tagTimeMs::now();
 		auto fileName = StringTool::Format("%d%02d%02d_%02d%02d%02d.csv",t.year,t.month,t.day,t.hour,t.minute,t.second);
 		obj->SetFileName(fileName);

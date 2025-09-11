@@ -8,6 +8,11 @@ class WIN_CLASS LogWnd :public ScintillaWnd
 public:
 	LogWnd();
 	int AddLog(const string& line);
+	int addLine(const string& line)
+	{
+		return AddLog(line + "\r\n");
+	}
+
 	int addLogFast(const string& line);
 	void clear();
 	void CopyAll();

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "uirunnable.h"
 #include <memory>
 namespace Bear {
@@ -19,7 +19,8 @@ class CORE_EXPORT MfcMainLooper :public MainLooper_
 public:
 	MfcMainLooper();
 	virtual ~MfcMainLooper();
-	void postRunnableUI(const std::function<void()>& fn,weak_ptr<UIProxy>&);
+	void postRunnableUI(const std::function<void()>& fn,weak_ptr<UIProxy>&,const string& body="");
+	void postRunnableUI(const std::function<void(const string&)>& fn, weak_ptr<UIProxy>&, const string& body = "");
 protected:
 	void SetFireEventSink(HWND wnd, UINT msg)
 	{

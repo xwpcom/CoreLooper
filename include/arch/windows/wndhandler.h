@@ -17,6 +17,8 @@ public:
 	}
 
 	void uiPostRunnable(const std::function<void()>& fn);
+	void uiPostRunnable(const std::function<void(const string&)>& fn);
+	void uiPostRunnable(const std::function<void(const string&)>& fn,const string& body);
 
 	weak_ptr<UIProxy> mUIProxy;
 };

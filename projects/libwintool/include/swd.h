@@ -12,6 +12,7 @@
 /*
 Functions which are described as JLINKARM_* are also implemented and exported as JLINK_*
 pdf文档中用的是JLINKARM_前缀,文档:pdfcoffee.com_um08002jlinkdllpdf-4-pdf-free
+stdcall functions start with JLINK_ cdecl functions start with JLINKARM_
 增加一个接口的流程
 .根据pdf中添加函数原型,然后在swd.api.inl中增加映射即可
 以JLINK_SetLogFile为例:
@@ -79,7 +80,7 @@ struct tagJLink
 /*
 XiongWanPing 2024.01.27
 文档:pdfcoffee.com_um08002jlinkdllpdf-4-pdf-free
-
+jlink.api.pdf
 https://blog.csdn.net/carrymen/article/details/133995472
 https://blog.csdn.net/qq446252221/article/details/89878996
 */
