@@ -48,8 +48,6 @@ public:
 		mSaveAndStoreWindowsPosition = true;
 	}
 
-	int GetCurSel(CListCtrl& list, bool enableFocus = true);
-	void SetReadOnly(UINT id, bool readOnly = true);
 	CString GetString(UINT id);
 	string getString(UINT id);
 	CString GetText(UINT id);
@@ -87,11 +85,6 @@ public:
 	void LoadCombo(UINT id, const string& name, const string& defaultValue = "");
 	int GetInt(CString name, int defaultValue = 0);
 	CString GetString(CString name, CString DefaultValue = _T(""));
-
-	void EnableItem(UINT id);
-	void DisableItem(UINT id);
-	void ShowItem(UINT id);
-	void HideItem(UINT id);
 
 	void OnOK()
 	{
