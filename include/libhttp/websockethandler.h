@@ -14,8 +14,8 @@ class HTTP_EXPORT WebSocketHandler :public Handler, public WebSocketSplitter
 public:
 	WebSocketHandler();
 	~WebSocketHandler();
-	sigslot::signal3<Handler*, LPBYTE, int>	SignalOnWebSocketRecv;
-	sigslot::signal1 < Handler*>			SignalOnWebSocketClosed;
+	sigslot::signal3<Bear::Core::Handler*, LPBYTE, int>	SignalOnWebSocketRecv;
+	sigslot::signal1 <Bear::Core::Handler*>			SignalOnWebSocketClosed;
 	sigslot::signal1<Handler*>				SignalOnWebSocketReadySend;
 	virtual void Send(Handler*, ByteBuffer& box);
 	void OnWSHandlerDestroy(Handler*);

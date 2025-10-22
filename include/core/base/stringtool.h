@@ -22,6 +22,7 @@ class CORE_EXPORT StringTool
 {
 public:
 	static int ByteToHexChar(const unsigned char* pByte, int cbByte, char* dest, int destBytes);
+	static int HexCharToByte(const char* pSrc, unsigned char* pDst, int cbDst);
 	static int AppendText(char* dst, int dstBytes, const char* text);
 	static int AppendFormat(char* dst, int dstBytes, const char* fmt, ...);
 	static void split(const char* text, const char* sep, char* itemBuf, size_t itemBufBytes, function<void(const char* item)> fn);

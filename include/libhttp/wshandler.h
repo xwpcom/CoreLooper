@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "websockethandler.h"
 #include "protocol/ctp/CommonTextProtocol.h"
 
@@ -16,27 +16,27 @@ public:
 	WSHandler();
 	~WSHandler();
 
-	sigslot::signal2<Handler*, ByteBuffer&> SignalSend;
-	sigslot::signal1<Handler*> SignalDestroy;
+	sigslot::signal2<Bear::Core::Handler*, ByteBuffer&> SignalSend;
+	sigslot::signal1<Bear::Core::Handler*> SignalDestroy;
 
-	virtual void OnWebSocketRecv(Handler*, LPBYTE, int);
-	virtual void OnWebSocketClosed(Handler*);
+	virtual void OnWebSocketRecv(Bear::Core::Handler*, LPBYTE, int);
+	virtual void OnWebSocketClosed(Bear::Core::Handler*);
 protected:
 	void OnCreate();
 	void OnDestroy();
 	void OnTimer(long id);
 
 	//CommonTextProtocolCB#begin
-	virtual void OnCommand(CommonTextProtocol* obj, const string& cmd, const Bundle& inputBundle, const ByteBuffer& inputBody, Bundle& ackBundle, ByteBuffer& ackBody);
+	virtual void OnCommand(CommonTextProtocol* obj, const string& cmd, const Bear::Core::Bundle& inputBundle, const ByteBuffer& inputBody, Bear::Core::Bundle& ackBundle, ByteBuffer& ackBody);
 
-	//ÊÕµ½¶Ô·½µÄÍ¨ÖªÊ±µ÷ÓÃ±¾½Ó¿Ú
-	virtual void OnNotify(CommonTextProtocol* obj, const string& cmd, const Bundle& bundle, const ByteBuffer& body);
+	//æ”¶åˆ°å¯¹æ–¹çš„é€šçŸ¥æ—¶è°ƒç”¨æœ¬æ¥å£
+	virtual void OnNotify(CommonTextProtocol* obj, const string& cmd, const Bear::Core::Bundle& bundle, const ByteBuffer& body);
 
-	//Ğ­ÒéµÈ³ö´íÊ±µ÷ÓÃ±¾½Ó¿Ú
-	//Õı³£Çé¿öÏÂ²»»á´¥·¢,½öÓÃÓÚ¿ª·¢µ÷ÊÔ
+	//åè®®ç­‰å‡ºé”™æ—¶è°ƒç”¨æœ¬æ¥å£
+	//æ­£å¸¸æƒ…å†µä¸‹ä¸ä¼šè§¦å‘,ä»…ç”¨äºå¼€å‘è°ƒè¯•
 	virtual void OnError(CommonTextProtocol* obj, int error, const string& desc);
 
-	//ÓĞÊı¾İÒª·¢¸ø¶Ô·½Ê±£¬»áµ÷ÓÃ±¾½Ó¿Ú
+	//æœ‰æ•°æ®è¦å‘ç»™å¯¹æ–¹æ—¶ï¼Œä¼šè°ƒç”¨æœ¬æ¥å£
 	virtual void Output(CommonTextProtocol* obj, const ByteBuffer& data);
 	//CommonTextProtocolCB#end
 

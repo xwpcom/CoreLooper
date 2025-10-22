@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "wshandler.h"
 #include "ajaxcommandhandler.h"
 #include "httptool.h"
@@ -135,7 +135,7 @@ void WSHandler::OnTimer(long id)
 	__super::OnTimer(id);
 }
 
-void WSHandler::OnWebSocketRecv(Handler*, LPBYTE data, int bytes)
+void WSHandler::OnWebSocketRecv(Bear::Core::Handler*, LPBYTE data, int bytes)
 {
 	if (mProtocol)
 	{
@@ -143,7 +143,7 @@ void WSHandler::OnWebSocketRecv(Handler*, LPBYTE data, int bytes)
 	}
 }
 
-void WSHandler::OnWebSocketClosed(Handler*)
+void WSHandler::OnWebSocketClosed(Bear::Core::Handler*)
 {
 	Destroy();
 }
