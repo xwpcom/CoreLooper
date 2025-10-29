@@ -434,7 +434,7 @@ public:
 		make_shared<MainLooper>()->StartRun();
 
 	}
-
+	
 	TEST_METHOD(HttpsGet)
 	{
 		class MainLooper :public MainLooper_

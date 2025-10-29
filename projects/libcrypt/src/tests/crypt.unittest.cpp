@@ -55,6 +55,15 @@ public:
 		LogV(TAG, "ack1=%s", ack1.c_str());
 		//LogV(TAG, "ack2=%s", ack2.c_str());
 	}
+	
+	TEST_METHOD(SHA1_demo)
+	{
+		string key = "2c5247bdb0697fb5e5d14150cf39a2bb";
+		uint8_t out[20] = {0};
+		sha1_EX((uint8_t*)key.c_str(), key.length(), out);
+		int x = 0;
+	}
+	
 
 	TEST_METHOD(Base64_Test)
 	{
