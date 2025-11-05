@@ -94,7 +94,7 @@ DnsLooper::~DnsLooper()
 
 int DnsLooper::AddRequest(string dns, weak_ptr<Handler> handler, UINT msg)
 {
-	LogV(TAG, "%s(%s)",__func__,dns.c_str());
+	//LogV(TAG, "%s(%s)",__func__,dns.c_str());
 
 	tagItemInfo info;
 	info.mDns = dns;
@@ -224,7 +224,7 @@ void* DnsLooper::_DnsThreadCB(void *p)
 					if (ipThis)
 					{
 					#ifdef _MSC_VER_DEBUG
-						LogV(TAG, "[%s]=[%s]", mDns, ipThis);
+						//LogV(TAG, "[%s]=[%s]", mDns, ipThis);
 					#endif
 						strncpy(mIP, ipThis, sizeof(mIP) - 1);
 						break;

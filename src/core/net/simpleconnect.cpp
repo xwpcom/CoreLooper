@@ -61,6 +61,7 @@ int SimpleConnect::StartConnect(Bundle& bundle)
 	}
 
 	obj->Connect(bundle);
+	mOutbox.PrepareBuf(16 * 1024);
 
 	mAddress = bundle.GetString("address") + ":" + bundle.GetString("port");
 
@@ -91,10 +92,14 @@ void SimpleConnect::OnConnect(Channel *endPoint, long error, ByteBuffer*, Bundle
 		}
 
 		mConnected = true;
-		mOutbox.PrepareBuf(16 * 1024);
 	}
 
 	SignalConnectAck(this, error);
+
+	if (error == 0)
+	{
+		CheckSend();
+	}
 }
 
 void SimpleConnect::OnClose(Channel*)
@@ -182,6 +187,12 @@ void SimpleConnect::CheckSend()
 
 		LPBYTE frame = mOutbox.GetDataPointer();
 		int frameLen = mOutbox.GetActualDataLength();
+
+		if (!IsConnected())
+		{
+			return;
+		}
+
 		int ret = channel->Send(frame, frameLen);
 		if (ret > 0)
 		{
