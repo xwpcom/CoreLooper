@@ -501,5 +501,22 @@ int StringTool::ByteToHexChar(const unsigned char* pByte, int cbByte, char* dest
 	return cbByte * 2;
 }
 
+void StringTool::parseKV(const std::string& text, string& key, string& value, char ch)
+{
+	key.clear();
+	value.clear();
+
+	auto pos = text.find(ch);
+	if (pos != string::npos)
+	{
+		key = text.substr(0, pos);
+		value = text.substr(pos + 1);
+	}
+	else
+	{
+		key = text;
+	}
+}
+
 }
 }

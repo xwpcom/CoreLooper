@@ -43,6 +43,7 @@ public:
 	static std::string& TrimRight(std::string&obj, char ch = ' ');
 	static std::string& MakeUpper(std::string&obj);
 	static std::string& MakeLower(std::string&obj);
+	static void parseKV(const std::string& text,string& key,string& value,char ch='=');
 	static void makeHexPretty(string& hex);
 	static bool IsHexChar(char ch);
 	static bool IsHexString(const char *sz);
