@@ -393,6 +393,20 @@ int SerialPort_Windows::OnRecv(IoContext *context, DWORD bytes)
 		UpdateRecvTick();
 
 		int ret = mInbox.Write((LPBYTE)context->mByteBuffer.GetDataPointer(), bytes);
+		mInbox.MakeSureEndWithNull();
+
+#ifdef _DEBUGx
+		auto tag = "COM15";
+		if (mDeviceName.find(tag)!=string::npos)
+		{
+			static int idx = 0;
+			++idx;
+			char buf[1024] = { 0 };
+			StringTool::ByteToHexChar(mInbox.data(), mInbox.bytes(), buf, sizeof(buf));
+			LogI(tag, "recv[%04d].bytes=%d,hex=%s(%s)", idx, bytes, buf, mInbox.data());
+		}
+#endif
+
 		if (ret != bytes)
 		{
 			ASSERT(FALSE);//todo
