@@ -84,8 +84,8 @@ protected:
 	static void FreeResult(MYSQL_RES* pMySQLRes);
 
 
-	MYSQL_RES* m_pMySQLRes;
-	MYSQL_ROW  m_CurrnetRowVal;
+	MYSQL_RES* m_pMySQLRes=nullptr;
+	MYSQL_ROW  m_CurrnetRowVal=nullptr;
 };
 
 }
