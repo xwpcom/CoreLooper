@@ -330,13 +330,13 @@ void LogWnd::CheckUpdateMarginWidth()
 
 void LogWnd::SetUtf8()
 {
-	LogV(TAG, "%s", __func__);
+	//LogV(TAG, "%s", __func__);
 	SendMessage(SCI_SETCODEPAGE, SC_CP_UTF8);
 }
 
 void LogWnd::SetGB()
 {
-	LogV(TAG, "%s", __func__);
+	//LogV(TAG, "%s", __func__);
 	SendMessage(SCI_SETCODEPAGE, 936);//解决app为unicode版时中文乱码问题
 }
 

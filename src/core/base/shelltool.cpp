@@ -1986,6 +1986,19 @@ string tagTimeMs::toText()const
 	return text;
 }
 
+void tagTimeMs::seconds2Time(int seconds)
+{
+	seconds %= (24 * 3600);
+
+	hour = seconds / 3600;
+	seconds -= hour * 3600;
+
+	minute = seconds / 60;
+	seconds -= minute * 60;
+
+	second = seconds;
+}
+
 int tagTimeMs::String2TimeMs(const string& text, tagTimeMs& ms)
 {
 	tagTimeMs& t = ms;

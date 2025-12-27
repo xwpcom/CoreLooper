@@ -89,6 +89,7 @@ struct CORE_EXPORT tagTimeMs
 	{
 		return hour * 3600 + minute * 60 + second;
 	}
+	
 	static int time2Seconds(int time)
 	{
 		//time格式:hhmmss
@@ -98,6 +99,7 @@ struct CORE_EXPORT tagTimeMs
 		int s = time % 100;
 		return h * 3600 + m * 60 + s;
 	}
+	void seconds2Time(int seconds);
 
 	static int String2TimeMs(const string& text, tagTimeMs& ms);
 	string toText()const;
