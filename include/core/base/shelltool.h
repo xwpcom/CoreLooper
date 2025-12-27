@@ -105,6 +105,8 @@ struct CORE_EXPORT tagTimeMs
 	string toText()const;
 	string toDT()const;
 	string stdDateTimeText()const;
+	string stdDateText()const;
+	string stdTimeText()const;
 	static tagTimeMs now();
 	static int setTime(const string& timeStr,const string& desc="");
 };

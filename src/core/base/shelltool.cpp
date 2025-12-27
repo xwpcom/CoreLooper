@@ -1974,6 +1974,18 @@ string tagTimeMs::stdDateTimeText()const
 	return text;
 }
 
+string tagTimeMs::stdDateText()const
+{
+	string text = StringTool::Format("%04d-%02d-%02d");
+	return text;
+}
+
+string tagTimeMs::stdTimeText()const
+{
+	string text = StringTool::Format("%02d:%02d:%02d", hour, minute, second);
+	return text;
+}
+
 string tagTimeMs::toDT()const
 {
 	string text = StringTool::Format("%04d%02d%02d%02d%02d%02d", year, month, day, hour, minute, second);
