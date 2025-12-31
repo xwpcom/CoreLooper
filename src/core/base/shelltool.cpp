@@ -1998,7 +1998,7 @@ string tagTimeMs::toText()const
 	return text;
 }
 
-void tagTimeMs::seconds2Time(int seconds)
+void tagTimeMs::daySeconds2Time(int seconds)
 {
 	seconds %= (24 * 3600);
 

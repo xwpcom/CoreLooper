@@ -99,7 +99,7 @@ struct CORE_EXPORT tagTimeMs
 		int s = time % 100;
 		return h * 3600 + m * 60 + s;
 	}
-	void seconds2Time(int seconds);
+	void daySeconds2Time(int seconds);
 
 	static int String2TimeMs(const string& text, tagTimeMs& ms);
 	string toText()const;
