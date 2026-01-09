@@ -2,6 +2,7 @@
 #include "include/basepage.h"
 #include "base64ex.h"
 #include "core/string/utf8tool.h"
+#include "include/mfctabctrlex.h"
 
 using namespace Bear::Core;
 
@@ -18,6 +19,7 @@ BEGIN_MESSAGE_MAP(BasePage, CDialogEx)
 	ON_WM_DESTROY()
 	ON_WM_TIMER()
 	ON_WM_SHOWWINDOW()
+	ON_MESSAGE(WM_TAB_SWAPED, OnTabSwaped)
 END_MESSAGE_MAP()
 
 string BasePage::getString(UINT id)

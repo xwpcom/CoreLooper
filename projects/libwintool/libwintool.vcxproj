@@ -202,6 +202,7 @@
     <ClCompile Include="src\CategoryPage.cpp" />
     <ClCompile Include="src\ieproxy.cpp" />
     <ClCompile Include="src\logwnd.cpp" />
+    <ClCompile Include="src\mfctabctrlex.CPP" />
     <ClCompile Include="src\rs485monitor.cpp" />
     <ClCompile Include="src\ScintillaWnd.cpp" />
     <ClCompile Include="src\swd.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="include\CategoryPage.h" />
     <ClInclude Include="include\ieproxy.h" />
     <ClInclude Include="include\logwnd.h" />
+    <ClInclude Include="include\mfctabctrlex.h" />
     <ClInclude Include="include\rs485monitor.h" />
     <ClInclude Include="include\ScintillaWnd.h" />
     <ClInclude Include="include\swd.h" />

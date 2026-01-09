@@ -119,7 +119,13 @@ protected:
 	virtual void OnTimer(UINT_PTR id);
 	void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual void OnFirstShow();
+	virtual LRESULT OnTabSwaped(WPARAM wParam, LPARAM lParam)
+	{
+		onTabSwaped();
+		return 0;
+	}
 
+	virtual void onTabSwaped() {}
 
 	string mSection;
 	bool mEnableOK=false;

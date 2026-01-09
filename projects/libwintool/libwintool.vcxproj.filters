@@ -48,6 +48,9 @@
     <ClCompile Include="src\swd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\mfctabctrlex.CPP">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="libwintool.def">
@@ -98,6 +101,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\swd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mfctabctrlex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
