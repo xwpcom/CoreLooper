@@ -25,6 +25,45 @@ TEST_CLASS(Log_)
 		a = b;
 		b = t;
 	};
+/*
+	template<typename T>
+	class BaseObj
+	{
+	public:
+		virtual uint32_t objSize()
+		{
+			return sizeof(T);
+		}
+	};
+
+	class Base:public BaseObj<Base>
+	{
+	public:
+		virtual ~Base() {}
+	protected:
+		int x = 0;
+	};
+
+	class Derived :virtual public Base, virtual public BaseObj<Derived>
+	{
+		int x = 0;
+		int y = 0;
+	};
+	
+	TEST_METHOD(template_objSize)
+	{
+		auto mTag = "base";
+
+		{
+			Base obj;
+			LogV(mTag, "sizeof(Base)=%zu,objSize=%d", sizeof(Base), obj.objSize());
+		}
+		{
+			Derived obj;
+			LogV(mTag, "sizeof(Derived)=%zu,objSize=%d", sizeof(Derived), obj.objSize());
+		}
+	};
+*/
 
 	TEST_METHOD(templateBase)
 	{

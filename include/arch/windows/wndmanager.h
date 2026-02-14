@@ -28,6 +28,7 @@ protected:
 		WM_RUNNABLE_EVENT = (WM_USER + 1),
 	};
 	LRESULT OnRunnableEvent(WPARAM wp, LPARAM lp);
+	afx_msg LRESULT OnSelfDelete(WPARAM, LPARAM);
 
 	static WndManager*	gInstance;
 	weak_ptr<Handler>	mLooper;

@@ -5,11 +5,37 @@
 
 namespace Bear {
 namespace Windows {
+enum { WM_SELF_DELETE = WM_USER + 2 };
 
 BEGIN_MESSAGE_MAP(WndManager, CWnd)
 	ON_WM_TIMER()
 	ON_MESSAGE(WM_RUNNABLE_EVENT, OnRunnableEvent)
+	ON_MESSAGE(WM_SELF_DELETE, OnSelfDelete)
 END_MESSAGE_MAP()
+
+LRESULT WndManager::OnSelfDelete(WPARAM, LPARAM)
+{
+	// safe: run on the window's thread and after other messages are processed
+	DestroyWindow(); // ensure window destroyed
+	//delete this;     // safe to delete on owning thread
+	return 0;
+}
+
+void WndManager::DestroyInstance()
+{
+	if (gInstance)
+	{
+		/*
+		HWND hwnd = gInstance->GetSafeHwnd();
+		// ask the window to delete itself on its own message thread
+		if (hwnd)
+			::PostMessage(hwnd, WM_SELF_DELETE, 0, 0);
+		else
+			delete gInstance;
+		gInstance = nullptr;
+		*/
+	}
+}
 
 WndManager* WndManager::Instance()
 {
@@ -66,16 +92,6 @@ void WndManager::Create()
 	}
 
 	auto ok = CreateEx(NULL, name, name, 0, 0, 0, 0, 0, HWND_MESSAGE, 0, 0);
-}
-
-void WndManager::DestroyInstance()
-{
-	if (gInstance)
-	{
-		gInstance->DestroyWindow();
-		delete gInstance;
-		gInstance = nullptr;
-	}
 }
 
 void WndManager::NotifyQuit()
