@@ -41,6 +41,7 @@ int HttpRequestHandler_Ajax::Start(tagHttpHeaderInfo *headerInfo)
 		userInfo->SetUserPassword(this->GetUserName(), this->GetPassword());
 		ajax->SetVirtualFolder(mWebConfig->mVirtualFolder);
 		ajax->SetUserInfo(userInfo);
+		ajax->setHttpRequest(m_httpRequest);
 
 		{
 			auto localAddr = headerInfo->mLocalAddr;

@@ -50,6 +50,7 @@ string  AjaxCommandHandler::Process(string  url)
 		handler->SetVirtualFolder(mVirtualFolder);
 		handler->SetUserInfo(mUserInfo);
 		handler->SetPort(mPort);
+		handler->setHttpRequest(mHttpRequest);
 		{
 			auto context = mContext.lock();
 			if (context)

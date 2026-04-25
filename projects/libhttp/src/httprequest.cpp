@@ -1142,11 +1142,13 @@ shared_ptr<HttpRequestHandler> HttpRequest::CreateHandler(string  uri, bool canM
 			if (AjaxHandler::AjaxCommandExists(uri))
 			{
 				handler = make_shared<HttpRequestHandler_Ajax>();
+				handler->SetHttpRequest(this);
 			}
 		}
 		else if (StringTool::CompareNoCase(ext, ".xml") == 0)
 		{
 			handler = make_shared<HttpRequestHandler_Ajax>();
+			handler->SetHttpRequest(this);
 		}
 		else if (ext == ".json")
 		{

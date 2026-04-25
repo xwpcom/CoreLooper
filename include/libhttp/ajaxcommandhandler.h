@@ -7,6 +7,7 @@ namespace Core {
 using namespace FileSystem;
 namespace Net {
 namespace Http {
+class HttpRequest;
 
 //XiongWanPing 2016.03.25
 class HTTP_EXPORT AjaxCommandHandler :public Handler
@@ -44,7 +45,13 @@ public:
 	{
 		return mPort;
 	}
+	void setHttpRequest(HttpRequest* obj)
+	{
+		mHttpRequest = obj;
+	}
+
 protected:
+	HttpRequest* mHttpRequest = nullptr;
 	int	mPort = 0;
 	std::string  mExtraHeader;
 	std::shared_ptr<UserInfo>		mUserInfo;
