@@ -492,8 +492,7 @@ string FtpCommandHandler::GetDirectoryList(const string& localPath)
 
 		char szFind[MAX_PATH + 1];
 		memset(szFind, 0, sizeof(szFind));
-		strcpy(szFind, szFolder);
-		strcat(szFind, "/*.*");
+		snprintf(szFind, sizeof(szFind), "%s/*.*", szFolder);
 		File::PathMakePretty(szFind);
 
 		hFindFile = FindFirstFileA(szFind, &fd);
