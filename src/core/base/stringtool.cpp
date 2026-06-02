@@ -213,6 +213,8 @@ void StringTool::makeHexPretty(string& hex)
 	StringTool::Replace(hex, "\n", "");
 	StringTool::Replace(hex, " ", "");
 	StringTool::Replace(hex, "\t", "");
+	StringTool::Replace(hex, ",", "");
+	StringTool::Replace(hex, u8"，", "");
 }
 
 

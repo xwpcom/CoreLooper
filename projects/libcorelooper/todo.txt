@@ -5010,7 +5010,7 @@ error C2143: syntax error: missing ',' before '<'
 changes:
 .NetLooper SetTimer(1,1),即设定一个1ms的定时器，发现cpu占用在2%,这个不正常
 //已解决,是GetQueuedCompletionStatus中cmsDelayNext计算有bug引起的
-之前用提cmsDelayNext/=10;
+之前用的是cmsDelayNext/=10;
 当cmsDelayNext为1时,cmsDelayNext/=10;导致cmsDelayNext为0
 这样GetQueuedCompletionStatus就被非常频繁的调用,从而占用cpu奇高
 解决办法是当cmsDelayNext>0时,限制最终cmsDelayNext至少为1
