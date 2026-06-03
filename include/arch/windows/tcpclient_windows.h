@@ -92,6 +92,10 @@ protected:
 	void MarkEndOfRecv();
 
 	virtual int GetOutboxCacheBytes(); 
+	virtual bool IsConnected()const
+	{
+		return mConnected;
+	}
 
 private:
 	void CheckInitTls(bool serverMode);
@@ -139,6 +143,9 @@ private:
 	ULONGLONG memoryUsed_impl()override;
 	int localPort();
 	int mLocalPort = -1;
+
+	bool mConnected = false;
+
 
 };
 }

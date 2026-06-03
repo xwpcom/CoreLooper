@@ -365,7 +365,7 @@ int TcpClient_Windows::Send(LPVOID data, int dataLen)
 
 void TcpClient_Windows::CheckSend()
 {
-	if (!mIoContextSend.mBusying)
+	if (mConnected && !mIoContextSend.mBusying)
 	{
 		int ack = SendOutBox();
 		if (ack)
@@ -562,6 +562,7 @@ int TcpClient_Windows::OnConnect(long handle, Bundle* extraInfo)
 
 	if (s != INVALID_SOCKET)
 	{
+		mConnected = true;
 		ASSERT(mSock == INVALID_SOCKET);
 		mSock = s;
 
@@ -643,6 +644,7 @@ void TcpClient_Windows::OnConnectAck()
 			{
 				//DT("Connection has been established %ld seconds\n", seconds);
 				ret = 0;
+				mConnected = true;
 			}
 		}
 #else
