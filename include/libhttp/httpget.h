@@ -104,7 +104,7 @@ protected:
 		bool			mChunked = false;//是否采用Transfer-Encoding: chunked
 		double			mSpeed=0.0f;//KB/秒,仅在下载成功后有效
 		bool			mChunkedDoubleCRLF = false;
-		ULONGLONG		mChunkedTotalBytes=0;
+		ULONGLONG		mChunkedBytes=0;
 		ULONGLONG		mChunkedReceivedBytes = 0;
 	}mAckInfo;
 

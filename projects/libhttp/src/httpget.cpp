@@ -9,6 +9,17 @@ namespace Bear {
 namespace Core {
 namespace Net {
 namespace Http {
+/*
+2026.07.30 做有人路由器时遇到chunked格式,目前只支持单chunk块，要改为支持多chunk块
+http ...\r\n
+\r\n
+FCB\r\n  十六进制ascii字节数+\r\n
+{FCB字节数据}
+...
+0\r\n 结束
+\r\n
+
+*/
 
 HttpGet::HttpGet()
 {
@@ -209,7 +220,7 @@ void HttpGet::OnConnect(Channel *endPoint, long error, ByteBuffer *pBox, Bundle*
 		}
 		else
 		{
-			LogW(mTag, "fail send,len=%d,ret=%d",len,ret);
+			LogW(mTag, "fail send,len=%d,ret=%d",(int)len,ret);
 
 			mSignaled = true;
 			if (mCB)
@@ -251,282 +262,304 @@ void HttpGet::ParseInbox()
 	{
 		mInbox.MakeSureEndWithNull();
 
-		LogV(mTag, "%s(%s)",__func__,(char*)mInbox.data());
+		//LogV(mTag, "%s(%s)",__func__,(char*)mInbox.data());
+		#if defined _MSC_VER_DEBUG
+		if (strstr((const char*)mInbox.data(), "\r\n0\r\n"))
+		{
+			int x = 0;
+		}
+		#endif
 	}
 	
-	switch (mAckInfo.mHttpAckStatus)
+	auto leftBytes = -1;
+	while (1)
 	{
-	case eHttpAckStatus_WaitHeader:
-	{
-		mInbox.MakeSureEndWithNull();
-
-		const char *ps = (const char*)mInbox.data();
-		const char *key = "\r\n\r\n";
-		const char *pEnd = strstr(ps, key);
-		if (!pEnd)
+		if (leftBytes == -1)
 		{
-			key = "\n\n";
-			pEnd = strstr(ps, key);
+			leftBytes = mInbox.bytes();
 		}
-		if (pEnd)
+		else if (leftBytes == mInbox.bytes() || mInbox.empty())
 		{
-			{
-				string header(ps, pEnd - ps+strlen(key));
-				HttpAcker obj;
-				obj.Parse(header, true);
-				mAckHeaders = obj.fields();
-			}
+			break;
+		}
 
-			string header(ps, pEnd - ps);
+		
 
-			if (mVerbose)
-			{
-				LogV(mTag, "recv http header(%s)",header.c_str());
-			}
+		switch (mAckInfo.mHttpAckStatus)
+		{
+		case eHttpAckStatus_WaitHeader:
+		{
+			mInbox.MakeSureEndWithNull();
 
+			const char* ps = (const char*)mInbox.data();
+			const char* key = "\r\n\r\n";
+			const char* pEnd = strstr(ps, key);
+			if (!pEnd)
 			{
-				HttpAckParser parser(header);
-				const HttpAckParser::tagHttpAckInfo& info = parser.GetAckInfo();
-				mAckInfo.mHttpAckCode = info.mAckCode;
+				key = "\n\n";
+				pEnd = strstr(ps, key);
 			}
-
-			mAckInfo.mContentLength = atoi(mAckHeaders["Content-Length"].c_str());// HttpTool::GetInt(header, "Content-Length");
-			if (mAckInfo.mContentLength == 0)
-			{
-				mAckInfo.mContentLength = atoi(mAckHeaders["Content-length"].c_str());//todo:要支持大小写不敏感
-			}
-			if (mAckInfo.mContentLength > 0)
-			{
-				SwitchStatus(eHttpAckStatus_ReceivingBody);
-			}
-			else
+			if (pEnd)
 			{
 				{
-					const char *key = "Transfer-Encoding:";
-					auto encoding = strstr(ps, key);
-					if (encoding)
-					{
-						auto p = strstr(encoding, " chunked\r\n");
-						if (p)
-						{
-							mAckInfo.mChunked = true;
-							//注意chunk长度是用十六进制字符串表示的
-						}
-					}
+					string header(ps, pEnd - ps + strlen(key));
+					HttpAcker obj;
+					obj.Parse(header, true);
+					mAckHeaders = obj.fields();
 				}
 
-				if (mAckInfo.mChunked)
+				string header(ps, pEnd - ps);
+
+				if (mVerbose)
 				{
-					auto eat = pEnd + strlen(key) - ps;
-					mInbox.Eat((int)eat);
+					LogV(mTag, "recv http header(%s)", header.c_str());
+				}
 
-					auto data = mInbox.data();
-					//2022.07.02 hot fix#begin,临时紧急使用
-					{
-						auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+				{
+					HttpAckParser parser(header);
+					const HttpAckParser::tagHttpAckInfo& info = parser.GetAckInfo();
+					mAckInfo.mHttpAckCode = info.mAckCode;
+				}
 
-						if (recvFinish)
-						{
-							mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
-							mAckInfo.mAckBody.MakeSureEndWithNull();
-
-							//extract data from chunked format
-							SwitchStatus(eHttpAckStatus_Done);
-							return;
-						}
-					}
-					//2022.07.02 hot fix#end
-
-					SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
-					return;
+				mAckInfo.mContentLength = atoi(mAckHeaders["Content-Length"].c_str());// HttpTool::GetInt(header, "Content-Length");
+				if (mAckInfo.mContentLength == 0)
+				{
+					mAckInfo.mContentLength = atoi(mAckHeaders["Content-length"].c_str());//todo:要支持大小写不敏感
+				}
+				if (mAckInfo.mContentLength > 0)
+				{
+					SwitchStatus(eHttpAckStatus_ReceivingBody);
 				}
 				else
 				{
-					bool done = true;
-					if (mAckInfo.mAckBody.empty())
 					{
-						/*
-						2023.06.13
-						aleka 4G路由器http ack虽然也符合http规范，但比较另类
-						每行可能以\n或\r\n结尾
-						返回http body时可能不带Content-Length字段导致要做如下特殊处理
-						根本原因是我们自己对Http协议没能完全支持和兼容,后续重构时改进
-						*/
-
-						auto text=pEnd + strlen(key);
-						mAckInfo.mAckBody.Write((char*)text);
-
-						auto aleka = strstr(ps, "Demo-Webs\r\n");//aleka Server
-						if (aleka && !strstr(pEnd,"}"))
+						const char* key = "Transfer-Encoding:";
+						auto encoding = strstr(ps, key);
+						if (encoding)
 						{
-							done = false;
-							LogV(mTag, "need more data");
-							mInbox.clear();
-							SwitchStatus(eHttpAckStatus_ReceivingBody);
+							auto p = strstr(encoding, " chunked\r\n");
+							if (p)
+							{
+								mAckInfo.mChunked = true;
+								//注意chunk长度是用十六进制字符串表示的
+							}
 						}
 					}
 
-					if (done)
+					if (mAckInfo.mChunked)
 					{
+						auto eat = pEnd + strlen(key) - ps;
+						mInbox.Eat((int)eat);
+
+						auto data = mInbox.data();
+						//2022.07.02 hot fix#begin,临时紧急使用
+						{
+							auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+
+							if (recvFinish)
+							{
+								mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
+								mAckInfo.mAckBody.MakeSureEndWithNull();
+
+								//extract data from chunked format
+								SwitchStatus(eHttpAckStatus_Done);
+								return;
+							}
+						}
+						//2022.07.02 hot fix#end
+
+						SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
+						return;
+					}
+					else
+					{
+						bool done = true;
+						if (mAckInfo.mAckBody.empty())
+						{
+							/*
+							2023.06.13
+							aleka 4G路由器http ack虽然也符合http规范，但比较另类
+							每行可能以\n或\r\n结尾
+							返回http body时可能不带Content-Length字段导致要做如下特殊处理
+							根本原因是我们自己对Http协议没能完全支持和兼容,后续重构时改进
+							*/
+
+							auto text = pEnd + strlen(key);
+							mAckInfo.mAckBody.Write((char*)text);
+
+							auto aleka = strstr(ps, "Demo-Webs\r\n");//aleka Server
+							if (aleka && !strstr(pEnd, "}"))
+							{
+								done = false;
+								LogV(mTag, "need more data");
+								mInbox.clear();
+								SwitchStatus(eHttpAckStatus_ReceivingBody);
+							}
+						}
+
+						if (done)
+						{
+							SwitchStatus(eHttpAckStatus_Done);
+						}
+					}
+				}
+
+				int eat = (int)(pEnd + strlen(key) - ps);
+				mInbox.Eat(eat);
+				if (!mInbox.IsEmpty())
+				{
+					OnRecvHttpAckBody(mInbox.data(), mInbox.length());
+					mInbox.clear();
+				}
+			}
+			break;
+		}
+		case eHttpAckStatus_ReceivingChunkedLength:
+		{
+			mInbox.MakeSureEndWithNull();
+
+			if (mAckInfo.mChunkedDoubleCRLF)
+			{
+				//格式为\r\nbytes\r\n
+				//即必须包含两个\r\n
+				auto data = (char*)mInbox.data();
+				auto bytes = mInbox.length();
+				if (bytes < 5)
+				{
+					return;
+				}
+				auto end = strstr(data + 2, "\r\n");
+				if (!end)
+				{
+					return;
+				}
+
+				ASSERT(data[0] == '\r');
+				ASSERT(data[1] == '\n');
+				mInbox.Eat(2);//eat first \r\n
+				mAckInfo.mChunkedDoubleCRLF = false;
+			}
+			else
+			{
+				//格式为bytes\r\n
+			}
+
+			auto data = (char*)mInbox.data();
+			auto bytes = mInbox.length();
+			auto end = strstr(data, "\r\n");
+			if (bytes < 3 || !end)
+			{
+				return;
+			}
+
+			//注意chunk长度是用十六进制字符串表示的
+			auto bodyBytes = strtol(data, nullptr, 16);
+			if (bodyBytes == 0)
+			{
+				mInbox.clear();
+				SwitchStatus(eHttpAckStatus_Done);
+				return;
+			}
+
+			mInbox.Eat((int)(end - data) + 2);
+			mAckInfo.mChunkedBytes = bodyBytes;
+			mAckInfo.mChunkedReceivedBytes = 0;
+
+			if (mVerbose)
+			{
+				LogD(mTag, "new chunked bytes=%d", bodyBytes);
+			}
+
+			//2024.04.20 hot fix#begin,临时紧急使用
+			if (mAckInfo.mChunked)
+			{
+				auto data = mInbox.data();
+				{
+					auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+
+					if (recvFinish)
+					{
+						mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
+						mAckInfo.mAckBody.MakeSureEndWithNull();
+
+						//extract data from chunked format
 						SwitchStatus(eHttpAckStatus_Done);
+						return;
 					}
 				}
 			}
+			//2024.04.20 hot fix#end,临时紧急使用
 
-			int eat = (int)(pEnd + strlen(key) - ps);
-			mInbox.Eat(eat);
-			if (!mInbox.IsEmpty())
-			{
-				OnRecvHttpAckBody(mInbox.data(), mInbox.length());
-				mInbox.clear();
-			}
+			SwitchStatus(eHttpAckStatus_ReceivingChunkedBody);
+			break;
 		}
-		break;
-	}
-	case eHttpAckStatus_ReceivingChunkedLength:
-	{
-		mInbox.MakeSureEndWithNull();
-
-		if (mAckInfo.mChunkedDoubleCRLF)
-		{
-			//格式为\r\nbytes\r\n
-			//即必须包含两个\r\n
-			auto data = (char*)mInbox.data();
-			auto bytes = mInbox.length();
-			if (bytes < 5)
-			{
-				return;
-			}
-			auto end = strstr(data+2, "\r\n");
-			if (!end)
-			{
-				return;
-			}
-
-			ASSERT(data[0] == '\r');
-			ASSERT(data[1] == '\n');
-			mInbox.Eat(2);//eat first \r\n
-			mAckInfo.mChunkedDoubleCRLF = false;
-		}
-		else
-		{
-			//格式为bytes\r\n
-		}
-
-		auto data = (char*)mInbox.data();
-		auto bytes = mInbox.length();
-		auto end = strstr(data, "\r\n");
-		if (bytes < 3 || !end)
-		{
-			return;
-		}
-
-		//注意chunk长度是用十六进制字符串表示的
-		auto bodyBytes = strtol(data, nullptr, 16);
-		if (bodyBytes == 0)
-		{
-			mInbox.clear();
-			SwitchStatus(eHttpAckStatus_Done);
-			return;
-		}
-
-		mInbox.Eat((int)(end-data)+2);
-		mAckInfo.mChunkedTotalBytes = bodyBytes;
-		mAckInfo.mChunkedReceivedBytes = 0;
-		
-		if (mVerbose)
-		{
-			LogV(mTag, "chunked.bytes=%d", bodyBytes);
-		}
-		
-		//2024.04.20 hot fix#begin,临时紧急使用
-		if (mAckInfo.mChunked)
+		case eHttpAckStatus_ReceivingChunkedBody:
 		{
 			auto data = mInbox.data();
+			auto bytes = mInbox.length();
+			auto eatBytes = (int)MIN(bytes, mAckInfo.mChunkedBytes - mAckInfo.mChunkedReceivedBytes);
+			if (eatBytes > 0)
 			{
-				auto recvFinish = (strstr((char*)data, "\r\n0\r\n\r\n") != nullptr);
+				OnRecvHttpAckBody(mInbox.data(), eatBytes);
+				mInbox.Eat(eatBytes);
 
-				if (recvFinish)
+				//mAckInfo.mChunkedReceivedBytes += eatBytes;
+
+				//auto pendingBytes = (int)(mAckInfo.mChunkedBytes - mAckInfo.mChunkedReceivedBytes);
+
+				if (mVerbose)
 				{
-					mAckInfo.mAckBody.Write(mInbox.data(), mInbox.length());
-					mAckInfo.mAckBody.MakeSureEndWithNull();
+					//LogV(mTag, "recv chunked=%d / %d", (int)mAckInfo.mChunkedReceivedBytes, (int)mAckInfo.mChunkedBytes);
+				}
 
-					//extract data from chunked format
-					SwitchStatus(eHttpAckStatus_Done);
-					return;
+				//if (pendingBytes == 0)
+				{
+					int x = 0;
 				}
 			}
-		}
-		//2024.04.20 hot fix#end,临时紧急使用
 
-		SwitchStatus(eHttpAckStatus_ReceivingChunkedBody);
-		break;
-	}
-	case eHttpAckStatus_ReceivingChunkedBody:
-	{
-		auto data = mInbox.data();
-		auto bytes = mInbox.length();
-		auto eatBytes = (int)MIN(bytes, mAckInfo.mChunkedTotalBytes - mAckInfo.mChunkedReceivedBytes);
-		if (eatBytes > 0)
-		{
-			OnRecvHttpAckBody(mInbox.data(), eatBytes);
-			mInbox.Eat(eatBytes);
-
-			mAckInfo.mChunkedReceivedBytes += eatBytes;
-
-			auto pendingBytes = mAckInfo.mChunkedTotalBytes - mAckInfo.mChunkedReceivedBytes;
-			
-			if (mVerbose)
+			if (mAckInfo.mChunkedReceivedBytes == mAckInfo.mChunkedBytes)
 			{
-				LogV(mTag, "chunked=%d / %d,pending %d"
-					, mAckInfo.mChunkedReceivedBytes
-					, mAckInfo.mChunkedTotalBytes
-					, pendingBytes
-				);
+				mAckInfo.mChunkedBytes = 0;
+				mAckInfo.mChunkedReceivedBytes = 0;
+
+				data = mInbox.data();
+
+				mAckInfo.mChunkedDoubleCRLF = true;
+				SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
+				//ParseInbox();
+				continue;
 			}
 
-			if (pendingBytes == 0)
-			{
-				int x = 0;
-			}
+			int x = 0;
+			break;
 		}
-
-		if (mAckInfo.mChunkedReceivedBytes == mAckInfo.mChunkedTotalBytes)
+		case eHttpAckStatus_ReceivingBody:
 		{
-			mAckInfo.mChunkedTotalBytes = 0;
-			mAckInfo.mChunkedReceivedBytes = 0;
-
-			data = mInbox.data();
-
-			mAckInfo.mChunkedDoubleCRLF=true;
-			SwitchStatus(eHttpAckStatus_ReceivingChunkedLength);
-			ParseInbox();
-			return;
+			OnRecvHttpAckBody(mInbox.data(), mInbox.length());
+			mInbox.clear();
+			break;
 		}
-		
-		int x = 0;
-		break;
-	}
-	case eHttpAckStatus_ReceivingBody:
-	{
-		OnRecvHttpAckBody(mInbox.data(), mInbox.length());
-		mInbox.clear();
-		break;
-	}
-	case eHttpAckStatus_Done:
-	{
-		break;
-	}
-	default:
-	{
-		ASSERT(FALSE);
-		break;
-	}
+		case eHttpAckStatus_Done:
+		{
+			break;
+		}
+		default:
+		{
+			ASSERT(FALSE);
+			break;
+		}
+		}
 	}
 }
 
 void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 {
+	if (mVerbose)
+	{
+		//LogV(mTag, "%s,bytes=%d",__func__,dataLen);
+	}
+
 	if (dataLen > 0)
 	{
 		mAckInfo.mChunkedReceivedBytes += dataLen;
@@ -543,6 +576,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 		}
 
 		auto ret = (long)fwrite(data, 1, dataLen, mAckInfo.mFile);
+		LogV(mTag, "fwrite bytes=%d,ret=%d", dataLen,ret);
 		if (ret != dataLen)
 		{
 			Destroy();
@@ -566,6 +600,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 	}
 	else
 	{
+		//LogV(mTag, "mAckBody.Write bytes=%d",dataLen);
 		mAckInfo.mAckBody.Write(data, dataLen);
 		mAckInfo.mAckBody.MakeSureEndWithNull();
 
