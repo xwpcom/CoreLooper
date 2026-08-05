@@ -576,7 +576,7 @@ void HttpGet::OnRecvHttpAckBody(LPVOID data, int dataLen)
 		}
 
 		auto ret = (long)fwrite(data, 1, dataLen, mAckInfo.mFile);
-		LogV(mTag, "fwrite bytes=%d,ret=%d", dataLen,ret);
+		//LogV(mTag, "fwrite bytes=%d,ret=%d", dataLen,ret);
 		if (ret != dataLen)
 		{
 			Destroy();
