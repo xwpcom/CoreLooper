@@ -427,6 +427,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_App|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\protocol\sctp\jpProtocol.cpp" />
     <ClCompile Include="..\..\src\core\protocol\sctp\sctp.cpp" />
     <ClCompile Include="..\..\src\core\protocol\sctp\sctpclient.cpp" />
     <ClCompile Include="..\..\src\core\protocol\sctp\sctphandler.c">
@@ -597,6 +598,7 @@
     <ClInclude Include="..\..\include\core\protocol\sctp\cbytebuffer.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\ccrc.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\csctp.h" />
+    <ClInclude Include="..\..\include\core\protocol\sctp\jpProtocol.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\sctp.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\sctpclient.h" />
     <ClInclude Include="..\..\include\core\protocol\sctp\tool.h" />

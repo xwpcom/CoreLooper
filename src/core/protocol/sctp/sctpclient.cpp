@@ -1,6 +1,7 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "protocol/sctp/sctpclient.h"
 #include "protocol/sctp/sctp.h"
+#include "protocol/sctp/jpProtocol.h"
 
 namespace SCTP {
 static const char* TAG = "sctpClient";
@@ -16,12 +17,24 @@ void SctpClient::OnCreate()
 
 	auto obj = make_shared<Sctp>();
 	AddChild(obj);
-	obj->Create();//×¢ÒâÒªµ÷ÓÃCreate()²ÅÄÜ³õÊ¼»¯sctp¹¦ÄÜ
+	obj->Create();//æ³¨æ„è¦è°ƒç”¨Create()æ‰èƒ½åˆå§‹åŒ–sctpåŠŸèƒ½
 
 	mProtocol = obj;
 	obj->SignalOnRecvCommand.connect(this, &SctpClient::OnRecvCommand);
 
 	InitEntries();
+
+	if (jpEnabled())
+	{
+		mJpDemux = make_shared<JpDemux>();
+		mJpDemux->setFrameCB([this](const char* data, int bytes) {
+			auto obj = mProtocol.lock();
+			if (obj)
+			{
+				obj->InputData((void*)data, bytes);
+			}
+			});
+	}
 
 }
 
@@ -69,7 +82,14 @@ void SctpClient::ParseInbox()
 	auto obj = mProtocol.lock();
 	if (obj)
 	{
-		obj->InputData(mInbox.data(), mInbox.length());
+		if (jpEnabled() && mJpDemux)
+		{
+			mJpDemux->inputData(mInbox.data(), mInbox.length());
+		}
+		else
+		{
+			obj->InputData(mInbox.data(), mInbox.length());
+		}
 	}
 
 	mInbox.clear();
@@ -95,9 +115,7 @@ int SctpClient::AddCommand(const string& cmd, Bundle& bundle)
 	}
 
 	auto& sctp = *obj.get();
-
 	sctp.PrepareCreateOutboxData();
-
 	sctp.AddField("cmd", cmd.c_str());
 	for (map<string, string>::iterator iter = bundle.mItems.begin(); iter != bundle.mItems.end(); ++iter)
 	{
@@ -106,11 +124,44 @@ int SctpClient::AddCommand(const string& cmd, Bundle& bundle)
 
 	int ackSeq = -1;
 	const tagByteBuffer& box = sctp.CreateOutboxData(&ackSeq);
-	int eatBytes = 0;
-	if (mChannel)
+
+	if (jpEnabled() && mJpDemux)
 	{
-		mChannel->Send(box.mBuf, box.mBytes);
-		//SignalWrite(this, box.mBuf, box.mBytes, eatBytes);
+		DynamicJsonBuffer jBuf;
+		auto& json = jBuf.createObject();
+
+		json["cmd"]=cmd;
+		if (ackSeq != -1)
+		{
+			json["seq"] = ackSeq;
+		}
+
+		for (map<string, string>::iterator iter = bundle.mItems.begin(); iter != bundle.mItems.end(); ++iter)
+		{
+			auto& name = iter->first;
+			if (name != "cmd" && name != "crc")
+			{
+				json[name] = iter->second;
+			}
+		}
+		
+		string text;
+		json.printTo(text);
+		text += "\n";
+
+		if (mChannel)
+		{
+			mChannel->Send(text.data(), text.length());
+		}
+	}
+	else
+	{
+		int eatBytes = 0;
+		if (mChannel)
+		{
+			mChannel->Send(box.mBuf, box.mBytes);
+			//SignalWrite(this, box.mBuf, box.mBytes, eatBytes);
+		}
 	}
 
 	return ackSeq;

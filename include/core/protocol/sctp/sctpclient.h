@@ -10,7 +10,7 @@ extern "C"
 #include "net/simpleconnect.h"
 
 struct tagBundle;
-
+class JpDemux;
 namespace SCTP {
 using namespace Bear::Core;
 using namespace Bear::Core::Net;
@@ -36,6 +36,15 @@ public:
 	{
 		mDumpCommand = enable;
 	}
+	void enableJp()
+	{
+		mUseJpProtocol = true;
+	}
+	bool jpEnabled()const
+	{
+		return mUseJpProtocol;
+	}
+
 protected:
 	void OnCreate();
 
@@ -49,6 +58,8 @@ protected:
 	virtual void InitEntries();
 
 	bool mDumpCommand = false;
+	bool mUseJpProtocol = false;
+	shared_ptr<JpDemux> mJpDemux;
 };
 
 }
