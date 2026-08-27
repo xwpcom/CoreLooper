@@ -151,7 +151,7 @@ int SctpClient::AddCommand(const string& cmd, Bundle& bundle)
 
 		if (mChannel)
 		{
-			mChannel->Send(text.data(), text.length());
+			mChannel->Send((void*)text.data(), text.length());
 		}
 	}
 	else

@@ -39,6 +39,12 @@ void JpDemux::inputData(void* data, int bytes)
 
 		onRecvJsonText(text);
 	}
+
+	if (mInbox.bytes() > 8 * 1024)
+	{
+		LogW("jpDemux", "invalid frame?");
+		mInbox.clear();
+	}
 }
 
 void JpDemux::onRecvJsonText(const string& text)
