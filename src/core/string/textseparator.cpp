@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "string/textseparator.h"
 using namespace std;
 
@@ -38,6 +38,12 @@ int TextSeparator::GetNext(string& sz, eTextFlag flag)
 		int ret = (mBegin[0] == 0) ? -1 : 0;
 		sz = mBegin;
 		mBegin = nullptr;
+
+		if (flag & eTextFlag_TrimTail)
+		{
+			StringTool::Trim(sz, '\r');
+		}
+
 		return ret;
 	}
 

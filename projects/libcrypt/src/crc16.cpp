@@ -74,7 +74,7 @@ WORD Crc16::Calc(LPBYTE data, int dataBytes)
 	return crc16(data, dataBytes);
 }
 
-unsigned short Crc16::Crc16Ex(unsigned char* pData, int bytes, unsigned short* crcInitValue)
+unsigned short Crc16::Crc16Ex(const unsigned char* pData, int bytes, unsigned short* crcInitValue)
 {
 	unsigned short  CRC = *crcInitValue;
 	int i, j;
@@ -96,7 +96,7 @@ unsigned short Crc16::Crc16Ex(unsigned char* pData, int bytes, unsigned short* c
 	return CRC;
 }
 
-bool Crc16::CrcMatched(LPBYTE d, int bytes, bool bigEndian)
+bool Crc16::CrcMatched(const LPBYTE d, int bytes, bool bigEndian)
 {
 	if (bytes <= 2)
 	{
