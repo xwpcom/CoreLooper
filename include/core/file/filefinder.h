@@ -32,9 +32,51 @@ struct tagFileFindItem
 #endif
 	}
 
+/*
+iot.jjyip.com/pushEvent.json?tag=ls&count=10&dir=/opt/media/mmcblk0p1/media/2026-09-30&uid=STL04427MEE
+
+root@t31ap:/opt/media/mmcblk0p1/media/2026-09-30# ls -l
+-rwxrwxrwx    1 root     root          8295 Sep 30 14:15 2026-09-30.json
+-rwxrwxrwx    1 root     root          8295 Sep 30 14:15 2026-09-30.json.bak
+-rwxrwxrwx    1 root     root        524288 Sep 30 03:40 2026-09-30_03_40_01.log
+
+可看到上面remote telnet中显示的时间是正确的，但下面lsAck返回的文件时间整体后移了8小时
+
+{
+  "cid": "",
+  "dir": "/opt/media/mmcblk0p1/media/2026-09-30",
+  "index": 0,
+  "count": 10,
+  "countAck": 3,
+  "total": 3,
+  "d": [],
+  "f": [
+	{
+	  "n": "2026-09-30_03_40_01.log",
+	  "t": "2026-09-30 11:40:01",
+	  "b": 524288
+	},
+	{
+	  "n": "2026-09-30.json.bak",
+	  "t": "2026-09-30 22:45:02",
+	  "b": 8581
+	},
+	{
+	  "n": "2026-09-30.json",
+	  "t": "2026-09-30 22:45:02",
+	  "b": 8581
+	}
+  ]
+}
+*/
 	time_t writeTime()const
 	{
-		return mStat.st_ctime;
+		auto t = mStat.st_ctime;
+#ifndef _MSC_VER
+		t -= 8 * 3600;//
+#endif
+
+		return t;
 	}
 };
 
